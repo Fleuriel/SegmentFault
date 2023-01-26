@@ -2,7 +2,7 @@
 // includes
 
 #include "AEEngine.h"
-
+#include <iostream>
 
 
 // ---------------------------------------------------------------------------
@@ -26,16 +26,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
 
 	// Changing the window title
-	AESysSetWindowTitle("My New Demo!");
+	AESysSetWindowTitle("Among Them");
 
 	// reset the system modules
 	AESysReset();
 
 	//My Own Testing Codes
 	AEGfxVertexList* pMesh = 0;
-	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/PlanetTexture.png");
-	AEGfxTexture* orbitTex = AEGfxTextureLoad("Assets/Lmao.png");
-
+	//AEGfxTexture* pTex = AEGfxTextureLoad("Assets/PlanetTexture.png");
+	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/Rainbow1.png");
 
 	AEGfxMeshStart();
 
@@ -61,47 +60,61 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Handling Input
 		AEInputUpdate();
 
-
-
-		//
 		if (AEInputCheckCurr(AEVK_RIGHT))
 		{
 			x += 5.0f;
-//			y = x;
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
+			
+			//			y = x;
 		}
 		if (AEInputCheckCurr(AEVK_LEFT))
 		{
 			x -= 5.0f;
+
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 			//			y = x;
 		}		
 		if (AEInputCheckCurr(AEVK_DOWN))
 		{
 			y -= 5.0f;
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
 		if (AEInputCheckCurr(AEVK_UP))
 		{
 			y += 5.0f;
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_A))
 		{
 			r -= 0.01f;
+
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
 		if (AEInputCheckCurr(AEVK_D))
 		{
 			r += 0.01f;
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_1))
 		{
 			z -= 1.0f;
+
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_2))
 		{
 			z += 1.0f;
+
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_R))
 		{
 			z = 100.0f;
+
+			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
+
+		
 
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -116,9 +129,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransparency(1.0f);
 		// Set the texture to pTex
 		AEGfxTextureSet(pTex, 0, 0);
+
 		// Create a scale matrix that scales by 100 x and y
 		AEMtx33 scale = { 0 };
-		AEMtx33Scale(&scale,z, z);
+		AEMtx33Scale(&scale,100 ,100);
 		// Create a rotation matrix that rotates by 45 degrees
 		AEMtx33 rotate = { 0 };
 		AEMtx33Rot(&rotate, r);
@@ -134,8 +148,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransform(transform.m);
 		// Actually drawing the mesh
 		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
-
-		//
 
 		// Your own update logic goes here
 
