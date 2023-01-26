@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.34.31933:TargetPlatformVersion=10.0.22000.0:
 Debug|x64|C:\Users\Emery\Documents\GitHub\FleurieTest\SegmentFault\GameProject\|
+=======
+PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.33.31629:TargetPlatformVersion=10.0.19041.0:
+Debug|x64|C:\School stuff\CSD1451 Software Engineering Project 2\SegmentFault\GameProject\|
+>>>>>>> d4f2c8df78a4cfee39f579c7613224d8194d9c4a
