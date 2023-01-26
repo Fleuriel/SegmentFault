@@ -34,6 +34,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//My Own Testing Codes
 	AEGfxVertexList* pMesh = 0;
 	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/PlanetTexture.png");
+	AEGfxTexture* orbitTex = AEGfxTextureLoad("Assets/Lmao.png");
+
 
 	AEGfxMeshStart();
 
