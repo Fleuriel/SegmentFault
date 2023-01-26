@@ -3,6 +3,7 @@
 
 #include "AEEngine.h"
 #include <iostream>
+#include <math.h>
 
 
 // ---------------------------------------------------------------------------
@@ -35,7 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxVertexList* pMesh = 0;
 	AEGfxVertexList* oOMesh = 0;
 	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/Assets/PlanetTexture.png");
-	AEGfxTexture* oOTex = AEGfxTextureLoad("Assets/Assets/images.png");
+	AEGfxTexture* oOTex = AEGfxTextureLoad("Assets/Assets/TrollFace.png");
 
 	AEGfxMeshStart();
 
@@ -65,6 +66,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 
+	f32 rotationx = 0;
 	f32 x = 0.0f , y = 0.0f, r = 0.0f, z = 0.0f,x1 = 50.0f, y1  = 50.0f;
 	// Game Loop
 
@@ -81,7 +83,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckCurr(AEVK_RIGHT))
 		{
 			x += 5.0f;
-			x1 += 5.0f;
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 			
 			//			y = x;
@@ -90,20 +91,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
 			x -= 5.0f;
 
-			x1 -= 5.0f;
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 			//			y = x;
 		}		
 		if (AEInputCheckCurr(AEVK_DOWN))
 		{
 			y -= 5.0f;
-			y1 -= 5.0f;
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
 		if (AEInputCheckCurr(AEVK_UP))
 		{
 			y += 5.0f;
-			y1 += 5.0f;
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_A))
@@ -136,7 +134,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 
-		
+		if (rotationx > 360)
+		{
+			rotationx = 0;
+		}
+		rotationx -= 0.04;
+
+		x1 = x + 100 * cos(rotationx);
+		y1 = y + 100 * sin(rotationx);
+
 
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -170,34 +176,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransform(transform.m);
 		// Actually drawing the mesh
 		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		
 
-		// Your own update logic goes here
-
-
-		// Your own rendering logic goes here
-
-		// Set the background to black.
-		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-		// Tell the engine to get ready to draw something with texture.
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		// Set the tint to white, so that the sprite can
-		// display the full range of colors (default is black).
-		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// Set blend mode to AE_GFX_BM_BLEND
-		// This will allow transparency.
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(1.0f);
+		//let this one be the turning ones.
 
 		AEGfxTextureSet(oOTex, 0, 0);
 		AEMtx33 scale1 = { 0 };
-		AEMtx33Scale(&scale1, z, z);
+		AEMtx33Scale(&scale1, 50, 50);
 		// Create a rotation matrix that rotates by 45 degrees
 		AEMtx33 rotate1 = { 0 };
-		AEMtx33Rot(&rotate1, r);
+		AEMtx33Rot(&rotate1, rotationx);
 		// Create a translation matrix that translates by
 		// 100 in the x-axis and 100 in the y-axis
 		AEMtx33 translate1 = { 0 };
-		AEMtx33Trans(&translate1, x, y);
+		AEMtx33Trans(&translate1, x1, y1);
 		// Concat the matrices (TRS)
 		AEMtx33 transform1 = { 0 };
 		AEMtx33Concat(&transform1, &rotate1, &scale1);
@@ -207,6 +199,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Actually drawing the mesh
 		AEGfxMeshDraw(oOMesh, AE_GFX_MDM_TRIANGLES);
 		// Informing the system about the loop's end
+
+
+
 
 		AESysFrameEnd();
 		// check if forcing the application to quit
