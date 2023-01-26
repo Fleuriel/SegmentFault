@@ -172,6 +172,8 @@ AE_API s32  AEInputInit();
 
 \warning    This function is already called in AESysReset.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputReset();
@@ -184,6 +186,8 @@ AE_API void AEInputReset();
 
 \warning    This function is already called in AESysUpdate.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputUpdate();
@@ -196,6 +200,8 @@ AE_API void AEInputUpdate();
 
 \warning    This function is already called in AESysExit.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputExit();
@@ -294,6 +300,8 @@ AE_API u8 AEInputCheckReleased	(u8 key);
 \param      [out] pY
             Pointer to s32 where the Y value will be stored.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputGetCursorPosition(s32 *pX, s32 *pY);
@@ -312,6 +320,8 @@ AE_API void AEInputGetCursorPosition(s32 *pX, s32 *pY);
 \param      [out] pDeltaY
             Pointer to s32 where the Y value will be stored.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputGetCursorPositionDelta(s32 *pDeltaX, s32 *pDeltaY);
@@ -328,6 +338,8 @@ AE_API void AEInputGetCursorPositionDelta(s32 *pDeltaX, s32 *pDeltaY);
 \param      [in] Show
             Set if mouse cursor is showned or not.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AEInputShowCursor(s32 Show);

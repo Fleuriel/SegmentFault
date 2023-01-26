@@ -25,7 +25,7 @@ struct AELineSegment
 	AEVec2		m_normal;
 };
 
-AE_API void AEBuildLineSegment(AELineSegment &lineSegment,
+void AEBuildLineSegment(AELineSegment &lineSegment, 
 						const AEVec2 &pos, 
 						float scale, 
 						float dir);
@@ -52,7 +52,7 @@ struct AERay
 
 
 // INTERSECTION FUNCTIONS
-AE_API int AECollisionIntersection_CircleLineSegment(const AECircle &circle,
+int AECollisionIntersection_CircleLineSegment(const AECircle &circle, 
 											  const AEVec2 &ptEnd,
 											  const AELineSegment &lineSeg, 
 											  AEVec2 &interPt, 
@@ -61,7 +61,7 @@ AE_API int AECollisionIntersection_CircleLineSegment(const AECircle &circle,
 											  bool & checkLineEdges);//the last parameter is new - for Extra Credits
 
 // Extra credits
-AE_API int AECheckMovingCircleToLineEdge(bool withinBothLines,
+int AECheckMovingCircleToLineEdge(bool withinBothLines,
 									const AECircle &circle,
 									const AEVec2 &ptEnd,
 									const AELineSegment &lineSeg,
@@ -72,7 +72,7 @@ AE_API int AECheckMovingCircleToLineEdge(bool withinBothLines,
 
 // circle-circle - same usage for: dynamic circle vs static pillar, and dynamic circle vs dynamic circle
 // In the case of "dynamic circle vs static pillar", velB will be 0.0f
-AE_API int AECollisionIntersection_CircleCircle(const AECircle &circleA,
+int AECollisionIntersection_CircleCircle(const AECircle &circleA,
 									   const AEVec2 &velA,
 									   const AECircle &circleB,
 									   const AEVec2 &velB,
@@ -83,7 +83,7 @@ AE_API int AECollisionIntersection_CircleCircle(const AECircle &circleA,
 // circle-circle - same usage for: dynamic circle vs static pillar, and dynamic circle vs dynamic circle
 // this is a helper function to be used inside "CollisionIntersection_CircleCircle" function
 // it is checking collision a moving dot vs a static circle
-AE_API int AECollisionIntersection_RayCircle(const AERay &ray,
+int AECollisionIntersection_RayCircle(const AERay &ray, 
 									const AECircle &circle, 
 									float &interTime);
 
@@ -93,12 +93,12 @@ AE_API int AECollisionIntersection_RayCircle(const AERay &ray,
 
 
 // RESPONSE FUNCTIONS
-AE_API void AECollisionResponse_CircleLineSegment(const AEVec2 &ptInter,
+void AECollisionResponse_CircleLineSegment(const AEVec2 &ptInter, 
 										   const AEVec2 &normal,
 										   AEVec2 &ptEnd, 
 										   AEVec2 &reflected);
 
-AE_API void AECollisionResponse_CirclePillar(const AEVec2 &normal,
+void AECollisionResponse_CirclePillar(const AEVec2 &normal,
 									const float &interTime, 
 									const AEVec2 &ptStart,
 									const AEVec2 &ptInter, 									
@@ -106,7 +106,7 @@ AE_API void AECollisionResponse_CirclePillar(const AEVec2 &normal,
 									AEVec2 &reflectedVectorNormalized);
 
 // Extra credits
-AE_API void AECollisionResponse_CircleCircle(AEVec2 &normal,
+void AECollisionResponse_CircleCircle(AEVec2 &normal, 
 									const float interTime,
 									AEVec2 &velA,
 									const float &massA,
