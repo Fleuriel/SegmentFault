@@ -1,5 +1,1 @@
-﻿  GameProject.vcxproj -> C:\School stuff\CSD1451 Software Engineering Project 2\SegmentFault\GameProject\bin\Debug-x64\GameProject.exe
-  3 File(s) copied
-  1 File(s) copied
-  1 File(s) copied
-  1 File(s) copied
+﻿C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\GameProject\GameProject\GameProject.vcxproj : error MSB4025: The project file could not be loaded. Could not find file 'C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\GameProject\GameProject\GameProject.vcxproj'.

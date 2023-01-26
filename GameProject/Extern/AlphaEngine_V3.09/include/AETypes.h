@@ -17,7 +17,6 @@
 #ifndef AE_TYPES_H
 #define AE_TYPES_H
 
-
 // ---------------------------------------------------------------------------
 // typdef types
 
@@ -31,10 +30,6 @@ typedef signed long long	s64;
 typedef unsigned long long	u64;
 typedef float				f32;
 typedef double				f64;
-
-#ifndef NULL
-# define NULL 0
-#endif
 
 // ---------------------------------------------------------------------------
 

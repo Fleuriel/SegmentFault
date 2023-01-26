@@ -45,6 +45,8 @@ extern "C"
 \param      [in] FrameRateMax
             The maximum number of frames per second.
 
+\retval     bool
+            Returns true
 */
 /******************************************************************************/
 AE_API void	AEFrameRateControllerInit	(u32 FrameRateMax);
@@ -57,6 +59,8 @@ AE_API void	AEFrameRateControllerInit	(u32 FrameRateMax);
 
 \warning    This function is already called in AESysReset.
 
+\retval     void
+            No return
 */
 /******************************************************************************/
 AE_API void	AEFrameRateControllerReset	();
@@ -70,6 +74,8 @@ AE_API void	AEFrameRateControllerReset	();
 
 \warning    This function is already called in AESysFrameStart.
 
+\retval     void
+            No return
 */
 /******************************************************************************/
 AE_API void	AEFrameRateControllerStart	();
@@ -83,6 +89,8 @@ AE_API void	AEFrameRateControllerStart	();
 
 \warning    This function is already called in AESysFrameEnd.
 
+\retval     void
+            No return
 */
 /******************************************************************************/
 AE_API void	AEFrameRateControllerEnd	();
@@ -119,7 +127,7 @@ AE_API u32 AEFrameRateControllerGetFrameCount();
 \brief      Get the current fps.
 
 \retval     f64
-            Return the total number of frames elapsed.
+Return the total number of frames elapsed.
 */
 /******************************************************************************/
 AE_API f64 AEFrameRateControllerGetFrameRate();

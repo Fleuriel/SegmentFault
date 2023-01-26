@@ -25,7 +25,7 @@ struct AELineSegment
 	AEVec2		m_normal;
 };
 
-AE_API void AEBuildLineSegment(AELineSegment &lineSegment,
+void AEBuildLineSegment(AELineSegment &lineSegment, 
 						const AEVec2 &pos, 
 						float scale, 
 						float dir);
@@ -42,7 +42,7 @@ struct AECircle
 };
 
 // Intersection functions
-AE_API int AECollisionIntersection_CircleLineSegment(const AECircle &circle,
+int AECollisionIntersection_CircleLineSegment(const AECircle &circle, 
 											  const AEVec2 &ptEnd,
 											  const AELineSegment &lineSeg, 
 											  AEVec2 &interPt, 
@@ -50,7 +50,7 @@ AE_API int AECollisionIntersection_CircleLineSegment(const AECircle &circle,
 											  float &interTime);
 
 // Response functions
-AE_API void AECollisionResponse_CircleLineSegment(const AEVec2 &ptInter,
+void AECollisionResponse_CircleLineSegment(const AEVec2 &ptInter, 
 										   const AEVec2 &normal,
 										   AEVec2 &ptEnd, 
 										   AEVec2 &reflected);
