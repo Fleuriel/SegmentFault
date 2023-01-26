@@ -76,6 +76,9 @@ extern "C"
             Pointer to a callback function. 
             May be left null if not needed.
             
+\retval     s32
+            Return 1 if initialization is successful.
+            Else return 0.
 */
 /******************************************************************************/
 AE_API s32  AESysInit				(HINSTANCE hAppInstance, s32 show, s32 WinWidth, s32 WinHeight, s32 CreateConsole, u32 FrameRateMax, bool vsync, LRESULT (CALLBACK *pWinCallBack)(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp));
@@ -89,6 +92,8 @@ AE_API s32  AESysInit				(HINSTANCE hAppInstance, s32 show, s32 WinWidth, s32 Wi
 \details    Call this function when changing gamestates to reset 
             the system.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AESysReset				();
@@ -105,6 +110,8 @@ AE_API void AESysReset				();
 \details    Call this function once at the end of the program
             to free the system.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AESysExit				();
@@ -118,6 +125,8 @@ AE_API void AESysExit				();
 \details    Call this function once at the start of the frame to
             inform the system a new frame is starting.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AESysFrameStart();
@@ -131,23 +140,14 @@ AE_API void AESysFrameStart();
 \details    Call this function once at the end of the frame to
             inform the system the current frame is ending.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AESysFrameEnd();
 
-/******************************************************************************/
-/*!
-\fn         void AESysToggleFullScreen()
 
-\brief      Toggles fullscreen.
-
-\param      [in] fullScreen
-            If true, sets the window to full screen mode.
-            Otherwise, sets the window to windowed mode.
-
-*/
-/******************************************************************************/
-AE_API void AESysToggleFullScreen(const bool fullScreen);
+AE_API void AEToogleFullScreen(const bool fullScreen);
 
 
 /******************************************************************************/
@@ -174,6 +174,8 @@ AE_API HWND AESysGetWindowHandle	();
             Pointer to a null-terminated string to set as the title
             of the window.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void AESysSetWindowTitle		(const s8 *pTitle);

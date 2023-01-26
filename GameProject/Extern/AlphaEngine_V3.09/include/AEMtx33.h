@@ -56,6 +56,8 @@ extern "C"
 \param      [out] pResult
             Pointer to AEMtx33 to be set.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Identity			(AEMtx33* pResult);
@@ -73,6 +75,8 @@ AE_API void 		AEMtx33Identity			(AEMtx33* pResult);
 \param      [in] pMtx
             Pointer to AEMtx33 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Transpose		(AEMtx33* pResult, AEMtx33* pMtx);
@@ -109,6 +113,8 @@ AE_API f32			AEMtx33Inverse			(AEMtx33* pResult, AEMtx33* pMtx);
 \param      [in] pMtx
             Pointer to AEMtx33 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33InvTranspose		(AEMtx33* pResult, AEMtx33* pMtx);
@@ -130,6 +136,8 @@ AE_API void 		AEMtx33InvTranspose		(AEMtx33* pResult, AEMtx33* pMtx);
 \param      [in] pMtx1
             Pointer to AEMtx33 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Concat			(AEMtx33* pResult, AEMtx33* pMtx0, AEMtx33* pMtx1);
@@ -149,6 +157,8 @@ AE_API void 		AEMtx33Concat			(AEMtx33* pResult, AEMtx33* pMtx0, AEMtx33* pMtx1)
 \param      [in] pMtx
             Pointer to AEMtx33 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Orthogonalize	(AEMtx33* pResult, AEMtx33* pMtx);
@@ -189,6 +199,8 @@ AE_API f32			AEMtx33Determinant		(AEMtx33* pMtx);
 \param      [in] pVec
             Pointer to AEVec2 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33SetCol			(AEMtx33* pResult, u32 col,  AEVec2* pVec);
@@ -212,6 +224,8 @@ AE_API void 		AEMtx33SetCol			(AEMtx33* pResult, u32 col,  AEVec2* pVec);
 \param      [in] pVec
             Pointer to AEVec2 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33SetRow			(AEMtx33* pResult, u32 row,  AEVec2* pVec);
@@ -234,6 +248,8 @@ AE_API void 		AEMtx33SetRow			(AEMtx33* pResult, u32 row,  AEVec2* pVec);
 \param      [in] col
             The selected column of pResult.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33GetCol			(AEVec2* pResult, AEMtx33* pMtx, u32 col);
@@ -256,6 +272,8 @@ AE_API void 		AEMtx33GetCol			(AEVec2* pResult, AEMtx33* pMtx, u32 col);
 \param      [in] row
             The selected row of pResult.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void			AEMtx33GetRow			(AEVec2* pResult, AEMtx33* pMtx, u32 row);
@@ -279,6 +297,8 @@ AE_API void			AEMtx33GetRow			(AEVec2* pResult, AEMtx33* pMtx, u32 row);
 \param      [in] y
             Translation along the y-axis.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Trans			(AEMtx33* pResult, f32 x, f32 y);
@@ -305,6 +325,8 @@ AE_API void 		AEMtx33Trans			(AEMtx33* pResult, f32 x, f32 y);
 \param      [in] y
             Translation along the y-axis.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33TransApply		(AEMtx33* pResult, AEMtx33* pMtx, f32 x, f32 y);
@@ -326,6 +348,8 @@ AE_API void 		AEMtx33TransApply		(AEMtx33* pResult, AEMtx33* pMtx, f32 x, f32 y)
 \param      [in] y
             Scaling along the y-axis.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Scale			(AEMtx33* pResult, f32 x, f32 y);
@@ -352,6 +376,8 @@ AE_API void 		AEMtx33Scale			(AEMtx33* pResult, f32 x, f32 y);
 \param      [in] y
             Scaling along the y-axis.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33ScaleApply		(AEMtx33* pResult, AEMtx33* pMtx, f32 x, f32 y);
@@ -370,6 +396,8 @@ AE_API void 		AEMtx33ScaleApply		(AEMtx33* pResult, AEMtx33* pMtx, f32 x, f32 y)
 \param      [in] angle
             Angle in radians rotating counter-clockwise.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33Rot				(AEMtx33* pResult, f32 angle);
@@ -388,6 +416,8 @@ AE_API void 		AEMtx33Rot				(AEMtx33* pResult, f32 angle);
 \param      [in] angle
             Angle in degress rotating counter-clockwise.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33RotDeg			(AEMtx33* pResult, f32 angle);
@@ -411,6 +441,8 @@ AE_API void 		AEMtx33RotDeg			(AEMtx33* pResult, f32 angle);
 \param      [in] pVec
             Pointer to AEVec2 for input.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33MultVec			(AEVec2* pResult, AEMtx33* pMtx, AEVec2* pVec);
@@ -439,6 +471,8 @@ AE_API void 		AEMtx33MultVec			(AEVec2* pResult, AEMtx33* pMtx, AEVec2* pVec);
 \param      [in] count
             Number of elements in pVec to be multiplied.
 
+\retval     void
+            No return.
 */
 /******************************************************************************/
 AE_API void 		AEMtx33MultVecArray		(AEVec2* pResult, AEMtx33* pMtx, AEVec2* pVec, u32 count);
