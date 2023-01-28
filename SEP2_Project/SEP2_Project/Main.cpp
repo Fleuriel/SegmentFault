@@ -24,7 +24,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Initialization of your own variables go here
 
 	// Using custom window procedure
-	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
+	AESysInit(hInstance, nCmdShow, 1366, 768, 1, 60, true, NULL);
 
 	// Changing the window title
 	AESysSetWindowTitle("Among Them");
@@ -69,6 +69,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	f32 rotationx = 0;
 	f32 x = 0.0f , y = 0.0f, r = 0.0f, z = 0.0f,x1 = 50.0f, y1  = 50.0f;
 	// Game Loop
+
+	f32 enemyX = 0.0f, enemyY = 0.0f;
 
 	while (gGameRunning)
 	{
@@ -156,8 +158,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetTransparency(1.0f);
 		// Set the texture to pTex
-		AEGfxTextureSet(pTex, 0, 0);
 
+
+		AEGfxTextureSet(pTex, 0, 0);
 		// Create a scale matrix that scales by 100 x and y
 		AEMtx33 scale = { 0 };
 		AEMtx33Scale(&scale,z ,z);
@@ -179,6 +182,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		
 
 		//let this one be the turning ones.
+
+
 
 		AEGfxTextureSet(oOTex, 0, 0);
 		AEMtx33 scale1 = { 0 };
