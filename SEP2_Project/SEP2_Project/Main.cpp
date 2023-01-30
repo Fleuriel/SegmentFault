@@ -13,6 +13,8 @@
 
 
 
+
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR    lpCmdLine,
@@ -23,23 +25,45 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int gGameRunning = 1;
 	// Initialization of your own variables go here
 	// Using custom window procedure
-	AESysInit(hInstance, nCmdShow, 800, 600, 1, 60, true, NULL);
+	AESysInit(hInstance, nCmdShow, 1366, 768, 1, 144, true, NULL);
+
 
 	// Changing the window title
 	AESysSetWindowTitle("Among Them");
 
 	// reset the system modules
 	AESysReset();
+	int enemySpeed = 1;
+	f32 x = 0.0f, y = 0.0f;
+	f32 rotationx = 0;
+	f32 r = 100.0f, z = 0.0f, x1 = 50.0f, y1 = 50.0f;
+	f32 projRotX = 0.0f , projRotY= 0.0f;
 
-	int array[MAX_ENEMIES] = {};
-	int distanceX[MAX_ENEMIES] = {};
-	int distanceY[MAX_ENEMIES] = {};
+
+	std::vector<std::pair<int, int>> enemies;
+	std::random_device random;
+	std::mt19937 gen(random());
+	std::uniform_int_distribution<>distX(x - 50, x + 50);
+	std::uniform_int_distribution<>distY(y - 50, y + 50);
+
+
+	f32 array[MAX_ENEMIES] = {0};
+	f32 distanceX[MAX_ENEMIES] = {0};
+	f32 distanceY[MAX_ENEMIES] = {0};
+	f32 enemyX[MAX_ENEMIES] = { 200.0f ,300.0f ,400.0f ,500.0f ,600.0f ,700.0f ,800.0f ,900.0f ,1000.0f ,1100.0f };
+	f32 enemyY[MAX_ENEMIES] = { 100.0f ,500.0f ,440.0f ,-300.0f ,-900.0f ,-700.0f ,-144.0f ,900.0f ,1000.0f ,1100.0f };
+
+	f32 projX = 0.0f, projY = 0.0f;
+	s32* mousex = new s32, * mousey = new s32;
 	//My Own Testing Codes
 	AEGfxVertexList* pMesh = 0;
 	AEGfxVertexList* oOMesh = 0;
 	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/Assets/TrollFace.png");
 	AEGfxTexture* oOTex = AEGfxTextureLoad("Assets/Assets/moon.png");
 	AEGfxTexture* ETex = AEGfxTextureLoad("Assets/Assets/images.png");
+	AEGfxTexture* pewTex = AEGfxTextureLoad("Assets/Assets/YellowTexture.png");
+	AEGfxTexture* GOTex = AEGfxTextureLoad("Assets/Assets/GameOver.png"); 
+	bool gameOverCheck = 0;
 
 	AEGfxMeshStart();
 	AEGfxTriAdd(-0.5f, -0.5f, 0xFFFF00FF, 0.0f, 0.0f,
@@ -51,17 +75,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	pMesh = AEGfxMeshEnd();
 	AEGfxMeshStart();
 
+	f32 projectile_speed = 5.0;
+	f32 degrees;
 
-
-	int enemySpeed = 1;
-	f32 x = 0.0f, y = 0.0f;
-	f32 rotationx = 0;
-	f32 r = 100.0f, z = 0.0f,x1 = 50.0f, y1  = 50.0f;
 	// Game Loop
 
-	f32 enemyX = 200.0f, enemyY = 200.0f;
+	//f32 enemyX = 200.0f, enemyY = 200.0f;
 
-
+	f32 seconds = 0.0f;
 	f32 distance = 0.0f;
 	while (gGameRunning)
 	{
@@ -71,21 +92,30 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Handling Input
 		AEInputUpdate();
 
+		//if(AEngine_getDT)
+		//timer += 1;
+		//
+		//	AEInputGetCursorPosition(mousex, mousey); 
+		//	std::cout << *mousex << *mousey << "\n";
+		//	gets the mouse x and y input.
+
+
+
 		for (int i = 0; i < MAX_ENEMIES; i++)
 		{
+			distanceX[i] = enemyX[i] - x;
+			distanceY[i] = enemyY[i] - y;
 
+			float magnitude = sqrt(pow(distanceX[i], 2) + pow(distanceY[i], 2));
+			distanceX[i] /= magnitude;
+			distanceY[i] /= magnitude;
 
-			float distanceX = enemyX - x;
-			float distanceY = enemyY - y;
-
-			float magnitude = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
-			distanceX /= magnitude;
-			distanceY /= magnitude;
-
-			enemyX -= distanceX * enemySpeed;
-			enemyY -= distanceY * enemySpeed;
-		}
+			enemyX[i] -= distanceX[i] * enemySpeed;
+			enemyY[i] -= distanceY[i] * enemySpeed;
+			//std::cout << "enemyX: " << i << "  " << enemyX[i] << "  enemyY: " << i << "  " << enemyY[i] << '\n';
+		}//
 	
+//		if (AEInputGetCursorPosition());
 		
 
 		//std::cout << distance << '\n';
@@ -147,6 +177,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		x1 = x + 100 * cos(rotationx);
 		y1 = y + 100 * sin(rotationx);
 
+		if (AEInputCheckTriggered(AEVK_H))
+		{
+			std::cout << enemyY[0] - y  <<  "   " << enemyX[0] - x << '\n';
+			degrees = acos(enemyY[0]-y/ enemyX[0]-x );
+			std::cout << degrees << '\n';
+			projRotX = cos(degrees);
+			projRotY = sin(degrees);
+		}
+
+
+		projX = projectile_speed *  projRotX;
+		projY = projectile_speed *  projRotY;
+
+
+		std::cout << "ProjRotX: " << projRotX << "ProjRotY : " << projRotY << '\n';
+		std::cout << "projX: " << projX << "projY : " << projY << '\n';
+
 
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -205,9 +252,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Actually drawing the mesh
 		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 		
-
-
-		std::cout << "enemyX: " << enemyX << "  enemyY: " << enemyY << '\n';
+		//projectile
+		AEGfxTextureSet(pewTex, 0, 0);
+		AEMtx33Scale(&scale1, 50, 50);
+		// Create a rotation matrix that rotates by 45 degrees
+		AEMtx33Rot(&rotate1, rotationx);
+		// Create a translation matrix that translates by
+		// 100 in the x-axis and 100 in the y-axis
+		AEMtx33Trans(&translate1, projX, projY);
+		// Concat the matrices (TRS)
+		AEMtx33Concat(&transform1, &rotate1, &scale1);
+		AEMtx33Concat(&transform1, &translate1, &transform1);
+		// Choose the transform to use
+		AEGfxSetTransform(transform1.m);
+		// Actually drawing the mesh
+		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 		/*		A
 			   /|
 			  / |
@@ -216,22 +275,40 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			C	B
 		*/
 
+		if (AEInputCheckTriggered(AEVK_J))
+		{
+			gameOverCheck = !gameOverCheck;
+		}
+		if (gameOverCheck == 1) {
+			AEGfxTextureSet(GOTex, 0, 0);
+			AEMtx33Scale(&scale, 500.f, 200.f);
+			AEMtx33Rot(&rotate, 0);
+			AEMtx33Trans(&translate, 0, 0);
+			AEMtx33Concat(&transform, &rotate, &scale);
+			AEMtx33Concat(&transform, &translate, &transform);
+			AEGfxSetTransform(transform.m);
+			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		}
 
-		AEGfxTextureSet(ETex, 0, 0);
-		AEMtx33Scale(&scale1, 50, 50);
-		// Create a rotation matrix that rotates by 45 degrees
-		AEMtx33Rot(&rotate1, rotationx);
-		// Create a translation matrix that translates by
-		// 100 in the x-axis and 100 in the y-axis
-		AEMtx33Trans(&translate1, enemyX, enemyY);
-		// Concat the matrices (TRS)
-		
-		AEMtx33Concat(&transform1, &rotate1, &scale1);
-		AEMtx33Concat(&transform1, &translate1, &transform1);
-		// Choose the transform to use
-		AEGfxSetTransform(transform1.m);
-		// Actually drawing the mesh
-		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+		for (int i = 0; i < MAX_ENEMIES; i++)
+		{
+			AEGfxTextureSet(ETex, 0, 0);
+			AEMtx33Scale(&scale1, 50, 50);
+			// Create a rotation matrix that rotates by 45 degrees
+			AEMtx33Rot(&rotate1, rotationx);
+			// Create a translation matrix that translates by
+			// 100 in the x-axis and 100 in the y-axis
+			AEMtx33Trans(&translate1, enemyX[i], enemyY[i]);
+			// Concat the matrices (TRS)
+
+			AEMtx33Concat(&transform1, &rotate1, &scale1);
+			AEMtx33Concat(&transform1, &translate1, &transform1);
+			// Choose the transform to use
+			AEGfxSetTransform(transform1.m);
+			// Actually drawing the mesh
+			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		}
 
 		AESysFrameEnd();
 		// check if forcing the application to quit
