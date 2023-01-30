@@ -1,27 +1,35 @@
-﻿  Main.cpp
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(46,49): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
+﻿  Controls.cpp
+  enemy.cpp
+  Main.cpp
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(72,49): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(46,41): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(72,41): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(47,49): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(73,49): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(47,41): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(73,41): warning C4244: 'argument': conversion from 'f32' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(109,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(175,20): warning C4305: '-=': truncation from 'double' to 'f32'
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(173,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(239,20): warning C4305: '-=': truncation from 'double' to 'f32'
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(327,44): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(327,34): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(116,6): warning C4101: 'degrees': unreferenced local variable
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(120,6): warning C4101: 'mX': unreferenced local variable
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(120,10): warning C4101: 'mY': unreferenced local variable
+  Generating Code...
   SEP2_Project.vcxproj -> C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\bin\Debug-x64\SEP2_Project.exe
-  9 File(s) copied
+  10 File(s) copied
   1 File(s) copied
   1 File(s) copied
