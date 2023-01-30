@@ -12,6 +12,8 @@
 #include <ctime>
 #include <chrono>
 
+std::chrono::duration<double> elapsed;
+
 class Projectile {
 public:
 	double x, y;
@@ -89,14 +91,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//Mesh
 	AEGfxVertexList* pMesh = 0;
 	//Texture Start
-	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/Assets/TrollFace.png");
+	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/Assets/Terran.png");
 	AEGfxTexture* oOTex = AEGfxTextureLoad("Assets/Assets/moon.png");
-	AEGfxTexture* ETex = AEGfxTextureLoad("Assets/Assets/images.png");
+	AEGfxTexture* ETex = AEGfxTextureLoad("Assets/Assets/ling.png");
 	AEGfxTexture* pewTex = AEGfxTextureLoad("Assets/Assets/YellowTexture.png");
 	AEGfxTexture* GOTex = AEGfxTextureLoad("Assets/Assets/GameOver.png"); 
 	AEGfxTexture* TargetTex = AEGfxTextureLoad("Assets/Assets/Target.png");
 
-
+	f64 deltaTime = 0;
 	//Texture End
 
 	bool gameOverCheck = 0;
@@ -111,6 +113,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	pMesh = AEGfxMeshEnd();
 	AEGfxMeshStart();
 
+	int playerScaleX = 75;
+	int playerScaleY = 75;
+	int enemyScaleX = 75;
+
 	const float projectileSpeed = 5.0f;
 	const float enemySpeed = 1.0f;
 
@@ -122,9 +128,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Game Loop
 	while (gGameRunning)
 	{
-
+		//timer
 		auto timerStart = std::chrono::high_resolution_clock::now();
 		// Informing the system about the loop's start
+		deltaTime += elapsed.count();
+
+		if(static_cast<int>(deltaTime) %2 == 1)
+		{
+			Projectile projectile(x1, y1, angle, projectileSpeed);
+			_bullet.push_back(projectile);
+			std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
+			deltaTime = 0;
+		}
+
 		AESysFrameStart();
 
 		// Handling Input
@@ -135,19 +151,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			_bullet[i].updatePosition();
 		}
 		
-		if (AEInputCheckTriggered(AEVK_C))
-		{
-			Projectile projectile(*mouseX - AEGetWindowWidth()/2, -(*mouseY - AEGetWindowHeight()/2), angle, projectileSpeed);
-			_bullet.push_back(projectile);
-		}
+		//if (AEInputCheckTriggered(AEVK_C))
+		//{
+			//Projectile projectile(*mouseX - AEGetWindowWidth() / 2, -(*mouseY - AEGetWindowHeight() / 2), angle, projectileSpeed);
+		//	Projectile projectile(x1,y1, angle, projectileSpeed);
+		//	_bullet.push_back(projectile);
+		//}
 
-
-
+		/*				  y
+						  ^
+						  |
+						  |
+		------------------|------------------->x
+						  |
+						  |
+							  */
 		//if (projectile.x > 400 || projectile.y > 400)
 		//{
 		//	projectile.x = projectile.y = 0;
 		//}
-		AEInputGetCursorPosition(mouseX, mouseY);
+		AEInputGetCursorPosition(mouseX, mouseY); 
 		//std::cout << "Mouse X: " << *mousex << "   Mouse Y: " << *mousey << "\n";
 		//	gets the mouse x and y input.
 		if (gameOverCheck == 0)
@@ -189,11 +212,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckCurr(AEVK_RIGHT))
 		{
 			x += 5.0f;
+			if (playerScaleX < 0)
+			{
+				playerScaleX *= -1;
+			}
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 		if (AEInputCheckCurr(AEVK_LEFT))
 		{
 			x -= 5.0f;
+			if(playerScaleX >0)
+				playerScaleX *= -1;
 			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
 		if (AEInputCheckCurr(AEVK_DOWN))
@@ -262,16 +291,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-		// Tell the engine to get ready to draw something with texture.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		// Set the tint to white, so that the sprite can
-		// display the full range of colors (default is black).
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// Set blend mode to AE_GFX_BM_BLEND
-		// This will allow transparency.
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetTransparency(1.0f);
 		// Set the texture to pTex
+
+		//X
 		AEGfxTextureSet(TargetTex, 0, 0);
 		AEMtx33Scale(&scale, 50, 50);
 		AEMtx33Rot(&rotate, 0);
@@ -281,11 +307,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransform(transform.m);
 		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
+		//
 		AEGfxTextureSet(pTex, 0, 0);
 		// Create a scale matrix that scales by 100 x and y
-		AEMtx33Scale(&scale,75 ,75);
+		AEMtx33Scale(&scale,playerScaleX, 75);
 		// Create a rotation matrix that rotates by 45 degrees
-		AEMtx33Rot(&rotate, 135);
+		AEMtx33Rot(&rotate, AEDegToRad(180));
 		// Create a translation matrix that translates by
 		// 100 in the x-axis and 100 in the y-axis
 		AEMtx33Trans(&translate, x, y);
@@ -341,11 +368,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
+		if (enemyX[0] < x)
+		{
+			if (enemyScaleX > 0)
+			{
+				enemyScaleX *= -1;
+			}
+		}		
+		if (enemyX[0] > x)
+		{
+			if (enemyScaleX < 0)
+			{
+				enemyScaleX *= -1;
+			}
+		}
+
 		for (int i = 0; i < MAX_ENEMIES; i++)
 		{
 			AEGfxTextureSet(ETex, 0, 0);
-			AEMtx33Scale(&scale, 50, 50);
-			AEMtx33Rot(&rotate, rotationx);
+			AEMtx33Scale(&scale, enemyScaleX, 75);
+			AEMtx33Rot(&rotate,  AEDegToRad(180));
 			AEMtx33Trans(&translate, enemyX[i], enemyY[i]);
 			AEMtx33Concat(&transform, &rotate, &scale);
 			AEMtx33Concat(&transform, &translate, &transform);
@@ -360,7 +402,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 		auto timerEnd = std::chrono::high_resolution_clock::now();
-		static double elapsed_time_ms = std::chrono::duration<double, std::milli>(timerEnd - timerStart).count();
+		//static double elapsed_time_ms = std::chrono::duration<double, std::milli>(timerEnd - timerStart).count();
+		elapsed = timerEnd - timerStart;
 	}
 
 	AEGfxMeshFree(pMesh);
