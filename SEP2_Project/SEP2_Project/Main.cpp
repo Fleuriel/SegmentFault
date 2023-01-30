@@ -83,8 +83,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//Dumb array, need to change for dynamic array.
 	f64 distanceX[MAX_ENEMIES] = {0};
 	f64 distanceY[MAX_ENEMIES] = {0};
-	f64 enemyX[MAX_ENEMIES] = { 200.0f };
-	f64 enemyY[MAX_ENEMIES] = { 200.0f };
+	f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237.0f, 937.0f, 823.0f, 236.0f };
+	f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
 
 	s32* mouseX = new s32, * mouseY = new s32;
 	//My Own Testing Codes
@@ -97,7 +97,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxTexture* pewTex = AEGfxTextureLoad("Assets/Assets/YellowTexture.png");
 	AEGfxTexture* GOTex = AEGfxTextureLoad("Assets/Assets/GameOver.png"); 
 	AEGfxTexture* TargetTex = AEGfxTextureLoad("Assets/Assets/Target.png");
-
+	float playerXMax = x + 15.0f, playerYMax = y + 15.0f, enemyXMax = 0, enemyYMax = 0;
+	float playerXMin = x - 15.0f, playerYMin = y - 15.0f, enemyXMin = 0, enemyYMin = 0;
 	f64 deltaTime = 0;
 	//Texture End
 
@@ -117,14 +118,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int playerScaleY = 75;
 	int enemyScaleX = 75;
 
-	const float projectileSpeed = 5.0f;
-	const float enemySpeed = 1.0f;
+	const float projectileSpeed = 10.0f;
+	float enemySpeed = 1.0f;
 
 	//Enemy
 	Enemy enemy(enemyX[0], enemyY[0]);
 	double angle = atan2(enemy.getY() - 0, enemy.getX() - 0);
 	Projectile projectile(0, 0, angle, projectileSpeed);
-
+	f64 lmao;
 	// Game Loop
 	while (gGameRunning)
 	{
@@ -132,9 +133,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		auto timerStart = std::chrono::high_resolution_clock::now();
 		// Informing the system about the loop's start
 		deltaTime += elapsed.count();
+		//angle
+		//angle = atan2(enemyX[0] - y1, enemyY[0] - x1);
 
-		if(static_cast<int>(deltaTime) %2 == 1)
+		//std::cout << "enemyX: " << enemyX[0] << "EnemyY: " << enemyY[0] << '\n';
+		enemyXMax = enemyX[0] - 15.0f, enemyYMax = enemyY[0] + 15.0f;
+		enemyXMin = enemyX[0] + 15.0f, enemyYMin = enemyY[0] - 15.0f;
+
+//		angle = atan2(enemyY[0] - y1, enemyX[0] - x1);
+		//std::cout <<"Y: " << enemyY[0] << "X: " << enemyY[0];
+		//std::cout << angle << '\n';
+
+		if(static_cast<int>(deltaTime) %3 == 2)
 		{
+			angle = atan2(enemyY[0] - y1, enemyX[0] - x1);
 			Projectile projectile(x1, y1, angle, projectileSpeed);
 			_bullet.push_back(projectile);
 			std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
@@ -150,7 +162,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
 			Projectile& projectile = _bullet[i];
 			_bullet[i].updatePosition();
-		
 			//if bullet is out of the map, delete it. (Can change later, but now to prevent mem leak)
 			if (projectile.x > AEGetWindowWidth() || projectile.x < -AEGetWindowWidth() || projectile.y > AEGetWindowHeight() || projectile.y < -AEGetWindowHeight())
 			{
@@ -166,13 +177,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//	_bullet.push_back(projectile);
 		//}
 
-		/*				  y
-						  ^
-						  |
-						  |
-		------------------|------------------->x
-						  |
-						  |
+		/*				   y
+						   ^
+						   |
+						   |
+		-------------------|------------------->x
+						   |
+						   |
 							  */
 		//if (projectile.x > 400 || projectile.y > 400)
 		//{
@@ -181,19 +192,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEInputGetCursorPosition(mouseX, mouseY); 
 		//std::cout << "Mouse X: " << *mousex << "   Mouse Y: " << *mousey << "\n";
 		//	gets the mouse x and y input.
-		if (gameOverCheck == 0)
-		{
-			if (*mouseX >= 500 && *mouseX <= 800)
-			{
-				if (*mouseY >= 500 && *mouseY <= 800)
-				{
-					if (AEInputCheckTriggered(AEVK_LBUTTON))
-					{
-						gameOverCheck = !gameOverCheck;
-					}
-				}
-			}
-		}
+
 
 
 		for (int i = 0; i < MAX_ENEMIES; i++)
@@ -217,64 +216,43 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		
 //		std::cout << "x1: " << x1 << ' ' << "y1: " << y1 << '\n';
 
-		if (AEInputCheckCurr(AEVK_RIGHT))
+		if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 		{
 			x += 5.0f;
+			playerXMax += 5.0f;
+			playerXMin += 5.0f;
+
 			if (playerScaleX < 0)
 			{
 				playerScaleX *= -1;
 			}
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
+			//std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
-		if (AEInputCheckCurr(AEVK_LEFT))
+		if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 		{
-			x -= 5.0f;
+			x -= 5.0f;     
+			playerXMax -= 5.0f;
+			playerXMin -= 5.0f;
 			if(playerScaleX >0)
 				playerScaleX *= -1;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
+			//std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
-		if (AEInputCheckCurr(AEVK_DOWN))
+		if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 		{
-			y -= 5.0f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
+			y -= 5.0f; 
+			playerYMin -= 5.0f;
+			playerYMax -= 5.0f;
+			//std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}		
-		if (AEInputCheckCurr(AEVK_UP))
+		if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 		{
+			playerYMax += 5.0f;
+			playerYMin += 5.0f;
 			y += 5.0f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
-		}
-		if (AEInputCheckCurr(AEVK_A))
-		{
-			r -= 0.01f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
-		}		
-		if (AEInputCheckCurr(AEVK_D))
-		{
-			r += 0.01f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
-		}
-		if (AEInputCheckCurr(AEVK_1))
-		{
-			z -= 1.0f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
-		}
-		if (AEInputCheckCurr(AEVK_2))
-		{
-			z += 1.0f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
-		}
-		if (AEInputCheckCurr(AEVK_R))
-		{
-			z = 100.0f;
-			std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
+			//std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
 
-		if (rotationx > 360)
-		{
-			rotationx = 0;
-		}
-		rotationx -= 0.04;
-
+		rotationx -= 0.04f;
 		x1 = x + 100 * cos(rotationx);
 		y1 = y + 100 * sin(rotationx);
 
@@ -306,14 +284,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Set the texture to pTex
 
 		//X
-		AEGfxTextureSet(TargetTex, 0, 0);
-		AEMtx33Scale(&scale, 50, 50);
-		AEMtx33Rot(&rotate, 0);
-		AEMtx33Trans(&translate, 200.0f, 200.0f);
-		AEMtx33Concat(&transform, &rotate, &scale);
-		AEMtx33Concat(&transform, &translate, &transform);
-		AEGfxSetTransform(transform.m);
-		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		//AEGfxTextureSet(TargetTex, 0, 0);
+		//AEMtx33Scale(&scale, 50, 50);
+		//AEMtx33Rot(&rotate, 0);
+		//AEMtx33Trans(&translate, 200.0f, 200.0f);
+		//AEMtx33Concat(&transform, &rotate, &scale);
+		//AEMtx33Concat(&transform, &translate, &transform);
+		//AEGfxSetTransform(transform.m);
+		//AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
 		//
 		AEGfxTextureSet(pTex, 0, 0);
@@ -335,7 +313,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//let this one be the turning ones.
 
-	
+		//Moon Projection.
 		AEGfxTextureSet(oOTex, 0, 0);
 		AEMtx33Scale(&scale, 50, 50);
 		AEMtx33Rot(&rotate, rotationx);
@@ -349,8 +327,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		for (size_t i = 0; i < _bullet.size(); i++)
 		{
 			AEGfxTextureSet(pewTex, 0, 0);
-			AEMtx33Scale(&scale, 5, 50);
-			AEMtx33Rot(&rotate, angle - 30);
+			AEMtx33Scale(&scale, 50, 5);
+			AEMtx33Rot(&rotate, angle);
 			AEMtx33Trans(&translate, _bullet[i].x, _bullet[i].y);
 			AEMtx33Concat(&transform, &rotate, &scale);
 			AEMtx33Concat(&transform, &translate, &transform);
@@ -364,6 +342,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			/___|
 			C	B
 		*/
+		if (((playerXMax < enemyXMin) && (playerYMax < enemyYMin)) || ((playerXMin > enemyXMax) && (playerYMin > enemyYMax)))
+			gameOverCheck = 0;
+		else
+			gameOverCheck = 1;
 
 		if (gameOverCheck == 1) {
 			AEGfxTextureSet(GOTex, 0, 0);
@@ -374,25 +356,48 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AEMtx33Concat(&transform, &translate, &transform);
 			AEGfxSetTransform(transform.m);
 			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+			deltaTime = 0;
+			rotationx +=0.04f;
 		}
 
-		if (enemyX[0] < x)
+
+
+		std::cout  << "Enemy X: " << enemyX[0] << " x: " << x << '\n';
+
+		lmao = enemyX[0] - (x*1.0f);
+		std::cout << lmao << '\n';
+		if (lmao < 0)
 		{
-			if (enemyScaleX > 0)
-			{
-				enemyScaleX *= -1;
-			}
-		}		
-		if (enemyX[0] > x)
-		{
-			if (enemyScaleX < 0)
-			{
-				enemyScaleX *= -1;
-			}
+			lmao *= -1;
 		}
 
+		if (lmao < 2)
+		{
+			enemySpeed = 0.0f;
+		}
+		else
+			enemySpeed = 1.0f;
+
+
+		//std::cout << " X: " << enemyX[0] << " Y: " << enemyY[0] << '\n';
+
+		//Spawn Mob
 		for (int i = 0; i < MAX_ENEMIES; i++)
 		{
+			if (enemyX[i] < x)
+			{
+				if (enemyScaleX > 0)
+				{
+					enemyScaleX *= -1;
+				}
+			}
+			if (enemyX[i] > x)
+			{
+				if (enemyScaleX < 0)
+				{
+					enemyScaleX *= -1;
+				}
+			}
 			AEGfxTextureSet(ETex, 0, 0);
 			AEMtx33Scale(&scale, enemyScaleX, 75);
 			AEMtx33Rot(&rotate,  AEDegToRad(180));
