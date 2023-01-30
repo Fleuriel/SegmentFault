@@ -139,16 +139,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			_bullet.push_back(projectile);
 			std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
 			deltaTime = 0;
+			std::cout << _bullet.size() << "    Bullet Size \n";
 		}
 
 		AESysFrameStart();
 
-		// Handling Input
 		AEInputUpdate();
-		//
+		// Handling Input
 		for (size_t i = 0; i < _bullet.size(); i++)
 		{
+			Projectile& projectile = _bullet[i];
 			_bullet[i].updatePosition();
+		
+			//if bullet is out of the map, delete it. (Can change later, but now to prevent mem leak)
+			if (projectile.x > AEGetWindowWidth() || projectile.x < -AEGetWindowWidth() || projectile.y > AEGetWindowHeight() || projectile.y < -AEGetWindowHeight())
+			{
+				_bullet.erase(_bullet.begin() + i);
+				--i;
+			}
 		}
 		
 		//if (AEInputCheckTriggered(AEVK_C))
