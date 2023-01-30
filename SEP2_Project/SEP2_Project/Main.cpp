@@ -9,7 +9,8 @@
 //#include "enemy.hpp"
 #include <vector>
 #include <random>
-
+#include <ctime>
+#include <chrono>
 
 class Projectile {
 public:
@@ -42,10 +43,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
+	
 	int gGameRunning = 1;
 	// Initialization of your own variables go here
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1366, 768, 1, 144, true, NULL);
+
+	std::vector <Projectile> _bullet;
+
+	//deltaTime
+	//const clock_t begin_Time = std::clock();
 
 
 	// Changing the window title
@@ -77,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	f64 enemyX[MAX_ENEMIES] = { 200.0f };
 	f64 enemyY[MAX_ENEMIES] = { 200.0f };
 
-	s32* mousex = new s32, * mousey = new s32;
+	s32* mouseX = new s32, * mouseY = new s32;
 	//My Own Testing Codes
 	//Mesh
 	AEGfxVertexList* pMesh = 0;
@@ -115,26 +122,39 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Game Loop
 	while (gGameRunning)
 	{
+
+		auto timerStart = std::chrono::high_resolution_clock::now();
 		// Informing the system about the loop's start
 		AESysFrameStart();
 
 		// Handling Input
-		AEInputUpdate(); 
-		
-		projectile.updatePosition();
-
-		if (projectile.x > 400 || projectile.y > 400)
+		AEInputUpdate();
+		//
+		for (size_t i = 0; i < _bullet.size(); i++)
 		{
-			projectile.x = projectile.y = 0;
+			_bullet[i].updatePosition();
 		}
-		AEInputGetCursorPosition(mousex, mousey); 
+		
+		if (AEInputCheckTriggered(AEVK_C))
+		{
+			Projectile projectile(*mouseX - AEGetWindowWidth()/2, -(*mouseY - AEGetWindowHeight()/2), angle, projectileSpeed);
+			_bullet.push_back(projectile);
+		}
+
+
+
+		//if (projectile.x > 400 || projectile.y > 400)
+		//{
+		//	projectile.x = projectile.y = 0;
+		//}
+		AEInputGetCursorPosition(mouseX, mouseY);
 		//std::cout << "Mouse X: " << *mousex << "   Mouse Y: " << *mousey << "\n";
 		//	gets the mouse x and y input.
 		if (gameOverCheck == 0)
 		{
-			if (*mousex >= 500 && *mousex <= 800)
+			if (*mouseX >= 500 && *mouseX <= 800)
 			{
-				if (*mousey >= 500 && *mousey <= 800)
+				if (*mouseY >= 500 && *mouseY <= 800)
 				{
 					if (AEInputCheckTriggered(AEVK_LBUTTON))
 					{
@@ -254,7 +274,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Set the texture to pTex
 		AEGfxTextureSet(TargetTex, 0, 0);
 		AEMtx33Scale(&scale, 50, 50);
-		AEMtx33Rot(&rotate, rotationx);
+		AEMtx33Rot(&rotate, 0);
 		AEMtx33Trans(&translate, 200.0f, 200.0f);
 		AEMtx33Concat(&transform, &rotate, &scale);
 		AEMtx33Concat(&transform, &translate, &transform);
@@ -291,14 +311,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 		
 		//projectile
-		AEGfxTextureSet(pewTex, 0, 0);
-		AEMtx33Scale(&scale, 5, 50);
-		AEMtx33Rot(&rotate, angle-30);
-		AEMtx33Trans(&translate, projectile.x, projectile.y);
-		AEMtx33Concat(&transform, &rotate, &scale);
-		AEMtx33Concat(&transform, &translate, &transform);
-		AEGfxSetTransform(transform.m);
-		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		for (size_t i = 0; i < _bullet.size(); i++)
+		{
+			AEGfxTextureSet(pewTex, 0, 0);
+			AEMtx33Scale(&scale, 5, 50);
+			AEMtx33Rot(&rotate, angle - 30);
+			AEMtx33Trans(&translate, _bullet[i].x, _bullet[i].y);
+			AEMtx33Concat(&transform, &rotate, &scale);
+			AEMtx33Concat(&transform, &translate, &transform);
+			AEGfxSetTransform(transform.m);
+			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		}
 		/*		A
 			   /|
 			  / |
@@ -318,9 +341,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 		}
 
-	
-
-
 		for (int i = 0; i < MAX_ENEMIES; i++)
 		{
 			AEGfxTextureSet(ETex, 0, 0);
@@ -337,6 +357,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// check if forcing the application to quit
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
+
+
+		auto timerEnd = std::chrono::high_resolution_clock::now();
+		static double elapsed_time_ms = std::chrono::duration<double, std::milli>(timerEnd - timerStart).count();
 	}
 
 	AEGfxMeshFree(pMesh);
@@ -347,5 +371,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxTextureUnload(ETex);
 
 	// free the system
+	
 	AESysExit();
 }

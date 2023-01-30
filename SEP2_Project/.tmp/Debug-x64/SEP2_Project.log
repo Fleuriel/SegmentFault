@@ -1,16 +1,15 @@
 ﻿  Main.cpp
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(262,23): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(276,31): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(276,28): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(291,23): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(292,32): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(292,28): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(301,28): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(302,52): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(302,38): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(333,24): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(334,48): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
-C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(334,37): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(291,31): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(291,28): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(306,23): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(307,32): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(307,28): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(318,30): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(319,53): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(319,39): warning C4244: 'argument': conversion from 'double' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(348,24): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(349,48): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
+C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\SEP2_Project\Main.cpp(349,37): warning C4244: 'argument': conversion from 'f64' to 'f32', possible loss of data
   SEP2_Project.vcxproj -> C:\Users\angus\OneDrive\Documents\GitHub\SegmentFault_New\SEP2_Project\bin\Debug-x64\SEP2_Project.exe
   10 File(s) copied
   1 File(s) copied
