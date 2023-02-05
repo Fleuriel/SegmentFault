@@ -12,6 +12,7 @@
 #include <ctime>
 #include <chrono>
 
+
 std::chrono::duration<double> elapsed;
 
 class Projectile {
@@ -53,6 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	std::vector <Projectile> _bullet;
 
+	bool check = true;
 	//deltaTime
 	//const clock_t begin_Time = std::clock();
 
@@ -117,9 +119,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int playerScaleX = 75;
 	int playerScaleY = 75;
 	int enemyScaleX = 75;
+	double rot = 0;
 
-	const float projectileSpeed = 10.0f;
-	float enemySpeed = 1.0f;
+	const float projectileSpeed = 2.0f;
+	float enemySpeed = 0.4f;
 
 	//Enemy
 	Enemy enemy(enemyX[0], enemyY[0]);
@@ -137,22 +140,77 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//angle = atan2(enemyX[0] - y1, enemyY[0] - x1);
 
 		//std::cout << "enemyX: " << enemyX[0] << "EnemyY: " << enemyY[0] << '\n';
-		enemyXMax = enemyX[0] - 15.0f, enemyYMax = enemyY[0] + 15.0f;
-		enemyXMin = enemyX[0] + 15.0f, enemyYMin = enemyY[0] - 15.0f;
+		enemyXMax = enemyX[0] + 15.0f, enemyYMax = enemyY[0] + 15.0f;
+		enemyXMin = enemyX[0] - 15.0f, enemyYMin = enemyY[0] - 15.0f;
 
 //		angle = atan2(enemyY[0] - y1, enemyX[0] - x1);
 		//std::cout <<"Y: " << enemyY[0] << "X: " << enemyY[0];
 		//std::cout << angle << '\n';
-
-		if(static_cast<int>(deltaTime) %3 == 2)
+		double radius = 5.0;
+		if(deltaTime > 0.001f)
 		{
-			angle = atan2(enemyY[0] - y1, enemyX[0] - x1);
-			Projectile projectile(x1, y1, angle, projectileSpeed);
-			_bullet.push_back(projectile);
-			std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
+			angle = atan2(y1 - y, x1 - x);
+
+			if (rot < 180 && check == false)
+			{
+				rot += 0.2;
+			}
+			else
+			{
+				rot -= 0.2;
+				check = true;
+			}
+
+			if (rot < 0)
+			{
+				check = false;
+			}
+
+
+			std::mt19937 rng(std::random_device{}());
+			std::uniform_int_distribution<int> angleTDist(0, 360);
+			int objcount = 0;
+			int angleT = angleTDist(rng);
+				for (int i = 0; i < 5; ++i) {
+					// Create the object using Alpha Engine's object creation functions
+					// ...
+					angleT += 360 / 5;
+				}
+				angleT += std::sin(objcount) * std::cos(objcount) * 12;
+				++objcount;
+				// Replace the yield call with the appropriate code in Alpha Engine
+				// 
+				Projectile projectile(x, y, angleT, projectileSpeed);
+
+				_bullet.push_back(projectile);
+				// ...
+			
+
+			std::cout << "Rotation: " << rot << '\n';
+			//angle needs to be a multiple of 2.
+			
+			
+			double newX = x;
+			double newY = y;
+
+			
+			//Projectile projectile(x, y, angle, projectileSpeed);
+			//_bullet.push_back(projectile);
+			
+
+			//std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
 			deltaTime = 0;
-			std::cout << _bullet.size() << "    Bullet Size \n";
+			//std::cout << _bullet.size() << "    Bullet Size \n";
+
+			//angle = atan2(enemyY[0] - y1, enemyX[0] - x1);
+			//Projectile projectile(x1, y1, angle, projectileSpeed);
+			//_bullet.push_back(projectile);
+			//std::cout << "DT: " << static_cast<int>(deltaTime) << '\n';
+			//deltaTime = 0;
+			//std::cout << _bullet.size() << "    Bullet Size \n";
 		}
+		
+
 
 		AESysFrameStart();
 
@@ -161,7 +219,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		for (size_t i = 0; i < _bullet.size(); i++)
 		{
 			Projectile& projectile = _bullet[i];
+
 			_bullet[i].updatePosition();
+
 			//if bullet is out of the map, delete it. (Can change later, but now to prevent mem leak)
 			if (projectile.x > AEGetWindowWidth() || projectile.x < -AEGetWindowWidth() || projectile.y > AEGetWindowHeight() || projectile.y < -AEGetWindowHeight())
 			{
@@ -206,6 +266,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			enemyX[i] -= distanceX[i] * enemySpeed;
 			enemyY[i] -= distanceY[i] * enemySpeed;
+
+
+
 			//std::cout << "enemyX: " << i << "  " << enemyX[i] << "  enemyY: " << i << "  " << enemyY[i] << '\n';
 		}//
 	
@@ -215,6 +278,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//std::cout << distance << '\n';
 		
 //		std::cout << "x1: " << x1 << ' ' << "y1: " << y1 << '\n';
+
+
 
 		if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 		{
@@ -251,8 +316,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			y += 5.0f;
 			//std::cout << "x: " << x << ' ' << "y: " << y << ' ' << "z: " << z << ' ' << "r: " << r << '\n';
 		}
+		rotationx -= 0.04;
+		
 
-		rotationx -= 0.04f;
 		x1 = x + 100 * cos(rotationx);
 		y1 = y + 100 * sin(rotationx);
 
@@ -327,7 +393,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		for (size_t i = 0; i < _bullet.size(); i++)
 		{
 			AEGfxTextureSet(pewTex, 0, 0);
-			AEMtx33Scale(&scale, 50, 5);
+			AEMtx33Scale(&scale, 5, 5);
+			//			AEMtx33Scale(&scale, 50, 5);
 			AEMtx33Rot(&rotate, angle);
 			AEMtx33Trans(&translate, _bullet[i].x, _bullet[i].y);
 			AEMtx33Concat(&transform, &rotate, &scale);
@@ -342,23 +409,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			/___|
 			C	B
 		*/
-		if (((playerXMax < enemyXMin) && (playerYMax < enemyYMin)) || ((playerXMin > enemyXMax) && (playerYMin > enemyYMax)))
-			gameOverCheck = 0;
-		else
-			gameOverCheck = 1;
 
-		if (gameOverCheck == 1) {
-			AEGfxTextureSet(GOTex, 0, 0);
-			AEMtx33Scale(&scale, 500.f, 200.f);
-			AEMtx33Rot(&rotate, 0);
-			AEMtx33Trans(&translate, 0, 0);
-			AEMtx33Concat(&transform, &rotate, &scale);
-			AEMtx33Concat(&transform, &translate, &transform);
-			AEGfxSetTransform(transform.m);
-			AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
-			deltaTime = 0;
-			rotationx +=0.04f;
-		}
+		//GAME OVER CHECK
+		//if (((playerXMax < enemyXMin) && (playerYMax < enemyYMin)) || ((playerXMin > enemyXMax) && (playerYMin > enemyYMax)))
+		//	gameOverCheck = 0;
+		//else
+		//	gameOverCheck = 1;
+		//
+		//if (gameOverCheck == 1) {
+		//	AEGfxTextureSet(GOTex, 0, 0);
+		//	AEMtx33Scale(&scale, 500.f, 200.f);
+		//	AEMtx33Rot(&rotate, 0);
+		//	AEMtx33Trans(&translate, 0, 0);
+		//	AEMtx33Concat(&transform, &rotate, &scale);
+		//	AEMtx33Concat(&transform, &translate, &transform);
+		//	AEGfxSetTransform(transform.m);
+		//	AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		//	deltaTime = 0;
+		//	//rotationx +=0.04f;
+		//}
 
 
 
@@ -376,8 +445,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			enemySpeed = 0.0f;
 		}
 		else
-			enemySpeed = 1.0f;
-
+		{
+			//enemySpeed = 0.4f;
+		}
 
 		//std::cout << " X: " << enemyX[0] << " Y: " << enemyY[0] << '\n';
 
