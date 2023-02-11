@@ -2,9 +2,6 @@
 
 
 
-#ifndef CS230_MAIN_H_
-#define CS230_MAIN_H_
-
 //------------------------------------
 // Globals
 
@@ -24,5 +21,3 @@ extern double	g_appTime;
 #include "Level1.h"
 #include "Menu.h"
 #include "Utilities.h"
-
-#endif

@@ -2,8 +2,48 @@
 #include <vector>
 #include "AEEngine.h"
 #include "Main.h"
-#define MAX_ENEMIES 100
 
+
+#define MAX_ENEMIES				100
+#define GAME_OBJ_NUM_MAX		32
+#define GAME_OBJ_INST_NUM_MAX	2048
+#define PLAYER_LIFE				3	//FOR NOW
+
+
+
+enum ObjectType {
+
+	TYPE_PLAYER = 0,
+	TYPE_BULLET,
+	TYPE_ENEMY
+
+};
+
+
+
+
+
+class GameObjects {
+private:
+
+public:
+	unsigned long type;
+	AEGfxVertexList* pMesh;
+};
+
+class Player 
+{
+private:
+
+public:
+	GameObjects*	pObjects;
+	u64				flag;
+	f32				scale;
+	AEVec2			position;
+	AEVec2			velocity;
+	AABB			boundingBox;
+	AEMtx33			transform;
+};
 
 class Projectile {
 public:
@@ -57,16 +97,43 @@ public:
 	f64 getAngle()  { return angle; }
 };
 
-//Parameters
+//Parameters: Testing
 //Enemy (Now)
 f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237.0f, 937.0f, 823.0f, 236.0f };
 f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
 
+//Parameters: Original Objects
+static GameObjects			sGameObjList[GAME_OBJ_NUM_MAX];
+static unsigned long		sGameObjNum;								
 
+//Object Instances
+static Player				sGameObjInstList[GAME_OBJ_INST_NUM_MAX];
+static unsigned long		sGameObjInstNum;
+
+//Pointer to Objects...
+static Player*				_Player;
+
+//Function to create/destroy a game object instance...
+
+Player*						gameObjInstCreate(unsigned long type, f32 scale, AEVec2* pPos, AEVec2* pVel, f32 dir);
+
+void						gameObjInstDestroy(Player* pInst);
+
+
+f64		enemySpeed		=	1.0f;
+f64		enemySize		=	10.0f;
 
 //parameters for constructor to fufil..
-f64 playerSpeed = 1.0f;
-f64 projectileSpeed = 1.0f;
+const f64 playerSpeed = 1.0f;
+const f64 projectileSpeed = 1.0f;
+const f64 PLAYER_SIZE = 10.0f;
+
+
+
+
+//Parameters Player Mouse:
+s32* mouseX = new s32, * mouseY = new s32;
+
 
 
 //Creating the objects for enemy and Projectile.
@@ -87,15 +154,11 @@ std::vector<Projectile> _bullet;
 
 
 //Assets Mesh
-AEGfxMeshStart();
-AEGfxTriAdd(
-	0.5f, 0.5f, 0x292929, 1.0f, 0.0f,
-	-0.5f, -0.5f, 0xC0C0C0, 0.0f, 1.0f,
-	0.5f, -0.5f, 0x808080, 1.0f, 1.0f);
-AEGfxTriAdd(
-	-0.5f, 0.5f, 0x808080, 0.0f, 0.0f,
-	-0.5f, -0.5f, 0xC0C0C0, 0.0f, 1.0f,
-	0.5f, 0.5f, 0x292929, 1.0f, 0.0f);
+
+
+
+
+
 //Assets (Sound)
 
 

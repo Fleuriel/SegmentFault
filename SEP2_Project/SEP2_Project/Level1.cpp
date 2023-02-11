@@ -6,13 +6,46 @@
 
 void Level_1_Load(void)
 {
-	
+	memset(sGameObjList, 0, sizeof(GameObjects) * GAME_OBJ_NUM_MAX);
+
+	sGameObjNum = 0;
+
+	memset(sGameObjInstList, 0, sizeof(Player) * GAME_OBJ_INST_NUM_MAX);
+
+	_Player = nullptr;
+
+
+	GameObjects* _PlayerObjects;
+
+	_PlayerObjects = sGameObjList + sGameObjNum++;
+	_PlayerObjects->type = TYPE_PLAYER;
+
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0x292929, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0xC0C0C0, 0.0f, 1.0f,
+		0.5f, -0.5f, 0x808080, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-0.5f, 0.5f, 0x808080, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0xC0C0C0, 0.0f, 1.0f,
+		0.5f, 0.5f, 0x292929, 1.0f, 0.0f);
+
+	_PlayerObjects->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(_PlayerObjects->pMesh, "Fail to create object!!");
+
+
 }
 
 void Level_1_Init(void)
 {
+	//_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
+	//AE_ASSERT(_Player);
 
+	
 }
+
+
 void Level_1_Update(void)
 {
 
@@ -51,6 +84,18 @@ void Level_1_Update(void)
 			--i;
 		}
 	}
+
+
+
+
+
+
+	for (unsigned long i = 0; i < 2048; i++)
+	{
+		
+
+	}
+
 
 }
 

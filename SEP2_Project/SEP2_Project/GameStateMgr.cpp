@@ -29,18 +29,6 @@ void GameStateMgrInit(unsigned int gameStateInit)
 	GameStateMgrUpdate();
 }
 
-/******************************************************************************/
-/*!
-
-*/
-/******************************************************************************/
-
-void Level_1_Load(void);
-void Level_1_Init(void);
-void Level_1_Update(void);
-void Level_1_Draw(void);
-void Level_1_Unload(void);
-
 void GameStateMgrUpdate()
 {
 	if ((gGameStateCurr == RESTART) || (gGameStateCurr == QUIT))
