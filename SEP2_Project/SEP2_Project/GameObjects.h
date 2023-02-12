@@ -7,9 +7,10 @@
 #define MAX_ENEMIES				100
 #define GAME_OBJ_NUM_MAX		32
 #define GAME_OBJ_INST_NUM_MAX	2048
-#define PLAYER_LIFE				3	//FOR NOW
+#define GameObjInstances_LIFE	3	//FOR NOW
 
-
+#define FLAG_ACTIVE				1
+#define PLAYER_SIZE				10.0f
 
 enum ObjectType {
 
@@ -19,10 +20,6 @@ enum ObjectType {
 
 };
 
-
-
-
-
 class GameObjects {
 private:
 
@@ -31,12 +28,12 @@ public:
 	AEGfxVertexList* pMesh;
 };
 
-class Player 
+class GameObjInstances 
 {
 private:
 
 public:
-	GameObjects*	pObjects;
+	GameObjects*	pObject;
 	u64				flag;
 	f32				scale;
 	AEVec2			position;
@@ -103,41 +100,41 @@ f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237
 f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
 
 //Parameters: Original Objects
-static GameObjects			sGameObjList[GAME_OBJ_NUM_MAX];
-static unsigned long		sGameObjNum;								
+static GameObjects						sGameObjList[GAME_OBJ_NUM_MAX];
+static unsigned long					sGameObjNum;								
 
 //Object Instances
-static Player				sGameObjInstList[GAME_OBJ_INST_NUM_MAX];
-static unsigned long		sGameObjInstNum;
+static GameObjInstances					sGameObjInstList[GAME_OBJ_INST_NUM_MAX];
+static unsigned long					sGameObjInstNum;
 
 //Pointer to Objects...
-static Player*				_Player;
+static GameObjInstances*				_Player;
 
 //Function to create/destroy a game object instance...
 
-Player*						gameObjInstCreate(unsigned long type, f32 scale, AEVec2* pPos, AEVec2* pVel, f32 dir);
+GameObjInstances*						gameObjInstCreate(unsigned long type, f32 scale, AEVec2* pPos, AEVec2* pVel, f32 dir);
 
-void						gameObjInstDestroy(Player* pInst);
+void									gameObjInstDestroy(GameObjInstances* pInst);
 
 
 f64		enemySpeed		=	1.0f;
 f64		enemySize		=	10.0f;
 
 //parameters for constructor to fufil..
-const f64 playerSpeed = 1.0f;
+const f64 GameObjInstancesSpeed = 1.0f;
 const f64 projectileSpeed = 1.0f;
-const f64 PLAYER_SIZE = 10.0f;
+const f64 GameObjInstances_SIZE = 10.0f;
 
 
 
 
-//Parameters Player Mouse:
+//Parameters GameObjInstances Mouse:
 s32* mouseX = new s32, * mouseY = new s32;
 
 
 
 //Creating the objects for enemy and Projectile.
-Enemy enemy(enemyX[0], enemyY[0], 0 , playerSpeed);
+Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
 f64 angle = atan2(enemy.getY() - 0, enemy.getX());
 Projectile projectile(0, 0, angle, projectileSpeed);
 
@@ -162,3 +159,50 @@ std::vector<Projectile> _bullet;
 //Assets (Sound)
 
 
+
+
+GameObjInstances* gameObjInstCreate(unsigned long type,
+	float scale,
+	AEVec2* pPos,
+	AEVec2* pVel,
+	float dir)
+{
+	AEVec2 zero;
+	AEVec2Zero(&zero);
+
+	AE_ASSERT_PARM(type < sGameObjNum);
+
+	// loop through the object instance list to find a non-used object instance
+	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		GameObjInstances* pInst = sGameObjInstList + i;
+
+		// check if current instance is not used
+		if (pInst->flag == 0)
+		{
+			// it is not used => use it to create the new instance
+			pInst->pObject = sGameObjList + type;
+			pInst->flag = FLAG_ACTIVE;
+			pInst->scale = scale;
+			pInst->position = pPos ? *pPos : zero;
+			pInst->velocity = pVel ? *pVel : zero;
+			
+			// return the newly created instance
+			return pInst;
+		}
+	}
+
+	// cannot find empty slot => return 0
+	return 0;
+}
+
+void gameObjInstDestroy(GameObjInstances* pInst)
+{
+	// if instance is destroyed before, just return
+	if (pInst->flag == 0)
+		return;
+
+	// zero out the flag
+	pInst->flag = 0;
+
+}

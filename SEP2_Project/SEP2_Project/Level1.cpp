@@ -10,7 +10,7 @@ void Level_1_Load(void)
 
 	sGameObjNum = 0;
 
-	memset(sGameObjInstList, 0, sizeof(Player) * GAME_OBJ_INST_NUM_MAX);
+	memset(sGameObjInstList, 0, sizeof(_Player) * GAME_OBJ_INST_NUM_MAX);
 
 	_Player = nullptr;
 
@@ -32,15 +32,14 @@ void Level_1_Load(void)
 		0.5f, 0.5f, 0x292929, 1.0f, 0.0f);
 
 	_PlayerObjects->pMesh = AEGfxMeshEnd();
+
 	AE_ASSERT_MESG(_PlayerObjects->pMesh, "Fail to create object!!");
-
-
 }
 
 void Level_1_Init(void)
 {
-	//_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	//AE_ASSERT(_Player);
+	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
+	AE_ASSERT(_Player);
 
 	
 }
@@ -101,17 +100,39 @@ void Level_1_Update(void)
 
 void Level_1_Draw(void)
 {
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+
+	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		GameObjInstances* pInst = sGameObjInstList + i;
+
+		// skip non-active object
+		if ((pInst->flag & FLAG_ACTIVE) == 0)
+			continue;
 
 
+	}
 
 
 }
 void Level_1_Free(void)
 {
+	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		GameObjInstances* pInst = sGameObjInstList + i;
+		// kill all object instances in the array using "gameObjInstDestroy"
 
+		gameObjInstDestroy(pInst);
+	}
 }
 
 void Level_1_Unload(void) 
 {
+	for (unsigned long i = 0; i < sGameObjInstNum; i++)
+	{
 
+		// kill all object instances in the array using "gameObjInstDestroy"
+
+		AEGfxMeshFree(sGameObjList[i].pMesh);
+	}
 }
