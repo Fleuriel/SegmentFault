@@ -38,6 +38,7 @@ public:
 	f32				scale;
 	AEVec2			position;
 	AEVec2			velocity;
+	f32				direction;
 	AABB			boundingBox;
 	AEMtx33			transform;
 };
@@ -109,6 +110,13 @@ static unsigned long					sGameObjInstNum;
 
 //Pointer to Objects...
 static GameObjInstances*				_Player;
+static GameObjInstances*				_Bullet;
+static GameObjInstances*				_Boss;
+
+
+
+
+
 
 //Function to create/destroy a game object instance...
 
@@ -186,6 +194,7 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			pInst->scale = scale;
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
+			pInst->direction = dir;
 			
 			// return the newly created instance
 			return pInst;
