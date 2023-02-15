@@ -54,8 +54,6 @@ void Level_1_Load(void)
 	_BulletObjects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_BulletObjects->pMesh, "Fail to create object!!");
 
-
-
 	_BossObjects = sGameObjList + sGameObjNum++;
 	_BossObjects->type = TYPE_BULLET;
 
@@ -89,49 +87,54 @@ void Level_1_Update(void)
 
 	//As of now i will be moving the X and Y coordinates with these, someone need to do the offsets.
 
+
+
+	//CHECK TRIGGERED ONLY
+	//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
+	if (AEInputCheckTriggered(AEVK_LEFT) || AEInputCheckTriggered(AEVK_A))
+	{
+		if (_playerScale > 0)
+		{
+			_Player->scaleX *= -1;
+			_playerScale *= -1;
+		}
+	}
+	
+	if (AEInputCheckTriggered(AEVK_RIGHT) || AEInputCheckTriggered(AEVK_D))
+	{
+		if (_playerScale < 0)
+		{
+			_Player->scaleX *= -1;
+			_playerScale *= -1;
+		}
+	}
+
+	//KeyDown
 	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 	{
-		_Player->direction -= 6.0f * (float)(AEFrameRateControllerGetFrameTime());
-		_Player->direction = AEWrap(_Player->direction, -PI, PI);
+		_Player->position.x += 5.0;
 	}
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
-		_Player->direction += 6.0f * (float)(AEFrameRateControllerGetFrameTime());
-		_Player->direction = AEWrap(_Player->direction, -PI, PI);
+		_Player->position.x -= 5.0;
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
-		AEVec2 added;
-
-		AEVec2Set(&added, -cosf(_Player->direction), -sinf(_Player->direction));
-
-		AEVec2Scale(&added, &added, 40.0f * g_dt);
-
-		AEVec2Add(&_Player->velocity, &_Player->velocity, &added);
-
-		AEVec2Scale(&_Player->velocity, &_Player->velocity, 0.99f);
+		_Player->position.y -= 5.0;
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
-		AEVec2 added;
-
-		AEVec2Set(&added, cosf(_Player->direction), sinf(_Player->direction));
-
-		AEVec2Scale(&added, &added, 40.0f * g_dt);
-
-		AEVec2Add(&_Player->velocity, &_Player->velocity, &added);
-
-		AEVec2Scale(&_Player->velocity, &_Player->velocity, 0.99f);
-		std::cout << "Input UP\n";
+		_Player->position.y += 5.0;
 	}
 	
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
-		float bulletDirection = _Player->direction; //the bullet follows the direction of where the spaceship is facing...
-		AEVec2 bulletVelocity;
-		AEVec2Set(&bulletVelocity, (f32)cos(bulletDirection), (f32)sin(bulletDirection));
-		AEVec2Scale(&bulletVelocity, &bulletVelocity, 50.0f);
-		gameObjInstCreate(TYPE_BULLET, 25, &_Player->position, &bulletVelocity, _Player->direction);
+		//THIS CODE SHOOTS RIGHT SIDE. AS A MEASURE THAT IT CAN BE DONE.
+		//float bulletDirection = _Player->direction; //the bullet follows the direction of where the spaceship is facing...
+		//AEVec2 bulletVelocity;
+		//AEVec2Set(&bulletVelocity, (f32)cos(bulletDirection), (f32)sin(bulletDirection));
+		//AEVec2Scale(&bulletVelocity, &bulletVelocity, 50.0f);
+		//gameObjInstCreate(TYPE_BULLET, 25, &_Player->position, &bulletVelocity, _Player->direction);
 	}
 
 
@@ -166,9 +169,6 @@ void Level_1_Update(void)
 
 
 
-
-
-
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
@@ -181,13 +181,14 @@ void Level_1_Update(void)
 		// skip non-active object
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
-		// Compute the scaling matrix
-		// Compute the rotation matrix 
-		// Compute the translation matrix
-		// Concatenate the 3 matrix in the correct order in the object instance's "transform" matrix
+
 
 		// Create a scale matrix that scales by pInst->scale for x and y axes.
-		AEMtx33Scale(&scale, pInst->scale, pInst->scale);
+
+
+			AEMtx33Scale(&scale, pInst->scaleX, pInst->scaleY);
+		
+
 		// Create a rotation matrix that rotates by dirCurr
 		AEMtx33Rot(&rotate, pInst->direction);
 		// Create a translation matrix that translates by
@@ -210,18 +211,39 @@ void Level_1_Draw(void)
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
+	//AEGfxTexture* playerTex = AEGfxTextureLoad("C:\\Users\\angus\\OneDrive\\Documents\\GitHub\\SegmentFault\\SEP2_Project\\Assets\\Assets\\Terran.png");
+	//AEGfxTexture* bulletTex = AEGfxTextureLoad("C:\\Users\\angus\\OneDrive\\Documents\\GitHub\\SegmentFault\\SEP2_Project\\Assets\\Assets\\YellowTexture.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Terran.png");
+	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
+
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
-
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-
-
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
+		AEGfxTexture* texture = nullptr;
 
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTintColor(0.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		// Set the tint to white, so that the sprite can // display the full range of colors (default is black). 
+		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+		if (pInst->pObject->type == TYPE_PLAYER)
+		{
+			texture = playerTex;
+		}
+		if (pInst->pObject->type == TYPE_BULLET)
+		{
+			texture = bulletTex;
+		}
+
+
+
+
+		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 

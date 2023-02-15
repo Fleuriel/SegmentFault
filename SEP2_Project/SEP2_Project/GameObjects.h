@@ -10,7 +10,7 @@
 #define GameObjInstances_LIFE	3	//FOR NOW
 
 #define FLAG_ACTIVE				1
-#define PLAYER_SIZE				10.0f
+#define PLAYER_SIZE				80.0f
 
 enum ObjectType {
 
@@ -35,7 +35,8 @@ private:
 public:
 	GameObjects*	pObject;
 	u64				flag;
-	f32				scale;
+	f32				scaleX;
+	f32				scaleY;
 	AEVec2			position;
 	AEVec2			velocity;
 	f32				direction;
@@ -95,10 +96,20 @@ public:
 	f64 getAngle()  { return angle; }
 };
 
+
+
+
+
 //Parameters: Testing
+//Player
+s16 _playerScale = -1;
+
+
 //Enemy (Now)
 f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237.0f, 937.0f, 823.0f, 236.0f };
 f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
+s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
+
 
 //Parameters: Original Objects
 static GameObjects						sGameObjList[GAME_OBJ_NUM_MAX];
@@ -191,7 +202,8 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			// it is not used => use it to create the new instance
 			pInst->pObject = sGameObjList + type;
 			pInst->flag = FLAG_ACTIVE;
-			pInst->scale = scale;
+			pInst->scaleX = scale;
+			pInst->scaleY = scale;
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
 			pInst->direction = dir;
