@@ -11,10 +11,16 @@
 
 #define FLAG_ACTIVE				1
 
-float const PLAYER_SIZE  = 80.0f;
-float const AUG_GUN_SIZE = 40.0f;
-float const BOSS_SIZE	= 30.0f;
-float const BULLET_SIZE = 20.0f;
+f32 const PLAYER_SIZE  = 80.0f; //Player Size...
+f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
+f32 const BOSS_SIZE	= 30.0f;    //Boss Size
+f32 const BULLET_SIZE = 20.0f;  //Bullet Size
+f32 const ENEMY_SIZE = 25.0f;   //Enemy Size
+f32 const BULLET_SPEED = 100.0f; //Bullet Speed
+u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
+static int bulletCount = 0; // Number of bullets fired
+f32 const BOUNDING_RECT_SIZE = 1.0f;
+
 
 enum ObjectType {
 
@@ -135,6 +141,7 @@ static GameObjInstances*				_Bullet;
 static GameObjInstances*				_Augment_Gun;
 static GameObjInstances*				_Boss;
 static GameObjInstances*				_BossBullet;
+static GameObjInstances*				_Enemy;
 
 
 
@@ -149,6 +156,8 @@ static GameObjInstances*				_BossBullet;
 
 f64		enemySpeed		=	1.0f;
 f64		enemySize		=	10.0f;
+f64		deltaTime;
+
 
 //parameters for constructor to fufil..
 const f64 GameObjInstancesSpeed = 1.0f;
@@ -231,10 +240,10 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 void gameObjInstDestroy(GameObjInstances* pInst)
 {
 	
-	//std::cout << "Destroyed" << pInst->pObject->type << '\n';
 	// if instance is destroyed before, just return
 	if (pInst->flag == 0)
 		return;
+//	std::cout << "Destroyed" << pInst->pObject->type << '\n';
 
 	// zero out the flag
 	pInst->flag = 0;
