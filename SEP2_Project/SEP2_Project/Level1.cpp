@@ -258,17 +258,18 @@ void Level_1_Update(void)
 		{
 			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			{
-
 				GameObjInstances* qInst = sGameObjInstList + j;
 
 				if ((qInst->flag & FLAG_ACTIVE) == 0)
 					continue;
+
 				if (qInst->pObject->type == TYPE_PLAYER)
 				{
 					//pInst is the augment that is moving around.
 					//qInst is the player position...
-					pInst->position.x = qInst->position.x + 100 * cos(_rotation_Aug);
-					pInst->position.y = qInst->position.y + 100 * sin(_rotation_Aug);
+					AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
+					AEVec2Scale(&direction, &direction, 100.0f);
+					AEVec2Add(&pInst->position, &qInst->position, &direction);
 				}
 
 				//if qInst is the enemy/boss then create a game object to shoot towards them.
@@ -276,7 +277,6 @@ void Level_1_Update(void)
 				{
 					const float FIRE_INTERVAL = 1.0f; // Fire interval in seconds
 					static float fireTimer = 0.0f; // Timer for tracking time since last shot
-					
 
 					fireTimer += g_dt;
 
@@ -289,15 +289,15 @@ void Level_1_Update(void)
 						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, NULL, 0.0f);
 
 						// Set the bullet's velocity to point towards the enemy/boss
-						AEVec2 bulletVel = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
-						AEVec2Normalize(&bulletVel, &bulletVel);
-						AEVec2Scale(&bulletVel, &bulletVel, BULLET_SPEED);
-						bulletInst->velocity = bulletVel;
+						AEVec2 direction = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
+						AEVec2Normalize(&direction, &direction);
+						AEVec2Scale(&direction, &direction, BULLET_SPEED);
+						bulletInst->velocity = direction;
 					}
 				}
-				
 			}
 		}
+
 
 		//if (pInst->pObject->type == TYPE_BOSS)
 		//{
@@ -373,13 +373,18 @@ void Level_1_Update(void)
 
 		}
 
-		if (pInst->pObject->type != TYPE_PLAYER)
+		if (pInst->pObject->type != TYPE_PLAYER || pInst->pObject->type != TYPE_AUGMENT1)
 		{
 			if (pInst->position.x > AEGfxGetWinMaxX() ||
 				pInst->position.x < AEGfxGetWinMinX() ||
 				pInst->position.y > AEGfxGetWinMaxY() ||
 				pInst->position.y < AEGfxGetWinMinY())
 			{
+				if (pInst->pObject->type == TYPE_PLAYER || pInst->pObject->type == TYPE_AUGMENT1)
+				{
+					continue;
+				}
+
 				if (pInst->pObject->type == TYPE_BULLET)
 				{
 					bulletCount--;

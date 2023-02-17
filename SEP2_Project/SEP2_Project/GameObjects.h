@@ -2,6 +2,7 @@
 #include <vector>
 #include "AEEngine.h"
 #include "Main.h"
+#include <queue>
 
 
 #define MAX_ENEMIES				100
@@ -33,6 +34,9 @@ enum ObjectType {
 
 };
 
+
+
+
 class GameObjects {
 private:
 
@@ -55,6 +59,14 @@ public:
 	f32				direction;
 	AABB			boundingBox;
 	AEMtx33			transform;
+};
+
+struct CompareDist
+{
+	bool operator()(const std::pair<float, GameObjInstances*>& p1, const std::pair<float, GameObjInstances*>& p2) const
+	{
+		return p1.first > p2.first;
+	}
 };
 
 class Projectile {
