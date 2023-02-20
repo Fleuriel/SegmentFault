@@ -95,3 +95,17 @@ bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
 	// The rectangles intersect
 	return true;
 }
+
+
+bool CollisionCircleCircle(const AEVec2& center1, f32 radius1, const AEVec2& center2, f32 radius2)
+{
+	float dx = center2.x - center1.x;
+	float dy = center2.y - center1.y;
+	float distanceSquared = dx * dx + dy * dy;
+
+	// Calculate the sum of the radii
+	float radiusSum = radius1 + radius2;
+
+	// Check if the distance is less than or equal to the sum of the radii
+	return distanceSquared <= radiusSum * radiusSum;
+}

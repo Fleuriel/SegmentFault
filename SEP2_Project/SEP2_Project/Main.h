@@ -1,13 +1,14 @@
 #pragma once
 
 
+#include <chrono>
+#include <ctime>
 
 //------------------------------------
 // Globals
 
 extern float	g_dt;
 extern double	g_appTime;
-
 // ---------------------------------------------------------------------------
 // includes
 

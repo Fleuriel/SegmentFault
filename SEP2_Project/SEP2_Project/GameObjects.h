@@ -3,6 +3,8 @@
 #include "AEEngine.h"
 #include "Main.h"
 #include <queue>
+#include <set>
+#include <algorithm>
 
 
 #define MAX_ENEMIES				100
@@ -19,9 +21,9 @@ f32 const BULLET_SIZE = 20.0f;  //Bullet Size
 f32 const ENEMY_SIZE = 25.0f;   //Enemy Size
 f32 const BULLET_SPEED = 100.0f; //Bullet Speed
 u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
-static int bulletCount = 0; // Number of bullets fired
+s32 bulletCount = 0; // Number of bullets fired
+u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
-
 
 enum ObjectType {
 
@@ -30,10 +32,20 @@ enum ObjectType {
 	TYPE_AUGMENT1,
 	TYPE_BOSS_BULLETHELL_BULLET_1,
 	TYPE_BULLET,
-	TYPE_ENEMY
+	TYPE_ENEMY,
+	TYPE_PLAYER_HITBOX_INDICATOR
+
 
 };
 
+
+enum BossPhase {
+	TYPE_BHELL1,
+	TYPE_BHELL2,
+	TYPE_BHELL3,
+	TYPE_BHELL4,
+	TYPE_BOWAP
+};
 
 
 
@@ -59,6 +71,8 @@ public:
 	f32				direction;
 	AABB			boundingBox;
 	AEMtx33			transform;
+	bool			isAlive;
+	s32				health;
 };
 
 struct CompareDist
@@ -128,6 +142,7 @@ public:
 //Parameters: Testing
 //Player
 s16 _playerScale = -1;
+u8  bossPhase = 0;
 
 
 //Augments
@@ -154,6 +169,7 @@ static GameObjInstances*				_Augment_Gun;
 static GameObjInstances*				_Boss;
 static GameObjInstances*				_BossBullet;
 static GameObjInstances*				_Enemy;
+static GameObjInstances*				_PlayerHitbox;
 
 
 
@@ -168,8 +184,8 @@ static GameObjInstances*				_Enemy;
 
 f64		enemySpeed		=	1.0f;
 f64		enemySize		=	10.0f;
-f64		deltaTime;
-
+f64		_deltaTime;
+bool	toggleHitBox    = false;
 
 //parameters for constructor to fufil..
 const f64 GameObjInstancesSpeed = 1.0f;
@@ -194,7 +210,8 @@ f64 rotationAngle = 3600;// number of rotations/360.
 
 //Creating Vector(List) for instances..
 std::vector<GameObjInstances> _bullet;
-
+std::vector<GameObjInstances*> _enemyList;
+std::vector<GameObjInstances*> remainingTargets;
 
 
 //Assets (Images)
