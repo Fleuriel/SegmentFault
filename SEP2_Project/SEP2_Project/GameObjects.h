@@ -7,6 +7,7 @@
 #include <algorithm>
 
 
+
 #define MAX_ENEMIES				100
 #define GAME_OBJ_NUM_MAX		64
 #define GAME_OBJ_INST_NUM_MAX	2048
@@ -33,7 +34,8 @@ enum ObjectType {
 	TYPE_BOSS_BULLETHELL_BULLET_1,
 	TYPE_BULLET,
 	TYPE_ENEMY,
-	TYPE_PLAYER_HITBOX_INDICATOR
+	TYPE_PLAYER_HITBOX_INDICATOR,
+	TYPE_BOSS_SPAWNER,
 
 
 };
@@ -170,6 +172,7 @@ static GameObjInstances*				_Boss;
 static GameObjInstances*				_BossBullet;
 static GameObjInstances*				_Enemy;
 static GameObjInstances*				_PlayerHitbox;
+static GameObjInstances*				_BulletSpawner;
 
 
 
@@ -186,10 +189,21 @@ f64		enemySpeed		=	1.0f;
 f64		enemySize		=	10.0f;
 f64		_deltaTime;
 bool	toggleHitBox    = false;
+AEVec2 velocity;
+AEVec2 velocity2;
+AEVec2 velocity3;
+int numBulletsBHell;
+double DelayMovement;
+bool hasDelayTimePassed = false;
+double DelayShoot;
+
+float rotationA = 0.0f;
+static bool spawnBulletSpawner = true;
+
 
 //parameters for constructor to fufil..
 const f64 GameObjInstancesSpeed = 1.0f;
-const f32 projectileSpeed = 75.0f;
+const f32 projectileSpeed = 90.0f;
 const f64 GameObjInstances_SIZE = 10.0f;
 
 
@@ -203,6 +217,7 @@ s32* mouseX = new s32, * mouseY = new s32;
 //Creating the objects for enemy and Projectile.
 Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
 f64 angle = atan2(enemy.getY() - 0, enemy.getX());
+f64 angle2 = 0;
 f64 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);
 
