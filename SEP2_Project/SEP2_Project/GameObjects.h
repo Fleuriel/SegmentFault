@@ -35,7 +35,6 @@ enum ObjectType {
 	TYPE_BULLET,
 	TYPE_ENEMY,
 	TYPE_PLAYER_HITBOX_INDICATOR,
-	TYPE_BOSS_SPAWNER,
 
 
 };
@@ -73,8 +72,11 @@ public:
 	f32				direction;
 	AABB			boundingBox;
 	AEMtx33			transform;
-	bool			isAlive;
 	s32				health;
+	bool			showTexture;
+
+
+
 };
 
 //struct CompareDist

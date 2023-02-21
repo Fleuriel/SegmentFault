@@ -148,22 +148,6 @@ void Level_1_Load(void)
 	_PlayerHitbox->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_PlayerHitbox->pMesh, "Fail to create object!!");
 
-	//7	TYPE_PLAYER_HITBOX_INDICATOR
-	_BossSpawner = sGameObjList + sGameObjNum++;
-	_BossSpawner->type = TYPE_BOSS_SPAWNER;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_BossSpawner->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_BossSpawner->pMesh, "Fail to create object!!");
 
 
 }
@@ -203,6 +187,9 @@ void Level_1_Init(void)
 	
 	//6
 	_PlayerHitbox = gameObjInstCreate(TYPE_PLAYER_HITBOX_INDICATOR, 20.0f, nullptr, nullptr, 0.0f);
+	_PlayerHitbox->showTexture = false;
+
+	//_PlayerHitbox->flag = !FLAG_ACTIVE;
 
 	//7
 	//_BulletSpawner = gameObjInstCreate(TYPE_BOSS_SPAWNER, 100, nullptr, nullptr, angle);
@@ -246,14 +233,14 @@ void Level_1_Update(void)
 				enemySpawnX = -(1366 / 2) - ((1600 - 1366) / 2 * AERandFloat());
 				enemySpawnY = -(900 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
 			}
-			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
-			AEVec2 velocityEnemy = { 20.0f, 20.0f };
-			enemyCount++;
-			//spawn enemy :)
-			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			enemyInst->isAlive = true;
-			enemyInst->health = 2;
-			_enemyList.push_back(enemyInst);
+			//AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
+			//AEVec2 velocityEnemy = { 20.0f, 20.0f };
+			//enemyCount++;
+			////spawn enemy :)
+			//GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
+			//enemyInst->isAlive = true;
+			//enemyInst->health = 2;
+			//_enemyList.push_back(enemyInst);
 		}
 		_deltaTime = 0;
 	}
@@ -345,15 +332,38 @@ void Level_1_Update(void)
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
 
-			if (AEInputCheckCurr(AEVK_LSHIFT))
-			{
-				_PlayerHitbox->position.x = pInst->position.x;
-				_PlayerHitbox->position.y = pInst->position.y - 10;
-				_PlayerHitbox->flag = FLAG_ACTIVE;
-			}
-			else{
-				_PlayerHitbox->flag = !FLAG_ACTIVE;
-			}
+			std::cout << "Player\n";
+			//for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			//{
+			//	GameObjInstances* qInst = sGameObjInstList + j;
+
+			//	if ((qInst->flag & FLAG_ACTIVE) == 0)
+			//		continue;
+			//	
+			//	
+			//	if (qInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+			//	{
+			//		std::cout << "Hitbox\n";
+			//		if (AEInputCheckCurr(AEVK_LSHIFT))
+			//		{
+			//			qInst->position.x = pInst->position.x;
+			//			qInst->position.y = pInst->position.y - 10;
+			//			qInst->flag = FLAG_ACTIVE;
+			//			std::cout << "PRESSED\n";
+			//		}
+			//		else
+			//		{
+			//			qInst->flag = !FLAG_ACTIVE;
+			//		}
+			//		//if (AEInputCheckReleased(AEVK_LSHIFT))
+			//		//{
+			//		//	qInst->flag = !FLAG_ACTIVE;
+			//		//}
+
+			//	}
+			//}
+			
+
 			//Checks closes enemiest.
 			//Checks closes enemiest.
 			//const float FIRE_INTERVAL = 2.0f; // Fire interval in seconds
@@ -425,32 +435,29 @@ void Level_1_Update(void)
 				}
 			}
 			const float FIRE_INTERVAL = 2.0f;
-			static float fireTimer = 0.0f; /// Create a new bullet object
+			static float fireTimer = 0.0f;
+
 			fireTimer += g_dt;
-
-			// Get the mouse cursor position
-			AEInputGetCursorPosition(&mouseX, &mouseY);
-
-			// Convert the mouse position to world space
-			AEVec2 mousePos = { (f32)mouseX, (f32)mouseY };
-
-			std::cout << mouseX << '\t' << mouseY << '\n';
-			
-			// Compute the direction of the bullet
-			AEVec2 direction = { mouseX - pInst->position.x, mouseY - pInst->position.y };
-
-			AEVec2Normalize(&direction, &direction);
-			AEVec2Scale(&direction, &direction, BULLET_SPEED);
-
-			// Create a new bullet instance with the correct velocity
-			GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, &direction, 0.0f);
-			//std::cout << bulletInst->position.x << bulletInst->position.y << '\n';
-
-			std::cout << bulletInst->velocity.x << bulletInst->velocity.y << '\n';
-
 			if (fireTimer >= FIRE_INTERVAL)
 			{
+				// Get the mouse cursor position
+				AEInputGetCursorPosition(&mouseX, &mouseY);
 
+				// Convert the mouse position to world space
+				AEVec2 mousePos = { (f32)mouseX - (1366/2), -((f32)mouseY - (768/ 2))};
+
+				// Compute the direction of the bullet
+				AEVec2 direction = { mousePos.x - pInst->position.x, mousePos.y - pInst->position.y };
+				AEVec2Normalize(&direction, &direction);
+
+				// Create a new bullet object and set its velocity to point towards the target
+				GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, &direction, 0.0f);
+
+				AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
+
+				std::cout << "Bullet Inst: " << bulletInst->position.x << '\t' << bulletInst->position.y << '\n';
+				std::cout << "Mouse Pos: " << mousePos.x << '\t' << mousePos.y << '\n';
+				
 				// Reset the fire timer
 				fireTimer = 0.0f;
 			}
@@ -851,6 +858,26 @@ void Level_1_Update(void)
 			}
 
 		}
+		
+		
+		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+		{
+			pInst->position.x = _Player->position.x;
+			pInst->position.y = _Player->position.y - 10;
+			if (AEInputCheckCurr(AEVK_LSHIFT))
+			{
+				pInst->showTexture = true;
+
+			}
+			else
+			{
+				pInst->showTexture = false;
+			}
+			std::cout << "Positions\n";
+
+
+		}
+		
 		//Window size is 1366x768
 
 		if (pInst->position.x > AEGfxGetWinMaxX() ||
@@ -871,9 +898,9 @@ void Level_1_Update(void)
 			{
 				bulletCount--;
 				std::cout << bulletCount << "Out of Screen ." << '\n';
+				gameObjInstDestroy(pInst);
 			}
 
-			gameObjInstDestroy(pInst);
 		}
 
 
@@ -916,7 +943,10 @@ void Level_1_Update(void)
 					continue;
 
 				//if ObjectInstance2 is same as ObjectInstance1, then continue...
-				if (ObjInstance2->pObject->type == TYPE_BULLET)
+				if (ObjInstance2->pObject->type == TYPE_BULLET   ||
+					ObjInstance2->pObject->type == TYPE_AUGMENT1 || 
+					ObjInstance2->pObject->type == TYPE_PLAYER   ||
+					ObjInstance2->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 					continue;
 
 				if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
@@ -925,7 +955,7 @@ void Level_1_Update(void)
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						bulletCount--;
-//						std::cout << bulletCount << '\n';
+		//				std::cout << bulletCount << '\n';
 						gameObjInstDestroy(ObjInstance1);
 						gameObjInstDestroy(ObjInstance2);
 						std::cout << "Collision Hit at this position (ObjInstance1) X : " << ObjInstance1->position.x << " Y: " << ObjInstance1->position.y << '\n';
@@ -954,23 +984,11 @@ void Level_1_Update(void)
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-
-		// Create a scale matrix that scales by pInst->scale for x and y axes.
-
-
 		AEMtx33Scale(&scale, pInst->scaleX, pInst->scaleY);
-
-
-		// Create a rotation matrix that rotates by dirCurr
 		AEMtx33Rot(&rotate, pInst->direction);
-		// Create a translation matrix that translates by
-		// pInst->posCurr.x in the x-axis and pInst->posCurr.y in the y-axis
 		AEMtx33Trans(&translate, pInst->position.x, pInst->position.y);
-		// Concat the matrices (TRS)
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
-		// Choose the transform to use
-
 
 	}
 
@@ -1003,12 +1021,14 @@ void Level_1_Draw(void)
 			continue;
 
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTintColor(0.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		// Set the tint to white, so that the sprite can // display the full range of colors (default is black). 
+
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+		AEGfxBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetTransparency(1);
+
+		// Set the tint to white, so that the sprite can // display the full range of colors (default is black).		
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
 			texture = playerTex;
@@ -1028,18 +1048,18 @@ void Level_1_Draw(void)
 		if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 		{
 			texture = bossBullet1Tex;
-		}	
+		}
 		if (pInst->pObject->type == TYPE_ENEMY)
 		{
 			texture = enemyTex;
 		}
-		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+
+		if (pInst->showTexture == true)
 		{
-			texture = pHitboxTex;
-		}
-		if (pInst->pObject->type == TYPE_BOSS_SPAWNER)
-		{
-			texture = spawnerTex;
+			if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+			{
+				texture = pHitboxTex;
+			}
 		}
 
 		AEGfxTextureSet(texture, 0, 0);
