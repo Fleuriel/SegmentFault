@@ -15,7 +15,7 @@
 
 #define FLAG_ACTIVE				1
 
-f32 const PLAYER_SIZE  = 80.0f; //Player Size...
+f32 const PLAYER_SIZE  = 60.0f; //Player Size...
 f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
 f32 const BOSS_SIZE	= 30.0f;    //Boss Size
 f32 const BULLET_SIZE = 20.0f;  //Bullet Size
@@ -25,16 +25,24 @@ u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
 s32 bulletCount = 0; // Number of bullets fired
 u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
+f64 enemyHealth = 1;
+
+
 
 enum ObjectType {
 
 	TYPE_PLAYER = 0,
 	TYPE_BOSS,
-	TYPE_AUGMENT1,
 	TYPE_BOSS_BULLETHELL_BULLET_1,
 	TYPE_BULLET,
 	TYPE_ENEMY,
 	TYPE_PLAYER_HITBOX_INDICATOR,
+
+	TYPE_AUGMENT1,
+	TYPE_AUGMENT2,
+	TYPE_AUGMENT3,
+	TYPE_AUGMENT4,
+	TYPE_AUGMENT5,
 
 
 };
@@ -74,8 +82,8 @@ public:
 	AEMtx33			transform;
 	s32				health;
 	bool			showTexture;
-
-
+	bool            isInvincible;
+	f64				iFrame;
 
 };
 
@@ -166,19 +174,23 @@ static unsigned long					sGameObjInstNum;
 //Pointer to Objects...
 static GameObjInstances*				_Player;
 static GameObjInstances*				_Bullet;
-static GameObjInstances*				_Augment_Gun;
 static GameObjInstances*				_Boss;
 static GameObjInstances*				_BossBullet;
 static GameObjInstances*				_Enemy;
 static GameObjInstances*				_PlayerHitbox;
-static GameObjInstances*				_BulletSpawner;
+static GameObjInstances*				_Augment_One;
+static GameObjInstances*				_Augment_Two;
+static GameObjInstances*				_Augment_Three;
+static GameObjInstances*				_Augment_Four;
+static GameObjInstances*				_Augment_Five;
 
 
 
 
-
+u32					minutes = 0;
 f64					enemySpeed				=	1.0f;
 f64					enemySize				=	10.0f;
+f64					_deltaTimeEnemySpawner;
 f64					_deltaTime;
 f64					_deltaTime_Shooting		=   0.0f;
 bool				toggleHitBox			= false;
@@ -240,8 +252,7 @@ s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
-Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
-f64 angle = atan2(enemy.getY() - 0, enemy.getX());
+f64 angle;
 f64 angle2 = 0;
 f64 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);
