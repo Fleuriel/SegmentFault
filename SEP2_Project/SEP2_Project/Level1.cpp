@@ -491,188 +491,246 @@ void Level_1_Update(void)
 				DelayShoot = 0.25f;
 				numBulletsBHell = 11;
 				angle = 225;
-				if (_delayTimeBullets >= DelayShoot)
+
+
+				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
+				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
 				{
-					for (int i = 0; i < numBulletsBHell; i++)
+					std::cout << "entry Upon this thing\n";
+					double const MAX_DELAY = 4.0f;
+					if (_delayTimeBullets > MAX_DELAY)
 					{
-						static f64 angle2 = 0;
-						angle -= 10;
-						if (angle < 134)
-						{
-							angle = 225;
-						}
-						angle2 -= 22.5;
-						if (angle2 < -45)
-						{
-							angle2 = 45;
-						}
-						velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
-						velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
-						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, angle2);
+						std::cout << "Entry2\n";
+						bossPhase = TYPE_BHELL2;
+						pInst->health = 100;
+						_deltaTime_Shooting = 0;
+						_delayTimeBullets = 0;
 					}
-					_delayTimeBullets = 0;
 				}
+				else
+				{
+					if (_delayTimeBullets >= DelayShoot)
+					{
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							static f64 angle2 = 0;
+							angle -= 10;
+							if (angle < 134)
+							{
+								angle = 225;
+							}
+							angle2 -= 22.5;
+							if (angle2 < -45)
+							{
+								angle2 = 45;
+							}
+							velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
+							velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, angle2);
+						}
+						_delayTimeBullets = 0;
+					}
+				}
+
 				break;
 			case TYPE_BHELL2:
 				DelayShoot = 0.05f;
 				numBulletsBHell = 2;
 				angle = 390;
-				if (_delayTimeBullets >= DelayShoot)
-				{	
-					for (int i = 0; i < numBulletsBHell; i++)
-					{
-						angle = 360 + 40 * sin(g_appTime * 2.0 * PI / 5.0);
-						for (int i = 0; i < 1; i++)
-						{
-							std::cout << angle << '\n';
-							if (angle < 320)
-							{
-								angle = 400;
-							}
-							velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
-						}
-					}
-					_delayTimeBullets = 0;
-				}
-				break;
-			case TYPE_BHELL3:
-				DelayShoot = 0.15f;
-				if (_delayTimeBullets >= DelayShoot)
-				{
-					if (pInst->health >= 80)
-					{
-						angle = 360;
-						static f64 angleOffset = 0;
-						DelayShoot = 0.25f;
-						numBulletsBHell = 4;
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle + angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
-							angle -= 120;
-						}
-						angleOffset += 10.0;
-					}
 
-					if (pInst->health >= 60 && pInst->health <80)
-					{
-						angle = 360;
-						static f64 angleOffset = 0;
-						DelayShoot = 0.25f;
-						numBulletsBHell = 4;
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle - angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
-							angle -= 120;
-						}
-						angleOffset += 10.0;
-					}
-					if (pInst->health > 40 && pInst->health < 60)
-					{
-						angle = 360;
-						static f64 angleOffset = 0;
-						DelayShoot = 0.25f;
-						numBulletsBHell = 4;
-
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle + angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
-							angle -= 120;
-						}
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle - angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
-							angle -= 120;
-						}
-						angleOffset += 10.0;
-					}
-					if (pInst->health >=0 && pInst->health <= 40)
-					{
-						angle = 360;
-						static f64 angleOffset = 0;
-						DelayShoot = 0.25f;
-						numBulletsBHell = 4;
-
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle + angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
-							angle -= 120;
-						}
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle - angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
-							angle -= 120;
-						}
-						angle = 90;
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle + angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
-							angle -= 120;
-						}
-						for (int i = 0; i < numBulletsBHell; i++)
-						{
-							f32 angleRadians = AEDegToRad(angle - angleOffset);
-							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
-							angle -= 120;
-						}
-						angleOffset += 10.0;
-					}
-					_delayTimeBullets = 0;
-				}
-
-				if (pInst->health <= 0)
+				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
+				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
 				{
 					double const MAX_DELAY = 4.0f;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
-						std::cout << "Entry\n";
-						bossPhase = TYPE_BHELL4;
+						std::cout << "Entry3\n";
+						bossPhase = TYPE_BHELL3;
 						pInst->health = 100;
+						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
 					}
 				}
+				else
+				{
+					if (_delayTimeBullets >= DelayShoot)
+					{
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							angle = 360 + 40 * sin(g_appTime * 2.0 * PI / 5.0);
+							for (int i = 0; i < 1; i++)
+							{
+								std::cout << angle << '\n';
+								if (angle < 320)
+								{
+									angle = 400;
+								}
+								velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
+							}
+						}
+						_delayTimeBullets = 0;
+					}
+				}
+
+				break;
+			case TYPE_BHELL3:
+				DelayShoot = 0.15f;
+				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
+				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
+				{
+					double const MAX_DELAY = 4.0f;
+					if (_delayTimeBullets > MAX_DELAY)
+					{
+						std::cout << "Entry4\n";
+						bossPhase = TYPE_BHELL4;
+						pInst->health = 100;
+						_deltaTime_Shooting = 0;
+						_delayTimeBullets = 0;
+					}
+				}
+				else {
+
+
+					if (_delayTimeBullets >= DelayShoot)
+					{
+						if (pInst->health >= 80)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+
+						if (pInst->health >= 60 && pInst->health < 80)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						if (pInst->health > 40 && pInst->health < 60)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						if (pInst->health >= 0 && pInst->health <= 40)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angle = 90;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						_delayTimeBullets = 0;
+					}
+				}
+
+
 				break;
 				//Peerless Wind God
 			case TYPE_BHELL4:
-
-				if (_delayTimeBullets > 3)
+				numBullets = 7;
+				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
+				if (_deltaTime_Shooting > 3 && _deltaTime_Shooting < 18)
 				{
 					frequency = 1.0f;	
 					times = g_appTime;
 					xSpeed += 0.01;
 				}
-				if (_delayTimeBullets > 8 && _delayTimeBullets < 13)
-				{
-					frequency = 1.0f;	
-					times = g_appTime;
-					xSpeed += 0.03;
-				}
-				if (_delayTimeBullets < 15)
+//				if (_deltaTime_Shooting > 8 && _deltaTime_Shooting < 13)
+//				{
+//					frequency = 1.0f;	
+//					times = g_appTime;
+////					xSpeed += 0.02;
+//				}
+				if (_deltaTime_Shooting < 18)
 				{
 					angle += 10;
 					if (angle > 200 || angle < 160)
 					{
 						angle = 160;
 					}
+					if (_deltaTime_Shooting < 10)
+					{
+						DelayShoot = 0.2f;
+					}
 
-					DelayShoot = 0.05f;
-					if (_deltaTime_Shooting > DelayShoot)
+					if (_deltaTime_Shooting >= 10 && _deltaTime_Shooting <= 14)
+					{
+						DelayShoot = 0.05f;
+					}
+					if (_deltaTime_Shooting > 14 && _deltaTime_Shooting <= 20)
+					{
+						DelayShoot = 0.015f;
+					}
+
+					if (_delayTimeBullets > DelayShoot)
 					{
 						for (int i = 0; i < numBullets; i++)
 						{
@@ -686,16 +744,16 @@ void Level_1_Update(void)
 							AEVec2 position = { xPos, yPos };
 							// Set the bullet's velocity and angle
 							AEVec2 velocity = { projectileSpeed * sin(AEDegToRad(angle)), projectileSpeed * cos(AEDegToRad(angle)) };
-							float angleOffset = ((float)rand() / RAND_MAX) * 20 - 10;
+							float angleOffset = ((float)rand() / RAND_MAX) * 20 -80;
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 7, &position, &velocity, angle - angleOffset);
-							_deltaTime_Shooting = 0;
+							_delayTimeBullets = 0;
 						}
 					}
 				}
 
-				if (_delayTimeBullets > 14)
+				if (_deltaTime_Shooting > 19)
 				{
-					xSpeed -= 0.25;
+					xSpeed -= 0.001;
 					if (xSpeed < 0)
 					{
 						xSpeed = 0;
@@ -704,13 +762,14 @@ void Level_1_Update(void)
 				}
 
 				//16 is the point where they stop..
-				if (_delayTimeBullets > 19)
+				if (_deltaTime_Shooting > 22)
 				{
+					std::cout << "Entry BOWAP\n";
 					_delayTimeBullets = 0;
 					bossPhase = TYPE_BOWAP;
 				}
 
-				std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
+				//std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
 				displacementX = xRange * sinf(xSpeed * g_appTime);
 				displacementY = yRange * sinf(ySpeed * g_appTime);
 				// Set the position of the object
@@ -721,12 +780,7 @@ void Level_1_Update(void)
 			case TYPE_BOWAP:
 				if (pInst->health > 0)
 				{
-					static double delayTimePosition5;
-					delayTimePosition5 += g_dt;
 					DelayMovement = 5.0f;
-					hasDelayTimePassed = false;
-
-
 					//Updates position..
 					if (hasDelayTimePassed)
 					{
@@ -756,15 +810,8 @@ void Level_1_Update(void)
 							pInst->position.y += velocity.y;
 						}
 					}
-
-					if (delayTimePosition5 > DelayMovement)
+					if (_delayTimeBullets > DelayMovement)
 					{
-						hasDelayTimePassed = true;
-						static double delayTimePosition2 = 0.0f;
-						delayTimePosition2 += g_dt;
-						static const double DelayMovement2 = 3.0f;
-
-
 						numBulletsBHell = 8;
 						angle = rotationAngle * sin(g_appTime / 12 * 3.142);
 
@@ -779,12 +826,10 @@ void Level_1_Update(void)
 				}
 				break;
 			default:
-
 				break;
 	
 			}
 		}
-
 
 		if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 		{
@@ -807,8 +852,6 @@ void Level_1_Update(void)
 					gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
 				}
 			}
-
-
 			if (bossPhase == TYPE_BHELL2 && pInst->position.y > AEGfxGetWinMaxY())
 			{
 				pInst->position.y = AEGfxGetWinMinY();
@@ -852,8 +895,6 @@ void Level_1_Update(void)
 					pInst->position.x += velocity.x;
 					pInst->position.y += velocity.y;
 
-					// Update enemy rotation to point towards player
-					//pInst->rotation = atan2(direction.y, direction.x);
 				}
 			}
 
@@ -927,12 +968,8 @@ void Level_1_Update(void)
 		if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-
-
 		AEVec2 circleCenter = ObjInstance1->position;
 		f32 circleRadius = BOUNDING_RECT_SIZE / 2.0f * ObjInstance1->scaleX;
-
-
 		if (ObjInstance1->pObject->type == TYPE_BULLET)
 		{
 			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
@@ -966,8 +1003,6 @@ void Level_1_Update(void)
 			}
 		}
 	}
-
-	//std::cout << "BulletCount    \t" << bulletCount << '\n';
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////CONCAT MATRIX//////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -989,17 +1024,11 @@ void Level_1_Update(void)
 		AEMtx33Trans(&translate, pInst->position.x, pInst->position.y);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
-
 	}
-
-
-	
 }
 
 void Level_1_Draw(void)
 {
-	char strBuffer[1024];
-
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 	
@@ -1022,8 +1051,8 @@ void Level_1_Draw(void)
 
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 		AEGfxBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetTransparency(1);
@@ -1033,19 +1062,19 @@ void Level_1_Draw(void)
 		{
 			texture = playerTex;
 		}
-		if (pInst->pObject->type == TYPE_BULLET)
+		else if (pInst->pObject->type == TYPE_BULLET)
 		{
 			texture = bulletTex;
 		}
-		if (pInst->pObject->type == TYPE_AUGMENT1)
+		else if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
 			texture = augmentGunTex;
 		}
-		if (pInst->pObject->type == TYPE_BOSS)
+		else if (pInst->pObject->type == TYPE_BOSS)
 		{
 			texture = bossTex;
 		}
-		if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
+		else if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 		{
 			texture = bossBullet1Tex;
 		}
@@ -1061,12 +1090,10 @@ void Level_1_Draw(void)
 				texture = pHitboxTex;
 			}
 		}
-
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 	}
-
 	AEGfxTextureUnload(playerTex);
 	AEGfxTextureUnload(bulletTex);
 	AEGfxTextureUnload(augmentGunTex);
