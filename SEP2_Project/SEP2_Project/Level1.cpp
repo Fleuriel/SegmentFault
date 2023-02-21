@@ -838,8 +838,7 @@ void Level_1_Draw(void)
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-	//AEGfxTexture* playerTex = AEGfxTextureLoad("C:\\Users\\angus\\OneDrive\\Documents\\GitHub\\SegmentFault\\SEP2_Project\\Assets\\Assets\\Terran.png");
-	//AEGfxTexture* bulletTex = AEGfxTextureLoad("C:\\Users\\angus\\OneDrive\\Documents\\GitHub\\SegmentFault\\SEP2_Project\\Assets\\Assets\\YellowTexture.png");
+	
 	AEGfxTexture* playerTex     = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Terran.png");
 	AEGfxTexture* bulletTex     = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\moon.png");
@@ -852,10 +851,11 @@ void Level_1_Draw(void)
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
+
+		AEGfxTexture* texture = nullptr;
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-		AEGfxTexture* texture = nullptr;
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetTintColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -901,7 +901,14 @@ void Level_1_Draw(void)
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 	}
 
-
+	AEGfxTextureUnload(playerTex);
+	AEGfxTextureUnload(bulletTex);
+	AEGfxTextureUnload(augmentGunTex);
+	AEGfxTextureUnload(bossTex);
+	AEGfxTextureUnload(bossBullet1Tex);
+	AEGfxTextureUnload(enemyTex);
+	AEGfxTextureUnload(pHitboxTex);
+	AEGfxTextureUnload(spawnerTex);
 }
 void Level_1_Free(void)
 {
