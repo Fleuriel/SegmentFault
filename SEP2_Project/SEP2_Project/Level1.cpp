@@ -176,11 +176,11 @@ void Level_1_Init(void)
 
 
 	//1
-	_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-	_Boss->health = 50;
-	AE_ASSERT(_Boss);
-	_Boss->position.x = 0;
-	_Boss->position.y = 50;
+	//_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
+	//_Boss->health = 100;
+	//AE_ASSERT(_Boss);
+	//_Boss->position.x = 0;
+	//_Boss->position.y = 50;
 
 	//2
 	_Augment_Gun = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
@@ -212,7 +212,9 @@ void Level_1_Init(void)
 void Level_1_Update(void)
 {
 	_deltaTime += g_dt;
-
+	_delayTimeBullets += g_dt;
+	_deltaTime_Shooting += g_dt;
+	//std::cout << mouseX << '\t' << mouseY << '\n';
 	if (_deltaTime > 1)
 	{
 		for (int i = 0; i < 7; i++)
@@ -231,7 +233,6 @@ void Level_1_Update(void)
 			{
 				enemySpawnX = 1366 / 2 + AERandFloat() * (1600 - 1366) / 2;
 				enemySpawnY = -(768 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
-
 			}
 			//C
 			else if (AERandFloat() >= 0.5 && AERandFloat() < 0.75)
@@ -244,24 +245,22 @@ void Level_1_Update(void)
 			{
 				enemySpawnX = -(1366 / 2) - ((1600 - 1366) / 2 * AERandFloat());
 				enemySpawnY = -(900 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
-
 			}
-
 			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
 			AEVec2 velocityEnemy = { 20.0f, 20.0f };
 			enemyCount++;
 			//spawn enemy :)
-			//GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			//enemyInst->isAlive = true;
-			//enemyInst->health = 2;
-			//_enemyList.push_back(enemyInst);
+			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
+			enemyInst->isAlive = true;
+			enemyInst->health = 2;
+			_enemyList.push_back(enemyInst);
 		}
 		_deltaTime = 0;
 	}
 	//Rotation for Augment...
 	//Rotation Increase.
 	_rotation_Aug += 0.04f;
-	rotationA += 0.08;
+	rotationA += 2* PI/180;
 	//MAKE SURE THAT BULLETCOUNT IS ALWAYS more than or equals 0
 	/*if (bulletCount < 0)
 		bulletCount = 0;*/
@@ -308,15 +307,10 @@ void Level_1_Update(void)
 		_Player->position.y += 5.0;
 	}
 
+
+
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
-		//THIS CODE SHOOTS RIGHT SIDE. AS A MEASURE THAT IT CAN BE DONE.
-		//float bulletDirection = _Player->direction; //the bullet follows the direction of where the spaceship is facing...
-		//AEVec2 bulletVelocity;
-		//AEVec2Set(&bulletVelocity, (f32)cos(bulletDirection), (f32)sin(bulletDirection));
-		//AEVec2Scale(&bulletVelocity, &bulletVelocity, 50.0f);
-		//gameObjInstCreate(TYPE_BULLET, 25, &_Player->position, &bulletVelocity, _Player->direction);
-		//std::cout << bulletCount << '\n';
 	}
 
 	if (AEInputCheckTriggered(AEVK_1))
@@ -340,8 +334,6 @@ void Level_1_Update(void)
 		bossPhase = TYPE_BOWAP;
 	}
 	
-
-
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
@@ -363,58 +355,59 @@ void Level_1_Update(void)
 				_PlayerHitbox->flag = !FLAG_ACTIVE;
 			}
 			//Checks closes enemiest.
-			const float FIRE_INTERVAL = 0.5f; // Fire interval in seconds
-			static float fireTimer = 0.0f; // Timer for tracking time since last shot
-			fireTimer += g_dt;
-			std::priority_queue<std::pair<float, GameObjInstances*>, std::vector<std::pair<float, GameObjInstances*>>, CompareDist> closeEnemies;
-			for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-			{
-				GameObjInstances* qInst = sGameObjInstList + i;
+			//Checks closes enemiest.
+			//const float FIRE_INTERVAL = 2.0f; // Fire interval in seconds
+			//static float fireTimer = 0.0f; // Timer for tracking time since last shot
+			//fireTimer += g_dt;
+			//std::priority_queue<std::pair<float, GameObjInstances*>, std::vector<std::pair<float, GameObjInstances*>>, CompareDist> closeEnemies;
+			//for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+			//{
+			//	GameObjInstances* qInst = sGameObjInstList + i;
 
-				if ((qInst->flag & FLAG_ACTIVE) == 0)
-					continue;
+			//	if ((qInst->flag & FLAG_ACTIVE) == 0)
+			//		continue;
 
-				if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
-				{
-					float dist = AEVec2Distance(&qInst->position, &pInst->position);
-					closeEnemies.push(std::make_pair(dist, qInst));
-				}
-			}
+			//	if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
+			//	{
+			//		float dist = AEVec2Distance(&qInst->position, &pInst->position);
+			//		closeEnemies.push(std::make_pair(dist, qInst));
+			//	}
+			//}
+			////std::cout << g_dt << '\t' << fireTimer << '\n';
 
-			std::set<GameObjInstances*> targetedEnemies;
+			//std::set<GameObjInstances*> targetedEnemies;
 
-			if (fireTimer > FIRE_INTERVAL)
-			{
-				fireTimer = 0;
-				targetedEnemies.clear(); // Clear the set before processing the next batch of targets
-				for (unsigned int i = 0; i < MAX_BULLETS && !closeEnemies.empty(); ++i)
-				{
-					GameObjInstances* qInst = closeEnemies.top().second;
-					closeEnemies.pop();
+			//if (fireTimer > FIRE_INTERVAL)
+			//{
+			//	fireTimer = 0;
+			//	targetedEnemies.clear(); // Clear the set before processing the next batch of targets
+			//	for (unsigned int i = 0; i < MAX_BULLETS && !closeEnemies.empty(); ++i)
+			//	{
+			//		GameObjInstances* qInst = closeEnemies.top().second;
+			//		closeEnemies.pop();
 
-					// If this enemy has already been targeted or is not alive, skip it
-					if (targetedEnemies.count(qInst) > 0) {
-						continue;
-					}
+			//		// If this enemy has already been targeted or is not alive, skip it
+			//		if (targetedEnemies.count(qInst) > 0) {
+			//			continue;
+			//		}
 
-					// Create a new bullet object
-					//GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, NULL, 0.0f);
+			//		// Create a new bullet object
+			//		GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, NULL, 0.0f);
 
-					// Set the bullet's velocity to point towards the enemy/boss
-					AEVec2 direction = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
-					AEVec2Normalize(&direction, &direction);
-					AEVec2Scale(&direction, &direction, BULLET_SPEED);
-				//	bulletInst->velocity = direction;
+			//		// Set the bullet's velocity to point towards the enemy/boss
+			//		AEVec2 direction = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
+			//		AEVec2Normalize(&direction, &direction);
+			//		AEVec2Scale(&direction, &direction, BULLET_SPEED);
+			//		bulletInst->velocity = direction;
 
-					// Mark this enemy as targeted
-					targetedEnemies.insert(qInst);
-				}
-			}
+			//		// Mark this enemy as targeted
+			//		targetedEnemies.insert(qInst);
+			//	}
+			//}
 		}
 
 		if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
-
 			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			{
 				GameObjInstances* qInst = sGameObjInstList + j;
@@ -431,9 +424,38 @@ void Level_1_Update(void)
 					AEVec2Add(&pInst->position, &qInst->position, &direction);
 				}
 			}
+			const float FIRE_INTERVAL = 2.0f;
+			static float fireTimer = 0.0f; /// Create a new bullet object
+			fireTimer += g_dt;
+
+			// Get the mouse cursor position
+			AEInputGetCursorPosition(&mouseX, &mouseY);
+
+			// Convert the mouse position to world space
+			AEVec2 mousePos = { (f32)mouseX, (f32)mouseY };
+
+			std::cout << mouseX << '\t' << mouseY << '\n';
+			
+			// Compute the direction of the bullet
+			AEVec2 direction = { mouseX - pInst->position.x, mouseY - pInst->position.y };
+
+			AEVec2Normalize(&direction, &direction);
+			AEVec2Scale(&direction, &direction, BULLET_SPEED);
+
+			// Create a new bullet instance with the correct velocity
+			GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, &direction, 0.0f);
+			//std::cout << bulletInst->position.x << bulletInst->position.y << '\n';
+
+			std::cout << bulletInst->velocity.x << bulletInst->velocity.y << '\n';
+
+			if (fireTimer >= FIRE_INTERVAL)
+			{
+
+				// Reset the fire timer
+				fireTimer = 0.0f;
+			}
 		}
 
-		
 		if (pInst->pObject->type == TYPE_BOSS)
 		{
 			AEVec2 velocity; 
@@ -443,36 +465,35 @@ void Level_1_Update(void)
 			double DelayMovement;
 			bool hasDelayTimePassed = false;
 			double DelayShoot;
-			if (bossPhase == TYPE_BHELL3)
+			if (bossPhase == TYPE_BHELL3 && pInst->health > 0 && pInst->health <80)
 			{
-				
-
 				AEVec2 direction = { cos(rotationA), sin(rotationA) };
-				AEVec2Scale(&direction, &direction, 10.0f);
+				//AEVec2Scale(&direction, &direction, 3.0f);
 				AEVec2Add(&pInst->position, &pInst->position, &direction);
 			}
-			//std::cout << pInst->position.x << pInst->position.y << '\n';
+
+			if (AEInputCheckCurr(AEVK_MINUS))
+			{
+				pInst->health -= 1;
+				std::cout << pInst->health << '\n';
+			}
+
 			switch (bossPhase)
 			{
 			case TYPE_BHELL1:
-
-				static double delayTimePosition1;
-				delayTimePosition1 += g_dt;
 				DelayShoot = 0.25f;
 				numBulletsBHell = 11;
 				angle = 225;
-				if (delayTimePosition1 >= DelayShoot)
+				if (_delayTimeBullets >= DelayShoot)
 				{
 					for (int i = 0; i < numBulletsBHell; i++)
 					{
 						static f64 angle2 = 0;
 						angle -= 10;
-
 						if (angle < 134)
 						{
 							angle = 225;
 						}
-
 						angle2 -= 22.5;
 						if (angle2 < -45)
 						{
@@ -483,91 +504,211 @@ void Level_1_Update(void)
 						velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
 						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, angle2);
 					}
-					delayTimePosition1 = 0;
+					_delayTimeBullets = 0;
 				}
 				break;
 			case TYPE_BHELL2:
-				static double delayTimePosition2;
-				delayTimePosition2 += g_dt;
-				DelayShoot = 0.25f;
-				numBulletsBHell = 18;
-				if (delayTimePosition2 >= DelayShoot)
-				{
+				DelayShoot = 0.05f;
+				numBulletsBHell = 2;
+				angle = 390;
+				if (_delayTimeBullets >= DelayShoot)
+				{	
 					for (int i = 0; i < numBulletsBHell; i++)
 					{
-						angle -= 20;
-						angle2 -= 25;
-						velocity = { (projectileSpeed/2) * sin(AEDegToRad(angle)) , projectileSpeed/2 * cos(AEDegToRad(angle)) };
-						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
-
-						velocity2 = { (projectileSpeed/2) * sin(AEDegToRad(angle2)) , projectileSpeed/2 * cos(AEDegToRad(angle2)) };
-						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, -angle2);
+						angle = 360 + 40 * sin(g_appTime * 2.0 * PI / 5.0);
+						for (int i = 0; i < 1; i++)
+						{
+							std::cout << angle << '\n';
+							if (angle < 320)
+							{
+								angle = 400;
+							}
+							velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
+						}
 					}
-
-
-					delayTimePosition2 = 0;
+					_delayTimeBullets = 0;
 				}
-
-
-				
 				break;
 			case TYPE_BHELL3:
-
-				static double delayTimePosition3;
-				delayTimePosition3 += g_dt;
-				DelayShoot = 0.25f;
-
-
-				AEVec2 bulletSpawnPos = pInst->position;
-				bulletSpawnPos.x + 200.0f;
-				bulletSpawnPos.y + 200.0f;
-				
-				
-				
-				if (delayTimePosition3>= DelayShoot)
+				DelayShoot = 0.15f;
+				if (_delayTimeBullets >= DelayShoot)
 				{
-					if (pInst->health > 66)
+					if (pInst->health >= 80)
 					{
-						numBulletsBHell = 16;
-
-						for (int k = 0; k < 4; k++)
+						angle = 360;
+						static f64 angleOffset = 0;
+						DelayShoot = 0.25f;
+						numBulletsBHell = 4;
+						for (int i = 0; i < numBulletsBHell; i++)
 						{
-							for (int i = 0; i < numBulletsBHell; i++)
-							{
-								angle -= 6;
-
-								velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
-							}
+							f32 angleRadians = AEDegToRad(angle + angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+							angle -= 120;
 						}
+						angleOffset += 10.0;
 					}
 
-					if (pInst->health > 33 && pInst->health < 67)
+					if (pInst->health >= 60 && pInst->health <80)
 					{
-						numBulletsBHell = 16; 
-						angle = rotationAngle * sin(g_appTime / 12 * 3.142);
-						
-						
-						//BOWAP			
-						for (int j = 0; j < numBulletsBHell; j++)
+						angle = 360;
+						static f64 angleOffset = 0;
+						DelayShoot = 0.25f;
+						numBulletsBHell = 4;
+						for (int i = 0; i < numBulletsBHell; i++)
 						{
-							double angleT = angle + (30 * j * 360 / 64);
-							velocity = { projectileSpeed * sin(AEDegToRad(angleT)) , projectileSpeed * cos(AEDegToRad(angleT)) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angleT);
+							f32 angleRadians = AEDegToRad(angle - angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+							angle -= 120;
 						}
-						
+						angleOffset += 10.0;
 					}
+					if (pInst->health > 40 && pInst->health < 60)
+					{
+						angle = 360;
+						static f64 angleOffset = 0;
+						DelayShoot = 0.25f;
+						numBulletsBHell = 4;
 
-					delayTimePosition3 = 0;
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle + angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+							angle -= 120;
+						}
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle - angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+							angle -= 120;
+						}
+						angleOffset += 10.0;
+					}
+					if (pInst->health >=0 && pInst->health <= 40)
+					{
+						angle = 360;
+						static f64 angleOffset = 0;
+						DelayShoot = 0.25f;
+						numBulletsBHell = 4;
+
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle + angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+							angle -= 120;
+						}
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle - angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+							angle -= 120;
+						}
+						angle = 90;
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle + angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+							angle -= 120;
+						}
+						for (int i = 0; i < numBulletsBHell; i++)
+						{
+							f32 angleRadians = AEDegToRad(angle - angleOffset);
+							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+							angle -= 120;
+						}
+						angleOffset += 10.0;
+					}
+					_delayTimeBullets = 0;
 				}
 
-
-
+				if (pInst->health <= 0)
+				{
+					double const MAX_DELAY = 4.0f;
+					if (_delayTimeBullets > MAX_DELAY)
+					{
+						std::cout << "Entry\n";
+						bossPhase = TYPE_BHELL4;
+						pInst->health = 100;
+						_delayTimeBullets = 0;
+					}
+				}
 				break;
 				//Peerless Wind God
 			case TYPE_BHELL4:
-			
-				
+
+				if (_delayTimeBullets > 3)
+				{
+					frequency = 1.0f;	
+					times = g_appTime;
+					xSpeed += 0.01;
+				}
+				if (_delayTimeBullets > 8 && _delayTimeBullets < 13)
+				{
+					frequency = 1.0f;	
+					times = g_appTime;
+					xSpeed += 0.03;
+				}
+				if (_delayTimeBullets < 15)
+				{
+					angle += 10;
+					if (angle > 200 || angle < 160)
+					{
+						angle = 160;
+					}
+
+					DelayShoot = 0.05f;
+					if (_deltaTime_Shooting > DelayShoot)
+					{
+						for (int i = 0; i < numBullets; i++)
+						{
+							// Calculate the x position for this bullet
+							float xPos = pInst->position.x + (i - numBullets / 2) * xSpacing;
+
+							// Calculate the y position for this bullet with a random offset
+							float yPos = pInst->position.y + (rand() % (maxY - minY + 1) + minY);
+
+							// Set the bullet's position
+							AEVec2 position = { xPos, yPos };
+							// Set the bullet's velocity and angle
+							AEVec2 velocity = { projectileSpeed * sin(AEDegToRad(angle)), projectileSpeed * cos(AEDegToRad(angle)) };
+							float angleOffset = ((float)rand() / RAND_MAX) * 20 - 10;
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 7, &position, &velocity, angle - angleOffset);
+							_deltaTime_Shooting = 0;
+						}
+					}
+				}
+
+				if (_delayTimeBullets > 14)
+				{
+					xSpeed -= 0.25;
+					if (xSpeed < 0)
+					{
+						xSpeed = 0;
+					}
+					ySpeed = 0;
+				}
+
+				//16 is the point where they stop..
+				if (_delayTimeBullets > 19)
+				{
+					_delayTimeBullets = 0;
+					bossPhase = TYPE_BOWAP;
+				}
+
+				std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
+				displacementX = xRange * sinf(xSpeed * g_appTime);
+				displacementY = yRange * sinf(ySpeed * g_appTime);
+				// Set the position of the object
+				pInst->position.x = displacementX;
+				pInst->position.y = 200.0f + displacementY; // set the y position to a fixed value for now
 				break;
 				//BOWAP
 			case TYPE_BOWAP:
@@ -635,7 +776,6 @@ void Level_1_Update(void)
 				break;
 	
 			}
-
 		}
 
 
@@ -659,6 +799,12 @@ void Level_1_Update(void)
 					velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 					gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
 				}
+			}
+
+
+			if (bossPhase == TYPE_BHELL2 && pInst->position.y > AEGfxGetWinMaxY())
+			{
+				pInst->position.y = AEGfxGetWinMinY();
 			}
 		}
 

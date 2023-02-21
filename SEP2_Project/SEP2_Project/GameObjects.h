@@ -77,13 +77,13 @@ public:
 	s32				health;
 };
 
-struct CompareDist
-{
-	bool operator()(const std::pair<float, GameObjInstances*>& p1, const std::pair<float, GameObjInstances*>& p2) const
-	{
-		return p1.first > p2.first;
-	}
-};
+//struct CompareDist
+//{
+//	bool operator()(const std::pair<float, GameObjInstances*>& p1, const std::pair<float, GameObjInstances*>& p2) const
+//	{
+//		return p1.first > p2.first;
+//	}
+//};
 
 class Projectile {
 public:
@@ -188,6 +188,7 @@ static GameObjInstances*				_BulletSpawner;
 f64		enemySpeed		=	1.0f;
 f64		enemySize		=	10.0f;
 f64		_deltaTime;
+f64		_deltaTime_Shooting = 0.0f;
 bool	toggleHitBox    = false;
 AEVec2 velocity;
 AEVec2 velocity2;
@@ -196,6 +197,38 @@ int numBulletsBHell;
 double DelayMovement;
 bool hasDelayTimePassed = false;
 double DelayShoot;
+double const DELAY_NOHEALTH = 15.0f;
+
+double _delayTimeBullets;
+
+
+float xRange  = 683.0f;
+float yRange = 50.0f;
+float ySpeed = 4.0f;
+float yPosition;
+
+float xSpeed = 2.0f;
+float frequency;
+float times;
+float displacementX;
+float displacementY;
+
+// Define the x spacing between bullets
+int xSpacing = 10;
+
+// Define the number of bullets to create
+int numBullets = 10;
+
+// Define the y position range for the bullet spawn location
+int minY = -200;
+int maxY = 200;
+
+// Define the movement parameters
+const float totalDuration = 15.0f; // Total duration of movement in seconds
+const float slowDuration = 3.0f; // Duration of slow movement at the beginning
+const float halfScreenWidth = AEGetWindowWidth() / 2.0f; // Half of the screen width
+				// Update the position of pInst
+static float timer = 0.0f; // Timer to keep track of the elapsed time
 
 float rotationA = 0.0f;
 static bool spawnBulletSpawner = true;
@@ -210,8 +243,9 @@ const f64 GameObjInstances_SIZE = 10.0f;
 
 
 //Parameters GameObjInstances Mouse:
-s32* mouseX = new s32, * mouseY = new s32;
+//s32* mouseX = new s32, * mouseY = new s32
 
+s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
