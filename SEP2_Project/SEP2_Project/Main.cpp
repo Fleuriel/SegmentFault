@@ -28,16 +28,18 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 	// Initialize the system
 	AESysInit(instanceH, show, 1366, 768, 1, FPS, false, NULL);
+	//AESysInit(instanceH, show, 1000, 563, 1, FPS, false, NULL);
+	
 
 	// Changing the window title
 	AESysSetWindowTitle("Among Them!");
 
 	//set background color
-	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(PLAY);
+	GameStateMgrInit(MENU);
 
 	while (gGameStateCurr != QUIT)
 	{
