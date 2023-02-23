@@ -26,6 +26,7 @@ void Level_1_Load(void)
 	GameObjects* _AugmentGunObjects;
 	GameObjects* _BossBulletObjects_1;
 	GameObjects* _EnemyObjects;
+	GameObjects* _PlayerHitbox;
 
 	//0 TYPE_PLAYER
 	_PlayerObjects = sGameObjList + sGameObjNum++;
@@ -133,35 +134,6 @@ void Level_1_Load(void)
 	_PlayerHitbox = sGameObjList + sGameObjNum++;
 	_PlayerHitbox->type = TYPE_PLAYER_HITBOX_INDICATOR;
 
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_PlayerHitbox->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_PlayerHitbox->pMesh, "Fail to create object!!");
-
-	//7	TYPE_PLAYER_HITBOX_INDICATOR
-	_BossSpawner = sGameObjList + sGameObjNum++;
-	_BossSpawner->type = TYPE_BOSS_SPAWNER;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_BossSpawner->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_BossSpawner->pMesh, "Fail to create object!!");
 
 
 }
@@ -247,7 +219,6 @@ void Level_1_Update(void)
 			enemyCount++;
 			//spawn enemy :)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			enemyInst->isAlive = true;
 			enemyInst->health = 2;
 			_enemyList.push_back(enemyInst);
 		}
@@ -965,7 +936,6 @@ void Level_1_Update(void)
 
 void Level_1_Draw(void)
 {
-	char strBuffer[1024];
 
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
@@ -987,54 +957,76 @@ void Level_1_Draw(void)
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
+		if (pInst->pObject == nullptr)
+			continue;
+
 		AEGfxTexture* texture = nullptr;
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTintColor(0.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		// Set the tint to white, so that the sprite can // display the full range of colors (default is black). 
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
-
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetTransparency(1);
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
 			texture = playerTex;
 		}
-		if (pInst->pObject->type == TYPE_BULLET)
+		else if (pInst->pObject->type == TYPE_BULLET)
 		{
 			texture = bulletTex;
 		}
-		if (pInst->pObject->type == TYPE_AUGMENT1)
+		else if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
 			texture = augmentGunTex;
 		}
-		if (pInst->pObject->type == TYPE_BOSS)
+		else if (pInst->pObject->type == TYPE_BOSS)
 		{
 			texture = bossTex;
 		}
-		if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
+		else if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 		{
 			texture = bossBullet1Tex;
-		}	
-		if (pInst->pObject->type == TYPE_ENEMY)
+		}
+		else if (pInst->pObject->type == TYPE_ENEMY)
 		{
 			texture = enemyTex;
 		}
-		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
-		{
-			texture = pHitboxTex;
+		else if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+		{		
+			//Improvise, Adapt, Overcome - Bear Grylls
+			if (pInst->showTexture == true)
+			{
+				texture = pHitboxTex;
+			}
+			else
+			{
+				texture = InvisibleTex;
+			}
 		}
-		if (pInst->pObject->type == TYPE_BOSS_SPAWNER)
+		else
 		{
-			texture = spawnerTex;
+			texture = InvisibleTex;
 		}
 
+		//if (pInst->pObject->type == TYPE_BOSS_SPAWNER)
+		//{
+		//	texture = spawnerTex;
+		//}
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
 
 
 	}
-
+	AEGfxTextureUnload(playerTex);
+	AEGfxTextureUnload(bulletTex);
+	AEGfxTextureUnload(augmentGunTex);
+	AEGfxTextureUnload(bossTex);
+	AEGfxTextureUnload(bossBullet1Tex);
+	AEGfxTextureUnload(enemyTex);
+	AEGfxTextureUnload(pHitboxTex);
+	AEGfxTextureUnload(spawnerTex);
+	AEGfxTextureUnload(InvisibleTex);
 
 }
 void Level_1_Free(void)
