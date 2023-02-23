@@ -89,11 +89,11 @@ void Menu_Init(void)
     //button4_transX = getWinWidth() * -0.439f;
     //button4_transY = getWinHeight() * -0.404f;
 
-    button1_transX = -230.f * scaleX;
+    button1_transX = -170.f * scaleX;
     button1_transY = -150.f * scaleY;
-    button2_transX = 70.0f * scaleX;
+    button2_transX = 130.0f * scaleX;
     button2_transY = -150.0f * scaleY;
-    button3_transX = -80.0f * scaleX;
+    button3_transX = -20.0f * scaleX;
     button3_transY = 0.f * scaleY;
     button4_transX = -600.0f * scaleX;
     button4_transY = -310.0f * scaleY;
@@ -131,21 +131,21 @@ void Menu_Update(void)
         printf("Goto powerups\n");
     }
     else if (IsAreaClicked(button2_midX, button2_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
-        //gGameStateNext = RESTART;
+        //gGameStateNext = SETTINGS;
         printf("Goto Settings\n");
     }
     else if (IsAreaClicked(button3_midX, button3_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
-        //gGameStateNext = PLAY;
+        gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
 
     else if (IsAreaClicked(button4_midX, button4_midY, 120.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)) {
-        //gGameStateNext = PLAY;
+        //gGameStateNext = CREDITS;
         printf("Goto Credits\n");
     }
 
     else if (IsAreaClicked(button5_midX, button5_midY, 57.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)) {
-        //gGameStateNext = PLAY;
+        gGameStateNext = QUIT;
         printf("QUIT\n");
     }
 
