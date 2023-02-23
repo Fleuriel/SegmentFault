@@ -240,8 +240,7 @@ s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
-Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
-f64 angle = atan2(enemy.getY() - 0, enemy.getX());
+f64 angle;
 f64 angle2 = 0;
 f64 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);
