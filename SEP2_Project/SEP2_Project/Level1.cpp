@@ -129,6 +129,40 @@ void Level_1_Load(void)
 	_EnemyObjects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_EnemyObjects->pMesh, "Fail to create object!!");
 
+	//6	TYPE_PLAYER_HITBOX_INDICATOR
+	_PlayerHitbox = sGameObjList + sGameObjNum++;
+	_PlayerHitbox->type = TYPE_PLAYER_HITBOX_INDICATOR;
+
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+	_PlayerHitbox->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(_PlayerHitbox->pMesh, "Fail to create object!!");
+
+	//7	TYPE_PLAYER_HITBOX_INDICATOR
+	_BossSpawner = sGameObjList + sGameObjNum++;
+	_BossSpawner->type = TYPE_BOSS_SPAWNER;
+
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+	_BossSpawner->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(_BossSpawner->pMesh, "Fail to create object!!");
+
 
 }
 
@@ -162,6 +196,12 @@ void Level_1_Init(void)
 	//5
 	//_Enemy = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Enemy);
+	
+	//6
+	_PlayerHitbox = gameObjInstCreate(TYPE_PLAYER_HITBOX_INDICATOR, 20.0f, nullptr, nullptr, 0.0f);
+
+	//7
+	//_BulletSpawner = gameObjInstCreate(TYPE_BOSS_SPAWNER, 100, nullptr, nullptr, angle);
 }
 
 
@@ -202,14 +242,14 @@ void Level_1_Update(void)
 				enemySpawnY = -(900 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
 
 			}
-
-			//AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
-			//AEVec2 velocityEnemy = { 20.0f, 20.0f };
-			//enemyCount++;
-			////spawn enemy :)
-			//GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			//enemyInst->health = 2;
-			//_enemyList.push_back(enemyInst);
+			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
+			AEVec2 velocityEnemy = { 20.0f, 20.0f };
+			enemyCount++;
+			//spawn enemy :)
+			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
+			enemyInst->isAlive = true;
+			enemyInst->health = 2;
+			_enemyList.push_back(enemyInst);
 		}
 		_deltaTime = 0;
 	}
@@ -377,6 +417,36 @@ void Level_1_Update(void)
 					AEVec2Scale(&direction, &direction, 100.0f);
 					AEVec2Add(&pInst->position, &qInst->position, &direction);
 				}
+			}
+			const float FIRE_INTERVAL = 2.0f;
+			static float fireTimer = 0.0f; /// Create a new bullet object
+			fireTimer += g_dt;
+
+			// Get the mouse cursor position
+			AEInputGetCursorPosition(&mouseX, &mouseY);
+
+			// Convert the mouse position to world space
+			AEVec2 mousePos = { (f32)mouseX, (f32)mouseY };
+
+			std::cout << mouseX << '\t' << mouseY << '\n';
+			
+			// Compute the direction of the bullet
+			AEVec2 direction = { mouseX - pInst->position.x, mouseY - pInst->position.y };
+
+			AEVec2Normalize(&direction, &direction);
+			AEVec2Scale(&direction, &direction, BULLET_SPEED);
+
+			// Create a new bullet instance with the correct velocity
+			GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, &direction, 0.0f);
+			//std::cout << bulletInst->position.x << bulletInst->position.y << '\n';
+
+			std::cout << bulletInst->velocity.x << bulletInst->velocity.y << '\n';
+
+			if (fireTimer >= FIRE_INTERVAL)
+			{
+
+				// Reset the fire timer
+				fireTimer = 0.0f;
 			}
 		}
 
@@ -837,7 +907,7 @@ void Level_1_Update(void)
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						bulletCount--;
-						//						std::cout << bulletCount << '\n';
+//						std::cout << bulletCount << '\n';
 						gameObjInstDestroy(ObjInstance1);
 						gameObjInstDestroy(ObjInstance2);
 						std::cout << "Collision Hit at this position (ObjInstance1) X : " << ObjInstance1->position.x << " Y: " << ObjInstance1->position.y << '\n';
@@ -944,12 +1014,19 @@ void Level_1_Draw(void)
 		if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 		{
 			texture = bossBullet1Tex;
-		}
+		}	
 		if (pInst->pObject->type == TYPE_ENEMY)
 		{
 			texture = enemyTex;
 		}
-
+		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+		{
+			texture = pHitboxTex;
+		}
+		if (pInst->pObject->type == TYPE_BOSS_SPAWNER)
+		{
+			texture = spawnerTex;
+		}
 
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);

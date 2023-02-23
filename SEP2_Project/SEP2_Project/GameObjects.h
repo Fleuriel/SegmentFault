@@ -72,11 +72,8 @@ public:
 	f32				direction;
 	AABB			boundingBox;
 	AEMtx33			transform;
+	bool			isAlive;
 	s32				health;
-	bool			showTexture;
-
-
-
 };
 
 //struct CompareDist
