@@ -23,24 +23,11 @@ void Level_1_Load(void)
 	GameObjects* _PlayerObjects;
 	GameObjects* _BulletObjects;
 	GameObjects* _BossObjects;
+	GameObjects* _AugmentGunObjects;
 	GameObjects* _BossBulletObjects_1;
 	GameObjects* _EnemyObjects;
 	GameObjects* _PlayerHitbox;
-
-	// Augments to choose,
-
-	//Augment (Gun)
-	GameObjects* _AugmentOne_Obj;
-	
-	//Augment Rotating Rocks
-	GameObjects* _AugmentTwo_Obj;
-	
-
-	GameObjects* _AugmentThree_Obj;
-	
-	GameObjects* _AugmentFour_Obj;
-	
-	GameObjects* _AugmentFive_Obj;
+	GameObjects* _BossSpawner;
 
 	//0 TYPE_PLAYER
 	_PlayerObjects = sGameObjList + sGameObjNum++;
@@ -76,9 +63,23 @@ void Level_1_Load(void)
 	_BossObjects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_BossObjects->pMesh, "Fail to create object!!");
 
+	//2 TYPE_AUGMENT1
+	_AugmentGunObjects = sGameObjList + sGameObjNum++;
+	_AugmentGunObjects->type = TYPE_AUGMENT1;
 
+	AEGfxMeshStart();
 
-	//2 TYPE_BOSS_BULLETHELL_BULLET_1
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+	_AugmentGunObjects->pMesh = AEGfxMeshEnd();
+
+	//3 TYPE_BOSS_BULLETHELL_BULLET_1
 	_BossBulletObjects_1 = sGameObjList + sGameObjNum++;
 	_BossBulletObjects_1->type = TYPE_BOSS_BULLETHELL_BULLET_1;
 
@@ -96,7 +97,7 @@ void Level_1_Load(void)
 	AE_ASSERT_MESG(_BossBulletObjects_1->pMesh, "Fail to create object!!");
 
 
-	//3 TYPE_BULLET
+	//4	TYPE_BULLET
 	_BulletObjects = sGameObjList + sGameObjNum++;
 	_BulletObjects->type = TYPE_BULLET;
 
@@ -113,7 +114,7 @@ void Level_1_Load(void)
 	_BulletObjects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_BulletObjects->pMesh, "Fail to create object!!");
 
-	//4	TYPE_ENEMY
+	//5	TYPE_ENEMY
 	_EnemyObjects = sGameObjList + sGameObjNum++;
 	_EnemyObjects->type = TYPE_ENEMY;
 
@@ -130,7 +131,7 @@ void Level_1_Load(void)
 	_EnemyObjects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_EnemyObjects->pMesh, "Fail to create object!!");
 
-	//5	TYPE_PLAYER_HITBOX_INDICATOR
+	//6	TYPE_PLAYER_HITBOX_INDICATOR
 	_PlayerHitbox = sGameObjList + sGameObjNum++;
 	_PlayerHitbox->type = TYPE_PLAYER_HITBOX_INDICATOR;
 
@@ -146,92 +147,6 @@ void Level_1_Load(void)
 		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
 	_PlayerHitbox->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_PlayerHitbox->pMesh, "Fail to create object!!");
-
-	//6 TYPE_AUGMENT1
-	_AugmentOne_Obj = sGameObjList + sGameObjNum++;
-	_AugmentOne_Obj->type = TYPE_AUGMENT1;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_AugmentOne_Obj->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_AugmentOne_Obj->pMesh, "Fail to create object!!");
-
-	//7 TYPE_AUGMENT2
-	_AugmentTwo_Obj = sGameObjList + sGameObjNum++;
-	_AugmentTwo_Obj->type = TYPE_AUGMENT2;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_AugmentTwo_Obj->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_AugmentTwo_Obj->pMesh, "Fail to create object!!");
-
-	//8 TYPE_AUGMENT3
-	_AugmentThree_Obj = sGameObjList + sGameObjNum++;
-	_AugmentThree_Obj->type = TYPE_AUGMENT3;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_AugmentThree_Obj->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_AugmentThree_Obj->pMesh, "Fail to create object!!");
-
-	//9 TYPE_AUGMENT4
-	_AugmentFour_Obj = sGameObjList + sGameObjNum++;
-	_AugmentFour_Obj->type = TYPE_AUGMENT4;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_AugmentFour_Obj->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_AugmentFour_Obj->pMesh, "Fail to create object!!");
-
-	//10 TYPE_AUGMENT5
-	_AugmentFive_Obj = sGameObjList + sGameObjNum++;
-	_AugmentFive_Obj->type = TYPE_AUGMENT5;
-
-	AEGfxMeshStart();
-
-	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-	_AugmentFive_Obj->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_AugmentFive_Obj->pMesh, "Fail to create object!!");
-
 
 
 
@@ -251,61 +166,45 @@ void Level_1_Init(void)
 	_Boss->position.x = 0;
 	_Boss->position.y = 50;
 
-
 	//2
+	_Augment_Gun = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
+	AE_ASSERT(_Augment_Gun);
+
+
+	//3
 	//_BossBullet = gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, BULLET_SIZE, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Boss);
 	
 	
-	//3
+	//4
 	/*_Bullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Bullet);*/
 
 	
-	//4
+	//5
 	//_Enemy = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Enemy);
 	
-	//5
+	//6
 	_PlayerHitbox = gameObjInstCreate(TYPE_PLAYER_HITBOX_INDICATOR, 20.0f, nullptr, nullptr, 0.0f);
 	_PlayerHitbox->showTexture = false;
 
 	//_PlayerHitbox->flag = !FLAG_ACTIVE;
 
-	//6
-	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
-	AE_ASSERT(_Augment_One);
-
 	//7
-	_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
-	AE_ASSERT(_Augment_Two);
-
-
-
-
+	//_BulletSpawner = gameObjInstCreate(TYPE_BOSS_SPAWNER, 100, nullptr, nullptr, angle);
 }
 
 
 void Level_1_Update(void)
 {
 	_deltaTime += g_dt;
-	std::cout << _deltaTime << '\n';
-	//Increment Minutes... (Health)
-	if (_deltaTime > 60)
-	{	
-		enemyHealth+= ++minutes;;
-		_deltaTime = 0;
-	}
-
-
-
-	_deltaTimeEnemySpawner += g_dt;
 	_delayTimeBullets += g_dt;
 	_deltaTime_Shooting += g_dt;
 	//std::cout << mouseX << '\t' << mouseY << '\n';
-	if (_deltaTimeEnemySpawner > 1)
+	if (_deltaTime > 1)
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			static float enemySpawnX = 0, enemySpawnY = 0;
 			// Generate a random number to determine which X range to use
@@ -334,17 +233,16 @@ void Level_1_Update(void)
 				enemySpawnX = -(1366 / 2) - ((1600 - 1366) / 2 * AERandFloat());
 				enemySpawnY = -(900 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
 			}
-			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
-			AEVec2 velocityEnemy = { 20.0f, 20.0f };
-			enemyCount++;
-			//spawn enemy :)
-			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			
-			enemyInst->health = enemyHealth;
-//			std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
-			_enemyList.push_back(enemyInst);
+			//AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
+			//AEVec2 velocityEnemy = { 20.0f, 20.0f };
+			//enemyCount++;
+			////spawn enemy :)
+			//GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
+			//enemyInst->isAlive = true;
+			//enemyInst->health = 2;
+			//_enemyList.push_back(enemyInst);
 		}
-		_deltaTimeEnemySpawner = 0;
+		_deltaTime = 0;
 	}
 	//Rotation for Augment...
 	//Rotation Increase.
@@ -434,6 +332,7 @@ void Level_1_Update(void)
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
 
+			std::cout << "Player\n";
 			//for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			//{
 			//	GameObjInstances* qInst = sGameObjInstList + j;
@@ -528,14 +427,11 @@ void Level_1_Update(void)
 
 				if (qInst->pObject->type == TYPE_PLAYER)
 				{
-					pInst->position.x = qInst->position.x;
-					pInst->position.y = qInst->position.y + 75;
-
 					//pInst is the augment that is moving around.
 					//qInst is the player position...
-					//AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
-					//AEVec2Scale(&direction, &direction, 100.0f);
-					//AEVec2Add(&pInst->position, &qInst->position, &direction);
+					AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
+					AEVec2Scale(&direction, &direction, 100.0f);
+					AEVec2Add(&pInst->position, &qInst->position, &direction);
 				}
 			}
 			const float FIRE_INTERVAL = 2.0f;
@@ -559,47 +455,13 @@ void Level_1_Update(void)
 
 				AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
 
-				//std::cout << "Bullet Inst: " << bulletInst->position.x << '\t' << bulletInst->position.y << '\n';
-				//std::cout << "Mouse Pos: " << mousePos.x << '\t' << mousePos.y << '\n';
+				std::cout << "Bullet Inst: " << bulletInst->position.x << '\t' << bulletInst->position.y << '\n';
+				std::cout << "Mouse Pos: " << mousePos.x << '\t' << mousePos.y << '\n';
 				
 				// Reset the fire timer
 				fireTimer = 0.0f;
 			}
 		}
-
-		//Auto Attack
-		if (pInst->pObject->type == TYPE_AUGMENT2)
-		{
-			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-			{
-				GameObjInstances* qInst = sGameObjInstList + j;
-
-				if ((qInst->flag & FLAG_ACTIVE) == 0)
-					continue;
-				//Make sure that it rotates...
-				if (qInst->pObject->type == TYPE_PLAYER)
-				{
-					//pInst is the augment that is moving around.
-					//qInst is the player position...
-					AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
-					AEVec2Scale(&direction, &direction, 100.0f);
-					AEVec2Add(&pInst->position, &qInst->position, &direction);
-				}
-			}
-		}
-		if (pInst->pObject->type == TYPE_AUGMENT3)
-		{
-
-		}
-		if (pInst->pObject->type == TYPE_AUGMENT4)
-		{
-
-		}
-		if (pInst->pObject->type == TYPE_AUGMENT5)
-		{
-
-		}
-
 
 		if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -629,6 +491,8 @@ void Level_1_Update(void)
 				DelayShoot = 0.25f;
 				numBulletsBHell = 11;
 				angle = 225;
+
+
 				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
 				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
 				{
@@ -727,6 +591,8 @@ void Level_1_Update(void)
 					}
 				}
 				else {
+
+
 					if (_delayTimeBullets >= DelayShoot)
 					{
 						if (pInst->health >= 80)
@@ -824,6 +690,8 @@ void Level_1_Update(void)
 						_delayTimeBullets = 0;
 					}
 				}
+
+
 				break;
 				//Peerless Wind God
 			case TYPE_BHELL4:
@@ -1046,6 +914,9 @@ void Level_1_Update(void)
 			{
 				pInst->showTexture = false;
 			}
+			std::cout << "Positions\n";
+
+
 		}
 		
 		//Window size is 1366x768
@@ -1109,15 +980,10 @@ void Level_1_Update(void)
 					continue;
 
 				//if ObjectInstance2 is same as ObjectInstance1, then continue...
-				if (
-					ObjInstance2->pObject->type == TYPE_BULLET					||
-					ObjInstance2->pObject->type == TYPE_PLAYER					||
-					ObjInstance2->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT1				||
-					ObjInstance2->pObject->type == TYPE_AUGMENT2				||
-					ObjInstance2->pObject->type == TYPE_AUGMENT3				||
-					ObjInstance2->pObject->type == TYPE_AUGMENT4				||
-					ObjInstance2->pObject->type == TYPE_AUGMENT5					)
+				if (ObjInstance2->pObject->type == TYPE_BULLET   ||
+					ObjInstance2->pObject->type == TYPE_AUGMENT1 || 
+					ObjInstance2->pObject->type == TYPE_PLAYER   ||
+					ObjInstance2->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 					continue;
 
 				if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
@@ -1125,47 +991,18 @@ void Level_1_Update(void)
 					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX , ObjInstance2->position, ObjInstance2->scaleX))
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
-						//bulletCount--;
-						//std::cout << bulletCount << '\n';
-						ObjInstance2->health--;
-						if (ObjInstance2->health == 0)
-						{
-							gameObjInstDestroy(ObjInstance2);
-						}
+						bulletCount--;
+		//				std::cout << bulletCount << '\n';
 						gameObjInstDestroy(ObjInstance1);
+						gameObjInstDestroy(ObjInstance2);
+						std::cout << "Collision Hit at this position (ObjInstance1) X : " << ObjInstance1->position.x << " Y: " << ObjInstance1->position.y << '\n';
+						std::cout << "Collision Hit at this position (ObjInstance2) X : " << ObjInstance2->position.x << " Y: " << ObjInstance2->position.y << '\n';
+
 					}
 				}
 			}
 		}
-	
-	
-	
-		if (ObjInstance1->pObject->type == TYPE_AUGMENT2)
-		{
-			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-			{
-				GameObjInstances* ObjInstance2 = sGameObjInstList + j;
-
-				if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
-					continue;
-				
-				if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
-				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
-					{
-						ObjInstance2->health--;
-						if (ObjInstance2->health == 0)
-						{
-							gameObjInstDestroy(ObjInstance2);
-						}
-					}
-				}
-			}
-
-		}
-	
 	}
-
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////CONCAT MATRIX//////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1203,7 +1040,6 @@ void Level_1_Draw(void)
 	AEGfxTexture* enemyTex      = AEGfxTextureLoad("..\\..\\Assets\\Assets\\ling.png");
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
-	AEGfxTexture *InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1213,11 +1049,13 @@ void Level_1_Draw(void)
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
+
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetTransparency(1);
-		// Set the tint to white, so that the sprite can // display the full range of colors (default is black). 
 		AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+		AEGfxBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetTransparency(1);
 
 		// Set the tint to white, so that the sprite can // display the full range of colors (default is black).		
 		if (pInst->pObject->type == TYPE_PLAYER)
@@ -1228,7 +1066,7 @@ void Level_1_Draw(void)
 		{
 			texture = bulletTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT1 || pInst->pObject->type == TYPE_AUGMENT2)
+		else if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
 			texture = augmentGunTex;
 		}
@@ -1240,20 +1078,16 @@ void Level_1_Draw(void)
 		{
 			texture = bossBullet1Tex;
 		}
-		else if (pInst->pObject->type == TYPE_ENEMY)
+		if (pInst->pObject->type == TYPE_ENEMY)
 		{
 			texture = enemyTex;
 		}
-		else if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+
+		if (pInst->showTexture == true)
 		{
-			//Improvise, Adapt, Overcome - Bear Grylls
-			if(pInst->showTexture == true) 
+			if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 			{
 				texture = pHitboxTex;
-			}
-			else
-			{
-				texture = InvisibleTex;
 			}
 		}
 		AEGfxTextureSet(texture, 0, 0);
@@ -1268,7 +1102,6 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(enemyTex);
 	AEGfxTextureUnload(pHitboxTex);
 	AEGfxTextureUnload(spawnerTex);
-	AEGfxTextureUnload(InvisibleTex);
 }
 void Level_1_Free(void)
 {
