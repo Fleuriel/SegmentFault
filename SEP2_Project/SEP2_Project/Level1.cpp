@@ -282,9 +282,12 @@ void Level_1_Init(void)
 	AE_ASSERT(_Augment_One);
 
 	//7
-	//_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
-	//AE_ASSERT(_Augment_Two);
+	_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
+	AE_ASSERT(_Augment_Two);
 
+	//8
+	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
+	//AE_ASSERT(_Augment_Three);
 
 
 
@@ -298,12 +301,9 @@ void Level_1_Update(void)
 	//Increment Minutes... (Health)
 	if (_deltaTime > 60)
 	{
-		enemyHealth += ++minutes;;
+		enemyHealth += ++minutes;
 		_deltaTime = 0;
 	}
-
-
-
 	_deltaTimeEnemySpawner += g_dt;
 	_delayTimeBullets += g_dt;
 	_deltaTime_Shooting += g_dt;
@@ -440,92 +440,6 @@ void Level_1_Update(void)
 
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
-
-			//for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-			//{
-			//	GameObjInstances* qInst = sGameObjInstList + j;
-
-			//	if ((qInst->flag & FLAG_ACTIVE) == 0)
-			//		continue;
-			//	
-			//	
-			//	if (qInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
-			//	{
-			//		std::cout << "Hitbox\n";
-			//		if (AEInputCheckCurr(AEVK_LSHIFT))
-			//		{
-			//			qInst->position.x = pInst->position.x;
-			//			qInst->position.y = pInst->position.y - 10;
-			//			qInst->flag = FLAG_ACTIVE;
-			//			std::cout << "PRESSED\n";
-			//		}
-			//		else
-			//		{
-			//			qInst->flag = !FLAG_ACTIVE;
-			//		}
-			//		//if (AEInputCheckReleased(AEVK_LSHIFT))
-			//		//{
-			//		//	qInst->flag = !FLAG_ACTIVE;
-			//		//}
-
-			//	}
-			//}
-
-
-			//Checks closes enemiest.
-			//Checks closes enemiest.
-			//const float FIRE_INTERVAL = 2.0f; // Fire interval in seconds
-			//static float fireTimer = 0.0f; // Timer for tracking time since last shot
-			//fireTimer += g_dt;
-			//std::priority_queue<std::pair<float, GameObjInstances*>, std::vector<std::pair<float, GameObjInstances*>>, CompareDist> closeEnemies;
-			//for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-			//{
-			//	GameObjInstances* qInst = sGameObjInstList + i;
-
-			//	if ((qInst->flag & FLAG_ACTIVE) == 0)
-			//		continue;
-
-			//	if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
-			//	{
-			//		float dist = AEVec2Distance(&qInst->position, &pInst->position);
-			//		closeEnemies.push(std::make_pair(dist, qInst));
-			//	}
-			//}
-			////std::cout << g_dt << '\t' << fireTimer << '\n';
-
-			//std::set<GameObjInstances*> targetedEnemies;
-
-			//if (fireTimer > FIRE_INTERVAL)
-			//{
-			//	fireTimer = 0;
-			//	targetedEnemies.clear(); // Clear the set before processing the next batch of targets
-			//	for (unsigned int i = 0; i < MAX_BULLETS && !closeEnemies.empty(); ++i)
-			//	{
-			//		GameObjInstances* qInst = closeEnemies.top().second;
-			//		closeEnemies.pop();
-
-			//		// If this enemy has already been targeted or is not alive, skip it
-			//		if (targetedEnemies.count(qInst) > 0) {
-			//			continue;
-			//		}
-
-			//		// Create a new bullet object
-			//		GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, NULL, 0.0f);
-
-			//		// Set the bullet's velocity to point towards the enemy/boss
-			//		AEVec2 direction = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
-			//		AEVec2Normalize(&direction, &direction);
-			//		AEVec2Scale(&direction, &direction, BULLET_SPEED);
-			//		bulletInst->velocity = direction;
-
-			//		// Mark this enemy as targeted
-			//		targetedEnemies.insert(qInst);
-			//	}
-			//}
-		}
-
-		if (pInst->pObject->type == TYPE_AUGMENT1)
-		{
 			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			{
 				GameObjInstances* qInst = sGameObjInstList + j;
@@ -533,81 +447,58 @@ void Level_1_Update(void)
 				if ((qInst->flag & FLAG_ACTIVE) == 0)
 					continue;
 
-				if (qInst->pObject->type == TYPE_PLAYER)
+				if (qInst->pObject->type == TYPE_AUGMENT1)
 				{
-					pInst->position.x = qInst->position.x;
-					pInst->position.y = qInst->position.y + 75;
+					qInst->position.x = pInst->position.x;
+					qInst->position.y = pInst->position.y +75.0f;
+				
+					AUGMENT_1_FIRE_INTERVAL = 1.5f;
+					AUGMENT_1_FIRE_TIMER = 0.0f;
 
-					//pInst is the augment that is moving around.
-					//qInst is the player position...
-					//AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
-					//AEVec2Scale(&direction, &direction, 100.0f);
-					//AEVec2Add(&pInst->position, &qInst->position, &direction);
-				}
-			}
-			const float FIRE_INTERVAL = 1.5f;
-			static float fireTimer = 0.0f;
+					AUGMENT_1_FIRE_TIMER += g_dt;
+					if (AUGMENT_1_FIRE_TIMER >= AUGMENT_1_FIRE_INTERVAL)
+					{
+						// Get the mouse cursor position
+						AEInputGetCursorPosition(&mouseX, &mouseY);
 
-			fireTimer += g_dt;
-			if (fireTimer >= FIRE_INTERVAL)
-			{
-				// Get the mouse cursor position
-				AEInputGetCursorPosition(&mouseX, &mouseY);
-			
-				// Convert the mouse position to world space
-				AEVec2 mousePos = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
-			
-				// Compute the direction of the bullet
-				AEVec2 direction = { mousePos.x - pInst->position.x, mousePos.y - pInst->position.y };
-				AEVec2Normalize(&direction, &direction);
-			
-				// Create a new bullet object and set its velocity to point towards the target
-				GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &pInst->position, &direction, 0.0f);
-			
-				std::cout << bulletInst->pObject << '\n';
+						// Convert the mouse position to world space
+						AUGMENT_1_MOUSE_POSITION = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
 
-				AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
-			
-				//std::cout << "Bullet Inst: " << bulletInst->position.x << '\t' << bulletInst->position.y << '\n';
-				//std::cout << "Mouse Pos: " << mousePos.x << '\t' << mousePos.y << '\n';
-			
-				// Reset the fire timer
-				fireTimer = 0.0f;
-			}
-		}
+						// Compute the direction of the bullet
+						AUGMENT_1_DIRECTION = { AUGMENT_1_MOUSE_POSITION.x - qInst->position.x, AUGMENT_1_MOUSE_POSITION.y - qInst->position.y };
+						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
-		//Auto Attack
-		if (pInst->pObject->type == TYPE_AUGMENT2)
-		{
-			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-			{
-				GameObjInstances* qInst = sGameObjInstList + j;
+						// Create a new bullet object and set its velocity to point towards the target
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, 0.0f);
 
-				if ((qInst->flag & FLAG_ACTIVE) == 0)
-					continue;
-				//Make sure that it rotates...
-				if (qInst->pObject->type == TYPE_PLAYER)
+						std::cout << bulletInst->pObject << '\n';
+
+						AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
+
+						// Reset the fire timer
+						AUGMENT_1_FIRE_TIMER = 0.0f;
+					}
+				}				
+				
+				if (qInst->pObject->type == TYPE_AUGMENT2)
 				{
-					//pInst is the augment that is moving around.
-					//qInst is the player position...
-					AEVec2 direction = { cos(_rotation_Aug), sin(_rotation_Aug) };
-					AEVec2Scale(&direction, &direction, 100.0f);
-					AEVec2Add(&pInst->position, &qInst->position, &direction);
+					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug), (f32)sin(_rotation_Aug) };
+					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f);
+					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
+
+				if (qInst->pObject->type == TYPE_AUGMENT3)
+				{
+
+					AUGMENT_3_FIRE_TIMER = 0.0f;
+					AUGMENT_3_FIRE_INTERVAL = 0.0f;
+
+
+				}
+
 			}
 		}
-		if (pInst->pObject->type == TYPE_AUGMENT3)
-		{
 
-		}
-		if (pInst->pObject->type == TYPE_AUGMENT4)
-		{
-
-		}
-		if (pInst->pObject->type == TYPE_AUGMENT5)
-		{
-
-		}
 
 
 		if (pInst->pObject->type == TYPE_BOSS)
@@ -842,10 +733,11 @@ void Level_1_Update(void)
 				{
 					frequency = 1.0f;
 					times = g_appTime;
-					xSpeed += 0.01;
+					xSpeed += 0.005;
+					std::cout << xSpeed << '\n';
 				}
 
-				if (_deltaTime_Shooting < 18)
+				if (_deltaTime_Shooting < 20)
 				{
 					angle += 10;
 					if (angle > 200 || angle < 160)
@@ -1017,22 +909,22 @@ void Level_1_Update(void)
 				if (qInst->pObject->type == TYPE_PLAYER)
 				{
 					// Get direction from enemy to player
-					AEVec2 direction = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
+					AEVec2 ENEMY_DIRECTION = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
 
 					// Normalize direction vector to get unit direction
-					AEVec2Normalize(&direction, &direction);
+					AEVec2Normalize(&ENEMY_DIRECTION, &ENEMY_DIRECTION);
 
 					// Calculate velocity vector by scaling unit direction by enemy's movement speed
-					AEVec2 velocity = { direction.x * 5.0f, direction.y * 5.0f };
+					AEVec2 ENEMY_VELOCITY = { ENEMY_DIRECTION.x * 5.0f, ENEMY_DIRECTION.y * 5.0f };
 
 					// Scale velocity vector by time since last frame to get distance to move this frame
 					float distanceToMove = AEVec2Length(&velocity) * g_dt;
-					velocity.x *= distanceToMove;
-					velocity.y *= distanceToMove;
+					ENEMY_VELOCITY.x *= distanceToMove;
+					ENEMY_VELOCITY.y *= distanceToMove;
 
 					// Update enemy position with velocity
-					pInst->position.x += velocity.x;
-					pInst->position.y += velocity.y;
+					pInst->position.x += ENEMY_VELOCITY.x;
+					pInst->position.y += ENEMY_VELOCITY.y;
 
 				}
 			}
@@ -1062,11 +954,15 @@ void Level_1_Update(void)
 			pInst->position.y > AEGfxGetWinMaxY() ||
 			pInst->position.y < AEGfxGetWinMinY())
 		{
-			if (pInst->pObject->type == TYPE_PLAYER ||
-				pInst->pObject->type == TYPE_AUGMENT1 ||
-				pInst->pObject->type == TYPE_ENEMY ||
-				pInst->pObject->type == TYPE_BOSS ||
-				pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+			if (pInst->pObject->type == TYPE_PLAYER						||
+				pInst->pObject->type == TYPE_AUGMENT1					||
+				pInst->pObject->type == TYPE_ENEMY						||
+				pInst->pObject->type == TYPE_BOSS						||
+				pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR	||
+				pInst->pObject->type == TYPE_AUGMENT2					||
+				pInst->pObject->type == TYPE_AUGMENT3					||
+				pInst->pObject->type == TYPE_AUGMENT4					||
+				pInst->pObject->type == TYPE_AUGMENT5	)				
 			{
 				continue;
 			}

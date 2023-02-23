@@ -42,7 +42,6 @@ enum ObjectType {
 	TYPE_AUGMENT4,
 	TYPE_AUGMENT5,
 
-
 };
 
 
@@ -208,19 +207,30 @@ std::vector<GameObjInstances*> _enemyList;
 std::vector<GameObjInstances*> remainingTargets;
 
 
-//Assets (Images)
+//Variables for TYPES...
+
+AEVec2 ENEMY_DIRECTION;
+AEVec2 ENEMY_VELOCITY;
 
 
+f64 AUGMENT_1_FIRE_TIMER      = 0;
+f64 AUGMENT_1_FIRE_INTERVAL   = 2.0f;
+AEVec2 AUGMENT_1_MOUSE_POSITION;
+AEVec2 AUGMENT_1_DIRECTION;
 
+//NOT REQUIRED AS IT IS JUST A ROLLING ROCK
+//f64 AUGMENT_2_FIRE_TIMER      = 0;
+//f64 AUGMENT_2_FIRE_INTERVAL   = 2.0f;
+AEVec2 AUGMENT_2_DIRECTION;
 
-//Assets Mesh
+f64 AUGMENT_3_FIRE_TIMER	  = 0.0f;
+f64 AUGMENT_3_FIRE_INTERVAL   = 10.0f;
 
+f64 AUGMENT_4_FIRE_TIMER;
+f64 AUGMENT_4_FIRE_INTERVAL;
 
-
-
-
-//Assets (Sound)
-
+f64 AUGMENT_5_FIRE_TIMER;
+f64 AUGMENT_5_FIRE_INTERVAL;
 
 
 
