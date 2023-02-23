@@ -74,6 +74,9 @@ public:
 	AEMtx33			transform;
 	s32				health;
 	bool			showTexture;
+
+
+
 };
 
 //struct CompareDist
@@ -176,27 +179,18 @@ static GameObjInstances*				_BulletSpawner;
 
 
 
-
-//Function to create/destroy a game object instance...
-
-//GameObjInstances*						gameObjInstCreate(unsigned long type, f32 scale, AEVec2* pPos, AEVec2* pVel, f32 dir);
-//
-//void									gameObjInstDestroy(GameObjInstances* pInst);
-
-
-f64		enemySpeed		=	1.0f;
-f64		enemySize		=	10.0f;
-f64		_deltaTime;
-f64		_deltaTime_Shooting = 0.0f;
-bool	toggleHitBox    = false;
-AEVec2 velocity;
-AEVec2 velocity2;
-AEVec2 velocity3;
-int numBulletsBHell;
-double DelayMovement;
-bool hasDelayTimePassed = false;
-double DelayShoot;
-double const DELAY_NOHEALTH = 15.0f;
+f64					enemySpeed				=	1.0f;
+f64					enemySize				=	10.0f;
+f64					_deltaTime;
+f64					_deltaTime_Shooting		=   0.0f;
+bool				toggleHitBox			= false;
+AEVec2				velocity;
+AEVec2				velocity2;
+AEVec2				velocity3;
+int					numBulletsBHell;
+double				DelayMovement;
+bool				hasDelayTimePassed		= false;
+double				DelayShoot;
 
 double _delayTimeBullets;
 
@@ -248,7 +242,8 @@ s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
-f64 angle;
+Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
+f64 angle = atan2(enemy.getY() - 0, enemy.getX());
 f64 angle2 = 0;
 f64 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);

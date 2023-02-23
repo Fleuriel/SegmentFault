@@ -149,7 +149,6 @@ void Level_1_Init(void)
 	_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Boss);
 
-
 	//2
 	_Augment_Gun = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Augment_Gun);
@@ -164,13 +163,15 @@ void Level_1_Init(void)
 	/*_Bullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Bullet);*/
 
-
 	//5
 	//_Enemy = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Enemy);
 	
 	//6
 	_PlayerHitbox = gameObjInstCreate(TYPE_PLAYER_HITBOX_INDICATOR, 20.0f, nullptr, nullptr, 0.0f);
+	_PlayerHitbox->showTexture = false;
+
+	//_PlayerHitbox->flag = !FLAG_ACTIVE;
 
 	//7
 	//_BulletSpawner = gameObjInstCreate(TYPE_BOSS_SPAWNER, 100, nullptr, nullptr, angle);
@@ -180,10 +181,11 @@ void Level_1_Init(void)
 void Level_1_Update(void)
 {
 	_deltaTime += g_dt;
-
+	_delayTimeBullets += g_dt;
+	_deltaTime_Shooting += g_dt;
+	//std::cout << mouseX << '\t' << mouseY << '\n';
 	if (_deltaTime > 1)
 	{
-		static	float enemySpawnX = 0, enemySpawnY = 0;
 		for (int i = 0; i < 7; i++)
 		{
 			// Generate a random number to determine which X range to use
@@ -602,9 +604,112 @@ void Level_1_Update(void)
 						std::cout << "Entry\n";
 						bossPhase = TYPE_BHELL4;
 						pInst->health = 100;
+						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
 					}
 				}
+				else {
+
+
+					if (_delayTimeBullets >= DelayShoot)
+					{
+						if (pInst->health >= 80)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+
+						if (pInst->health >= 60 && pInst->health < 80)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						if (pInst->health > 40 && pInst->health < 60)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						if (pInst->health >= 0 && pInst->health <= 40)
+						{
+							angle = 360;
+							static f64 angleOffset = 0;
+							DelayShoot = 0.25f;
+							numBulletsBHell = 4;
+
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angle = 90;
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
+								angle -= 120;
+							}
+							for (int i = 0; i < numBulletsBHell; i++)
+							{
+								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
+								angle -= 120;
+							}
+							angleOffset += 10.0;
+						}
+						_delayTimeBullets = 0;
+					}
+				}
+
+
 				break;
 				//Peerless Wind God
 			case TYPE_BHELL4:
@@ -795,6 +900,26 @@ void Level_1_Update(void)
 			}
 
 		}
+		
+		
+		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
+		{
+			pInst->position.x = _Player->position.x;
+			pInst->position.y = _Player->position.y - 10;
+			if (AEInputCheckCurr(AEVK_LSHIFT))
+			{
+				pInst->showTexture = true;
+
+			}
+			else
+			{
+				pInst->showTexture = false;
+			}
+			std::cout << "Positions\n";
+
+
+		}
+		
 		//Window size is 1366x768
 
 		if (pInst->position.x > AEGfxGetWinMaxX() ||
@@ -859,41 +984,29 @@ void Level_1_Update(void)
 					continue;
 
 				//if ObjectInstance2 is same as ObjectInstance1, then continue...
-				if (ObjInstance2->pObject->type == TYPE_BULLET)
+				if (ObjInstance2->pObject->type == TYPE_BULLET   ||
+					ObjInstance2->pObject->type == TYPE_AUGMENT1 || 
+					ObjInstance2->pObject->type == TYPE_PLAYER   ||
+					ObjInstance2->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 					continue;
 
 				if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
 				{
-					//if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
-					//{
-					//	//Spawn Orbs of Experience at ObjInstance1 Position...
-					//	bulletCount--;
-					//	std::cout << bulletCount << '\n';
-					//	gameObjInstDestroy(ObjInstance1);
-					//	gameObjInstDestroy(ObjInstance2);
-					//	//std::cout << ObjInstance1->position.x << ObjInstance1->position.y;
-					//}
-
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX , ObjInstance2->position, ObjInstance2->scaleX))
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						bulletCount--;
-//						std::cout << bulletCount << '\n';
+		//				std::cout << bulletCount << '\n';
 						gameObjInstDestroy(ObjInstance1);
 						gameObjInstDestroy(ObjInstance2);
 						std::cout << "Collision Hit at this position (ObjInstance1) X : " << ObjInstance1->position.x << " Y: " << ObjInstance1->position.y << '\n';
 						std::cout << "Collision Hit at this position (ObjInstance2) X : " << ObjInstance2->position.x << " Y: " << ObjInstance2->position.y << '\n';
 
-						//std::cout << ObjInstance1->position.x << ObjInstance1->position.y;
 					}
-
-
 				}
 			}
 		}
 	}
-
-	//std::cout << "BulletCount    \t" << bulletCount << '\n';
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////CONCAT MATRIX//////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -997,10 +1110,6 @@ void Level_1_Draw(void)
 			if (pInst->showTexture == true)
 			{
 				texture = pHitboxTex;
-			}
-			else
-			{
-				texture = InvisibleTex;
 			}
 		}
 		else
