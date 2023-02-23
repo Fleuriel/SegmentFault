@@ -152,6 +152,9 @@ u8  bossPhase = 0;
 //Augments
 f64 _rotation_Aug = 0.0f;
 
+//Enemy (Now)
+f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237.0f, 937.0f, 823.0f, 236.0f };
+f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
 s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
 
 
@@ -177,18 +180,26 @@ static GameObjInstances*				_BulletSpawner;
 
 
 
-f64					enemySpeed				=	1.0f;
-f64					enemySize				=	10.0f;
-f64					_deltaTime;
-f64					_deltaTime_Shooting		=   0.0f;
-bool				toggleHitBox			= false;
-AEVec2				velocity;
-AEVec2				velocity2;
-AEVec2				velocity3;
-int					numBulletsBHell;
-double				DelayMovement;
-bool				hasDelayTimePassed		= false;
-double				DelayShoot;
+//Function to create/destroy a game object instance...
+
+//GameObjInstances*						gameObjInstCreate(unsigned long type, f32 scale, AEVec2* pPos, AEVec2* pVel, f32 dir);
+//
+//void									gameObjInstDestroy(GameObjInstances* pInst);
+
+
+f64		enemySpeed		=	1.0f;
+f64		enemySize		=	10.0f;
+f64		_deltaTime;
+f64		_deltaTime_Shooting = 0.0f;
+bool	toggleHitBox    = false;
+AEVec2 velocity;
+AEVec2 velocity2;
+AEVec2 velocity3;
+int numBulletsBHell;
+double DelayMovement;
+bool hasDelayTimePassed = false;
+double DelayShoot;
+double const DELAY_NOHEALTH = 15.0f;
 
 double _delayTimeBullets;
 
