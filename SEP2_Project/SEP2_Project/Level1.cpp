@@ -245,11 +245,11 @@ void Level_1_Init(void)
 
 
 	//1
-	//_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-	//_Boss->health = 100;
-	//AE_ASSERT(_Boss);
-	//_Boss->position.x = 0;
-	//_Boss->position.y = 50;
+	_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
+	_Boss->health = 100;
+	AE_ASSERT(_Boss);
+	_Boss->position.x = 0;
+	_Boss->position.y = 50;
 
 
 	//2
