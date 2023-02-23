@@ -10,14 +10,13 @@
 
 #define MAX_ENEMIES				100
 #define GAME_OBJ_NUM_MAX		64
-#define GAME_OBJ_INST_NUM_MAX	2048
-#define GameObjInstances_LIFE	3	//FOR NOW
+#define GAME_OBJ_INST_NUM_MAX	4096
 
 #define FLAG_ACTIVE				1
 
-f32 const PLAYER_SIZE  = 80.0f; //Player Size...
+f32 const PLAYER_SIZE = 60.0f; //Player Size...
 f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
-f32 const BOSS_SIZE	= 30.0f;    //Boss Size
+f32 const BOSS_SIZE = 30.0f;    //Boss Size
 f32 const BULLET_SIZE = 20.0f;  //Bullet Size
 f32 const ENEMY_SIZE = 25.0f;   //Enemy Size
 f32 const BULLET_SPEED = 100.0f; //Bullet Speed
@@ -25,16 +24,23 @@ u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
 s32 bulletCount = 0; // Number of bullets fired
 u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
+f64 enemyHealth = 1;
+
+
 
 enum ObjectType {
 
 	TYPE_PLAYER = 0,
 	TYPE_BOSS,
-	TYPE_AUGMENT1,
 	TYPE_BOSS_BULLETHELL_BULLET_1,
 	TYPE_BULLET,
 	TYPE_ENEMY,
 	TYPE_PLAYER_HITBOX_INDICATOR,
+	TYPE_AUGMENT1,
+	TYPE_AUGMENT2,
+	TYPE_AUGMENT3,
+	TYPE_AUGMENT4,
+	TYPE_AUGMENT5,
 
 
 };
@@ -58,12 +64,12 @@ public:
 	AEGfxVertexList* pMesh;
 };
 
-class GameObjInstances 
+class GameObjInstances
 {
 private:
 
 public:
-	GameObjects*	pObject;
+	GameObjects* pObject;
 	u64				flag;
 	f32				scaleX;
 	f32				scaleY;
@@ -74,8 +80,8 @@ public:
 	AEMtx33			transform;
 	s32				health;
 	bool			showTexture;
-
-
+	bool            isInvincible;
+	f64				iFrame;
 
 };
 
@@ -87,61 +93,6 @@ public:
 //	}
 //};
 
-class Projectile {
-public:
-	f64 x, y;
-	f64 angle;
-	f64 speed;
-
-	Projectile(f64 x = 0, f64 y = 0, f64 angle = 0, f64 speed = 0)
-		: x(x), y(y), angle(angle), speed(speed) {}
-
-	void updatePosition() {
-		x += speed * cos(angle);
-		y += speed * sin(angle);
-	}
-};
-
-class Enemy {
-private:
-	f64 x, y, distanceX, distanceY;
-	f64 angle;
-	f64 speed;
-	
-public:
-	//Enemy Constructor with x,y ,angle and speed of enemy.
-	Enemy(f64 x = 0, f64 y = 0, f64 angle = 0, f64 speed = 0)
-		: x(x), y(y), angle(angle), speed(speed) {}
-
-	//Copy Constructor
-//	Enemy (Enemy const& e){ }
-	//Destructor..
-//	~Enemy(){}
-
-	void updatePosition() {
-		x += speed * cos(angle);
-		y += speed * sin(angle);
-	}
-
-	//void updatePosition(double x, double y) {
-	//	distanceX = this->x - x;
-	//	distanceY = this->y - y;
-
-	//	double magnitude = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
-	//	distanceX /= magnitude;
-	//	distanceY /= magnitude;
-
-	//	this->x -= distanceX * speed;
-	//	this->y -= distanceY * speed;
-	//}
-	f64 getX() { return x; }
-	f64 getY() { return y; }
-	f64 getAngle()  { return angle; }
-};
-
-
-
-
 
 //Parameters: Testing
 //Player
@@ -152,50 +103,52 @@ u8  bossPhase = 0;
 //Augments
 f64 _rotation_Aug = 0.0f;
 
-//Enemy (Now)
-f64 enemyX[MAX_ENEMIES] = { 200.0f , 900.0f, 800.0f, 850.0f, 754.0f, 723.0f, 237.0f, 937.0f, 823.0f, 236.0f };
-f64 enemyY[MAX_ENEMIES] = { 200.0f , 100.0f, 200.0f, 350.0f, 664.0f, 423.0f, 537.0f, 737.0f, 423.0f, 736.0f };
 s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
 
 
 //Parameters: Original Objects
 static GameObjects						sGameObjList[GAME_OBJ_NUM_MAX];
-static unsigned long					sGameObjNum;								
+static unsigned long					sGameObjNum;
 
 //Object Instances
 static GameObjInstances					sGameObjInstList[GAME_OBJ_INST_NUM_MAX];
 static unsigned long					sGameObjInstNum;
 
 //Pointer to Objects...
-static GameObjInstances*				_Player;
-static GameObjInstances*				_Bullet;
-static GameObjInstances*				_Augment_Gun;
-static GameObjInstances*				_Boss;
-static GameObjInstances*				_BossBullet;
-static GameObjInstances*				_Enemy;
-static GameObjInstances*				_PlayerHitbox;
-static GameObjInstances*				_BulletSpawner;
+static GameObjInstances* _Player;
+static GameObjInstances* _Bullet;
+static GameObjInstances* _Boss;
+static GameObjInstances* _BossBullet;
+static GameObjInstances* _Enemy;
+static GameObjInstances* _PlayerHitbox;
+static GameObjInstances* _Augment_One;
+static GameObjInstances* _Augment_Two;
+static GameObjInstances* _Augment_Three;
+static GameObjInstances* _Augment_Four;
+static GameObjInstances* _Augment_Five;
 
 
 
 
-f64					enemySpeed				=	1.0f;
-f64					enemySize				=	10.0f;
+u32					minutes = 0;
+f64					enemySpeed = 1.0f;
+f64					enemySize = 10.0f;
+f64					_deltaTimeEnemySpawner;
 f64					_deltaTime;
-f64					_deltaTime_Shooting		=   0.0f;
-bool				toggleHitBox			= false;
+f64					_deltaTime_Shooting = 0.0f;
+bool				toggleHitBox = false;
 AEVec2				velocity;
 AEVec2				velocity2;
 AEVec2				velocity3;
 int					numBulletsBHell;
 double				DelayMovement;
-bool				hasDelayTimePassed		= false;
+bool				hasDelayTimePassed = false;
 double				DelayShoot;
 
 double _delayTimeBullets;
 
 
-float xRange  = 683.0f;
+float xRange = 683.0f;
 float yRange = 50.0f;
 float ySpeed = 4.0f;
 float yPosition;
@@ -242,8 +195,7 @@ s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
-Enemy enemy(enemyX[0], enemyY[0], 0 , GameObjInstancesSpeed);
-f64 angle = atan2(enemy.getY() - 0, enemy.getX());
+f64 angle;
 f64 angle2 = 0;
 f64 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);
@@ -298,7 +250,7 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
 			pInst->direction = dir;
-			
+
 			// return the newly created instance
 			return pInst;
 		}
@@ -310,13 +262,13 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 
 void gameObjInstDestroy(GameObjInstances* pInst)
 {
-	
+
 	// if instance is destroyed before, just return
 	if (pInst->flag == 0)
 		return;
-//	std::cout << "Destroyed" << pInst->pObject->type << '\n';
+	//	std::cout << "Destroyed" << pInst->pObject->type << '\n';
 
-	// zero out the flag
+		// zero out the flag
 	pInst->flag = 0;
 
 }
