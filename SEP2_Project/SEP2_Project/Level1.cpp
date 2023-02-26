@@ -17,8 +17,9 @@ void Level_1_Load(void)
 	_Boss = nullptr;
 	_BossBullet = nullptr;
 	_Enemy = nullptr;
-	
+
 	_PlayerHitbox = nullptr;
+	_ExpOrbs = nullptr;
 	_Augment_One = nullptr;
 	_Augment_Two = nullptr;
 	_Augment_Three = nullptr;
@@ -31,6 +32,7 @@ void Level_1_Load(void)
 	GameObjects* _BossBulletObjects_1;
 	GameObjects* _EnemyObjects;
 	GameObjects* _PlayerHitbox;
+	GameObjects* _ExpObjects;
 
 	// Augments to choose,
 
@@ -152,7 +154,26 @@ void Level_1_Load(void)
 	_PlayerHitbox->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_PlayerHitbox->pMesh, "Fail to create object!!");
 
-	//6 TYPE_AUGMENT1
+	//6 Exp Orbs
+	_ExpObjects = sGameObjList + sGameObjNum++;
+	_ExpObjects->type = TYPE_EXPERIENCE;
+
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+	_ExpObjects->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(_ExpObjects->pMesh, "Fail to create object!!");
+
+
+
+	//7 TYPE_AUGMENT1
 	_AugmentOne_Obj = sGameObjList + sGameObjNum++;
 	_AugmentOne_Obj->type = TYPE_AUGMENT1;
 
@@ -169,7 +190,7 @@ void Level_1_Load(void)
 	_AugmentOne_Obj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_AugmentOne_Obj->pMesh, "Fail to create object!!");
 
-	//7 TYPE_AUGMENT2
+	//8 TYPE_AUGMENT2
 	_AugmentTwo_Obj = sGameObjList + sGameObjNum++;
 	_AugmentTwo_Obj->type = TYPE_AUGMENT2;
 
@@ -186,7 +207,7 @@ void Level_1_Load(void)
 	_AugmentTwo_Obj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_AugmentTwo_Obj->pMesh, "Fail to create object!!");
 
-	//8 TYPE_AUGMENT3
+	//9 TYPE_AUGMENT3
 	_AugmentThree_Obj = sGameObjList + sGameObjNum++;
 	_AugmentThree_Obj->type = TYPE_AUGMENT3;
 
@@ -203,7 +224,7 @@ void Level_1_Load(void)
 	_AugmentThree_Obj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_AugmentThree_Obj->pMesh, "Fail to create object!!");
 
-	//9 TYPE_AUGMENT4
+	//10 TYPE_AUGMENT4
 	_AugmentFour_Obj = sGameObjList + sGameObjNum++;
 	_AugmentFour_Obj->type = TYPE_AUGMENT4;
 
@@ -220,7 +241,7 @@ void Level_1_Load(void)
 	_AugmentFour_Obj->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_AugmentFour_Obj->pMesh, "Fail to create object!!");
 
-	//10 TYPE_AUGMENT5
+	//11 TYPE_AUGMENT5
 	_AugmentFive_Obj = sGameObjList + sGameObjNum++;
 	_AugmentFive_Obj->type = TYPE_AUGMENT5;
 
@@ -250,11 +271,11 @@ void Level_1_Init(void)
 
 
 	//1
-	_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-	_Boss->health = 100;
-	AE_ASSERT(_Boss);
-	_Boss->position.x = 0;
-	_Boss->position.y = 50;
+	//_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
+	//_Boss->health = 100;
+	//AE_ASSERT(_Boss);
+	//_Boss->position.x = 0;
+	//_Boss->position.y = 50;
 
 
 	//2
@@ -277,15 +298,20 @@ void Level_1_Init(void)
 
 	//_PlayerHitbox->flag = !FLAG_ACTIVE;
 
-	//6
+	//6 Exp Orbs
+	//_ExpOrbs = gameObjInstCreate(TYPE_EXPERIENCE, 10, nullptr, nullptr, 0.0f);
+	//AE_ASSERT(_ExpOrbs);
+
+
+	//7
 	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Augment_One);
 
-	//7
+	//8
 	_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Augment_Two);
 
-	//8
+	//9
 	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Augment_Three);
 
@@ -307,10 +333,17 @@ void Level_1_Update(void)
 	_deltaTimeEnemySpawner += g_dt;
 	_delayTimeBullets += g_dt;
 	_deltaTime_Shooting += g_dt;
-	//std::cout << mouseX << '\t' << mouseY << '\n';
+	
+
+
+	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
+
+
+
+	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1)
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			static float enemySpawnX = 0, enemySpawnY = 0;
 			// Generate a random number to determine which X range to use
@@ -339,15 +372,16 @@ void Level_1_Update(void)
 				enemySpawnX = -(1366 / 2) - ((1600 - 1366) / 2 * AERandFloat());
 				enemySpawnY = -(900 / 2) + AERandFloat() * (768 + (900 - 768) / 2);
 			}
-			//AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
-			//AEVec2 velocityEnemy = { 20.0f, 20.0f };
-			//enemyCount++;
-			////spawn enemy :)
-			//GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			//
-			//enemyInst->health = enemyHealth;
-			////			std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
-			//_enemyList.push_back(enemyInst);
+			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
+			AEVec2 velocityEnemy = { 20.0f, 20.0f };
+			enemyCount++;
+			//spawn enemy :)
+			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
+
+			enemyInst->health = enemyHealth;
+			std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
+
+			_enemyList.push_back(enemyInst);
 		}
 		_deltaTimeEnemySpawner = 0;
 	}
@@ -450,10 +484,9 @@ void Level_1_Update(void)
 				if (qInst->pObject->type == TYPE_AUGMENT1)
 				{
 					qInst->position.x = pInst->position.x;
-					qInst->position.y = pInst->position.y +75.0f;
-				
+					qInst->position.y = pInst->position.y + 75.0f;
+
 					AUGMENT_1_FIRE_INTERVAL = 1.5f;
-					AUGMENT_1_FIRE_TIMER = 0.0f;
 
 					AUGMENT_1_FIRE_TIMER += g_dt;
 					if (AUGMENT_1_FIRE_TIMER >= AUGMENT_1_FIRE_INTERVAL)
@@ -471,15 +504,15 @@ void Level_1_Update(void)
 						// Create a new bullet object and set its velocity to point towards the target
 						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, 0.0f);
 
-						std::cout << bulletInst->pObject << '\n';
+						//std::cout << bulletInst->pObject << '\n';
 
 						AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
 
 						// Reset the fire timer
 						AUGMENT_1_FIRE_TIMER = 0.0f;
 					}
-				}				
-				
+				}
+
 				if (qInst->pObject->type == TYPE_AUGMENT2)
 				{
 					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug), (f32)sin(_rotation_Aug) };
@@ -487,14 +520,14 @@ void Level_1_Update(void)
 					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
 
-				if (qInst->pObject->type == TYPE_AUGMENT3)
-				{
-
-					AUGMENT_3_FIRE_TIMER = 0.0f;
-					AUGMENT_3_FIRE_INTERVAL = 0.0f;
-
-
-				}
+				//if (qInst->pObject->type == TYPE_AUGMENT3)
+				//{
+				//
+				//	AUGMENT_3_FIRE_TIMER = 0.0f;
+				//	AUGMENT_3_FIRE_INTERVAL = 0.0f;
+				//
+				//
+				//}
 
 			}
 		}
@@ -555,17 +588,33 @@ void Level_1_Update(void)
 							{
 								angle = 225;
 							}
-							angle2 -= 22.5;
-							if (angle2 < -45)
+							angle2 -= 20;
+							if (angle2 < -60)
 							{
-								angle2 = 45;
+								angle2 = 60;
 							}
 							velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
 							velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, angle2);
+
+
 						}
+						angle = 0;
+						numBulletsBHell = 12;
+						//for (int i = 0; i < numBulletsBHell; i++)
+						//{
+						//	angle += 360/12;
+						//
+						//	velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+						//	gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 20, &pInst->position, &velocity, angle);
+						//
+						//
+						//
+						//}
+
 						_delayTimeBullets = 0;
+
 					}
 				}
 
@@ -873,12 +922,10 @@ void Level_1_Update(void)
 				angle = 180 + 45 * sin(g_appTime * 2.0 * PI / 5.0);
 				for (int i = 0; i < 1; i++)
 				{
-			
 					if (angle < 135)
 					{
 						angle = 225;
 					}
-			
 					velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 					gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
 				}
@@ -918,7 +965,7 @@ void Level_1_Update(void)
 					AEVec2 ENEMY_VELOCITY = { ENEMY_DIRECTION.x * 5.0f, ENEMY_DIRECTION.y * 5.0f };
 
 					// Scale velocity vector by time since last frame to get distance to move this frame
-					float distanceToMove = AEVec2Length(&velocity) * g_dt;
+					float distanceToMove = AEVec2Length(&ENEMY_VELOCITY) * g_dt;
 					ENEMY_VELOCITY.x *= distanceToMove;
 					ENEMY_VELOCITY.y *= distanceToMove;
 
@@ -928,9 +975,7 @@ void Level_1_Update(void)
 
 				}
 			}
-
 		}
-
 
 		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 		{
@@ -954,15 +999,15 @@ void Level_1_Update(void)
 			pInst->position.y > AEGfxGetWinMaxY() ||
 			pInst->position.y < AEGfxGetWinMinY())
 		{
-			if (pInst->pObject->type == TYPE_PLAYER						||
-				pInst->pObject->type == TYPE_AUGMENT1					||
-				pInst->pObject->type == TYPE_ENEMY						||
-				pInst->pObject->type == TYPE_BOSS						||
-				pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR	||
-				pInst->pObject->type == TYPE_AUGMENT2					||
-				pInst->pObject->type == TYPE_AUGMENT3					||
-				pInst->pObject->type == TYPE_AUGMENT4					||
-				pInst->pObject->type == TYPE_AUGMENT5	)				
+			if (pInst->pObject->type == TYPE_PLAYER ||
+				pInst->pObject->type == TYPE_AUGMENT1 ||
+				pInst->pObject->type == TYPE_ENEMY ||
+				pInst->pObject->type == TYPE_BOSS ||
+				pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR ||
+				pInst->pObject->type == TYPE_AUGMENT2 ||
+				pInst->pObject->type == TYPE_AUGMENT3 ||
+				pInst->pObject->type == TYPE_AUGMENT4 ||
+				pInst->pObject->type == TYPE_AUGMENT5)
 			{
 				continue;
 			}
@@ -986,6 +1031,7 @@ void Level_1_Update(void)
 
 	}
 
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////COLLISION////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1002,6 +1048,7 @@ void Level_1_Update(void)
 
 		AEVec2 circleCenter = ObjInstance1->position;
 		f32 circleRadius = BOUNDING_RECT_SIZE / 2.0f * ObjInstance1->scaleX;
+
 		if (ObjInstance1->pObject->type == TYPE_BULLET)
 		{
 			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
@@ -1036,12 +1083,34 @@ void Level_1_Update(void)
 							gameObjInstDestroy(ObjInstance2);
 						}
 						gameObjInstDestroy(ObjInstance1);
+
+						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 					}
 				}
 			}
 		}
 
+		if (ObjInstance1->pObject->type == TYPE_EXPERIENCE)
+		{
+			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			{
+				GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 
+				if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
+					continue;
+
+				if (ObjInstance2->pObject->type == TYPE_PLAYER)
+				{
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					{
+						_Player_Experience++;
+						std::cout << "Player Experience: " << _Player_Experience << '\n';
+						std::cout << "Player Level: " << _Player_Level << '\n';
+						gameObjInstDestroy(ObjInstance1);
+					}
+				}
+			}
+		}
 
 		//if (ObjInstance1->pObject->type == TYPE_AUGMENT2)
 		//{
@@ -1107,6 +1176,8 @@ void Level_1_Draw(void)
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
+	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
+
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1151,14 +1222,15 @@ void Level_1_Draw(void)
 		{
 			//Improvise, Adapt, Overcome - Bear Grylls
 			if (pInst->showTexture == true)
-			{
 				texture = pHitboxTex;
-			}
 			else
-			{
 				texture = InvisibleTex;
-			}
 		}
+		else if (pInst->pObject->type == TYPE_EXPERIENCE)
+		{
+			texture = ExpOrbTex;
+		}
+
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
@@ -1172,6 +1244,10 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(pHitboxTex);
 	AEGfxTextureUnload(spawnerTex);
 	AEGfxTextureUnload(InvisibleTex);
+	AEGfxTextureUnload(ExpOrbTex);
+
+
+
 
 }
 void Level_1_Free(void)

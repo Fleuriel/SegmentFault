@@ -36,6 +36,7 @@ enum ObjectType {
 	TYPE_BULLET,
 	TYPE_ENEMY,
 	TYPE_PLAYER_HITBOX_INDICATOR,
+	TYPE_EXPERIENCE,
 	TYPE_AUGMENT1,
 	TYPE_AUGMENT2,
 	TYPE_AUGMENT3,
@@ -93,16 +94,6 @@ public:
 //};
 
 
-//Parameters: Testing
-//Player
-s16 _playerScale = -1;
-u8  bossPhase = 0;
-
-
-//Augments
-f64 _rotation_Aug = 0.0f;
-
-s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
 
 
 //Parameters: Original Objects
@@ -120,6 +111,7 @@ static GameObjInstances* _Boss;
 static GameObjInstances* _BossBullet;
 static GameObjInstances* _Enemy;
 static GameObjInstances* _PlayerHitbox;
+static GameObjInstances* _ExpOrbs;
 static GameObjInstances* _Augment_One;
 static GameObjInstances* _Augment_Two;
 static GameObjInstances* _Augment_Three;
@@ -209,6 +201,17 @@ std::vector<GameObjInstances*> remainingTargets;
 
 //Variables for TYPES...
 
+//Parameters: Testing
+//Player
+s16 _playerScale = -1;
+u8  bossPhase = 0;
+
+
+//Augments
+f64 _rotation_Aug = 0.0f;
+
+s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
+
 AEVec2 ENEMY_DIRECTION;
 AEVec2 ENEMY_VELOCITY;
 
@@ -225,6 +228,8 @@ AEVec2 AUGMENT_2_DIRECTION;
 
 f64 AUGMENT_3_FIRE_TIMER	  = 0.0f;
 f64 AUGMENT_3_FIRE_INTERVAL   = 10.0f;
+f64 AUGMENT_3_CLOSEST_DISTANCE = 2147483647.0f; 
+f64 AUGMENT_3_CLOSEST_ENEMY = 0.0f;
 
 f64 AUGMENT_4_FIRE_TIMER;
 f64 AUGMENT_4_FIRE_INTERVAL;
@@ -232,6 +237,46 @@ f64 AUGMENT_4_FIRE_INTERVAL;
 f64 AUGMENT_5_FIRE_TIMER;
 f64 AUGMENT_5_FIRE_INTERVAL;
 
+s32 _Player_Experience = 0;
+s32 _Player_Level = 1;
+
+int experienceCurve(int level, int& playerExperience)
+{
+	int baseExp = 15;
+	int increment = 2 * ((level - 1) / 5);
+	int requiredExp = baseExp + (level - 1) * increment;
+
+	if (playerExperience >= requiredExp) {
+		// Increment the player's level and subtract the required experience from their total
+		playerExperience -= requiredExp;
+		level++;
+	}
+
+	return level;
+}
+
+
+GameObjInstances* FindNearestEnemy(GameObjInstances* player)
+{
+	float minDistance = FLT_MAX;
+	GameObjInstances* nearestEnemy = nullptr;
+	for (int i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
+	{
+		GameObjInstances* pInst = sGameObjInstList + i;
+		if (pInst != player && pInst->pObject->type == TYPE_ENEMY &&
+			pInst->position.x > player->position.x + 200 || pInst->position.x < player->position.x - 200 ||
+			pInst->position.y > player->position.y + 200 || pInst->position.y < player->position.y - 200)
+		{
+			float distance = AEVec2Distance(&pInst->position, &player->position);
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				nearestEnemy = pInst;
+			}
+		}
+	}
+	return nearestEnemy;
+}
 
 
 GameObjInstances* gameObjInstCreate(unsigned long type,
@@ -260,12 +305,10 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
 			pInst->direction = dir;
-
 			// return the newly created instance
 			return pInst;
 		}
 	}
-
 	// cannot find empty slot => return 0
 	return 0;
 }
