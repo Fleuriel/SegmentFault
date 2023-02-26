@@ -53,6 +53,14 @@ void GameStateMgrUpdate()
 		GameStateUnload = Level_1_Unload;
 		break;
 		// no need for GS RESTART/GS_QUIT because if statement.
+	case UPGRADE:
+		GameStateLoad	= Upgrade_Load;
+		GameStateInit	= Upgrade_Init;
+		GameStateUpdate = Upgrade_Update;
+		GameStateDraw	= Upgrade_Draw;
+		GameStateFree	= Upgrade_Free;
+		GameStateUnload = Upgrade_Unload;
+		break;
 
 	default:
 		AE_FATAL_ERROR("invalid state!!");

@@ -5,14 +5,23 @@
 #include <queue>
 #include <set>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+
 
 
 
 #define MAX_ENEMIES				100
-#define GAME_OBJ_NUM_MAX		64
-#define GAME_OBJ_INST_NUM_MAX	4096
+#define GAME_OBJ_NUM_MAX		16
+#define GAME_OBJ_INST_NUM_MAX	128
 
 #define FLAG_ACTIVE				1
+
+
+//FILE DIRECTORY...
+
+std::ifstream inputFileStream{ "..\\..\\Assets\\SaveFiles\\save.txt" };
+
 
 f32 const PLAYER_SIZE = 60.0f; //Player Size...
 f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
@@ -120,6 +129,7 @@ static GameObjInstances* _Augment_Five;
 
 
 
+bool				UIToggle = false;
 
 u32					minutes = 0;
 f64					enemySpeed = 1.0f;
@@ -136,6 +146,7 @@ double				DelayMovement;
 bool				hasDelayTimePassed = false;
 double				DelayShoot;
 
+float enemySpawnX = 0, enemySpawnY = 0;
 double _delayTimeBullets;
 
 

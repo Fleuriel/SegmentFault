@@ -46,8 +46,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 		// reset the system modules
 		AESysReset();
 
-		// If not restarting, load the gamestate
-		if (gGameStateCurr != RESTART)
+		// If not RESTART, load the gamestate
+		if (gGameStateCurr != QUIT)
 		{
 			GameStateMgrUpdate();
 			GameStateLoad();

@@ -12,6 +12,7 @@ enum
 	//Start Game
 	PLAY,
 	// special game state. Do not change
+	UPGRADE,
 	RESTART,
 
 	QUIT

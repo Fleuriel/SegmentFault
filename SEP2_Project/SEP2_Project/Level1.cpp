@@ -259,6 +259,92 @@ void Level_1_Load(void)
 	AE_ASSERT_MESG(_AugmentFive_Obj->pMesh, "Fail to create object!!");
 
 
+	if (inputFileStream.good())
+	{
+		std::cout << "File Exist\n";
+
+		std::string line;
+
+		std::cout << inputFileStream.eof() << '\n';
+		inputFileStream.seekg(0, std::ios::beg);
+
+		std::cout << inputFileStream.eof()<< '\n';
+		while (std::getline(inputFileStream, line))
+		{
+			std::cout << "Inside Line 1\n";
+			if (line == "enemyInstances Positions...\n")
+			{
+				while (std::getline(inputFileStream, line))
+				{
+					if (line.empty()) {
+						continue;
+					}
+
+					std::istringstream iss(line);
+					GameObjInstances* enemyInstance = new GameObjInstances;
+					iss >> enemyInstance->flag >> enemyInstance->scaleX >> enemyInstance->scaleY >>
+						enemyInstance->position.x >> enemyInstance->position.y >>
+						enemyInstance->velocity.x >> enemyInstance->velocity.y >>
+						enemyInstance->direction >> enemyInstance->boundingBox.min.x >>
+						enemyInstance->boundingBox.min.y >> enemyInstance->boundingBox.max.x >>
+						enemyInstance->boundingBox.max.y >> enemyInstance->transform.m[0][0] >>
+						enemyInstance->transform.m[0][1] >> enemyInstance->transform.m[0][2] >>
+						enemyInstance->transform.m[1][0] >> enemyInstance->transform.m[1][1] >>
+						enemyInstance->transform.m[1][2] >> enemyInstance->transform.m[2][0] >>
+						enemyInstance->transform.m[2][1] >> enemyInstance->transform.m[2][2] >>
+						enemyInstance->health >> enemyInstance->showTexture >> enemyInstance->isInvincible >>
+						enemyInstance->iFrame;
+
+					_enemyList.push_back(enemyInstance);
+				}
+			}
+			else if (line == "Player Experience and Level...")
+			{
+				std::getline(inputFileStream, line);
+				std::istringstream iss(line);
+				//works
+				iss >> _Player_Level >> _Player_Experience;
+				//works
+				std::cout << _Player_Level << " WHOOPSEY " << _Player_Experience << '\n';
+			}
+			else
+			{
+				if (line.empty()) {
+					continue;
+				}
+
+				std::istringstream iss(line);
+				GameObjInstances gameObjInstance;
+				std::string objectType;
+				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scaleX >> gameObjInstance.scaleY >>
+					gameObjInstance.position.x >> gameObjInstance.position.y >>
+					gameObjInstance.velocity.x >> gameObjInstance.velocity.y >> gameObjInstance.direction >>
+					gameObjInstance.boundingBox.min.x >> gameObjInstance.boundingBox.min.y >>
+					gameObjInstance.boundingBox.max.x >> gameObjInstance.boundingBox.max.y >>
+					gameObjInstance.transform.m[0][0] >> gameObjInstance.transform.m[0][1] >>
+					gameObjInstance.transform.m[0][2] >> gameObjInstance.transform.m[1][0] >>
+					gameObjInstance.transform.m[1][1] >> gameObjInstance.transform.m[1][2] >>
+					gameObjInstance.transform.m[2][0] >> gameObjInstance.transform.m[2][1] >>
+					gameObjInstance.transform.m[2][2] >> gameObjInstance.health >> gameObjInstance.showTexture >>
+					gameObjInstance.isInvincible >> gameObjInstance.iFrame;
+
+	/*			std::cout << gameObjInstance.flag << gameObjInstance.scaleX << gameObjInstance.scaleY <<
+					gameObjInstance.position.x << gameObjInstance.position.y <<
+					gameObjInstance.velocity.x << gameObjInstance.velocity.y << gameObjInstance.direction <<
+					gameObjInstance.boundingBox.min.x << gameObjInstance.boundingBox.min.y <<
+					gameObjInstance.boundingBox.max.x << gameObjInstance.boundingBox.max.y <<
+					gameObjInstance.transform.m[0][0] << gameObjInstance.transform.m[0][1] <<
+					gameObjInstance.transform.m[0][2] << gameObjInstance.transform.m[1][0] <<
+					gameObjInstance.transform.m[1][1] << gameObjInstance.transform.m[1][2] <<
+					gameObjInstance.transform.m[2][0] << gameObjInstance.transform.m[2][1] <<
+					gameObjInstance.transform.m[2][2] << gameObjInstance.health << gameObjInstance.showTexture <<
+					gameObjInstance.isInvincible << gameObjInstance.iFrame;*/
+
+			}
+		}
+	}
+
+
 
 
 }
@@ -322,6 +408,122 @@ void Level_1_Init(void)
 
 void Level_1_Update(void)
 {
+
+
+
+	//Make Toggle..
+	if (AEInputCheckReleased(AEVK_LBUTTON))
+	{
+		//SAVE.....
+
+		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\save.txt" };
+
+
+		if (outputStream.is_open())
+		{
+			std::cout << "Current GameObjects\n";
+			for (const auto& gameObjInstance : sGameObjInstList)
+			{
+				if (gameObjInstance.flag == 0 &&
+					gameObjInstance.scaleX == 0 &&
+					gameObjInstance.scaleY == 0 &&
+					gameObjInstance.position.x == 0 &&
+					gameObjInstance.position.y == 0 &&
+					gameObjInstance.velocity.x == 0 &&
+					gameObjInstance.velocity.y == 0 &&
+					gameObjInstance.direction == 0 &&
+					gameObjInstance.boundingBox.min.x == 0 &&
+					gameObjInstance.boundingBox.min.y == 0 &&
+					gameObjInstance.boundingBox.max.x == 0 &&
+					gameObjInstance.boundingBox.max.y == 0 &&
+					gameObjInstance.transform.m[0][0] == 0 &&
+					gameObjInstance.transform.m[0][1] == 0 &&
+					gameObjInstance.transform.m[0][2] == 0 &&
+					gameObjInstance.transform.m[1][0] == 0 &&
+					gameObjInstance.transform.m[1][1] == 0 &&
+					gameObjInstance.transform.m[1][2] == 0 &&
+					gameObjInstance.transform.m[2][0] == 0 &&
+					gameObjInstance.transform.m[2][1] == 0 &&
+					gameObjInstance.transform.m[2][2] == 0 &&
+					gameObjInstance.health == 0 &&
+					gameObjInstance.showTexture == false &&
+					gameObjInstance.isInvincible == false &&
+					gameObjInstance.iFrame == 0.0)
+				{
+					continue; // Skip this iteration of the loop
+				}
+				else
+				{
+					if (gameObjInstance.pObject != nullptr)
+					{
+						outputStream
+							<< gameObjInstance.pObject->type << " "
+							<< gameObjInstance.flag << " "
+							<< gameObjInstance.scaleX << " "
+							<< gameObjInstance.scaleY << " "
+							<< gameObjInstance.position.x << " "
+							<< gameObjInstance.position.y << " "
+							<< gameObjInstance.velocity.x << " "
+							<< gameObjInstance.velocity.y << " "
+							<< gameObjInstance.direction << " "
+							<< gameObjInstance.boundingBox.min.x << " "
+							<< gameObjInstance.boundingBox.min.y << " "
+							<< gameObjInstance.boundingBox.max.x << " "
+							<< gameObjInstance.boundingBox.max.y << " "
+							<< gameObjInstance.transform.m[0][0] << " "
+							<< gameObjInstance.transform.m[0][1] << " "
+							<< gameObjInstance.transform.m[0][2] << " "
+							<< gameObjInstance.transform.m[1][0] << " "
+							<< gameObjInstance.transform.m[1][1] << " "
+							<< gameObjInstance.transform.m[1][2] << " "
+							<< gameObjInstance.transform.m[2][0] << " "
+							<< gameObjInstance.transform.m[2][1] << " "
+							<< gameObjInstance.transform.m[2][2] << " "
+							<< gameObjInstance.health << " "
+							<< gameObjInstance.showTexture << " "
+							<< gameObjInstance.isInvincible << " "
+							<< gameObjInstance.iFrame
+							<< "\n";
+					}
+				}
+			}
+			outputStream << "enemyInstances Positions...\n";
+			for (const auto& enemyInstance : _enemyList) {
+				outputStream << enemyInstance->flag << " "
+					<< enemyInstance->scaleX << " "
+					<< enemyInstance->scaleY << " "
+					<< enemyInstance->position.x << " "
+					<< enemyInstance->position.y << " "
+					<< enemyInstance->velocity.x << " "
+					<< enemyInstance->velocity.y << " "
+					<< enemyInstance->direction << " "
+					<< enemyInstance->boundingBox.min.x << " "
+					<< enemyInstance->boundingBox.min.y << " "
+					<< enemyInstance->boundingBox.max.x << " "
+					<< enemyInstance->boundingBox.max.y << " "
+					<< enemyInstance->transform.m[0][0] << " "
+					<< enemyInstance->transform.m[0][1] << " "
+					<< enemyInstance->transform.m[0][2] << " "
+					<< enemyInstance->transform.m[1][0] << " "
+					<< enemyInstance->transform.m[1][1] << " "
+					<< enemyInstance->transform.m[1][2] << " "
+					<< enemyInstance->transform.m[2][0] << " "
+					<< enemyInstance->transform.m[2][1] << " "
+					<< enemyInstance->transform.m[2][2] << " "
+					<< enemyInstance->health << " "
+					<< enemyInstance->showTexture << " "
+					<< enemyInstance->isInvincible << " "
+					<< enemyInstance->iFrame
+					<< "\n";
+			}
+			outputStream << "Player Experience and Level...\n";
+			outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
+		}
+		gGameStateNext = UPGRADE;
+	}
+
+
+
 	_deltaTime += g_dt;
 	//std::cout << _deltaTime << '\n';
 	//Increment Minutes... (Health)
@@ -333,7 +535,7 @@ void Level_1_Update(void)
 	_deltaTimeEnemySpawner += g_dt;
 	_delayTimeBullets += g_dt;
 	_deltaTime_Shooting += g_dt;
-	
+
 
 
 	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
@@ -345,7 +547,6 @@ void Level_1_Update(void)
 	{
 		for (int i = 0; i < 1; i++)
 		{
-			static float enemySpawnX = 0, enemySpawnY = 0;
 			// Generate a random number to determine which X range to use
 			// Outer Box, 1600x900 , Inner Box 1366x768;
 			//A
@@ -984,7 +1185,6 @@ void Level_1_Update(void)
 			if (AEInputCheckCurr(AEVK_LSHIFT))
 			{
 				pInst->showTexture = true;
-
 			}
 			else
 			{
@@ -1007,7 +1207,8 @@ void Level_1_Update(void)
 				pInst->pObject->type == TYPE_AUGMENT2 ||
 				pInst->pObject->type == TYPE_AUGMENT3 ||
 				pInst->pObject->type == TYPE_AUGMENT4 ||
-				pInst->pObject->type == TYPE_AUGMENT5)
+				pInst->pObject->type == TYPE_AUGMENT5 ||
+				pInst->pObject->type == TYPE_EXPERIENCE)
 			{
 				continue;
 			}
@@ -1046,10 +1247,9 @@ void Level_1_Update(void)
 		if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-		AEVec2 circleCenter = ObjInstance1->position;
-		f32 circleRadius = BOUNDING_RECT_SIZE / 2.0f * ObjInstance1->scaleX;
 
-		if (ObjInstance1->pObject->type == TYPE_BULLET)
+
+		if (ObjInstance1->pObject->type == TYPE_ENEMY)
 		{
 			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			{
@@ -1058,37 +1258,43 @@ void Level_1_Update(void)
 				if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 					continue;
 
-				//if ObjectInstance2 is same as ObjectInstance1, then continue...
-				if (
-					ObjInstance2->pObject->type == TYPE_BULLET ||
-					ObjInstance2->pObject->type == TYPE_PLAYER ||
-					ObjInstance2->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT1 ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT2 ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT3 ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT4 ||
-					ObjInstance2->pObject->type == TYPE_AUGMENT5)
-					continue;
-
-				if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
+				if (ObjInstance2->pObject->type == TYPE_BULLET)
 				{
 					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						//bulletCount--;
 						//std::cout << bulletCount << '\n';
-						ObjInstance2->health--;
-						if (ObjInstance2->health == 0)
+						ObjInstance1->health--;
+						if (ObjInstance1->health <= 0)
 						{
-							gameObjInstDestroy(ObjInstance2);
+							gameObjInstDestroy(ObjInstance1);
 						}
-						gameObjInstDestroy(ObjInstance1);
+						gameObjInstDestroy(ObjInstance2);
 
 						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 					}
 				}
+				if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
+				{
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					{
+						//Spawn Orbs of Experience at ObjInstance1 Position...
+						//bulletCount--;
+						//std::cout << bulletCount << '\n';
+						ObjInstance1->health--;
+						if (ObjInstance1->health <= 0)
+						{
+							gameObjInstDestroy(ObjInstance1);
+						}
+
+						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+					}
+				}
+
 			}
 		}
+
 
 		if (ObjInstance1->pObject->type == TYPE_EXPERIENCE)
 		{
@@ -1112,29 +1318,6 @@ void Level_1_Update(void)
 			}
 		}
 
-		//if (ObjInstance1->pObject->type == TYPE_AUGMENT2)
-		//{
-		//	for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-		//	{
-		//		GameObjInstances* ObjInstance2 = sGameObjInstList + j;
-		//
-		//		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
-		//			continue;
-		//
-		//		if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS)
-		//		{
-		//			if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
-		//			{
-		//				ObjInstance2->health--;
-		//				if (ObjInstance2->health == 0)
-		//				{
-		//					gameObjInstDestroy(ObjInstance2);
-		//				}
-		//			}
-		//		}
-		//	}
-		//
-		//}
 
 	}
 
