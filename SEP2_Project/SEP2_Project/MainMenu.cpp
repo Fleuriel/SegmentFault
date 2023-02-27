@@ -105,25 +105,30 @@ void Menu_Update(void)
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
+    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         //gGameStateNext = POWER_UPS;
         printf("Goto powerups\n");
     }
-    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
+    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = SETTINGS;
         printf("Goto Settings\n");
     }
-    else if (IsAreaClicked(playButton_midX, playButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
+    else if (IsAreaClicked(playButton_midX, playButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
 
-    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 120.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)) {
+    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 120.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         //gGameStateNext = CREDITS;
         printf("Goto Credits\n");
     }
 
-    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)) {
+    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = QUIT;
         printf("QUIT\n");
     }

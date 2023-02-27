@@ -502,7 +502,7 @@ void Level_1_Update(void)
 
 
 
-		gGameStateNext = UPGRADE;
+		gGameStateNext = PAUSE;
 		_deltaTime_State = 0.0f;
 	}
 

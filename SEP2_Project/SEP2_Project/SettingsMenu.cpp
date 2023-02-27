@@ -56,7 +56,8 @@ void Settings_Update(void)
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX_settings, 100.0f * scaleY_settings, cursorX, cursorY)) {
+    if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX_settings, 100.0f * scaleY_settings, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         printf("MAINMENU\n");
     }

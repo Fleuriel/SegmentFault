@@ -98,16 +98,19 @@ void Pause_Update(void)
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(quitButton_midX, quitButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)) {
+    if (IsAreaClicked(quitButton_midX, quitButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         printf("MAINMENU\n");
     }
-    else if (IsAreaClicked(resumeButton_midX, resumeButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)) {
+    else if (IsAreaClicked(resumeButton_midX, resumeButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PLAY;
         printf("RESUME\n");
     }
 
-    else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)) {
+    else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) {
         //gGameStateNext = UPGRADE;
         printf("UPGRADES\n");
     }
