@@ -78,10 +78,9 @@ class GameObjInstances
 private:
 
 public:
-	GameObjects* pObject;
+	GameObjects*	pObject;
 	u64				flag;
-	f32				scaleX;
-	f32				scaleY;
+	AEVec2			scale;
 	AEVec2			position;
 	AEVec2			velocity;
 	f32				direction;
@@ -311,8 +310,8 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			// it is not used => use it to create the new instance
 			pInst->pObject = sGameObjList + type;
 			pInst->flag = FLAG_ACTIVE;
-			pInst->scaleX = scale;
-			pInst->scaleY = scale;
+			pInst->scale.x = scale;
+			pInst->scale.y = scale;
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
 			pInst->direction = dir;

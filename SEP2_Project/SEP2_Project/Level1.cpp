@@ -282,7 +282,7 @@ void Level_1_Load(void)
 
 					std::istringstream iss(line);
 					GameObjInstances* enemyInstance = new GameObjInstances;
-					iss >> enemyInstance->flag >> enemyInstance->scaleX >> enemyInstance->scaleY >>
+					iss >> enemyInstance->flag >> enemyInstance->scale.x >> enemyInstance->scale.y >>
 						enemyInstance->position.x >> enemyInstance->position.y >>
 						enemyInstance->velocity.x >> enemyInstance->velocity.y >>
 						enemyInstance->direction >> enemyInstance->boundingBox.min.x >>
@@ -316,7 +316,7 @@ void Level_1_Load(void)
 				std::istringstream iss(line);
 				GameObjInstances gameObjInstance;
 				std::string objectType;
-				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scaleX >> gameObjInstance.scaleY >>
+				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scale.x >> gameObjInstance.scale.y >>
 					gameObjInstance.position.x >> gameObjInstance.position.y >>
 					gameObjInstance.velocity.x >> gameObjInstance.velocity.y >> gameObjInstance.direction >>
 					gameObjInstance.boundingBox.min.x >> gameObjInstance.boundingBox.min.y >>
@@ -328,7 +328,7 @@ void Level_1_Load(void)
 					gameObjInstance.transform.m[2][2] >> gameObjInstance.health >> gameObjInstance.showTexture >>
 					gameObjInstance.isInvincible >> gameObjInstance.iFrame;
 
-	/*			std::cout << gameObjInstance.flag << gameObjInstance.scaleX << gameObjInstance.scaleY <<
+	/*			std::cout << gameObjInstance.flag << gameObjInstance.scale.x << gameObjInstance.scale.y <<
 					gameObjInstance.position.x << gameObjInstance.position.y <<
 					gameObjInstance.velocity.x << gameObjInstance.velocity.y << gameObjInstance.direction <<
 					gameObjInstance.boundingBox.min.x << gameObjInstance.boundingBox.min.y <<
@@ -412,7 +412,7 @@ void Level_1_Update(void)
 
 
 	//Make Toggle..
-	if (AEInputCheckReleased(AEVK_LBUTTON))
+	if (AEInputCheckTriggered(AEVK_LBUTTON))
 	{
 		//SAVE.....
 
@@ -425,8 +425,8 @@ void Level_1_Update(void)
 			for (const auto& gameObjInstance : sGameObjInstList)
 			{
 				if (gameObjInstance.flag == 0 &&
-					gameObjInstance.scaleX == 0 &&
-					gameObjInstance.scaleY == 0 &&
+					gameObjInstance.scale.x == 0 &&
+					gameObjInstance.scale.y == 0 &&
 					gameObjInstance.position.x == 0 &&
 					gameObjInstance.position.y == 0 &&
 					gameObjInstance.velocity.x == 0 &&
@@ -436,15 +436,6 @@ void Level_1_Update(void)
 					gameObjInstance.boundingBox.min.y == 0 &&
 					gameObjInstance.boundingBox.max.x == 0 &&
 					gameObjInstance.boundingBox.max.y == 0 &&
-					gameObjInstance.transform.m[0][0] == 0 &&
-					gameObjInstance.transform.m[0][1] == 0 &&
-					gameObjInstance.transform.m[0][2] == 0 &&
-					gameObjInstance.transform.m[1][0] == 0 &&
-					gameObjInstance.transform.m[1][1] == 0 &&
-					gameObjInstance.transform.m[1][2] == 0 &&
-					gameObjInstance.transform.m[2][0] == 0 &&
-					gameObjInstance.transform.m[2][1] == 0 &&
-					gameObjInstance.transform.m[2][2] == 0 &&
 					gameObjInstance.health == 0 &&
 					gameObjInstance.showTexture == false &&
 					gameObjInstance.isInvincible == false &&
@@ -459,8 +450,8 @@ void Level_1_Update(void)
 						outputStream
 							<< gameObjInstance.pObject->type << " "
 							<< gameObjInstance.flag << " "
-							<< gameObjInstance.scaleX << " "
-							<< gameObjInstance.scaleY << " "
+							<< gameObjInstance.scale.x << " "
+							<< gameObjInstance.scale.y << " "
 							<< gameObjInstance.position.x << " "
 							<< gameObjInstance.position.y << " "
 							<< gameObjInstance.velocity.x << " "
@@ -470,15 +461,7 @@ void Level_1_Update(void)
 							<< gameObjInstance.boundingBox.min.y << " "
 							<< gameObjInstance.boundingBox.max.x << " "
 							<< gameObjInstance.boundingBox.max.y << " "
-							<< gameObjInstance.transform.m[0][0] << " "
-							<< gameObjInstance.transform.m[0][1] << " "
-							<< gameObjInstance.transform.m[0][2] << " "
-							<< gameObjInstance.transform.m[1][0] << " "
-							<< gameObjInstance.transform.m[1][1] << " "
-							<< gameObjInstance.transform.m[1][2] << " "
-							<< gameObjInstance.transform.m[2][0] << " "
-							<< gameObjInstance.transform.m[2][1] << " "
-							<< gameObjInstance.transform.m[2][2] << " "
+							<< gameObjInstance.transform.m << " "
 							<< gameObjInstance.health << " "
 							<< gameObjInstance.showTexture << " "
 							<< gameObjInstance.isInvincible << " "
@@ -490,8 +473,8 @@ void Level_1_Update(void)
 			outputStream << "enemyInstances Positions...\n";
 			for (const auto& enemyInstance : _enemyList) {
 				outputStream << enemyInstance->flag << " "
-					<< enemyInstance->scaleX << " "
-					<< enemyInstance->scaleY << " "
+					<< enemyInstance->scale.x << " "
+					<< enemyInstance->scale.y << " "
 					<< enemyInstance->position.x << " "
 					<< enemyInstance->position.y << " "
 					<< enemyInstance->velocity.x << " "
@@ -501,15 +484,7 @@ void Level_1_Update(void)
 					<< enemyInstance->boundingBox.min.y << " "
 					<< enemyInstance->boundingBox.max.x << " "
 					<< enemyInstance->boundingBox.max.y << " "
-					<< enemyInstance->transform.m[0][0] << " "
-					<< enemyInstance->transform.m[0][1] << " "
-					<< enemyInstance->transform.m[0][2] << " "
-					<< enemyInstance->transform.m[1][0] << " "
-					<< enemyInstance->transform.m[1][1] << " "
-					<< enemyInstance->transform.m[1][2] << " "
-					<< enemyInstance->transform.m[2][0] << " "
-					<< enemyInstance->transform.m[2][1] << " "
-					<< enemyInstance->transform.m[2][2] << " "
+					<< enemyInstance->transform.m << " "
 					<< enemyInstance->health << " "
 					<< enemyInstance->showTexture << " "
 					<< enemyInstance->isInvincible << " "
@@ -604,7 +579,7 @@ void Level_1_Update(void)
 	{
 		if (_playerScale > 0)
 		{
-			_Player->scaleX *= -1;
+			_Player->scale.x *= -1;
 			_playerScale *= -1;
 		}
 	}
@@ -613,7 +588,7 @@ void Level_1_Update(void)
 	{
 		if (_playerScale < 0)
 		{
-			_Player->scaleX *= -1;
+			_Player->scale.x *= -1;
 			_playerScale *= -1;
 		}
 	}
@@ -1223,11 +1198,12 @@ void Level_1_Update(void)
 		}
 
 
-		//pInst->boundingBox.min.x = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scaleX + pInst->position.x;
-		//pInst->boundingBox.min.y = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scaleY + pInst->position.y;
-		//pInst->boundingBox.max.x = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scaleX + pInst->position.x;
-		//pInst->boundingBox.max.y = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scaleY + pInst->position.y;
-		//
+		//pInst->boundingBox.min.x = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.x + pInst->position.x;
+		//pInst->boundingBox.min.y = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.y + pInst->position.y;
+		//pInst->boundingBox.max.x = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.x + pInst->position.x;
+		//pInst->boundingBox.max.y = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.y + pInst->position.y;
+
+
 
 
 	}
@@ -1247,8 +1223,6 @@ void Level_1_Update(void)
 		if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-
-
 		if (ObjInstance1->pObject->type == TYPE_ENEMY)
 		{
 			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
@@ -1260,7 +1234,7 @@ void Level_1_Update(void)
 
 				if (ObjInstance2->pObject->type == TYPE_BULLET)
 				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						//bulletCount--;
@@ -1277,7 +1251,7 @@ void Level_1_Update(void)
 				}
 				if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
 				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 					{
 						//Spawn Orbs of Experience at ObjInstance1 Position...
 						//bulletCount--;
@@ -1307,7 +1281,7 @@ void Level_1_Update(void)
 
 				if (ObjInstance2->pObject->type == TYPE_PLAYER)
 				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scaleX, ObjInstance2->position, ObjInstance2->scaleX))
+					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 					{
 						_Player_Experience++;
 						std::cout << "Player Experience: " << _Player_Experience << '\n';
@@ -1337,7 +1311,7 @@ void Level_1_Update(void)
 		if ((pInst->flag & FLAG_ACTIVE) == 0)
 			continue;
 
-		AEMtx33Scale(&scale, pInst->scaleX, pInst->scaleY);
+		AEMtx33Scale(&scale, pInst->scale.x, pInst->scale.y);
 		AEMtx33Rot(&rotate, pInst->direction);
 		AEMtx33Trans(&translate, pInst->position.x, pInst->position.y);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
