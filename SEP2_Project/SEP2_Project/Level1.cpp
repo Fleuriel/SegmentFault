@@ -5,6 +5,7 @@
 
 void Level_1_Load(void)
 {
+	std::cout << "Level1_Load\n";
 	memset(sGameObjList, 0, sizeof(GameObjects) * GAME_OBJ_NUM_MAX);
 
 	sGameObjNum = 0;
@@ -259,50 +260,60 @@ void Level_1_Load(void)
 	AE_ASSERT_MESG(_AugmentFive_Obj->pMesh, "Fail to create object!!");
 
 
+
 	if (inputFileStream.good())
 	{
 		std::cout << "File Exist\n";
-
+		std::string ExpText = "Player Experience and Level...";
 		std::string line;
 
 		std::cout << inputFileStream.eof() << '\n';
 		inputFileStream.seekg(0, std::ios::beg);
 
-		std::cout << inputFileStream.eof()<< '\n';
+
+
+
 		while (std::getline(inputFileStream, line))
 		{
-			std::cout << "Inside Line 1\n";
+			std::cout << line << '\n';
 			if (line == "enemyInstances Positions...")
 			{
-				std::cout << "Hello1\n";
-
-				while (std::getline(inputFileStream, line)) {
-			
-					std::cout << "Hello2\n";
-
-
-					std::istringstream iss(line);
-					int flag, direction, health, showTexture, isInvincible, iFrame;
-					float scaleX, scaleY, posX, posY, velX, velY;
-					AABB boundingBox;
-					AEMtx33 transform;
-
-					iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
-						>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
-						>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
-						>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
-						>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
-						>> health >> showTexture >> isInvincible >> iFrame;
-
-					AEVec2 positionCreation{ posX, posY };
-					AEVec2 velocityCreation{ velX, velY };
-					std::cout << posX  <<' ' << posY << '\n';
-
-					GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
-					_enemyList.push_back(newEnemyInst);
+				
+				for (auto it = _enemyList.begin(); it != _enemyList.end(); ) {
+					if (*it == nullptr)
+						continue;
+					if ((*it)->flag == 0) {
+						delete* it;
+						it = _enemyList.erase(it);
+					}
+					else {
+						++it;
+					}
 				}
+
+				std::istringstream iss(line);
+				int flag, direction, health, showTexture, isInvincible, iFrame;
+				float scaleX, scaleY, posX, posY, velX, velY;
+				AABB boundingBox;
+				AEMtx33 transform;
+				
+				iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
+					>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
+					>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
+					>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
+					>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
+					>> health >> showTexture >> isInvincible >> iFrame;
+				
+				AEVec2 positionCreation{ posX, posY };
+				AEVec2 velocityCreation{ velX, velY };
+				std::cout << posX  <<' ' << posY << '\n';
+				
+				GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
+				_enemyList.push_back(newEnemyInst);
+
+			
 			}
-			else if (line == "Player Experience and Level...")
+			if (line == ExpText)
 			{
 				std::getline(inputFileStream, line);
 				std::istringstream iss(line);
@@ -313,27 +324,18 @@ void Level_1_Load(void)
 			}
 			else
 			{
-	/*			if (line.empty()) {
-					continue;
-				}
-				std::istringstream iss(line);
-				GameObjInstances gameObjInstance;
-				std::string objectType;
 
-				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scale.x >> gameObjInstance.scale.y >>
-					gameObjInstance.position.x >> gameObjInstance.position.y >>
-					gameObjInstance.velocity.x >> gameObjInstance.velocity.y >> gameObjInstance.direction >>
-					gameObjInstance.boundingBox.min.x >> gameObjInstance.boundingBox.min.y >>
-					gameObjInstance.boundingBox.max.x >> gameObjInstance.boundingBox.max.y >>
-					gameObjInstance.transform.m[0][0] >> gameObjInstance.transform.m[0][1] >>
-					gameObjInstance.transform.m[0][2] >> gameObjInstance.transform.m[1][0] >>
-					gameObjInstance.transform.m[1][1] >> gameObjInstance.transform.m[1][2] >>
-					gameObjInstance.transform.m[2][0] >> gameObjInstance.transform.m[2][1] >>
-					gameObjInstance.transform.m[2][2] >> gameObjInstance.health >> gameObjInstance.showTexture >>
-					gameObjInstance.isInvincible >> gameObjInstance.iFrame;*/
 			}
 		}
+
+		inputFileStream.close();
 	}
+	else if(inputFileStream.fail())
+	{
+		std::cerr << "Error: \n" ;
+
+	}
+
 }
 
 void Level_1_Init(void)
@@ -493,8 +495,12 @@ void Level_1_Update(void)
 			}
 			outputStream << "Player Experience and Level...\n";
 			outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
-			outputStream.close();
 		}
+
+		outputStream.close();
+		
+
+
 		gGameStateNext = UPGRADE;
 		_deltaTime_State = 0.0f;
 	}
@@ -506,7 +512,7 @@ void Level_1_Update(void)
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1)
 	{
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2*enemyHealth+1; i++)
 		{
 			// Generate a random number to determine which X range to use
 			// Outer Box, 1600x900 , Inner Box 1366x768;
