@@ -80,25 +80,17 @@ void Menu_Init(void)
     scaleX = getWinWidth() / 1366.f; 
     scaleY = getWinHeight() / 768.f;
 
-    //button1_transX = getWinWidth() * -0.168f;
-    //button1_transY = getWinHeight() * -0.195f;
-    //button2_transX = getWinWidth() * 0.051f;
-    //button2_transY = getWinHeight() * -0.195f;
-    //button3_transX = getWinWidth() * -0.0585f;
-    //button3_transY = 0.f;
-    //button4_transX = getWinWidth() * -0.439f;
-    //button4_transY = getWinHeight() * -0.404f;
 
-    button1_transX = -170.f * scaleX;
+    button1_transX = -150.f * scaleX;
     button1_transY = -150.f * scaleY;
-    button2_transX = 130.0f * scaleX;
+    button2_transX = 150.0f * scaleX;
     button2_transY = -150.0f * scaleY;
-    button3_transX = -20.0f * scaleX;
-    button3_transY = 0.f * scaleY;
+    button3_transX = 0.0f * scaleX;
+    button3_transY = 0.0f * scaleY;
     button4_transX = -600.0f * scaleX;
-    button4_transY = -310.0f * scaleY;
-    button5_transX = 580.0f * scaleX;
-    button5_transY = 290.0f * scaleY;
+    button4_transY = -355.0f * scaleY;
+    button5_transX = 660.0f * scaleX;
+    button5_transY = 355.0f * scaleY;
     
 }
 
@@ -109,19 +101,25 @@ void Menu_Update(void)
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
     
-
+    //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
     //float button1_midX = (AEGfxGetWinMaxX() - (25.f) + button1_transX);
-    float button1_midX = ((353+503) * scaleX)/2;
-    //float button1_midY = (AEGfxGetWinMaxY() - (68.f) - button1_transY);  
-    float button1_midY = ((416+516) * scaleY)/2;
-    float button2_midX = AEGfxGetWinMaxX() - (25.f) + button2_transX;
-    float button2_midY = AEGfxGetWinMaxY() - (68.f) - button2_transY;
-    float button3_midX = AEGfxGetWinMaxX() - (25.f) + button3_transX;
-    float button3_midY = AEGfxGetWinMaxY() - (68.f) - button3_transY;
-    float button4_midX = AEGfxGetWinMaxX() - (25.f) + button4_transX;
-    float button4_midY = AEGfxGetWinMaxY() - (68.f) - button4_transY;
-    float button5_midX = (1225 + 1283) / 2;
-    float button5_midY = (2 + 52) / 2;
+    //float button1_midY = (AEGfxGetWinMaxY() - (68.f) - button1_transY); 
+    float button1_midX = (getWinWidth() / 2.08) + button1_transX;
+    float button1_midY = (getWinHeight() / 2) - button1_transY;
+    //float button2_midX = AEGfxGetWinMaxX() - (25.f) + button2_transX;
+    //float button2_midY = AEGfxGetWinMaxY() - (68.f) - button2_transY;
+    float button2_midX = (getWinWidth() / 2.08) + button2_transX;
+    float button2_midY = (getWinHeight() / 2) - button2_transY;
+    //float button3_midX = ((582.f + 732.f) / 2.f);
+    //float button3_midY = ((334.f + 434.f) / 2.f);
+    float button3_midX = (getWinWidth() / 2.08);
+    float button3_midY = getWinHeight() / 2;
+    //float button4_midX = AEGfxGetWinMaxX() - (25.f) + button4_transX;
+    //float button4_midY = AEGfxGetWinMaxY() - (68.f) - button4_transY;
+    float button4_midX = (getWinWidth() / 2.08) + button4_transX;
+    float button4_midY = (getWinHeight() / 2) - button4_transY;
+    float button5_midX = (getWinWidth() / 2.08) + button5_transX;
+    float button5_midY = (getWinHeight() / 2) - button5_transY;
     
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
@@ -135,7 +133,7 @@ void Menu_Update(void)
         printf("Goto Settings\n");
     }
     else if (IsAreaClicked(button3_midX, button3_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) {
-        gGameStateNext = PLAY;
+        //gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
 
@@ -145,7 +143,7 @@ void Menu_Update(void)
     }
 
     else if (IsAreaClicked(button5_midX, button5_midY, 57.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)) {
-        gGameStateNext = QUIT;
+        //gGameStateNext = QUIT;
         printf("QUIT\n");
     }
 
