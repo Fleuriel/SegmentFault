@@ -109,3 +109,26 @@ bool CollisionCircleCircle(const AEVec2& center1, f32 radius1, const AEVec2& cen
 	// Check if the distance is less than or equal to the sum of the radii
 	return distanceSquared <= radiusSum * radiusSum;
 }
+
+// Function to check if the area is being touched/clicked
+int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, int click_x, int click_y)
+{
+	// TODO
+	if (click_x > area_center_x - (area_width / 2) && click_x < area_center_x + (area_width / 2)
+		&& click_y < area_center_y + (area_height / 2) && click_y > area_center_y - (area_height / 2))
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
+// Function to get window width
+float getWinWidth() {
+	return AEGfxGetWinMaxX() - AEGfxGetWinMinX();
+}
+
+// Function to get window width
+float getWinHeight() {
+	return AEGfxGetWinMaxY() - AEGfxGetWinMinY();
+}

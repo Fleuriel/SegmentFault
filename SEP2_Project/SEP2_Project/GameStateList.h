@@ -7,13 +7,15 @@
 enum
 {
 	// list of all game states 
-	MENU = 0,
+	MAINMENU = 0,
 
 	//Start Game
 	PLAY,
 	// special game state. Do not change
+	PAUSE,
 	UPGRADE,
 	RESTART,
+	SETTINGS,
 
 	QUIT
 

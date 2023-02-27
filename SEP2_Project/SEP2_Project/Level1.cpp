@@ -495,7 +495,7 @@ void Level_1_Update(void)
 			outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
 			outputStream.close();
 		}
-		gGameStateNext = UPGRADE;
+		gGameStateNext = PAUSE;
 		_deltaTime_State = 0.0f;
 	}
 

@@ -21,5 +21,7 @@ extern double	g_appTime;
 #include "GameStateMgr.h"
 #include "Level1.h"
 #include "Upgrade.h"
-#include "Menu.h"
+#include "MainMenu.h"
 #include "Utilities.h"
+#include "SettingsMenu.h"
+#include "PauseMenu.h"
