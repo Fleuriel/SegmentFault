@@ -1,10 +1,11 @@
 #include "Main.h"
 #include "GameObjects.h"
 
-
+static bool onValueChange = true;
 
 void Level_1_Load(void)
 {
+	std::cout << "Level1_Load\n";
 	memset(sGameObjList, 0, sizeof(GameObjects) * GAME_OBJ_NUM_MAX);
 
 	sGameObjNum = 0;
@@ -259,50 +260,60 @@ void Level_1_Load(void)
 	AE_ASSERT_MESG(_AugmentFive_Obj->pMesh, "Fail to create object!!");
 
 
+
 	if (inputFileStream.good())
 	{
 		std::cout << "File Exist\n";
-
+		std::string ExpText = "Player Experience and Level...";
 		std::string line;
 
 		std::cout << inputFileStream.eof() << '\n';
 		inputFileStream.seekg(0, std::ios::beg);
 
-		std::cout << inputFileStream.eof()<< '\n';
+
+
+
 		while (std::getline(inputFileStream, line))
 		{
-			std::cout << "Inside Line 1\n";
+			std::cout << line << '\n';
 			if (line == "enemyInstances Positions...")
 			{
-				std::cout << "Hello1\n";
-
-				while (std::getline(inputFileStream, line)) {
-			
-					std::cout << "Hello2\n";
-
-
-					std::istringstream iss(line);
-					int flag, direction, health, showTexture, isInvincible, iFrame;
-					float scaleX, scaleY, posX, posY, velX, velY;
-					AABB boundingBox;
-					AEMtx33 transform;
-
-					iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
-						>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
-						>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
-						>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
-						>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
-						>> health >> showTexture >> isInvincible >> iFrame;
-
-					AEVec2 positionCreation{ posX, posY };
-					AEVec2 velocityCreation{ velX, velY };
-					std::cout << posX  <<' ' << posY << '\n';
-
-					GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
-					_enemyList.push_back(newEnemyInst);
+				
+				for (auto it = _enemyList.begin(); it != _enemyList.end(); ) {
+					if (*it == nullptr)
+						continue;
+					if ((*it)->flag == 0) {
+						delete* it;
+						it = _enemyList.erase(it);
+					}
+					else {
+						++it;
+					}
 				}
+
+				std::istringstream iss(line);
+				int flag, direction, health, showTexture, isInvincible, iFrame;
+				float scaleX, scaleY, posX, posY, velX, velY;
+				AABB boundingBox;
+				AEMtx33 transform;
+				
+				iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
+					>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
+					>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
+					>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
+					>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
+					>> health >> showTexture >> isInvincible >> iFrame;
+				
+				AEVec2 positionCreation{ posX, posY };
+				AEVec2 velocityCreation{ velX, velY };
+				std::cout << posX  <<' ' << posY << '\n';
+				
+				GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
+				_enemyList.push_back(newEnemyInst);
+
+			
 			}
-			else if (line == "Player Experience and Level...")
+			if (line == ExpText)
 			{
 				std::getline(inputFileStream, line);
 				std::istringstream iss(line);
@@ -313,33 +324,25 @@ void Level_1_Load(void)
 			}
 			else
 			{
-	/*			if (line.empty()) {
-					continue;
-				}
-				std::istringstream iss(line);
-				GameObjInstances gameObjInstance;
-				std::string objectType;
 
-				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scale.x >> gameObjInstance.scale.y >>
-					gameObjInstance.position.x >> gameObjInstance.position.y >>
-					gameObjInstance.velocity.x >> gameObjInstance.velocity.y >> gameObjInstance.direction >>
-					gameObjInstance.boundingBox.min.x >> gameObjInstance.boundingBox.min.y >>
-					gameObjInstance.boundingBox.max.x >> gameObjInstance.boundingBox.max.y >>
-					gameObjInstance.transform.m[0][0] >> gameObjInstance.transform.m[0][1] >>
-					gameObjInstance.transform.m[0][2] >> gameObjInstance.transform.m[1][0] >>
-					gameObjInstance.transform.m[1][1] >> gameObjInstance.transform.m[1][2] >>
-					gameObjInstance.transform.m[2][0] >> gameObjInstance.transform.m[2][1] >>
-					gameObjInstance.transform.m[2][2] >> gameObjInstance.health >> gameObjInstance.showTexture >>
-					gameObjInstance.isInvincible >> gameObjInstance.iFrame;*/
 			}
 		}
+
+		inputFileStream.close();
 	}
+	else if(inputFileStream.fail())
+	{
+		std::cerr << "Error: \n" ;
+
+	}
+
 }
 
 void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
+	_Player->health = 20;
 	AE_ASSERT(_Player);
 
 
@@ -493,20 +496,24 @@ void Level_1_Update(void)
 			}
 			outputStream << "Player Experience and Level...\n";
 			outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
-			outputStream.close();
 		}
-		gGameStateNext = PAUSE;
+
+		outputStream.close();
+
+
+
+		gGameStateNext = UPGRADE;
 		_deltaTime_State = 0.0f;
 	}
 
-	
+
 
 
 
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1)
 	{
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
 			// Generate a random number to determine which X range to use
 			// Outer Box, 1600x900 , Inner Box 1366x768;
@@ -1202,84 +1209,109 @@ void Level_1_Update(void)
 
 	//TAKE NOTE
 	//ObjInstance1 = Instance 1 to check with :  ObjInstance2 = Instance 2 , SIMILARLY TO THE TOP,
-
-	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-	{
-		GameObjInstances* ObjInstance1 = sGameObjInstList + i;
-
-		if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
-			continue;
-
-		if (ObjInstance1->pObject->type == TYPE_ENEMY)
+	if (_Player->health > 0) {
+		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
-			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
+
+			if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			if (ObjInstance1->pObject->type == TYPE_ENEMY)
 			{
-				GameObjInstances* ObjInstance2 = sGameObjInstList + j;
-
-				if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
-					continue;
-
-				if (ObjInstance2->pObject->type == TYPE_BULLET)
+				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
+
+					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
+						continue;
+
+					if (ObjInstance2->pObject->type == TYPE_BULLET)
 					{
-						//Spawn Orbs of Experience at ObjInstance1 Position...
-						//bulletCount--;
-						//std::cout << bulletCount << '\n';
-						ObjInstance1->health--;
-						if (ObjInstance1->health <= 0)
+						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
-							gameObjInstDestroy(ObjInstance1);
-						}
-						gameObjInstDestroy(ObjInstance2);
+							//Spawn Orbs of Experience at ObjInstance1 Position...
+							//bulletCount--;
+							//std::cout << bulletCount << '\n';
+							ObjInstance1->health--;
+							if (ObjInstance1->health <= 0)
+							{
+								gameObjInstDestroy(ObjInstance1);
+							}
+							gameObjInstDestroy(ObjInstance2);
 
-						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+							gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+						}
 					}
-				}
-				if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
-				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+					if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
 					{
-						//Spawn Orbs of Experience at ObjInstance1 Position...
-						//bulletCount--;
-						//std::cout << bulletCount << '\n';
-						ObjInstance1->health--;
-						if (ObjInstance1->health <= 0)
+						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
-							gameObjInstDestroy(ObjInstance1);
+							//Spawn Orbs of Experience at ObjInstance1 Position...
+							//bulletCount--;
+							//std::cout << bulletCount << '\n';
+							ObjInstance1->health--;
+							if (ObjInstance1->health <= 0)
+							{
+								gameObjInstDestroy(ObjInstance1);
+							}
+
+							gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 						}
-
-						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 					}
-				}
 
-			}
-		}
-
-
-		if (ObjInstance1->pObject->type == TYPE_EXPERIENCE)
-		{
-			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-			{
-				GameObjInstances* ObjInstance2 = sGameObjInstList + j;
-
-				if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
-					continue;
-
-				if (ObjInstance2->pObject->type == TYPE_PLAYER)
-				{
-					if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
-					{
-						_Player_Experience++;
-						std::cout << "Player Experience: " << _Player_Experience << '\n';
-						std::cout << "Player Level: " << _Player_Level << '\n';
-						gameObjInstDestroy(ObjInstance1);
-					}
 				}
 			}
+
+
+			if (ObjInstance1->pObject->type == TYPE_EXPERIENCE)
+			{
+				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+				{
+					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
+
+					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
+						continue;
+
+					if (ObjInstance2->pObject->type == TYPE_PLAYER)
+					{
+						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+						{
+							_Player_Experience++;
+							std::cout << "Player Experience: " << _Player_Experience << '\n';
+							std::cout << "Player Level: " << _Player_Level << '\n';
+							gameObjInstDestroy(ObjInstance1);
+						}
+					}
+				}
+			}
+			//PLAYER COLLISION
+			if (ObjInstance1->pObject->type == TYPE_PLAYER) {
+				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+				{
+					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
+					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
+						continue;
+
+					if (ObjInstance2->pObject->type == TYPE_ENEMY) {
+						if (_Player->iFrame <= 0)
+							_Player->isInvincible = false;
+						if (_Player->iFrame > 0) {
+							_Player->isInvincible = true;
+							_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
+						}
+						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x)) {
+							if (_Player->isInvincible == false) {
+								_Player->health--;
+								std::cout << "Player HP: " << _Player->health << '\n';
+								_Player->iFrame = 50.f;
+								onValueChange = true;
+							}
+						}
+					}
+				}
+			}
 		}
-
-
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1378,6 +1410,12 @@ void Level_1_Draw(void)
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
+	}
+	if (onValueChange) {
+		if (_Player->health == 0) {
+			std::cout << "GAME OVER \n";
+		}
+		onValueChange = false;
 	}
 	AEGfxTextureUnload(playerTex);
 	AEGfxTextureUnload(bulletTex);

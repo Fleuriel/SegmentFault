@@ -7,6 +7,7 @@
 
 void Upgrade_Load(void) 
 {
+	std::cout << "Upgrade_Load\n";
 
 }
 
