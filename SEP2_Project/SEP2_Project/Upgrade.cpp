@@ -1,6 +1,9 @@
 #include "Upgrade.h"
 #include "Main.h"
 
+bool LevelToggle;
+f32 Timer;
+
 
 void Upgrade_Load(void) 
 {
@@ -9,14 +12,19 @@ void Upgrade_Load(void)
 
 void Upgrade_Init(void) 
 {
+	LevelToggle = false;
+	Timer = 0.0f;
 
 }
 void Upgrade_Update(void) 
 {
-	if (AEInputCheckTriggered(AEVK_LBUTTON))
+	Timer += g_dt;
+
+	if (AEInputCheckPrev(AEVK_P) && Timer >= 1.5f)
 	{
-		std::cout << "Play\n";
 		gGameStateNext = PLAY;
+		std::cout << "Back\n";
+		Timer = 0;
 	}
 
 }

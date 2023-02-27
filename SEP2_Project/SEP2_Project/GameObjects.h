@@ -1,13 +1,17 @@
 #pragma once
-#include <vector>
+
+
 #include "AEEngine.h"
 #include "Main.h"
+
+
 #include <queue>
 #include <set>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-
+#include <string>
+#include <vector>
 
 
 
@@ -34,6 +38,7 @@ s32 bulletCount = 0; // Number of bullets fired
 u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
 f64 enemyHealth = 1;
+bool upgradeToggle = 0;
 
 
 
@@ -71,6 +76,7 @@ private:
 public:
 	unsigned long type;
 	AEGfxVertexList* pMesh;
+
 };
 
 class GameObjInstances
@@ -136,6 +142,7 @@ f64					enemySize = 10.0f;
 f64					_deltaTimeEnemySpawner;
 f64					_deltaTime;
 f64					_deltaTime_Shooting = 0.0f;
+f64					_deltaTime_State = 0.0f;
 bool				toggleHitBox = false;
 AEVec2				velocity;
 AEVec2				velocity2;

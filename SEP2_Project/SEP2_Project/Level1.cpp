@@ -272,30 +272,34 @@ void Level_1_Load(void)
 		while (std::getline(inputFileStream, line))
 		{
 			std::cout << "Inside Line 1\n";
-			if (line == "enemyInstances Positions...\n")
+			if (line == "enemyInstances Positions...")
 			{
-				while (std::getline(inputFileStream, line))
-				{
-					if (line.empty()) {
-						continue;
-					}
+				std::cout << "Hello1\n";
+
+				while (std::getline(inputFileStream, line)) {
+			
+					std::cout << "Hello2\n";
+
 
 					std::istringstream iss(line);
-					GameObjInstances* enemyInstance = new GameObjInstances;
-					iss >> enemyInstance->flag >> enemyInstance->scale.x >> enemyInstance->scale.y >>
-						enemyInstance->position.x >> enemyInstance->position.y >>
-						enemyInstance->velocity.x >> enemyInstance->velocity.y >>
-						enemyInstance->direction >> enemyInstance->boundingBox.min.x >>
-						enemyInstance->boundingBox.min.y >> enemyInstance->boundingBox.max.x >>
-						enemyInstance->boundingBox.max.y >> enemyInstance->transform.m[0][0] >>
-						enemyInstance->transform.m[0][1] >> enemyInstance->transform.m[0][2] >>
-						enemyInstance->transform.m[1][0] >> enemyInstance->transform.m[1][1] >>
-						enemyInstance->transform.m[1][2] >> enemyInstance->transform.m[2][0] >>
-						enemyInstance->transform.m[2][1] >> enemyInstance->transform.m[2][2] >>
-						enemyInstance->health >> enemyInstance->showTexture >> enemyInstance->isInvincible >>
-						enemyInstance->iFrame;
+					int flag, direction, health, showTexture, isInvincible, iFrame;
+					float scaleX, scaleY, posX, posY, velX, velY;
+					AABB boundingBox;
+					AEMtx33 transform;
 
-					_enemyList.push_back(enemyInstance);
+					iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
+						>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
+						>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
+						>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
+						>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
+						>> health >> showTexture >> isInvincible >> iFrame;
+
+					AEVec2 positionCreation{ posX, posY };
+					AEVec2 velocityCreation{ velX, velY };
+					std::cout << posX  <<' ' << posY << '\n';
+
+					GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
+					_enemyList.push_back(newEnemyInst);
 				}
 			}
 			else if (line == "Player Experience and Level...")
@@ -309,13 +313,13 @@ void Level_1_Load(void)
 			}
 			else
 			{
-				if (line.empty()) {
+	/*			if (line.empty()) {
 					continue;
 				}
-
 				std::istringstream iss(line);
 				GameObjInstances gameObjInstance;
 				std::string objectType;
+
 				iss >> objectType >> gameObjInstance.flag >> gameObjInstance.scale.x >> gameObjInstance.scale.y >>
 					gameObjInstance.position.x >> gameObjInstance.position.y >>
 					gameObjInstance.velocity.x >> gameObjInstance.velocity.y >> gameObjInstance.direction >>
@@ -326,27 +330,10 @@ void Level_1_Load(void)
 					gameObjInstance.transform.m[1][1] >> gameObjInstance.transform.m[1][2] >>
 					gameObjInstance.transform.m[2][0] >> gameObjInstance.transform.m[2][1] >>
 					gameObjInstance.transform.m[2][2] >> gameObjInstance.health >> gameObjInstance.showTexture >>
-					gameObjInstance.isInvincible >> gameObjInstance.iFrame;
-
-	/*			std::cout << gameObjInstance.flag << gameObjInstance.scale.x << gameObjInstance.scale.y <<
-					gameObjInstance.position.x << gameObjInstance.position.y <<
-					gameObjInstance.velocity.x << gameObjInstance.velocity.y << gameObjInstance.direction <<
-					gameObjInstance.boundingBox.min.x << gameObjInstance.boundingBox.min.y <<
-					gameObjInstance.boundingBox.max.x << gameObjInstance.boundingBox.max.y <<
-					gameObjInstance.transform.m[0][0] << gameObjInstance.transform.m[0][1] <<
-					gameObjInstance.transform.m[0][2] << gameObjInstance.transform.m[1][0] <<
-					gameObjInstance.transform.m[1][1] << gameObjInstance.transform.m[1][2] <<
-					gameObjInstance.transform.m[2][0] << gameObjInstance.transform.m[2][1] <<
-					gameObjInstance.transform.m[2][2] << gameObjInstance.health << gameObjInstance.showTexture <<
-					gameObjInstance.isInvincible << gameObjInstance.iFrame;*/
-
+					gameObjInstance.isInvincible >> gameObjInstance.iFrame;*/
 			}
 		}
 	}
-
-
-
-
 }
 
 void Level_1_Init(void)
@@ -409,16 +396,27 @@ void Level_1_Init(void)
 void Level_1_Update(void)
 {
 
-
-
-	//Make Toggle..
-	if (AEInputCheckTriggered(AEVK_LBUTTON))
+	_deltaTime += g_dt;
+	_deltaTime_State += g_dt;
+	//std::cout << _deltaTime << '\n';
+	//Increment Minutes... (Health)
+	if (_deltaTime > 60)
 	{
-		//SAVE.....
+		enemyHealth += ++minutes;
+		_deltaTime = 0;
+	}
+	_deltaTimeEnemySpawner += g_dt;
+	_delayTimeBullets += g_dt;
+	_deltaTime_Shooting += g_dt;
 
+
+	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
+
+
+	//SAVE.....
+	if (AEInputCheckTriggered(AEVK_P) && _deltaTime_State >= 1.5f)
+	{
 		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\save.txt" };
-
-
 		if (outputStream.is_open())
 		{
 			std::cout << "Current GameObjects\n";
@@ -470,6 +468,8 @@ void Level_1_Update(void)
 					}
 				}
 			}
+
+
 			outputStream << "enemyInstances Positions...\n";
 			for (const auto& enemyInstance : _enemyList) {
 				outputStream << enemyInstance->flag << " "
@@ -493,27 +493,13 @@ void Level_1_Update(void)
 			}
 			outputStream << "Player Experience and Level...\n";
 			outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
+			outputStream.close();
 		}
 		gGameStateNext = UPGRADE;
+		_deltaTime_State = 0.0f;
 	}
 
-
-
-	_deltaTime += g_dt;
-	//std::cout << _deltaTime << '\n';
-	//Increment Minutes... (Health)
-	if (_deltaTime > 60)
-	{
-		enemyHealth += ++minutes;
-		_deltaTime = 0;
-	}
-	_deltaTimeEnemySpawner += g_dt;
-	_delayTimeBullets += g_dt;
-	_deltaTime_Shooting += g_dt;
-
-
-
-	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
+	
 
 
 
@@ -615,6 +601,7 @@ void Level_1_Update(void)
 
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
+		std::cout << "Once\n";
 	}
 
 	if (AEInputCheckTriggered(AEVK_1))
