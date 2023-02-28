@@ -2,11 +2,10 @@
 #include "GameObjects.h"
 
 static bool onValueChange = true;
-
+int reqExp = 15;
+int expPercent = 0;
 // Pointer to Mesh
 AEGfxVertexList* ptrMesh = nullptr;
-//Exp bar pre-definition
-AEGfxTexture* Expbar;
 
 void Level_1_Load(void)
 {
@@ -357,9 +356,6 @@ void Level_1_Load(void)
 		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	ptrMesh = AEGfxMeshEnd();
-
-	// Loading textures
-	Expbar = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar.png");
 	//end Expbar
 }
 
@@ -438,7 +434,9 @@ void Level_1_Update(void)
 	_deltaTime_Shooting += g_dt;
 
 
-	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
+	_Player_Level = experienceCurve(_Player_Level, _Player_Experience, reqExp);
+	expPercent = _Player_Experience * 10 /reqExp;
+
 
 
 	//SAVE.....
@@ -1429,12 +1427,36 @@ void Level_1_Draw(void)
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
 
-	//Exp bar
+	//Exp bar start
+	//DOING IT THIS WAY CAUSES LAG/STUTTERING, TO BE FIXED
+	
+	AEGfxTexture* Expbar0 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp0.png");
+	AEGfxTexture* Expbar1 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp1.png");
+	AEGfxTexture* Expbar2 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp2.png");
+	AEGfxTexture* Expbar3 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp3.png");
+	AEGfxTexture* Expbar4 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp4.png");
+	AEGfxTexture* Expbar5 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp5.png");
+	AEGfxTexture* Expbar6 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp6.png");
+	AEGfxTexture* Expbar7 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp7.png");
+	AEGfxTexture* Expbar8 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp8.png");
+	AEGfxTexture* Expbar9 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp9.png");
+
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(Expbar, 0, 0);
+	if (expPercent == 0) {AEGfxTextureSet(Expbar0, 0, 0);}
+	else if (expPercent == 1) {AEGfxTextureSet(Expbar1, 0, 0);}
+	else if (expPercent == 2) {AEGfxTextureSet(Expbar2, 0, 0);}
+	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
+	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
+	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
+	else if (expPercent == 6) { AEGfxTextureSet(Expbar6, 0, 0); }
+	else if (expPercent == 7) { AEGfxTextureSet(Expbar7, 0, 0); }
+	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
+	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
+	//Exp bar end
+	
 	AEMtx33 scale2 = { 0 };
 	AEMtx33Scale(&scale2, 600.f, 30.f);
 	AEMtx33 rotate2 = { 0 };

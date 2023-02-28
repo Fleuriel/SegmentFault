@@ -257,15 +257,14 @@ f64 AUGMENT_5_FIRE_INTERVAL;
 s32 _Player_Experience = 0;
 s32 _Player_Level = 1;
 
-int experienceCurve(int level, int& playerExperience)
+int experienceCurve(int level, int& playerExperience, int& reqExp)
 {
-	int baseExp = 15;
 	int increment = 2 * ((level - 1) / 5);
-	int requiredExp = baseExp + (level - 1) * increment;
+	reqExp += (level - 1) * increment;
 
-	if (playerExperience >= requiredExp) {
+	if (playerExperience >= reqExp) {
 		// Increment the player's level and subtract the required experience from their total
-		playerExperience -= requiredExp;
+		playerExperience -= reqExp;
 		level++;
 	}
 
