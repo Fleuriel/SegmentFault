@@ -3,6 +3,11 @@
 
 static bool onValueChange = true;
 
+// Pointer to Mesh
+AEGfxVertexList* ptrMesh = nullptr;
+//Exp bar pre-definition
+AEGfxTexture* Expbar;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -336,6 +341,26 @@ void Level_1_Load(void)
 
 	}
 
+	//Expbar
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
+
+	// Create buttons
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	ptrMesh = AEGfxMeshEnd();
+
+	// Loading textures
+	Expbar = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar.png");
+	//end Expbar
 }
 
 void Level_1_Init(void)
@@ -1393,7 +1418,7 @@ void Level_1_Draw(void)
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 
-	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Terran.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\player.png");
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\moon.png");
 	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\images.png");
@@ -1404,6 +1429,24 @@ void Level_1_Draw(void)
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
 
+	//Exp bar
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(Expbar, 0, 0);
+	AEMtx33 scale2 = { 0 };
+	AEMtx33Scale(&scale2, 600.f, 30.f);
+	AEMtx33 rotate2 = { 0 };
+	AEMtx33Rot(&rotate2, 0.f);
+	AEMtx33 translate2 = { 0 };
+	AEMtx33Trans(&translate2, -85, 368);
+	AEMtx33 transform2 = { 0 };
+	AEMtx33Concat(&transform2, &rotate2, &scale2);
+	AEMtx33Concat(&transform2, &translate2, &transform2);
+	AEGfxSetTransform(transform2.m);
+	AEGfxMeshDraw(ptrMesh, AE_GFX_MDM_TRIANGLES);
+	//end Exp bar
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1502,4 +1545,5 @@ void Level_1_Unload(void)
 
 		AEGfxMeshFree(sGameObjList[i].pMesh);
 	}
+	AEGfxMeshFree(ptrMesh);
 }
