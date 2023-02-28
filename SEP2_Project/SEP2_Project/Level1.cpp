@@ -586,22 +586,72 @@ void Level_1_Update(void)
 		}
 	}
 
+	//Offset ALL objects instances + adding player velo
 	//KeyDown
 	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 	{
-		_Player->position.x += 5.0;
+		_Player->position.x += 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+				qInst->position.x -= 5;
+
+		}
 	}
+	
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
-		_Player->position.x -= 5.0;
+		_Player->position.x -= 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.x += 5;
+
+		}
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
-		_Player->position.y -= 5.0;
+		_Player->position.y -= 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.y += 5;
+
+		}
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
-		_Player->position.y += 5.0;
+		_Player->position.y += 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.y -= 5;
+
+		}
 	}
 
 
