@@ -1,18 +1,10 @@
 #pragma once
 
 
+
+// includes
 #include <chrono>
 #include <ctime>
-
-//------------------------------------
-// Globals
-
-extern float	g_dt;
-extern double	g_appTime;
-// ---------------------------------------------------------------------------
-// includes
-
-
 #include <iostream>
 
 #include "AEEngine.h"
@@ -25,3 +17,12 @@ extern double	g_appTime;
 #include "Utilities.h"
 #include "SettingsMenu.h"
 #include "PauseMenu.h"
+
+
+//------------------------------------
+// Globals
+
+extern float	g_dt;
+extern double	g_appTime;
+extern s8       fontID;
+// ---------------------------------------------------------------------------

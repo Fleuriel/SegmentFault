@@ -6,6 +6,7 @@
 float	 g_dt;
 double	 g_appTime;
 int		 FPS = 144;
+s8       fontID;
 
 /******************************************************************************/
 /*!
@@ -37,9 +38,11 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//set background color
 	//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
+	// Initialize font
+	fontID = AEGfxCreateFont("..\\..\\Assets\\Assets\\Roboto-Regular.ttf", 30);
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(MAINMENU);
+	GameStateMgrInit(PAUSE);
 
 	while (gGameStateCurr != QUIT)
 	{

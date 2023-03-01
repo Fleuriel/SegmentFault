@@ -12,8 +12,8 @@ f32 Timer;
 AEGfxVertexList* pMeshPause = nullptr;
 
 // Pre-defintion
-//s8 fontID;
-//char quit_buffer[100] = "Quit";
+char quit_buffer[1024]{};
+float textWidth{}, textHeight{};
 
 // Pre-definition for translations of buttons
 double quitButton_transX;
@@ -43,9 +43,6 @@ void Pause_Load(void)
         0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
 
     pMeshPause = AEGfxMeshEnd();
-
-    // Load font
-    // fontID = AEGfxCreateFont("..\\..\\Assets\\Assets\\Minecraft.ttf", 30);
 
 }
 
@@ -91,9 +88,6 @@ void Pause_Update(void)
     float augmentButton_midX = (getWinWidth() / 2.08) + augmentButton_transX;
     float augmentButton_midY = (getWinHeight() / 2) - augmentButton_transY;
 
-    
-    // snprintf(buffer, sizeof buffer, "%d", 9);
-    // AEGfxPrint(fontID, quit_buffer, 0, 0, 0.7f, 0.0f, 0.0f, 0.0f);
 
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
@@ -126,6 +120,14 @@ void Pause_Update(void)
 }
 void Pause_Draw(void)
 {
+
+    // Set render & texture modes
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(quit_buffer, "I can finally print this fucking shit out");
+    AEGfxGetPrintSize(fontID, quit_buffer, 1.0f, textWidth, textHeight);
+    AEGfxPrint(fontID, quit_buffer, 0.0f , 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
     // Quit button
     AEGfxTextureSet(NULL, 0, 0);
