@@ -1,4 +1,4 @@
-
+#include "GameStateMgr.h"
 #include "main.h"
 
 unsigned int	gGameStateInit;
@@ -27,6 +27,7 @@ void GameStateMgrInit(unsigned int gameStateInit)
 
 	// call the update to set the function pointers
 	GameStateMgrUpdate();
+
 }
 
 void GameStateMgrUpdate()
@@ -36,7 +37,7 @@ void GameStateMgrUpdate()
 
 	switch (gGameStateCurr)
 	{
-	case MENU:
+	case MAINMENU:
 		GameStateLoad   = Menu_Load;
 		GameStateInit   = Menu_Init;
 		GameStateUpdate = Menu_Update;
@@ -60,6 +61,24 @@ void GameStateMgrUpdate()
 		GameStateDraw	= Upgrade_Draw;
 		GameStateFree	= Upgrade_Free;
 		GameStateUnload = Upgrade_Unload;
+		break;
+
+	case SETTINGS:
+		GameStateLoad = Settings_Load;
+		GameStateInit = Settings_Init;
+		GameStateUpdate = Settings_Update;
+		GameStateDraw = Settings_Draw;
+		GameStateFree = Settings_Free;
+		GameStateUnload = Settings_Unload;
+		break;
+
+	case PAUSE:
+		GameStateLoad = Pause_Load;
+		GameStateInit = Pause_Init;
+		GameStateUpdate = Pause_Update;
+		GameStateDraw = Pause_Draw;
+		GameStateFree = Pause_Free;
+		GameStateUnload = Pause_Unload;
 		break;
 
 	default:

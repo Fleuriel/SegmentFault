@@ -2,6 +2,10 @@
 #include "GameObjects.h"
 
 static bool onValueChange = true;
+int reqExp = 15;
+int expPercent = 0;
+// Pointer to Mesh
+AEGfxVertexList* ptrMesh = nullptr;
 
 void Level_1_Load(void)
 {
@@ -336,6 +340,23 @@ void Level_1_Load(void)
 
 	}
 
+	//Expbar
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
+
+	// Create buttons
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	ptrMesh = AEGfxMeshEnd();
+	//end Expbar
 }
 
 void Level_1_Init(void)
@@ -413,7 +434,9 @@ void Level_1_Update(void)
 	_deltaTime_Shooting += g_dt;
 
 
-	_Player_Level = experienceCurve(_Player_Level, _Player_Experience);
+	_Player_Level = experienceCurve(_Player_Level, _Player_Experience, reqExp);
+	expPercent = _Player_Experience * 10 /reqExp;
+
 
 
 	//SAVE.....
@@ -502,7 +525,7 @@ void Level_1_Update(void)
 
 
 
-		gGameStateNext = UPGRADE;
+		gGameStateNext = PAUSE;
 		_deltaTime_State = 0.0f;
 	}
 
@@ -586,22 +609,72 @@ void Level_1_Update(void)
 		}
 	}
 
+	//Offset ALL objects instances + adding player velo
 	//KeyDown
 	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 	{
-		_Player->position.x += 5.0;
+		_Player->position.x += 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+				qInst->position.x -= 5;
+
+		}
 	}
+	
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
-		_Player->position.x -= 5.0;
+		_Player->position.x -= 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.x += 5;
+
+		}
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
-		_Player->position.y -= 5.0;
+		_Player->position.y -= 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.y += 5;
+
+		}
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
-		_Player->position.y += 5.0;
+		_Player->position.y += 5;
+		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
+		{
+
+			GameObjInstances* qInst = sGameObjInstList + i;
+
+			if ((qInst->flag & FLAG_ACTIVE) == 0)
+				continue;
+
+			// Update enemy position with player velocity
+			qInst->position.y -= 5;
+
+		}
 	}
 
 
@@ -1343,7 +1416,7 @@ void Level_1_Draw(void)
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 
-	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Terran.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\player.png");
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\moon.png");
 	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\images.png");
@@ -1354,6 +1427,48 @@ void Level_1_Draw(void)
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
 
+	//Exp bar start
+	//DOING IT THIS WAY CAUSES LAG/STUTTERING, TO BE FIXED
+	
+	AEGfxTexture* Expbar0 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp0.png");
+	AEGfxTexture* Expbar1 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp1.png");
+	AEGfxTexture* Expbar2 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp2.png");
+	AEGfxTexture* Expbar3 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp3.png");
+	AEGfxTexture* Expbar4 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp4.png");
+	AEGfxTexture* Expbar5 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp5.png");
+	AEGfxTexture* Expbar6 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp6.png");
+	AEGfxTexture* Expbar7 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp7.png");
+	AEGfxTexture* Expbar8 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp8.png");
+	AEGfxTexture* Expbar9 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp9.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	if (expPercent == 0) {AEGfxTextureSet(Expbar0, 0, 0);}
+	else if (expPercent == 1) {AEGfxTextureSet(Expbar1, 0, 0);}
+	else if (expPercent == 2) {AEGfxTextureSet(Expbar2, 0, 0);}
+	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
+	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
+	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
+	else if (expPercent == 6) { AEGfxTextureSet(Expbar6, 0, 0); }
+	else if (expPercent == 7) { AEGfxTextureSet(Expbar7, 0, 0); }
+	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
+	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
+	//Exp bar end
+	
+	AEMtx33 scale2 = { 0 };
+	AEMtx33Scale(&scale2, 600.f, 30.f);
+	AEMtx33 rotate2 = { 0 };
+	AEMtx33Rot(&rotate2, 0.f);
+	AEMtx33 translate2 = { 0 };
+	AEMtx33Trans(&translate2, -85, 368);
+	AEMtx33 transform2 = { 0 };
+	AEMtx33Concat(&transform2, &rotate2, &scale2);
+	AEMtx33Concat(&transform2, &translate2, &transform2);
+	AEGfxSetTransform(transform2.m);
+	AEGfxMeshDraw(ptrMesh, AE_GFX_MDM_TRIANGLES);
+	//end Exp bar
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1452,4 +1567,5 @@ void Level_1_Unload(void)
 
 		AEGfxMeshFree(sGameObjList[i].pMesh);
 	}
+	AEGfxMeshFree(ptrMesh);
 }

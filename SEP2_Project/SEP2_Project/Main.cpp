@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(MENU);
+	GameStateMgrInit(MAINMENU);
 
 	while (gGameStateCurr != QUIT)
 	{
