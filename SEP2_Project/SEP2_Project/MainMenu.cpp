@@ -50,7 +50,8 @@ void Menu_Load(void)
     // Loading textures
     startTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\start.png");
 
-   
+
+
 }
 
 void Menu_Init(void) 
@@ -137,6 +138,9 @@ void Menu_Update(void)
 }
 void Menu_Draw(void)
 {
+    
+
+
 
     // Button 1, Power-ups button
     AEGfxTextureSet(NULL, 0, 0);
@@ -224,5 +228,6 @@ void Menu_Free(void)
 void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
+    
     
 }

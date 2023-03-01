@@ -7,6 +7,10 @@ int expPercent = 0;
 // Pointer to Mesh
 AEGfxVertexList* ptrMesh = nullptr;
 
+//Background definition
+AEGfxVertexList* bMesh = nullptr;
+AEGfxTexture* BGTex;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -265,6 +269,8 @@ void Level_1_Load(void)
 
 
 
+
+
 	if (inputFileStream.good())
 	{
 		std::cout << "File Exist\n";
@@ -357,6 +363,24 @@ void Level_1_Load(void)
 
 	ptrMesh = AEGfxMeshEnd();
 	//end Expbar
+
+	//Background
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	//start Background
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	bMesh = AEGfxMeshEnd();
+	BGTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+	//end Background
 }
 
 void Level_1_Init(void)
@@ -1426,6 +1450,26 @@ void Level_1_Draw(void)
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
+	AEGfxTexture* BgroundTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+
+	//Draw Background
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(BGTex, 0, 0);
+	AEMtx33 scale0 = { 0 };
+	AEMtx33Scale(&scale0, 1366.f, 768.f);
+	AEMtx33 rotate0 = { 0 };
+	AEMtx33Rot(&rotate0, 0.f);
+	AEMtx33 translate0 = { 0 };
+	AEMtx33Trans(&translate0, 0, 0);
+	AEMtx33 transform0 = { 0 };
+	AEMtx33Concat(&transform0, &rotate0, &scale0);
+	AEMtx33Concat(&transform0, &translate0, &transform0);
+	AEGfxSetTransform(transform0.m);
+	AEGfxMeshDraw(bMesh, AE_GFX_MDM_TRIANGLES);
+	//Finish Background draw
 
 	//Exp bar start
 	//DOING IT THIS WAY CAUSES LAG/STUTTERING, TO BE FIXED
@@ -1440,6 +1484,9 @@ void Level_1_Draw(void)
 	AEGfxTexture* Expbar7 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp7.png");
 	AEGfxTexture* Expbar8 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp8.png");
 	AEGfxTexture* Expbar9 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp9.png");
+
+	
+	
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1457,6 +1504,7 @@ void Level_1_Draw(void)
 	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
 	//Exp bar end
 	
+
 	AEMtx33 scale2 = { 0 };
 	AEMtx33Scale(&scale2, 600.f, 30.f);
 	AEMtx33 rotate2 = { 0 };
@@ -1469,7 +1517,7 @@ void Level_1_Draw(void)
 	AEGfxSetTransform(transform2.m);
 	AEGfxMeshDraw(ptrMesh, AE_GFX_MDM_TRIANGLES);
 	//end Exp bar
-
+	
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
@@ -1521,7 +1569,7 @@ void Level_1_Draw(void)
 		{
 			texture = ExpOrbTex;
 		}
-
+		
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
@@ -1568,4 +1616,5 @@ void Level_1_Unload(void)
 		AEGfxMeshFree(sGameObjList[i].pMesh);
 	}
 	AEGfxMeshFree(ptrMesh);
+	AEGfxMeshFree(bMesh);
 }
