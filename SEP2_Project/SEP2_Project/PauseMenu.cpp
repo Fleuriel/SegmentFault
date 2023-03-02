@@ -1,8 +1,5 @@
-#include <iostream>
 #include "PauseMenu.h"
 #include "Main.h"
-#include "Utilities.h"
-#include "GameStateMgr.h"
 
 
 bool LevelToggle;
@@ -13,7 +10,9 @@ AEGfxVertexList* pMeshPause = nullptr;
 
 // Pre-defintion
 char quit_buffer[1024]{};
-float textWidth{}, textHeight{};
+char resume_buffer[1024]{};
+char augment_buffer[1024]{};
+float pause_textWidth{}, pause_textHeight{};
 
 // Pre-definition for translations of buttons
 double quitButton_transX;
@@ -32,15 +31,16 @@ void Pause_Load(void)
 	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);  // conversion -> rgb value/255
     // Create buttons
     AEGfxMeshStart();
-
+    //#9ccddc light blue
+    //#001736 midnight blue
     AEGfxTriAdd(
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+        0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f,
+        -1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFF001736, 1.0f, 1.0f);
     AEGfxTriAdd(
-        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+        -1.f, 0.5f, 0xFF001736, 0.0f, 0.0f,
+        -1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
 
     pMeshPause = AEGfxMeshEnd();
 
@@ -72,6 +72,7 @@ void Pause_Init(void)
 }
 void Pause_Update(void)
 {
+    // Initialize cursor coordinates
     s32 cursorX;
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
@@ -121,13 +122,7 @@ void Pause_Update(void)
 void Pause_Draw(void)
 {
 
-    // Set render & texture modes
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(quit_buffer, "I can finally print this fucking shit out");
-    AEGfxGetPrintSize(fontID, quit_buffer, 1.0f, textWidth, textHeight);
-    AEGfxPrint(fontID, quit_buffer, 0.0f , 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+    
 
     // Quit button
     AEGfxTextureSet(NULL, 0, 0);
@@ -173,6 +168,28 @@ void Pause_Draw(void)
     AEMtx33Concat(&transform2, &translate2, &transform2);
     AEGfxSetTransform(transform2.m);
     AEGfxMeshDraw(pMeshPause, AE_GFX_MDM_TRIANGLES);
+
+    // Rendering texts for the screen
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(quit_buffer, "Quit");
+    AEGfxGetPrintSize(fontID, quit_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    AEGfxPrint(fontID, quit_buffer, (getWinWidth() / (-2500.f * scaleX_pause)), (getWinHeight() / (-1350.f * scaleY_pause)), 1.0f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(resume_buffer, "Resume");
+    AEGfxGetPrintSize(fontID, resume_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    AEGfxPrint(fontID, resume_buffer, (getWinWidth() / (4500.f * scaleX_pause)), (getWinHeight() / (-1380.f * scaleY_pause)), 0.7f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(augment_buffer, "Augments");
+    AEGfxGetPrintSize(fontID, augment_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    AEGfxPrint(fontID, augment_buffer, (getWinWidth() / (-9800.f * scaleX_pause)), (getWinHeight() / (1550.f * scaleY_pause)), 0.6f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 }
 void Pause_Free(void)

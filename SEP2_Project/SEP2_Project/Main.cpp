@@ -39,10 +39,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 	// Initialize font
-	fontID = AEGfxCreateFont("..\\..\\Assets\\Assets\\Roboto-Regular.ttf", 30);
+	fontID = AEGfxCreateFont("..\\..\\Assets\\Assets\\Minecraft.ttf", 50);
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(PAUSE);
+	GameStateMgrInit(MAINMENU);
 
 	while (gGameStateCurr != QUIT)
 	{

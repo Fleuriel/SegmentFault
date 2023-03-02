@@ -80,6 +80,14 @@ void GameStateMgrUpdate()
 		GameStateFree = Pause_Free;
 		GameStateUnload = Pause_Unload;
 		break;
+	case CREDITS:
+		GameStateLoad = Credits_Load;
+		GameStateInit = Credits_Init;
+		GameStateUpdate = Credits_Update;
+		GameStateDraw = Credits_Draw;
+		GameStateFree = Credits_Free;
+		GameStateUnload = Credits_Unload;
+		break;
 
 	default:
 		AE_FATAL_ERROR("invalid state!!");

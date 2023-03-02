@@ -16,7 +16,7 @@ enum
 	UPGRADE,
 	RESTART,
 	SETTINGS,
-
+	CREDITS,
 	QUIT
 
 };

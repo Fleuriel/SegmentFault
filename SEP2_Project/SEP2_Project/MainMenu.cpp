@@ -1,8 +1,6 @@
 #include "MainMenu.h"
-#include "AEEngine.h"
-#include "GameStateMgr.h"
-#include "GameStateList.h"
-#include "Utilities.h"
+#include "Main.h"
+
 
 
 // Pointer to Mesh
@@ -23,6 +21,14 @@ double creditsButton_transY;
 double exitButton_transX;
 double exitButton_transY;
 
+// Pre-defintion for str buffers
+char play_buffer[1024]{};
+char upgrade_buffer[1024]{};
+char settings_buffer[1024]{};
+char credits_buffer[1024]{};
+char exit_buffer[1024]{};
+float mainMenu_textWidth{}, mainMenu_textHeight{};
+
 // Pre-definition of scaling
 double scaleX;
 double scaleY;
@@ -37,13 +43,13 @@ void Menu_Load(void)
     AEGfxMeshStart();
 
     AEGfxTriAdd(
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+        0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f,
+        -1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFF001736, 1.0f, 1.0f);
     AEGfxTriAdd(
-        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+        -1.2f, 0.5f, 0xFF001736, 0.0f, 0.0f,
+        -1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
 
     pMesh = AEGfxMeshEnd();
 
@@ -61,21 +67,22 @@ void Menu_Init(void)
     scaleY = getWinHeight() / 768.f;
 
 
-    powerUpButton_transX = -150.f * scaleX;
+    powerUpButton_transX = -120.f * scaleX;
     powerUpButton_transY = -150.f * scaleY;
-    settingsButton_transX = 150.0f * scaleX;
+    settingsButton_transX = 180.0f * scaleX;
     settingsButton_transY = -150.0f * scaleY;
-    playButton_transX = 0.0f * scaleX;
+    playButton_transX = 30.0f * scaleX;
     playButton_transY = 0.0f * scaleY;
-    creditsButton_transX = -600.0f * scaleX;
+    creditsButton_transX = -585.0f * scaleX;
     creditsButton_transY = -355.0f * scaleY;
-    exitButton_transX = 660.0f * scaleX;
+    exitButton_transX = 663.5f * scaleX;
     exitButton_transY = 355.0f * scaleY;
     
 }
 
 void Menu_Update(void) 
 {
+    // Initialize cursor coordinates
     s32 cursorX;
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
@@ -84,51 +91,51 @@ void Menu_Update(void)
     //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
 
     // Powerups button mid points
-    float powerUpButton_midX = (getWinWidth() / 2.08) + powerUpButton_transX;
+    float powerUpButton_midX = (getWinWidth() / 2.11) + powerUpButton_transX;
     float powerUpButton_midY = (getWinHeight() / 2) - powerUpButton_transY;
 
     // Settings button mid points
-    float settingsButton_midX = (getWinWidth() / 2.08) + settingsButton_transX;
+    float settingsButton_midX = (getWinWidth() / 2.11) + settingsButton_transX;
     float settingsButton_midY = (getWinHeight() / 2) - settingsButton_transY;
 
     // Play button mid points
-    float playButton_midX = (getWinWidth() / 2.08) + playButton_transX;
+    float playButton_midX = (getWinWidth() / 2.11) + playButton_transX;
     float playButton_midY = getWinHeight() / 2 - playButton_transY;
 
     // Credits button mid points
-    float creditsButton_midX = (getWinWidth() / 2.08) + creditsButton_transX;
+    float creditsButton_midX = (getWinWidth() / 2.09) + creditsButton_transX;
     float creditsButton_midY = (getWinHeight() / 2) - creditsButton_transY;
 
     // Exit button mid points
-    float exitButton_midX = (getWinWidth() / 2.08) + exitButton_transX;
+    float exitButton_midX = (getWinWidth() / 2.04) + exitButton_transX;
     float exitButton_midY = (getWinHeight() / 2) - exitButton_transY;
     
     printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         //gGameStateNext = POWER_UPS;
         printf("Goto powerups\n");
     }
-    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = SETTINGS;
         printf("Goto Settings\n");
     }
-    else if (IsAreaClicked(playButton_midX, playButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+    else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
 
-    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 120.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
-        //gGameStateNext = CREDITS;
+        gGameStateNext = CREDITS;
         printf("Goto Credits\n");
     }
 
-    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = QUIT;
         printf("QUIT\n");
@@ -173,11 +180,11 @@ void Menu_Draw(void)
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
     // Button 3, Start button
-    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     AEGfxSetTransparency(1.0f);
-    AEGfxTextureSet(startTex, 0, 0);
+    AEGfxTextureSet(NULL, 0, 0);
     AEMtx33 scale2 = { 0 };
     AEMtx33Scale(&scale2, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate2 = { 0 };
@@ -209,7 +216,7 @@ void Menu_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEMtx33 scale4 = { 0 };
-    AEMtx33Scale(&scale4, 38.f * scaleX, 50.f * scaleY);
+    AEMtx33Scale(&scale4, 34.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate4 = { 0 };
     AEMtx33Rot(&rotate4, 0.f);
     AEMtx33 translate4 = { 0 };
@@ -219,6 +226,42 @@ void Menu_Draw(void)
     AEMtx33Concat(&transform4, &translate4, &transform4);
     AEGfxSetTransform(transform4.m);
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+    // Rendering texts for the screen
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(play_buffer, "Play");
+    AEGfxGetPrintSize(fontID, play_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, play_buffer, (getWinWidth() / (-17200.f * scaleX)), (getWinHeight() / (-17000.f * scaleY)), 1.f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(upgrade_buffer, "Upgrade");
+    AEGfxGetPrintSize(fontID, upgrade_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, upgrade_buffer, (getWinWidth() / ( - 3950.f * scaleX)), (getWinHeight() / (- 1800.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settings_buffer, "Settings");
+    AEGfxGetPrintSize(fontID, settings_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, settings_buffer, (getWinWidth() / (13300.f * scaleX)), (getWinHeight() / ( - 1800.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits_buffer, "credits");
+    AEGfxGetPrintSize(fontID, credits_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, credits_buffer, (getWinWidth() / ( - 1393.f * scaleX)), (getWinHeight() / ( - 800.f * scaleY)), 0.7f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(exit_buffer, "X");
+    AEGfxGetPrintSize(fontID, exit_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (1466.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 222.0f / 255.f, 49.0f / 255.f, 99.0f / 255.f);
 }
 
 void Menu_Free(void) 
@@ -228,6 +271,5 @@ void Menu_Free(void)
 void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
-    
     
 }

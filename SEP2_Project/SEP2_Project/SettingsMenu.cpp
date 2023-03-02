@@ -45,6 +45,7 @@ void Settings_Init(void)
 }
 void Settings_Update(void)
 {
+    // Initialize cursor coordinates
     s32 cursorX;
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
