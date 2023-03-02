@@ -27,6 +27,9 @@ float credits_textWidth{}, credits_textHeight{};
 double scaleX_credits;
 double scaleY_credits;
 
+// Pre-definition of Rotation
+double picRotate{};
+
 void Credits_Load(void) 
 {
     AEGfxSetBackgroundColor(0.019f, 0.27f, 0.411f);  // conversion -> rgb value/255
@@ -66,15 +69,26 @@ void Credits_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
+    // Credits pic mid points
+    float creditsPic_midX = (getWinWidth() / 2.11) + creditsPic_transX;
+    float creditsPic_midY = (getWinHeight() / 2) - creditsPic_transY;
+
     // Credits back button mid points
     float creditsBackbutton_midX = (getWinWidth() / 2.09) + creditsBackbutton_transX;
     float creditsBackbutton_midY = (getWinHeight() / 2) - creditsBackbutton_transY;
+
+    if (IsAreaClicked(creditsPic_midX, creditsPic_midY, 170.0f * scaleX_credits, 100.0f * scaleY_credits, cursorX, cursorY)) 
+    {
+        picRotate += 100.f;
+        printf("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
+    }
 
     if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX_credits, 50.0f * scaleY_credits, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         printf("Goto MAIN MENU\n");
     }
+
 }
 void Credits_Draw(void) 
 {
@@ -88,7 +102,7 @@ void Credits_Draw(void)
     AEMtx33 scale = { 0 };
     AEMtx33Scale(&scale, 100.f * scaleX_credits, 100.f * scaleY_credits);
     AEMtx33 rotate = { 0 };
-    AEMtx33Rot(&rotate, 0.f);
+    AEMtx33Rot(&rotate, picRotate);
     AEMtx33 translate = { 0 };
     AEMtx33Trans(&translate, creditsPic_transX, creditsPic_transY);
     AEMtx33 transform = { 0 };
