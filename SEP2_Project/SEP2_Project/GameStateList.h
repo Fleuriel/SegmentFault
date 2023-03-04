@@ -17,6 +17,7 @@ enum
 	RESTART,
 	SETTINGS,
 	CREDITS,
+	AUGMENTS,
 	QUIT
 
 };

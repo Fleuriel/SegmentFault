@@ -106,8 +106,8 @@ void Pause_Update(void)
 
     else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
-        //gGameStateNext = UPGRADE;
-        printf("UPGRADES\n");
+        gGameStateNext = AUGMENTS;
+        printf("AUGMENTS\n");
     }
 
     Timer += g_dt;

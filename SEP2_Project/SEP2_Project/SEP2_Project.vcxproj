@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Augments.h" />
     <ClInclude Include="Credits.h" />
     <ClInclude Include="GameObjects.h" />
     <ClInclude Include="GameStateList.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Augments.cpp" />
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="GameObjects.cpp" />
     <ClCompile Include="GameStateMgr.cpp" />

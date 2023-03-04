@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 	fontID = AEGfxCreateFont("..\\..\\Assets\\Assets\\Minecraft.ttf", 50);
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(MAINMENU);
+	GameStateMgrInit(AUGMENTS);
 
 	while (gGameStateCurr != QUIT)
 	{

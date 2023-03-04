@@ -11,6 +11,14 @@ AEGfxVertexList* ptrMesh = nullptr;
 AEGfxVertexList* bMesh = nullptr;
 AEGfxTexture* BGTex;
 
+// Pre-definiton for printing g_dt
+char gdt_buffer[1024]{};
+
+
+// Pre-definition of scaling
+double scaleX_level1;
+double scaleY_level1;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -1591,7 +1599,12 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(ExpOrbTex);
 
-
+	// Rendering texts for the screen
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(gdt_buffer, "%f", g_dt);
+	AEGfxPrint(fontID, gdt_buffer, (getWinWidth() / (-2500.f * scaleX_level1)), (getWinHeight() / (-1350.f * scaleY_level1)), 1.0f * scaleX_level1, 255.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
 
 
 }
