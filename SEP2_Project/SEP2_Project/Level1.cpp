@@ -1450,8 +1450,8 @@ void Level_1_Draw(void)
 
 	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\player.png");
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
-	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\moon.png");
-	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\images.png");
+	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\drone.png");
+	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Boss.png");
 	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
 	AEGfxTexture* enemyTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\ling.png");
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
@@ -1467,7 +1467,7 @@ void Level_1_Draw(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(BGTex, 0, 0);
 	AEMtx33 scale0 = { 0 };
-	AEMtx33Scale(&scale0, 1366.f, 768.f);
+	AEMtx33Scale(&scale0, 1366.f, 1000.f);
 	AEMtx33 rotate0 = { 0 };
 	AEMtx33Rot(&rotate0, 0.f);
 	AEMtx33 translate0 = { 0 };
