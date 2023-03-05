@@ -27,6 +27,7 @@ char augment1_buffer[1024]{};
 char augment2_buffer[1024]{};
 char augment3_buffer[1024]{};
 char augment4_buffer[1024]{};
+char augmentAdd_buffer[1024]{};
 char skillpoint_buffer[1024]{};
 char strbuffer1[1024]{};
 char strbuffer2[1024]{};
@@ -68,6 +69,7 @@ int Augment2Level = 0;
 float Augment1CD = 1.5f;
 float Augment2Range = 1;
 int Aug2CreateCheck = 0;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -508,6 +510,8 @@ void Level_1_Init(void)
 
 	//8
 
+	
+
 	//9
 	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Augment_Three);
@@ -887,26 +891,26 @@ void Level_1_Update(void)
 		std::cout << "Once\n";
 	}
 
-	if (AEInputCheckTriggered(AEVK_1))
-	{
-		bossPhase = TYPE_BHELL1;
-	}
-	if (AEInputCheckTriggered(AEVK_2))
-	{
-		bossPhase = TYPE_BHELL2;
-	}
-	if (AEInputCheckTriggered(AEVK_3))
-	{
-		bossPhase = TYPE_BHELL3;
-	}
-	if (AEInputCheckTriggered(AEVK_4))
-	{
-		bossPhase = TYPE_BHELL4;
-	}
-	if (AEInputCheckTriggered(AEVK_5))
-	{
-		bossPhase = TYPE_BOWAP;
-	}
+	//if (AEInputCheckTriggered(AEVK_1))
+	//{
+	//	bossPhase = TYPE_BHELL1;
+	//}
+	//if (AEInputCheckTriggered(AEVK_2))
+	//{
+	//	bossPhase = TYPE_BHELL2;
+	//}
+	//if (AEInputCheckTriggered(AEVK_3))
+	//{
+	//	bossPhase = TYPE_BHELL3;
+	//}
+	//if (AEInputCheckTriggered(AEVK_4))
+	//{
+	//	bossPhase = TYPE_BHELL4;
+	//}
+	//if (AEInputCheckTriggered(AEVK_5))
+	//{
+	//	bossPhase = TYPE_BOWAP;
+	//}
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -966,14 +970,24 @@ void Level_1_Update(void)
 					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
 
-				//if (qInst->pObject->type == TYPE_AUGMENT3)
-				//{
-				//
-				//	AUGMENT_3_FIRE_TIMER = 0.0f;
-				//	AUGMENT_3_FIRE_INTERVAL = 0.0f;
-				//
-				//
-				//}
+				if (qInst->pObject->type == TYPE_AUGMENT3)
+				{
+				
+					AUGMENT_3_FIRE_TIMER = 0.0f;
+					AUGMENT_3_FIRE_INTERVAL = 1.0f;
+					
+					if (AUGMENT_3_FIRE_TIMER > AUGMENT_3_FIRE_INTERVAL)
+					{
+						static float delayAug3 = 0.0f;
+						delayAug3 += g_dt;
+
+						_Augment_Three->showTexture = false;
+					}
+
+				//	GameObjInstances* slashInst = gameObjInstCreate(TYPE_AUGMENT3, BULLET_SIZE * 10, &pInst->position, 0, 0.0f);
+				//	std::cout << "True\n";
+				
+				}
 
 			}
 		}
@@ -1537,7 +1551,7 @@ void Level_1_Update(void)
 									}
 								}
 							}
-							else {
+							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
 								ObjInstance1->health--;
 								if (ObjInstance1->health <= 0)
 								{
@@ -1932,6 +1946,18 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
 		AEGfxPrint(fontID, skillpoint_buffer, -0.5f, -0.8f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1130.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1680.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 		// Overlay end
 
 

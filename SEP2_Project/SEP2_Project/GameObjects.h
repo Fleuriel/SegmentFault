@@ -39,7 +39,7 @@ u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
 f64 enemyHealth = 1;
 bool upgradeToggle = 0;
-int SkillPoint = 0;
+extern int SkillPoint = 0;
 
 
 
