@@ -513,8 +513,8 @@ void Level_1_Init(void)
 	
 
 	//9
-	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
-	AE_ASSERT(_Augment_Three);
+	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
+	//AE_ASSERT(_Augment_Three);
 
 	// Gets the scale of 1366x768
 	scaleX_level1 = getWinWidth() / 1366.f;
