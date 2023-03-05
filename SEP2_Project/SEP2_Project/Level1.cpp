@@ -615,10 +615,10 @@ void Level_1_Update(void)
 			enemyCount++;
 			//spawn enemy :)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-
-			enemyInst->health = enemyHealth;
+			if(enemyInst!= nullptr){
+				enemyInst->health = enemyHealth;
 			std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
-
+			}
 			_enemyList.push_back(enemyInst);
 		}
 		_deltaTimeEnemySpawner = 0;
