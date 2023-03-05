@@ -90,24 +90,24 @@ void Pause_Update(void)
     float augmentButton_midY = (getWinHeight() / 2) - augmentButton_transY;
 
 
-    printf("%d\n%d\n", cursorX, cursorY);  //debug
+    // printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
     if (IsAreaClicked(quitButton_midX, quitButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
-        printf("MAINMENU\n");
+        //printf("MAINMENU\n");
     }
     else if (IsAreaClicked(resumeButton_midX, resumeButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PLAY;
-        printf("RESUME\n");
+        //printf("RESUME\n");
     }
 
     else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = AUGMENTS;
-        printf("AUGMENTS\n");
+        //printf("AUGMENTS\n");
     }
 
     Timer += g_dt;

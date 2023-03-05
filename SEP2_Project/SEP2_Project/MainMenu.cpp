@@ -110,7 +110,7 @@ void Menu_Update(void)
     float exitButton_midX = (getWinWidth() / 2.04) + exitButton_transX;
     float exitButton_midY = (getWinHeight() / 2) - exitButton_transY;
     
-    printf("%d\n%d\n", cursorX, cursorY);  //debug
+    // printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
     if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)

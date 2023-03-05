@@ -63,13 +63,13 @@ void Settings_Update(void)
     float backButton_midX = (getWinWidth() / 2.08) + backButton_transX;
     float backButton_midY = (getWinHeight() / 2) - backButton_transY;
 
-    printf("%d\n%d\n", cursorX, cursorY);  //debug
+    // printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
     if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX_settings, 100.0f * scaleY_settings, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
-        printf("MAINMENU\n");
+        //printf("MAINMENU\n");
     }
 }
 void Settings_Draw(void)
@@ -98,19 +98,19 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions1_buffer, "Press 'P' to pause.");
+    sprintf_s(instructions1_buffer, "Right click for augments.");
     AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (1350.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions2_buffer, "Right click for augments.");
+    sprintf_s(instructions2_buffer, "WASD for movement.");
     AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (2000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "WASD for movement.");
+    sprintf_s(instructions3_buffer, "Bullets will follow cursor.");
     AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (4000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
