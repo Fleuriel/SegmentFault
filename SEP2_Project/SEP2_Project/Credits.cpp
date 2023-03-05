@@ -80,20 +80,20 @@ void Credits_Update(void)
     if (IsAreaClicked(creditsPic_midX, creditsPic_midY, 170.0f * scaleX_credits, 100.0f * scaleY_credits, cursorX, cursorY)) 
     {
         picRotate += 100.f;
-        printf("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
+        // printf("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
     }
 
     if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX_credits, 50.0f * scaleY_credits, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
-        printf("Goto MAIN MENU\n");
+        // printf("Goto MAIN MENU\n");
     }
 
 }
 void Credits_Draw(void) 
 {
 
-    // Button 1, Start button
+    // Button 1, TOHRU BUTTON
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
