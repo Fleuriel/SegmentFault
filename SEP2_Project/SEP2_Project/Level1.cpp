@@ -55,7 +55,7 @@ float timeElapsed = 0.f;
 float minElapsed = 0.f;
 
 int MaxHealth;
-
+int OrbCap = 30, OrbCounter = 0;
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -705,7 +705,7 @@ void Level_1_Update(void)
 	}
 
 	//Spawn Enemy
-	if (_deltaTimeEnemySpawner > 1)
+	if (_deltaTimeEnemySpawner > 1 && enemyCount<50)
 	{
 		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
@@ -1493,10 +1493,13 @@ void Level_1_Update(void)
 							if (ObjInstance1->health <= 0)
 							{
 								gameObjInstDestroy(ObjInstance1);
+								enemyCount--;
 							}
 							gameObjInstDestroy(ObjInstance2);
-
-							gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+							if (OrbCounter < OrbCap) {
+								gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+								OrbCounter++;
+							}
 						}
 					}
 					if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
@@ -1510,9 +1513,13 @@ void Level_1_Update(void)
 							if (ObjInstance1->health <= 0)
 							{
 								gameObjInstDestroy(ObjInstance1);
+								enemyCount--;
 							}
 
-							gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+							if (OrbCounter < OrbCap) {
+								gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+								OrbCounter++;
+							}
 						}
 					}
 
@@ -1536,7 +1543,9 @@ void Level_1_Update(void)
 							_Player_Experience++;
 							std::cout << "Player Experience: " << _Player_Experience << '\n';
 							std::cout << "Player Level: " << _Player_Level << '\n';
+
 							gameObjInstDestroy(ObjInstance1);
+							OrbCounter--;
 						}
 					}
 				}
