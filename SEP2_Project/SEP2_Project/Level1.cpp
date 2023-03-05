@@ -431,13 +431,13 @@ void Level_1_Load(void)
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+		0.5f, 0.5f, 0xFFADD8E6, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFADD8E6, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFADD8E6, 1.0f, 1.0f);
 	AEGfxTriAdd(
-		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+		-1.f, 0.5f, 0xFFADD8E6, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFADD8E6, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFADD8E6, 1.0f, 0.0f);
 
 	augmentMesh = AEGfxMeshEnd();
 	// End Overlay
@@ -518,13 +518,13 @@ void Level_1_Init(void)
 
 	// Defintion of the translation for augment buttons
 	augment1Button_transX = 0.0f * scaleX_level1;
-	augment1Button_transY = 290.0f * scaleY_level1;
+	augment1Button_transY = 280.0f * scaleY_level1;
 	augment2Button_transX = 0.0f * scaleX_level1;
-	augment2Button_transY = 205.0f * scaleY_level1;
+	augment2Button_transY = 195.0f * scaleY_level1;
 	augment3Button_transX = 0.0f * scaleX_level1;
-	augment3Button_transY = 125.0f * scaleY_level1;
+	augment3Button_transY = 115.0f * scaleY_level1;
 	augment4Button_transX = 0.0f * scaleX_level1;
-	augment4Button_transY = 40.0f * scaleY_level1;
+	augment4Button_transY = 30.0f * scaleY_level1;
 
 }
 
@@ -1788,7 +1788,7 @@ void Level_1_Draw(void)
 		AEMtx33 rotate3 = { 0 };
 		AEMtx33Rot(&rotate3, 0.f);
 		AEMtx33 translate3 = { 0 };
-		AEMtx33Trans(&translate3, 125.f, 0.f);
+		AEMtx33Trans(&translate3, 125.f, -10.f);
 		AEMtx33 transform3 = { 0 };
 		AEMtx33Concat(&transform3, &rotate3, &scale3);
 		AEMtx33Concat(&transform3, &translate3, &transform3);
@@ -1861,25 +1861,25 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment1_buffer, "Augment 1");
 		// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1050.f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1100.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment2_buffer, "Augment 2");
-		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1522.5f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment3_buffer, "Augment 3");
-		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (2730.f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (2860.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment3_buffer, "Augment 4");
-		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (11776.5f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (12337.3f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 		// Overlay end
 	}
 
