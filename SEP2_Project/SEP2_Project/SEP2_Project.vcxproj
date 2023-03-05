@@ -45,6 +45,7 @@
     <ProjectGuid>{ba9edf4c-8f21-4766-81a2-e4f8ead482fe}</ProjectGuid>
     <RootNamespace>SEP2Project</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Segement Fault</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
