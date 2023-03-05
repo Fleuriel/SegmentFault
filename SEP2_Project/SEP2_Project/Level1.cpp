@@ -8,8 +8,8 @@ int expPercent = 0;
 AEGfxVertexList* ptrMesh = nullptr;
 
 //Background definition
-AEGfxVertexList* bMesh = nullptr;
-AEGfxTexture* BGTex;
+//AEGfxVertexList* bMesh = nullptr;
+//AEGfxTexture* BGTex;
 
 // Pre-definiton for string buffers
 char gdt_buffer[1024]{};
@@ -377,7 +377,7 @@ void Level_1_Load(void)
 	//end Expbar
 
 	//Background
-	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	/*AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	//start Background
 	AEGfxMeshStart();
 
@@ -393,6 +393,7 @@ void Level_1_Load(void)
 	bMesh = AEGfxMeshEnd();
 	BGTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
 	//end Background
+	*/
 }
 
 void Level_1_Init(void)
@@ -1465,8 +1466,8 @@ void Level_1_Draw(void)
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
-	AEGfxTexture* BgroundTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
-
+	//AEGfxTexture* BgroundTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+	/*
 	//Draw Background
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
@@ -1485,6 +1486,7 @@ void Level_1_Draw(void)
 	AEGfxSetTransform(transform0.m);
 	AEGfxMeshDraw(bMesh, AE_GFX_MDM_TRIANGLES);
 	//Finish Background draw
+	*/
 
 	//Exp bar start
 	//DOING IT THIS WAY CAUSES LAG/STUTTERING, TO BE FIXED
@@ -1606,6 +1608,16 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(spawnerTex);
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(ExpOrbTex);
+	AEGfxTextureUnload(Expbar0);
+	AEGfxTextureUnload(Expbar1);
+	AEGfxTextureUnload(Expbar2);
+	AEGfxTextureUnload(Expbar3);
+	AEGfxTextureUnload(Expbar4);
+	AEGfxTextureUnload(Expbar5);
+	AEGfxTextureUnload(Expbar6);
+	AEGfxTextureUnload(Expbar7);
+	AEGfxTextureUnload(Expbar8);
+	AEGfxTextureUnload(Expbar9);
 
 	//// Rendering texts for the screen
 	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1641,5 +1653,5 @@ void Level_1_Unload(void)
 		AEGfxMeshFree(sGameObjList[i].pMesh);
 	}
 	AEGfxMeshFree(ptrMesh);
-	AEGfxMeshFree(bMesh);
+	//AEGfxMeshFree(bMesh);
 }
