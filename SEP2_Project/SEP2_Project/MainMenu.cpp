@@ -128,12 +128,12 @@ void Menu_Update(void)
         gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
-
+    /*
     else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = CREDITS;
         printf("Goto Credits\n");
-    }
+    }*/
 
     else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
