@@ -1,99 +1,105 @@
 #include "Main.h"
 
 
-
 bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
-	const AABB& aabb2, const AEVec2& vel2)
+    const AABB& aabb2, const AEVec2& vel2)
 {
-	UNREFERENCED_PARAMETER(aabb1);
-	UNREFERENCED_PARAMETER(vel1);
-	UNREFERENCED_PARAMETER(aabb2);
-	UNREFERENCED_PARAMETER(vel2);
+    UNREFERENCED_PARAMETER(aabb1);
+    UNREFERENCED_PARAMETER(vel1);
+    UNREFERENCED_PARAMETER(aabb2);
+    UNREFERENCED_PARAMETER(vel2);
 
-	// Check for static collision
-	if (aabb1.max.x < aabb2.min.x || aabb2.max.x < aabb1.min.x)
-		return false;
-	if (aabb1.max.y < aabb2.min.y || aabb2.max.y < aabb1.min.y)
-		return false;
+    // Check static collision
 
-	float tFirst = 0;
-	float tLast = g_dt;
+    if (aabb1.max.x > aabb2.min.x && aabb1.max.y > aabb2.min.y && aabb2.max.x > aabb1.min.x && aabb2.max.y > aabb1.min.y) {
+        return true;
+    }
 
+    AEVec2 veloVec{};
+    veloVec.x = vel2.x - vel1.x;
+    veloVec.y = vel2.y - vel1.y;
+    AEVec2 tFirst{ 0 };
+    AEVec2 tLast{ (float)AEFrameRateControllerGetFrameTime(), (float)AEFrameRateControllerGetFrameTime() };
+    AEVec2 tFirsttemp{ 0 };
+    AEVec2 tLasttemp{ (float)AEFrameRateControllerGetFrameTime(), (float)AEFrameRateControllerGetFrameTime() };
 
+    // Check if the rectangles are moving towards each other on X axis
+    if (veloVec.x < 0) {
+        if (aabb1.min.x > aabb2.max.x) {
+            return false;
+        }
+        else {
+            tFirsttemp.x = (aabb1.max.x - aabb2.min.x) / veloVec.x;
+            if (tFirsttemp.x > tFirst.x)
+                tFirst.x = tFirsttemp.x;
+            tLasttemp.x = (aabb1.min.x - aabb2.max.x) / veloVec.x;
+            if (tLast.x > tLasttemp.x)
+                tFirst.x = tFirsttemp.x;
+        }
+    }
+    else {
+        if (aabb1.min.x > aabb2.max.x) {
+            tFirsttemp.x = (aabb1.max.x - aabb2.min.x) / veloVec.x;
+            if (tFirsttemp.x > tFirst.x)
+                tFirst.x = tFirsttemp.x;
+            tLasttemp.x = (aabb1.min.x - aabb2.max.x) / veloVec.x;
+            if (tLast.x > tLasttemp.x)
+                tFirst.x = tFirsttemp.x;
+        }
+        else {
+            return false;
+        }
+    }
+    // Check if the rectangles are moving towards each other on Y axis
+    if (veloVec.y < 0) {
+        if (aabb1.min.y > aabb2.max.y) {
+            return false;
+        }
+        else {
+            tFirsttemp.y = (aabb1.max.y - aabb2.min.y) / veloVec.y;
+            if (tFirsttemp.y > tFirst.y)
+                tFirst.y = tFirsttemp.y;
+            tLasttemp.y = (aabb1.min.y - aabb2.max.y) / veloVec.y;
+            if (tLast.y > tLasttemp.y)
+                tFirst.y = tFirsttemp.y;
+        }
+    }
+    else {
+        if (aabb1.min.y > aabb2.max.y) {
+            tFirsttemp.y = (aabb1.max.y - aabb2.min.y) / veloVec.y;
+            if (tFirsttemp.y > tFirst.y)
+                tFirst.y = tFirsttemp.y;
+            tLasttemp.y = (aabb1.min.y - aabb2.max.y) / veloVec.y;
+            if (tLast.y > tLasttemp.y)
+                tFirst.y = tFirsttemp.y;
+        }
+        else {
+            return false;
+        }
+    }
 
-	// Calculate the new velocity of the second rectangle
-	float Vb_x = vel2.x - vel1.x;
-	float Vb_y = vel2.y - vel1.y;
+    // Check if the time of collision is within the frame time
+    if (tFirst.y > tLast.x || tFirst.x > tLast.y)
+    {
+        return false;
+    }
 
-	// Check the x-axis
+    if (tFirst.x > tFirst.y)
+    {
+        if (tFirst.x < 0 || tFirst.x >(float)AEFrameRateControllerGetFrameTime())
+        {
+            return false;
+        }
+    }
+    else
+    {
+        if (tFirst.y < 0 || tFirst.y >(float)AEFrameRateControllerGetFrameTime())
+        {
+            return false;
+        }
+    }
 
-
-	//if vRel (x) < 0...
-	if (Vb_x < 0)
-	{
-		//Case 1
-		if (aabb1.min.x > aabb2.max.x) ///
-			return 0;
-		//Case 4 (1/2)
-		if (aabb1.max.x < aabb2.min.x)
-			tFirst = max((aabb1.max.x - aabb2.min.x) / Vb_x, tFirst);
-		//Case 4 (2/2)
-		if (aabb1.min.x < aabb2.max.x)
-			tLast = min((aabb1.min.x - aabb2.max.x) / Vb_x, tLast);
-	}
-
-	//if vRel (x) > 0...
-	if (Vb_x > 0)
-	{
-		//Case 2 (1/2)
-		if (aabb1.min.x > aabb2.max.x)
-			tFirst = max((aabb1.min.x - aabb2.max.x) / Vb_x, tFirst);
-		//Case 2 (2/2)
-		if (aabb1.max.x > aabb2.min.x)
-			tLast = min((aabb1.max.x - aabb2.min.x) / Vb_x, tLast);
-		//Case 3
-		if (aabb1.max.x < aabb2.min.x)
-			return 0;
-	}
-
-	//Intersection
-	if (tFirst > tLast)
-		return 0;
-
-	//if vRel (y) < 0...
-	if (Vb_y < 0)
-	{
-		//Case 1
-		if (aabb1.min.y > aabb2.max.y)
-			return 0;
-		//Case 4 (1/2)
-		if (aabb1.max.y < aabb2.min.y)
-			tFirst = max((aabb1.max.y - aabb2.min.y) / Vb_y, tFirst);
-		//Case 4 (2/2)
-		if (aabb1.min.y < aabb2.max.y)
-			tLast = min((aabb1.min.y - aabb2.max.y) / Vb_y, tLast);
-	}
-
-	//if vRel (y) > 0...
-	if (Vb_y > 0)
-	{
-		//Case 2 (1/2)
-		if (aabb1.min.y > aabb2.max.y)
-			tFirst = max((aabb1.min.y - aabb2.max.y) / Vb_y, tFirst);
-		//Case 2 (2/2)
-		if (aabb1.max.y > aabb2.min.y)
-			tLast = min((aabb1.max.y - aabb2.min.y) / Vb_y, tLast);
-		//Case 3
-		if (aabb1.max.y < aabb2.min.y)
-			return 0;
-	}
-
-	//No Intersection
-	if (tFirst > tLast)
-		return 0;
-
-	// The rectangles intersect
-	return true;
+    return true;
 }
 
 
