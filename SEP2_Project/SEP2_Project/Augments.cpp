@@ -24,6 +24,7 @@ double augmentsBackbutton_transY;
 double scaleX_augments;
 double scaleY_augments;
 
+
 void Augments_Load(void) 
 {
     AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);  // conversion -> rgb value/255
@@ -66,6 +67,11 @@ void Augments_Update(void)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PAUSE;
         printf("Goto MAIN MENU\n");
+    }
+    timeElapsed += g_dt;
+    if (timeElapsed >= 59.5) {
+        minElapsed++;
+        timeElapsed = 0;
     }
 }
 
@@ -120,7 +126,10 @@ void Augments_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(gdt1_buffer, "%f", g_dt);
+    if(timeElapsed>=9.5)
+        sprintf_s(gdt1_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
+    else
+        sprintf_s(gdt1_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
     printf(gdt1_buffer);
     AEGfxPrint(fontID, gdt1_buffer, (getWinWidth() / (-2500.f * scaleX_augments)), (getWinHeight() / (-1350.f * scaleY_augments)), 1.0f * scaleX_augments, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 }
