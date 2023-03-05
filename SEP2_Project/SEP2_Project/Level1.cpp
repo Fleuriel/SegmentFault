@@ -748,7 +748,7 @@ void Level_1_Update(void)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
 			if(enemyInst!= nullptr){
 				enemyInst->health = enemyHealth;
-			std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
+			//std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
 			}
 			_enemyList.push_back(enemyInst);
 		}
@@ -1705,7 +1705,6 @@ void Level_1_Draw(void)
 	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* enemyTex = AEGfxTextureLoad("Assets\\Assets\\enemy.png");
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
-	AEGfxTexture* spawnerTex = AEGfxTextureLoad("Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("Assets\\Assets\\Orb.png");
 
@@ -1863,7 +1862,6 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(bossBullet1Tex);
 	AEGfxTextureUnload(enemyTex);
 	AEGfxTextureUnload(pHitboxTex);
-	AEGfxTextureUnload(spawnerTex);
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(ExpOrbTex);
 	AEGfxTextureUnload(Expbar0);
