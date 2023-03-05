@@ -1693,6 +1693,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
+	AEGfxTexture* rotatingball = AEGfxTextureLoad("..\\..\\Assets\\Assets\\blackball.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
@@ -1794,9 +1795,13 @@ void Level_1_Draw(void)
 		{
 			texture = bulletTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT1 || pInst->pObject->type == TYPE_AUGMENT2)
+		else if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
 			texture = augmentGunTex;
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT2)
+		{
+			texture = rotatingball;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -1857,6 +1862,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
 	AEGfxTextureUnload(BgroundTexB);
+	AEGfxTextureUnload(rotatingball);
 
 	// Rendering texts for the screen	
 
