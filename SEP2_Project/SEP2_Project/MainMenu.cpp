@@ -115,7 +115,7 @@ void Menu_Update(void)
     // if cursor within buttons, change game state
     if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
-        //gGameStateNext = POWER_UPS;
+        gGameStateNext = UPGRADE;
         printf("Goto powerups\n");
     }
     else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
