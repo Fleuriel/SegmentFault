@@ -88,14 +88,14 @@ void GameStateMgrUpdate()
 		GameStateFree = Credits_Free;
 		GameStateUnload = Credits_Unload;
 		break;
-	case AUGMENTS:
-		GameStateLoad = Augments_Load;
-		GameStateInit = Augments_Init;
-		GameStateUpdate = Augments_Update;
-		GameStateDraw = Augments_Draw;
-		GameStateFree = Augments_Free;
-		GameStateUnload = Augments_Unload;
-		break;
+	//case AUGMENTS:
+	//	GameStateLoad = Augments_Load;
+	//	GameStateInit = Augments_Init;
+	//	GameStateUpdate = Augments_Update;
+	//	GameStateDraw = Augments_Draw;
+	//	GameStateFree = Augments_Free;
+	//	GameStateUnload = Augments_Unload;
+	//	break;
 	case GAMEOVER:
 		GameStateLoad = GameOver_Load;
 		GameStateInit = GameOver_Init;

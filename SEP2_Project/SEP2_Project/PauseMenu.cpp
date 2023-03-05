@@ -154,20 +154,20 @@ void Pause_Draw(void)
     AEGfxSetTransform(transform1.m);
     AEGfxMeshDraw(pMeshPause, AE_GFX_MDM_TRIANGLES);
 
-    // Augment button
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEMtx33 scale2 = { 0 };
-    AEMtx33Scale(&scale2, 100.f * scaleX_pause, 100.f * scaleY_pause);
-    AEMtx33 rotate2 = { 0 };
-    AEMtx33Rot(&rotate2, 0.f);
-    AEMtx33 translate2 = { 0 };
-    AEMtx33Trans(&translate2, augmentButton_transX, augmentButton_transY);
-    AEMtx33 transform2 = { 0 };
-    AEMtx33Concat(&transform2, &rotate2, &scale2);
-    AEMtx33Concat(&transform2, &translate2, &transform2);
-    AEGfxSetTransform(transform2.m);
-    AEGfxMeshDraw(pMeshPause, AE_GFX_MDM_TRIANGLES);
+    //// Augment button
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEMtx33 scale2 = { 0 };
+    //AEMtx33Scale(&scale2, 100.f * scaleX_pause, 100.f * scaleY_pause);
+    //AEMtx33 rotate2 = { 0 };
+    //AEMtx33Rot(&rotate2, 0.f);
+    //AEMtx33 translate2 = { 0 };
+    //AEMtx33Trans(&translate2, augmentButton_transX, augmentButton_transY);
+    //AEMtx33 transform2 = { 0 };
+    //AEMtx33Concat(&transform2, &rotate2, &scale2);
+    //AEMtx33Concat(&transform2, &translate2, &transform2);
+    //AEGfxSetTransform(transform2.m);
+    //AEGfxMeshDraw(pMeshPause, AE_GFX_MDM_TRIANGLES);
 
     // Rendering texts for the screen
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -184,12 +184,12 @@ void Pause_Draw(void)
     AEGfxGetPrintSize(fontID, resume_buffer, 1.0f, pause_textWidth, pause_textHeight);
     AEGfxPrint(fontID, resume_buffer, (getWinWidth() / (4500.f * scaleX_pause)), (getWinHeight() / (-1380.f * scaleY_pause)), 0.7f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    /*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(augment_buffer, "Augments");
     AEGfxGetPrintSize(fontID, augment_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, augment_buffer, (getWinWidth() / (-9800.f * scaleX_pause)), (getWinHeight() / (1550.f * scaleY_pause)), 0.6f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, augment_buffer, (getWinWidth() / (-9800.f * scaleX_pause)), (getWinHeight() / (1550.f * scaleY_pause)), 0.6f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);*/
 
 }
 void Pause_Free(void)

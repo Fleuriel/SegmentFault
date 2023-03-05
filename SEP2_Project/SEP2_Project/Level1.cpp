@@ -44,7 +44,7 @@ double augment4Button_transY;
 
 
 // Pre-definition of overlay transparency
-float overlayTransparency = 1;
+float overlayTransparency = 0.0f;
 
 // Pre-definition of scaling
 double scaleX_level1;
@@ -544,12 +544,12 @@ void Level_1_Update(void)
 	}
 
 	// Checking if overlay is pressed
-	if (AEInputCheckTriggered(AEVK_O))
+	if (AEInputCheckTriggered(AEVK_RBUTTON))
 	{
 		if (overlayTransparency == 0) {
-			overlayTransparency = 1;
+			overlayTransparency = 0.5;
 		}
-		else if (overlayTransparency == 1) {
+		else if (overlayTransparency != 0) {
 			overlayTransparency = 0;
 		}
 	}
@@ -567,7 +567,7 @@ void Level_1_Update(void)
 	float augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
 	float augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
 
-	if (overlayTransparency == 1) {
+	if (overlayTransparency != 0) {
 		// Overlay button logic and defintions
 		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
@@ -1860,7 +1860,7 @@ void Level_1_Draw(void)
 
 	// Rendering texts for the screen	
 
-	if (overlayTransparency == 1)
+	if (overlayTransparency != 0)
 	{
 		// Drawing the augment overlay on the screen
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1921,7 +1921,7 @@ void Level_1_Draw(void)
 		sprintf_s(augment2_buffer, "Augment 2");
 		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		/*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
