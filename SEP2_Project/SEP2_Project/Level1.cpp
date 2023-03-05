@@ -20,8 +20,8 @@ double scaleX_level1;
 double scaleY_level1;
 
 //// Pre-definition of time
-//float timeElapsed = 0.f;
-//float minElapsed = 0.f;
+float timeElapsed = 0.f;
+float minElapsed = 0.f;
 
 void Level_1_Load(void)
 {
@@ -457,11 +457,11 @@ void Level_1_Init(void)
 void Level_1_Update(void)
 {
 	// Checking for time passed in seconds;
-	//timeElapsed += g_dt;
-	//if (timeElapsed >= 59.5) {
-	//	minElapsed++;
-	//	timeElapsed = 0;
-	//}
+	timeElapsed += g_dt;
+	if (timeElapsed >= 59.5) {
+		minElapsed++;
+		timeElapsed = 0;
+	}
 
 	_deltaTime += g_dt;
 	_deltaTime_State += g_dt;
@@ -1449,6 +1449,7 @@ void Level_1_Update(void)
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
 	}
+	
 }
 
 void Level_1_Draw(void)
@@ -1619,17 +1620,17 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
 
-	//// Rendering texts for the screen
-	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	//AEGfxTextureSet(NULL, 0, 0);
-	//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	//if (timeElapsed >= 59.5)
-	//	sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
-	//else
-	//	sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
-	//printf(gdt_buffer);
-	//AEGfxPrint(fontID, gdt_buffer, (getWinWidth() / (-9800.f * scaleX_level1)), (getWinHeight() / (1550.f * scaleY_level1)), 1.0f * scaleX_level1, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+	//// Rendering texts for the screen	
 
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	if (timeElapsed >= 9.5)
+		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
+	else
+		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
+	printf(gdt_buffer);
+	AEGfxPrint(fontID, gdt_buffer,0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 }
 void Level_1_Free(void)
