@@ -9,6 +9,12 @@ int expPercent = 0;
 // Pointer to Mesh
 AEGfxVertexList* ptrMesh = nullptr;
 
+//AugmentOverlay definition
+AEGfxVertexList* augmentMesh = nullptr;
+
+// Buttons in AugmentOverlay definition
+AEGfxVertexList* augmentButtonMesh = nullptr;
+
 //Background definition
 AEGfxVertexList* bMesh = nullptr;
 AEVec2 BG = { 0, 0 };
@@ -16,6 +22,25 @@ AEVec2 BG = { 0, 0 };
 // Pre-definiton for string buffers
 char gdt_buffer[1024]{};
 char hp_buffer[1024]{};
+char augment1_buffer[1024]{};
+char augment2_buffer[1024]{};
+char augment3_buffer[1024]{};
+char augment4_buffer[1024]{};
+float augments_textWidth{}, augments_textHeight{};
+
+// Pre-definition for translations of buttons
+double augment1Button_transX;
+double augment1Button_transY;
+double augment2Button_transX;
+double augment2Button_transY;
+double augment3Button_transX;
+double augment3Button_transY;
+double augment4Button_transX;
+double augment4Button_transY;
+
+
+// Pre-definition of overlay transparency
+float overlayTransparency = 1;
 
 // Pre-definition of scaling
 double scaleX_level1;
@@ -290,7 +315,7 @@ void Level_1_Load(void)
 
 
 
-
+	/*
 	if (inputFileStream.good())
 	{
 		std::cout << "File Exist\n";
@@ -365,6 +390,7 @@ void Level_1_Load(void)
 		std::cerr << "Error: \n" ;
 
 	}
+	*/
 
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -401,6 +427,36 @@ void Level_1_Load(void)
 	bMesh = AEGfxMeshEnd();
 	//end Background
 	
+	// Create Overlay for Augments
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	augmentMesh = AEGfxMeshEnd();
+	// End Overlay
+
+	// Create buttons for Augments
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFF001736, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFF001736, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
+
+	augmentButtonMesh = AEGfxMeshEnd();
+	// End Overlay
+
 }
 
 void Level_1_Init(void)
@@ -456,7 +512,19 @@ void Level_1_Init(void)
 	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
 	//AE_ASSERT(_Augment_Three);
 
+	// Gets the scale of 1366x768
+	scaleX_level1 = getWinWidth() / 1366.f;
+	scaleY_level1 = getWinHeight() / 768.f;
 
+	// Defintion of the translation for augment buttons
+	augment1Button_transX = 640.0f * scaleX_level1;
+	augment1Button_transY = 640.0f * scaleY_level1;
+	augment2Button_transX;
+	augment2Button_transY;
+	augment3Button_transX;
+	augment3Button_transY;
+	augment4Button_transX;
+	augment4Button_transY;
 
 }
 
@@ -469,6 +537,20 @@ void Level_1_Update(void)
 		minElapsed++;
 		timeElapsed = 0;
 	}
+
+	// Checking if overlay is pressed
+	if (AEInputCheckTriggered(AEVK_O))
+	{
+		if (overlayTransparency == 0) {
+			overlayTransparency = 1;
+		}
+		else if (overlayTransparency == 1) {
+			overlayTransparency = 0;
+		}
+	}
+
+	printf("\noverlay: %d\n", overlayTransparency);
+
 
 	_deltaTime += g_dt;
 	_deltaTime_State += g_dt;
@@ -659,7 +741,6 @@ void Level_1_Update(void)
 	//KeyDown
 	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 	{
-		_Player->position.x += 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -678,7 +759,6 @@ void Level_1_Update(void)
 	
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
-		_Player->position.x -= 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -695,7 +775,6 @@ void Level_1_Update(void)
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
-		_Player->position.y -= 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -712,7 +791,6 @@ void Level_1_Update(void)
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
-		_Player->position.y += 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -1654,8 +1732,70 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar9);
 	AEGfxTextureUnload(BgroundTexB);
 
-	//// Rendering texts for the screen	
+	// Rendering texts for the screen	
 
+	if (overlayTransparency == 1)
+	{
+		// Drawing the augment overlay on the screen
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale3 = { 0 };
+		AEMtx33Scale(&scale3, 500.f, 650.f);
+		AEMtx33 rotate3 = { 0 };
+		AEMtx33Rot(&rotate3, 0.f);
+		AEMtx33 translate3 = { 0 };
+		AEMtx33Trans(&translate3, 125.f, 0.f);
+		AEMtx33 transform3 = { 0 };
+		AEMtx33Concat(&transform3, &rotate3, &scale3);
+		AEMtx33Concat(&transform3, &translate3, &transform3);
+		AEGfxSetTransform(transform3.m);
+		AEGfxMeshDraw(augmentMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale4 = { 0 };
+		AEMtx33Scale(&scale4, 100.f, 100.f);
+		AEMtx33 rotate4 = { 0 };
+		AEMtx33Rot(&rotate4, 0.f);
+		AEMtx33 translate4 = { 0 };
+		AEMtx33Trans(&translate4, 125.f, 0.f);
+		AEMtx33 transform4 = { 0 };
+		AEMtx33Concat(&transform4, &rotate4, &scale4);
+		AEMtx33Concat(&transform4, &translate4, &transform4);
+		AEGfxSetTransform(transform4.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Rendering texts for overlay
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Augment 1");
+		// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1050.f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment2_buffer, "Augment 2");
+		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1522.5f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment3_buffer, "Augment 3");
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (2730.f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment3_buffer, "Augment 4");
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (11776.5f * scaleY_level1)), 0.6f * scaleX_level1, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+		// Overlay end
+	}
+
+	// Rendering texts for the screen	
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
