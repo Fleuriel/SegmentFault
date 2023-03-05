@@ -74,7 +74,7 @@ void Upgrade_Update(void)
 	float backButton_midX = (getWinWidth() / 2.08) + UpgradebackButton_transX;
 	float backButton_midY = (getWinHeight() / 2) - UpgradebackButton_transY;
 
-	printf("%d\n%d\n", cursorX, cursorY);  //debug
+	//printf("%d\n%d\n", cursorX, cursorY);  //debug
 	//printf("%f\n%f\n", button1_midX, button1_midY);  //debug
 	// if cursor within buttons, change game state
 	if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * UpgradescaleX_settings, 100.0f * UpgradescaleY_settings, cursorX, cursorY)
