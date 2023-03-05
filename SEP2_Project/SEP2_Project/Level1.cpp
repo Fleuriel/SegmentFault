@@ -13,7 +13,7 @@ AEVec2 BG = { 0, 0 };
 
 // Pre-definiton for string buffers
 char gdt_buffer[1024]{};
-
+char hp_buffer[1024]{};
 
 // Pre-definition of scaling
 double scaleX_level1;
@@ -22,6 +22,8 @@ double scaleY_level1;
 //// Pre-definition of time
 float timeElapsed = 0.f;
 float minElapsed = 0.f;
+
+int MaxHealth;
 
 void Level_1_Load(void)
 {
@@ -399,7 +401,7 @@ void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	_Player->health = 20;
+	_Player->health = MaxHealth =20;
 	AE_ASSERT(_Player);
 
 
@@ -1318,7 +1320,22 @@ void Level_1_Update(void)
 
 
 	}
+	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
+	{
+		GameObjInstances* ObjInstance2 = sGameObjInstList + i;
+		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
+			continue;
 
+		AEVec2 boundingRect{};
+		AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+		AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
+		AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+
+		AEVec2 velocity{};
+		AEVec2Scale(&velocity, &ObjInstance2->velocity, (float)AEFrameRateControllerGetFrameTime());
+		//--Positions of the instances are updated here with the already computed velocity(above)
+		AEVec2Add(&ObjInstance2->position, &ObjInstance2->position, &velocity);
+	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////COLLISION////////////////////////////////////////////
@@ -1417,7 +1434,7 @@ void Level_1_Update(void)
 							_Player->isInvincible = true;
 							_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
 						}
-						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x)) {
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox,ObjInstance1->velocity,ObjInstance2->boundingBox,ObjInstance2->velocity)) {
 							if (_Player->isInvincible == false) {
 								_Player->health--;
 								std::cout << "Player HP: " << _Player->health << '\n';
@@ -1634,9 +1651,13 @@ void Level_1_Draw(void)
 		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
 	else
 		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
-	printf(gdt_buffer);
 	AEGfxPrint(fontID, gdt_buffer,0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(hp_buffer, "HP: %d/%d", _Player->health, MaxHealth);
+	AEGfxPrint(fontID, hp_buffer, 0.5f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 }
 void Level_1_Free(void)
 {
@@ -1660,4 +1681,6 @@ void Level_1_Unload(void)
 	}
 	AEGfxMeshFree(ptrMesh);
 	//AEGfxMeshFree(bMesh);
+	timeElapsed = 0;
+	minElapsed = 0;
 }
