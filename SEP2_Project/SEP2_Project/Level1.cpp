@@ -447,11 +447,11 @@ void Level_1_Load(void)
 
 	AEGfxTriAdd(
 		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f,
-		-1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		-1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
 		0.5f, -0.5f, 0xFF001736, 1.0f, 1.0f);
 	AEGfxTriAdd(
-		-1.f, 0.5f, 0xFF001736, 0.0f, 0.0f,
-		-1.f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		-1.2f, 0.5f, 0xFF001736, 0.0f, 0.0f,
+		-1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
 		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
 
 	augmentButtonMesh = AEGfxMeshEnd();
@@ -517,20 +517,25 @@ void Level_1_Init(void)
 	scaleY_level1 = getWinHeight() / 768.f;
 
 	// Defintion of the translation for augment buttons
-	augment1Button_transX = 640.0f * scaleX_level1;
-	augment1Button_transY = 640.0f * scaleY_level1;
-	augment2Button_transX;
-	augment2Button_transY;
-	augment3Button_transX;
-	augment3Button_transY;
-	augment4Button_transX;
-	augment4Button_transY;
+	augment1Button_transX = 0.0f * scaleX_level1;
+	augment1Button_transY = 290.0f * scaleY_level1;
+	augment2Button_transX = 0.0f * scaleX_level1;
+	augment2Button_transY = 205.0f * scaleY_level1;
+	augment3Button_transX = 0.0f * scaleX_level1;
+	augment3Button_transY = 125.0f * scaleY_level1;
+	augment4Button_transX = 0.0f * scaleX_level1;
+	augment4Button_transY = 40.0f * scaleY_level1;
 
 }
 
 
 void Level_1_Update(void)
 {
+	// Initialize cursor coordinates
+	s32 cursorX;
+	s32 cursorY;
+	AEInputGetCursorPosition(&cursorX, &cursorY);
+
 	// Checking for time passed in seconds;
 	timeElapsed += g_dt;
 	if (timeElapsed >= 59.5) {
@@ -549,7 +554,45 @@ void Level_1_Update(void)
 		}
 	}
 
-	printf("\noverlay: %d\n", overlayTransparency);
+	// Augment buttons mid points
+	float augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
+	float augment1Button_midY = (getWinHeight() / 2) - augment1Button_transY;
+
+	float augment2Button_midX = (getWinWidth() / 2.04) + augment2Button_transX;
+	float augment2Button_midY = (getWinHeight() / 2) - augment2Button_transY;
+
+	float augment3Button_midX = (getWinWidth() / 2.04) + augment3Button_transX;
+	float augment3Button_midY = (getWinHeight() / 2) - augment3Button_transY;
+
+	float augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
+	float augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
+
+	if (overlayTransparency == 1) {
+		// Overlay button logic and defintions
+		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
+			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//gGameStateNext = QUIT;
+			printf("Augment 1 ++\n");
+		}
+
+		if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
+			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//gGameStateNext = QUIT;
+			printf("Augment 2 ++\n");
+		}
+
+		if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
+			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//gGameStateNext = QUIT;
+			printf("Augment 3 ++\n");
+		}
+
+		if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
+			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//gGameStateNext = QUIT;
+			printf("Augment 4 ++\n");
+		}
+	}
 
 
 	_deltaTime += g_dt;
@@ -1756,15 +1799,60 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxSetTransparency(overlayTransparency);
 		AEMtx33 scale4 = { 0 };
-		AEMtx33Scale(&scale4, 100.f, 100.f);
+		AEMtx33Scale(&scale4, 34.f, 50.f);
 		AEMtx33 rotate4 = { 0 };
 		AEMtx33Rot(&rotate4, 0.f);
 		AEMtx33 translate4 = { 0 };
-		AEMtx33Trans(&translate4, 125.f, 0.f);
+		AEMtx33Trans(&translate4, augment1Button_transX, augment1Button_transY);
 		AEMtx33 transform4 = { 0 };
 		AEMtx33Concat(&transform4, &rotate4, &scale4);
 		AEMtx33Concat(&transform4, &translate4, &transform4);
 		AEGfxSetTransform(transform4.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale5 = { 0 };
+		AEMtx33Scale(&scale5, 34.f, 50.f);
+		AEMtx33 rotate5 = { 0 };
+		AEMtx33Rot(&rotate5, 0.f);
+		AEMtx33 translate5 = { 0 };
+		AEMtx33Trans(&translate5, augment2Button_transX, augment2Button_transY);
+		AEMtx33 transform5 = { 0 };
+		AEMtx33Concat(&transform5, &rotate5, &scale5);
+		AEMtx33Concat(&transform5, &translate5, &transform5);
+		AEGfxSetTransform(transform5.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale6 = { 0 };
+		AEMtx33Scale(&scale6, 34.f, 50.f);
+		AEMtx33 rotate6 = { 0 };
+		AEMtx33Rot(&rotate6, 0.f);
+		AEMtx33 translate6 = { 0 };
+		AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
+		AEMtx33 transform6 = { 0 };
+		AEMtx33Concat(&transform6, &rotate6, &scale6);
+		AEMtx33Concat(&transform6, &translate6, &transform6);
+		AEGfxSetTransform(transform6.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale7 = { 0 };
+		AEMtx33Scale(&scale7, 34.f, 50.f);
+		AEMtx33 rotate7 = { 0 };
+		AEMtx33Rot(&rotate7, 0.f);
+		AEMtx33 translate7 = { 0 };
+		AEMtx33Trans(&translate7, augment4Button_transX, augment4Button_transY);
+		AEMtx33 transform7 = { 0 };
+		AEMtx33Concat(&transform7, &rotate7, &scale7);
+		AEMtx33Concat(&transform7, &translate7, &transform7);
+		AEGfxSetTransform(transform7.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
 
 		// Rendering texts for overlay
