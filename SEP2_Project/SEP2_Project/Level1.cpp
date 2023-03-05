@@ -8,8 +8,8 @@ int expPercent = 0;
 AEGfxVertexList* ptrMesh = nullptr;
 
 //Background definition
-//AEGfxVertexList* bMesh = nullptr;
-//AEGfxTexture* BGTex;
+AEGfxVertexList* bMesh = nullptr;
+AEVec2 BG = { 0, 0 };
 
 // Pre-definiton for string buffers
 char gdt_buffer[1024]{};
@@ -377,7 +377,7 @@ void Level_1_Load(void)
 	//end Expbar
 
 	//Background
-	/*AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	//start Background
 	AEGfxMeshStart();
 
@@ -391,9 +391,8 @@ void Level_1_Load(void)
 		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	bMesh = AEGfxMeshEnd();
-	BGTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
 	//end Background
-	*/
+	
 }
 
 void Level_1_Init(void)
@@ -665,6 +664,8 @@ void Level_1_Update(void)
 				qInst->position.x -= 5;
 
 		}
+		//Background Offset
+		BG.x -= 0.5f;
 	}
 	
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
@@ -680,8 +681,9 @@ void Level_1_Update(void)
 
 			// Update enemy position with player velocity
 			qInst->position.x += 5;
-
 		}
+		//Background Offset
+		BG.x += 0.5f;
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
@@ -696,8 +698,9 @@ void Level_1_Update(void)
 
 			// Update enemy position with player velocity
 			qInst->position.y += 5;
-
 		}
+		//Background Offset
+		BG.y += 0.5f;
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
@@ -712,8 +715,9 @@ void Level_1_Update(void)
 
 			// Update enemy position with player velocity
 			qInst->position.y -= 5;
-
 		}
+		//Background Offset
+		BG.y -= 0.5;
 	}
 
 
@@ -1467,31 +1471,31 @@ void Level_1_Draw(void)
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
-	//AEGfxTexture* BgroundTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
-	/*
+
+	//Background
+	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+	
 	//Draw Background
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(BGTex, 0, 0);
+	AEGfxTextureSet(BgroundTexB, 0, 0);
 	AEMtx33 scale0 = { 0 };
-	AEMtx33Scale(&scale0, 1366.f, 1000.f);
+	AEMtx33Scale(&scale0, 1366*1.5, 1000*1.5);
 	AEMtx33 rotate0 = { 0 };
 	AEMtx33Rot(&rotate0, 0.f);
 	AEMtx33 translate0 = { 0 };
-	AEMtx33Trans(&translate0, 0, 0);
+	AEMtx33Trans(&translate0, BG.x+1366/2, BG.y);
 	AEMtx33 transform0 = { 0 };
 	AEMtx33Concat(&transform0, &rotate0, &scale0);
 	AEMtx33Concat(&transform0, &translate0, &transform0);
 	AEGfxSetTransform(transform0.m);
 	AEGfxMeshDraw(bMesh, AE_GFX_MDM_TRIANGLES);
 	//Finish Background draw
-	*/
+	
 
 	//Exp bar start
-	//DOING IT THIS WAY CAUSES LAG/STUTTERING, TO BE FIXED
-	
 	AEGfxTexture* Expbar0 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp0.png");
 	AEGfxTexture* Expbar1 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp1.png");
 	AEGfxTexture* Expbar2 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp2.png");
@@ -1619,6 +1623,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar7);
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
+	AEGfxTextureUnload(BgroundTexB);
 
 	//// Rendering texts for the screen	
 
