@@ -1921,7 +1921,7 @@ void Level_1_Draw(void)
 		sprintf_s(augment2_buffer, "Augment 2");
 		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		/*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
