@@ -28,6 +28,9 @@ char augment2_buffer[1024]{};
 char augment3_buffer[1024]{};
 char augment4_buffer[1024]{};
 char augmentAdd_buffer[1024]{};
+char skillpoint_buffer[1024]{};
+char strbuffer1[1024]{};
+char strbuffer2[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
@@ -56,10 +59,17 @@ float textWidth{}, textHeight{};
 float timeElapsed = 0.f;
 float minElapsed = 0.f;
 
-int MaxHealth;
-int OrbCap = 30, OrbCounter = 0;
-int spawnCheck = 1;
+int MaxHealth; // Player max hp 
+int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
+int spawnCheck = 1; // Boss Spawn 
 int MaxBossHealth;
+
+int Augment1Level = 1;
+int Augment2Level = 0;
+float Augment1CD = 1.5f;
+float Augment2Range = 1;
+int Aug2CreateCheck = 0;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -499,8 +509,6 @@ void Level_1_Init(void)
 	AE_ASSERT(_Augment_One);
 
 	//8
-	_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
-	AE_ASSERT(_Augment_Two);
 
 	
 
@@ -569,27 +577,29 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 1 ++\n");
+			if (SkillPoint != 0 && Augment1Level!=4) {
+				SkillPoint--;
+				Augment1CD -= 0.3;
+				Augment1Level++;
+			}
 		}
 
 		if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 2 ++\n");
-		}
-
-		if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
-			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
-			printf("Augment 3 ++\n");
-		}
-
-		if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
-			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
-			printf("Augment 4 ++\n");
+			if (SkillPoint != 0 && Augment1Level != 4) {
+				SkillPoint--;
+				Augment2Range += 0.3;
+				Augment2Level++;
+			}
 		}
 	}
-
+	if (Augment2Level == 1 && Aug2CreateCheck == 0) {
+		_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
+		AE_ASSERT(_Augment_Two);
+		Aug2CreateCheck = 1;
+	}
 
 	_deltaTime += g_dt;
 	_deltaTime_State += g_dt;
@@ -773,8 +783,14 @@ void Level_1_Update(void)
 			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
 			if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
 				continue;
-			if ((ObjInstance1->pObject->type == TYPE_ENEMY)|| (ObjInstance1->pObject->type == TYPE_EXPERIENCE))
+			if ((ObjInstance1->pObject->type == TYPE_ENEMY)) {
 				gameObjInstDestroy(ObjInstance1);
+
+			}
+			else if ((ObjInstance1->pObject->type == TYPE_EXPERIENCE)) {
+				gameObjInstDestroy(ObjInstance1);
+			}
+
 		}
 	}
 
@@ -920,10 +936,10 @@ void Level_1_Update(void)
 					qInst->position.x = pInst->position.x;
 					qInst->position.y = pInst->position.y + 75.0f;
 
-					AUGMENT_1_FIRE_INTERVAL = 1.5f;
+					AUGMENT_1_FIRE_INTERVAL = Augment1CD;
 
 					AUGMENT_1_FIRE_TIMER += g_dt;
-					if (AUGMENT_1_FIRE_TIMER >= AUGMENT_1_FIRE_INTERVAL)
+					if (AUGMENT_1_FIRE_TIMER >= Augment1CD)
 					{
 						// Get the mouse cursor position
 						AEInputGetCursorPosition(&mouseX, &mouseY);
@@ -949,7 +965,7 @@ void Level_1_Update(void)
 
 				if (qInst->pObject->type == TYPE_AUGMENT2)
 				{
-					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug), (f32)sin(_rotation_Aug) };
+					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug) * Augment2Range, (f32)sin(_rotation_Aug)*Augment2Range };
 					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f);
 					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
@@ -1535,7 +1551,7 @@ void Level_1_Update(void)
 									}
 								}
 							}
-							else {
+							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
 								ObjInstance1->health--;
 								if (ObjInstance1->health <= 0)
 								{
@@ -1905,37 +1921,6 @@ void Level_1_Draw(void)
 		AEMtx33Concat(&transform5, &translate5, &transform5);
 		AEGfxSetTransform(transform5.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
-
-		//AEGfxTextureSet(NULL, 0, 0);
-		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		//AEGfxSetTransparency(overlayTransparency);
-		//AEMtx33 scale6 = { 0 };
-		//AEMtx33Scale(&scale6, 34.f, 50.f);
-		//AEMtx33 rotate6 = { 0 };
-		//AEMtx33Rot(&rotate6, 0.f);
-		//AEMtx33 translate6 = { 0 };
-		//AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
-		//AEMtx33 transform6 = { 0 };
-		//AEMtx33Concat(&transform6, &rotate6, &scale6);
-		//AEMtx33Concat(&transform6, &translate6, &transform6);
-		//AEGfxSetTransform(transform6.m);
-		//AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
-
-		//AEGfxTextureSet(NULL, 0, 0);
-		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		//AEGfxSetTransparency(overlayTransparency);
-		//AEMtx33 scale7 = { 0 };
-		//AEMtx33Scale(&scale7, 34.f, 50.f);
-		//AEMtx33 rotate7 = { 0 };
-		//AEMtx33Rot(&rotate7, 0.f);
-		//AEMtx33 translate7 = { 0 };
-		//AEMtx33Trans(&translate7, augment4Button_transX, augment4Button_transY);
-		//AEMtx33 transform7 = { 0 };
-		//AEMtx33Concat(&transform7, &rotate7, &scale7);
-		//AEMtx33Concat(&transform7, &translate7, &transform7);
-		//AEGfxSetTransform(transform7.m);
-		//AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
-
 		// Rendering texts for overlay
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1950,17 +1935,11 @@ void Level_1_Draw(void)
 		sprintf_s(augment2_buffer, "Augment 2");
 		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		/*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment3_buffer, "Augment 3");
-		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (2860.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment4_buffer, "Augment 4");
-		AEGfxPrint(fontID, augment4_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (12337.3f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);*/
+		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
+		AEGfxPrint(fontID, skillpoint_buffer, -0.5f, -0.8f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1973,8 +1952,27 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1680.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
-
 		// Overlay end
+
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (Augment1Level != 4)
+			sprintf_s(strbuffer1, "LEVEL %d", Augment1Level);
+		if (Augment1Level == 4)
+			sprintf_s(strbuffer1, "MAX LEVEL");
+		AEGfxPrint(fontID, strbuffer1, 0.075f, 0.725f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (Augment2Level != 4)
+			sprintf_s(strbuffer2, "LEVEL %d", Augment2Level);
+		if (Augment2Level == 4)
+			sprintf_s(strbuffer2, "MAX LEVEL");
+		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 	}
 
 	// Rendering texts for the screen	
@@ -2023,6 +2021,14 @@ void Level_1_Unload(void)
 	}
 	AEGfxMeshFree(ptrMesh);
 	//AEGfxMeshFree(bMesh);
+	Augment1Level = 1;
+	Augment2Level = 0;
+	Augment1CD = 1.5f;
+	Augment2Range = 1;
+	Aug2CreateCheck = 0;
 	timeElapsed = 0;
 	minElapsed = 0;
+	spawnCheck = 1;
+	enemyCount = 0;
+	OrbCounter = 0;
 }
