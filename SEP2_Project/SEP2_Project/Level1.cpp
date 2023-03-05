@@ -42,7 +42,7 @@ double augment4Button_transY;
 
 
 // Pre-definition of overlay transparency
-float overlayTransparency = 0.5f;
+float overlayTransparency = 0.0f;
 
 // Pre-definition of scaling
 double scaleX_level1;

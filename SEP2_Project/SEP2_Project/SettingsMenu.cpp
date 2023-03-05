@@ -104,7 +104,7 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions2_buffer, "Press 'O' for augments.");
+    sprintf_s(instructions2_buffer, "Right click for augments.");
     AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (2000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
