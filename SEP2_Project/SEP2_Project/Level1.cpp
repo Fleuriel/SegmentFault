@@ -1697,20 +1697,20 @@ void Level_1_Draw(void)
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 
-	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\player.png");
-	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
-	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\drone.png");
-	AEGfxTexture* augment2Tex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
-	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Boss.png");
-	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
-	AEGfxTexture* enemyTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\enemy.png");
-	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
-	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
-	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
-	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player.png");
+	AEGfxTexture* bulletTex = AEGfxTextureLoad("Assets\\Assets\\YellowTexture.png");
+	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("Assets\\Assets\\drone.png");
+	AEGfxTexture* augment2Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
+	AEGfxTexture* bossTex = AEGfxTextureLoad("Assets\\Assets\\Boss.png");
+	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
+	AEGfxTexture* enemyTex = AEGfxTextureLoad("Assets\\Assets\\enemy.png");
+	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
+	AEGfxTexture* spawnerTex = AEGfxTextureLoad("Assets\\Assets\\TrollFace.png");
+	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
+	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("Assets\\Assets\\Orb.png");
 
 	//Background
-	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
 	
 	//Draw Background
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -1733,16 +1733,16 @@ void Level_1_Draw(void)
 	
 
 	//Exp bar start
-	AEGfxTexture* Expbar0 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp0.png");
-	AEGfxTexture* Expbar1 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp1.png");
-	AEGfxTexture* Expbar2 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp2.png");
-	AEGfxTexture* Expbar3 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp3.png");
-	AEGfxTexture* Expbar4 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp4.png");
-	AEGfxTexture* Expbar5 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp5.png");
-	AEGfxTexture* Expbar6 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp6.png");
-	AEGfxTexture* Expbar7 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp7.png");
-	AEGfxTexture* Expbar8 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp8.png");
-	AEGfxTexture* Expbar9 = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Expbar\\xp9.png");
+	AEGfxTexture* Expbar0 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png");
+	AEGfxTexture* Expbar1 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png");
+	AEGfxTexture* Expbar2 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png");
+	AEGfxTexture* Expbar3 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png");
+	AEGfxTexture* Expbar4 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png");
+	AEGfxTexture* Expbar5 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png");
+	AEGfxTexture* Expbar6 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png");
+	AEGfxTexture* Expbar7 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png");
+	AEGfxTexture* Expbar8 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png");
+	AEGfxTexture* Expbar9 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png");
 
 	
 	
