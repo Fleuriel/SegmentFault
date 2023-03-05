@@ -27,6 +27,7 @@ char augment1_buffer[1024]{};
 char augment2_buffer[1024]{};
 char augment3_buffer[1024]{};
 char augment4_buffer[1024]{};
+char augmentAdd_buffer[1024]{};
 char skillpoint_buffer[1024]{};
 char strbuffer1[1024]{};
 char strbuffer2[1024]{};
@@ -68,6 +69,7 @@ int Augment2Level = 0;
 float Augment1CD = 1.5f;
 float Augment2Range = 1;
 int Aug2CreateCheck = 0;
+
 void Level_1_Load(void)
 {
 	std::cout << "Level1_Load\n";
@@ -1926,6 +1928,18 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
 		AEGfxPrint(fontID, skillpoint_buffer, -0.5f, -0.8f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1130.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1680.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 		// Overlay end
 
 
