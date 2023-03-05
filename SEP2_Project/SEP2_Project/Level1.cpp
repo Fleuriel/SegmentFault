@@ -878,8 +878,8 @@ void Level_1_Update(void)
 						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, 0.0f);
 
 						//std::cout << bulletInst->pObject << '\n';
-
-						AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
+						if(bulletInst!=nullptr)
+							AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
 
 						// Reset the fire timer
 						AUGMENT_1_FIRE_TIMER = 0.0f;
