@@ -290,7 +290,7 @@ void Level_1_Load(void)
 
 
 
-
+	/*
 	if (inputFileStream.good())
 	{
 		std::cout << "File Exist\n";
@@ -365,6 +365,7 @@ void Level_1_Load(void)
 		std::cerr << "Error: \n" ;
 
 	}
+	*/
 
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -659,7 +660,6 @@ void Level_1_Update(void)
 	//KeyDown
 	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
 	{
-		_Player->position.x += 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -678,7 +678,6 @@ void Level_1_Update(void)
 	
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
-		_Player->position.x -= 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -695,7 +694,6 @@ void Level_1_Update(void)
 	}
 	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
 	{
-		_Player->position.y -= 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
@@ -712,7 +710,6 @@ void Level_1_Update(void)
 	}
 	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
 	{
-		_Player->position.y += 5;
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 
