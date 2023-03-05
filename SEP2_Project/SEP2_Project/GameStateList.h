@@ -18,6 +18,7 @@ enum
 	SETTINGS,
 	CREDITS,
 	AUGMENTS,
+	GAMEOVER,
 	QUIT
 
 };

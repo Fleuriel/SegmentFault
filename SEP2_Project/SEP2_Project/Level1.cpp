@@ -11,13 +11,17 @@ AEGfxVertexList* ptrMesh = nullptr;
 AEGfxVertexList* bMesh = nullptr;
 AEGfxTexture* BGTex;
 
-// Pre-definiton for printing g_dt
+// Pre-definiton for string buffers
 char gdt_buffer[1024]{};
 
 
 // Pre-definition of scaling
 double scaleX_level1;
 double scaleY_level1;
+
+//// Pre-definition of time
+//float timeElapsed = 0.f;
+//float minElapsed = 0.f;
 
 void Level_1_Load(void)
 {
@@ -451,6 +455,12 @@ void Level_1_Init(void)
 
 void Level_1_Update(void)
 {
+	// Checking for time passed in seconds;
+	//timeElapsed += g_dt;
+	//if (timeElapsed >= 59.5) {
+	//	minElapsed++;
+	//	timeElapsed = 0;
+	//}
 
 	_deltaTime += g_dt;
 	_deltaTime_State += g_dt;
@@ -1599,12 +1609,16 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(ExpOrbTex);
 
-	// Rendering texts for the screen
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(gdt_buffer, "%f", g_dt);
-	AEGfxPrint(fontID, gdt_buffer, (getWinWidth() / (-2500.f * scaleX_level1)), (getWinHeight() / (-1350.f * scaleY_level1)), 1.0f * scaleX_level1, 255.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+	//// Rendering texts for the screen
+	//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	//AEGfxTextureSet(NULL, 0, 0);
+	//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	//if (timeElapsed >= 59.5)
+	//	sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
+	//else
+	//	sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
+	//printf(gdt_buffer);
+	//AEGfxPrint(fontID, gdt_buffer, (getWinWidth() / (-9800.f * scaleX_level1)), (getWinHeight() / (1550.f * scaleY_level1)), 1.0f * scaleX_level1, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 
 }

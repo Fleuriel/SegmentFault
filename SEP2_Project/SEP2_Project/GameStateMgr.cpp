@@ -96,6 +96,14 @@ void GameStateMgrUpdate()
 		GameStateFree = Augments_Free;
 		GameStateUnload = Augments_Unload;
 		break;
+	case GAMEOVER:
+		GameStateLoad = GameOver_Load;
+		GameStateInit = GameOver_Init;
+		GameStateUpdate = GameOver_Update;
+		GameStateDraw = GameOver_Draw;
+		GameStateFree = GameOver_Free;
+		GameStateUnload = GameOver_Unload;
+		break;
 
 	default:
 		AE_FATAL_ERROR("invalid state!!");

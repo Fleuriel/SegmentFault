@@ -24,6 +24,9 @@ double augmentsBackbutton_transY;
 double scaleX_augments;
 double scaleY_augments;
 
+// Pre-definition of time
+float timeElapsed = 0.f;
+float minElapsed = 0.f;
 
 void Augments_Load(void) 
 {
@@ -94,12 +97,12 @@ void Augments_Draw(void)
     AEGfxMeshDraw(pMeshAugments, AE_GFX_MDM_TRIANGLES);
 
     // Rendering texts for the screen
-    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    //AEGfxTextureSet(NULL, 0, 0);
-    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    //sprintf_s(augment1_buffer, "Augment 1");
-    //// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    //AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(augment1_buffer, "Augment 1");
+    // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);

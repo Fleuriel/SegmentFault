@@ -20,6 +20,7 @@
 #include "SettingsMenu.h"
 #include "Augments.h"
 #include "Credits.h"
+#include "GameOverMenu.h"
 
 #include "Utilities.h"
 

@@ -64,7 +64,7 @@ void Pause_Init(void)
     resumeButton_transX = 300.f * scaleX_pause;
     resumeButton_transY = -200.f * scaleY_pause;
 
-    // Resume button translation
+    // Augment button translation
     augmentButton_transX = 0.f * scaleX_pause;
     augmentButton_transY = 200.f * scaleY_pause;
 
