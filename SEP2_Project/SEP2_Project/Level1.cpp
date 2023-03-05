@@ -27,6 +27,7 @@ char augment1_buffer[1024]{};
 char augment2_buffer[1024]{};
 char augment3_buffer[1024]{};
 char augment4_buffer[1024]{};
+char augmentAdd_buffer[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
@@ -41,7 +42,7 @@ double augment4Button_transY;
 
 
 // Pre-definition of overlay transparency
-float overlayTransparency = 1;
+float overlayTransparency = 0;
 
 // Pre-definition of scaling
 double scaleX_level1;
@@ -1893,35 +1894,35 @@ void Level_1_Draw(void)
 		AEGfxSetTransform(transform5.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(overlayTransparency);
-		AEMtx33 scale6 = { 0 };
-		AEMtx33Scale(&scale6, 34.f, 50.f);
-		AEMtx33 rotate6 = { 0 };
-		AEMtx33Rot(&rotate6, 0.f);
-		AEMtx33 translate6 = { 0 };
-		AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
-		AEMtx33 transform6 = { 0 };
-		AEMtx33Concat(&transform6, &rotate6, &scale6);
-		AEMtx33Concat(&transform6, &translate6, &transform6);
-		AEGfxSetTransform(transform6.m);
-		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+		//AEGfxTextureSet(NULL, 0, 0);
+		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		//AEGfxSetTransparency(overlayTransparency);
+		//AEMtx33 scale6 = { 0 };
+		//AEMtx33Scale(&scale6, 34.f, 50.f);
+		//AEMtx33 rotate6 = { 0 };
+		//AEMtx33Rot(&rotate6, 0.f);
+		//AEMtx33 translate6 = { 0 };
+		//AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
+		//AEMtx33 transform6 = { 0 };
+		//AEMtx33Concat(&transform6, &rotate6, &scale6);
+		//AEMtx33Concat(&transform6, &translate6, &transform6);
+		//AEGfxSetTransform(transform6.m);
+		//AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
 
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(overlayTransparency);
-		AEMtx33 scale7 = { 0 };
-		AEMtx33Scale(&scale7, 34.f, 50.f);
-		AEMtx33 rotate7 = { 0 };
-		AEMtx33Rot(&rotate7, 0.f);
-		AEMtx33 translate7 = { 0 };
-		AEMtx33Trans(&translate7, augment4Button_transX, augment4Button_transY);
-		AEMtx33 transform7 = { 0 };
-		AEMtx33Concat(&transform7, &rotate7, &scale7);
-		AEMtx33Concat(&transform7, &translate7, &transform7);
-		AEGfxSetTransform(transform7.m);
-		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+		//AEGfxTextureSet(NULL, 0, 0);
+		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		//AEGfxSetTransparency(overlayTransparency);
+		//AEMtx33 scale7 = { 0 };
+		//AEMtx33Scale(&scale7, 34.f, 50.f);
+		//AEMtx33 rotate7 = { 0 };
+		//AEMtx33Rot(&rotate7, 0.f);
+		//AEMtx33 translate7 = { 0 };
+		//AEMtx33Trans(&translate7, augment4Button_transX, augment4Button_transY);
+		//AEMtx33 transform7 = { 0 };
+		//AEMtx33Concat(&transform7, &rotate7, &scale7);
+		//AEMtx33Concat(&transform7, &translate7, &transform7);
+		//AEGfxSetTransform(transform7.m);
+		//AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
 
 		// Rendering texts for overlay
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1937,7 +1938,7 @@ void Level_1_Draw(void)
 		sprintf_s(augment2_buffer, "Augment 2");
 		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		/*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment3_buffer, "Augment 3");
@@ -1946,8 +1947,21 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment3_buffer, "Augment 4");
-		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (12337.3f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		sprintf_s(augment4_buffer, "Augment 4");
+		AEGfxPrint(fontID, augment4_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (12337.3f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);*/
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1130.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1680.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
 		// Overlay end
 	}
 
