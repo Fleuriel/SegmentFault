@@ -1539,7 +1539,7 @@ void Level_1_Update(void)
 									}
 								}
 							}
-							else {
+							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
 								ObjInstance1->health--;
 								if (ObjInstance1->health <= 0)
 								{
