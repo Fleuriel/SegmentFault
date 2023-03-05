@@ -590,7 +590,7 @@ void Level_1_Update(void)
 			printf("Augment 2 ++\n");
 			if (SkillPoint != 0 && Augment2Level != 4) {
 				SkillPoint--;
-				Augment2Range += 0.3;
+				Augment2Range += 0.5;
 				Augment2Level++;
 			}
 		}
@@ -965,9 +965,9 @@ void Level_1_Update(void)
 
 				if (qInst->pObject->type == TYPE_AUGMENT2)
 				{
-					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug) * Augment2Range, (f32)sin(_rotation_Aug)*Augment2Range };
-					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f);
-					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
+					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug)* Augment2Range, (f32)sin(_rotation_Aug)* Augment2Range };
+					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f );
+					AEVec2Add(&qInst->position, &pInst->position , &AUGMENT_2_DIRECTION);
 				}
 
 				if (qInst->pObject->type == TYPE_AUGMENT3)
