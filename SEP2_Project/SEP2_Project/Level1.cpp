@@ -571,10 +571,6 @@ void Level_1_Update(void)
 		_deltaTime_State = 0.0f;
 	}
 
-
-
-
-
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1)
 	{
@@ -718,6 +714,7 @@ void Level_1_Update(void)
 
 		}
 	}
+
 
 
 
@@ -1595,6 +1592,7 @@ void Level_1_Draw(void)
 	if (onValueChange) {
 		if (_Player->health == 0) {
 			std::cout << "GAME OVER \n";
+			gGameStateNext = GAMEOVER;
 		}
 		onValueChange = false;
 	}
