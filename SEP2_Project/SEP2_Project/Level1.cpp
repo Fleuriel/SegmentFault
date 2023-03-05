@@ -588,7 +588,7 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 2 ++\n");
-			if (SkillPoint != 0 && Augment1Level != 4) {
+			if (SkillPoint != 0 && Augment2Level != 4) {
 				SkillPoint--;
 				Augment2Range += 0.3;
 				Augment2Level++;
@@ -1700,6 +1700,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* playerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\player.png");
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\drone.png");
+	AEGfxTexture* augment2Tex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
 	AEGfxTexture* bossTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Boss.png");
 	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\circle-512.png");
 	AEGfxTexture* enemyTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\ling.png");
@@ -1808,9 +1809,13 @@ void Level_1_Draw(void)
 		{
 			texture = bulletTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT1 || pInst->pObject->type == TYPE_AUGMENT2)
+		else if (pInst->pObject->type == TYPE_AUGMENT1)
 		{
 			texture = augmentGunTex;
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT2)
+		{
+			texture = augment2Tex;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -1853,6 +1858,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(playerTex);
 	AEGfxTextureUnload(bulletTex);
 	AEGfxTextureUnload(augmentGunTex);
+	AEGfxTextureUnload(augment2Tex);
 	AEGfxTextureUnload(bossTex);
 	AEGfxTextureUnload(bossBullet1Tex);
 	AEGfxTextureUnload(enemyTex);
@@ -1970,7 +1976,7 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		if (Augment2Level != 4)
 			sprintf_s(strbuffer2, "LEVEL %d", Augment2Level);
-		if (Augment2Level == 4)
+		if (Augment2Level >= 4)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 	}
