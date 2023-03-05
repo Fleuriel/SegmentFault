@@ -24,10 +24,6 @@ double augmentsBackbutton_transY;
 double scaleX_augments;
 double scaleY_augments;
 
-// Pre-definition of time
-float timeElapsed = 0.f;
-float minElapsed = 0.f;
-
 void Augments_Load(void) 
 {
     AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);  // conversion -> rgb value/255
@@ -71,11 +67,7 @@ void Augments_Update(void)
         gGameStateNext = PAUSE;
         printf("Goto MAIN MENU\n");
     }
-    timeElapsed += g_dt;
-    if (timeElapsed >= 59.5) {
-        minElapsed++;
-        timeElapsed = 0;
-    }
+
 }
 
 void Augments_Draw(void) 
@@ -125,16 +117,6 @@ void Augments_Draw(void)
     // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
     AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (11000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    // Rendering texts for the screen
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    if(timeElapsed>=9.5)
-        sprintf_s(gdt1_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
-    else
-        sprintf_s(gdt1_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
-    printf(gdt1_buffer);
-    AEGfxPrint(fontID, gdt1_buffer, (getWinWidth() / (-2500.f * scaleX_augments)), (getWinHeight() / (-1350.f * scaleY_augments)), 1.0f * scaleX_augments, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 }
 void Augments_Free(void) 
 {
