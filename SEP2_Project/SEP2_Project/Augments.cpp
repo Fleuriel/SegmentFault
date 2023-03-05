@@ -5,12 +5,12 @@
 AEGfxVertexList* pMeshAugments = nullptr;
 
 // Pre-defintion
-char augment1_buffer[1024]{};
-char augment2_buffer[1024]{};
-char augment3_buffer[1024]{};
-char augment4_buffer[1024]{};
-char gdt1_buffer[1024]{};
-float augments_textWidth{}, augments_textHeight{};
+//char augment1_buffer[1024]{};
+//char augment2_buffer[1024]{};
+//char augment3_buffer[1024]{};
+//char augment4_buffer[1024]{};
+//char gdt1_buffer[1024]{};
+//float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
 //double quitButton_transX;
@@ -23,10 +23,6 @@ double augmentsBackbutton_transY;
 // Pre-definition of scaling
 double scaleX_augments;
 double scaleY_augments;
-
-// Pre-definition of time
-float timeElapsed = 0.f;
-float minElapsed = 0.f;
 
 void Augments_Load(void) 
 {
@@ -71,11 +67,7 @@ void Augments_Update(void)
         gGameStateNext = PAUSE;
         printf("Goto MAIN MENU\n");
     }
-    timeElapsed += g_dt;
-    if (timeElapsed >= 59.5) {
-        minElapsed++;
-        timeElapsed = 0;
-    }
+
 }
 
 void Augments_Draw(void) 
@@ -96,45 +88,35 @@ void Augments_Draw(void)
     AEGfxSetTransform(transform.m);
     AEGfxMeshDraw(pMeshAugments, AE_GFX_MDM_TRIANGLES);
 
-    // Rendering texts for the screen
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(augment1_buffer, "Augment 1");
-    // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //// Rendering texts for the screen
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(augment1_buffer, "Augment 1");
+    //// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    //AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(augment2_buffer, "Augment 2");
-    // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1450.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(augment2_buffer, "Augment 2");
+    //// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    //AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (1450.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(augment3_buffer, "Augment 3");
-    // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (2550.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(augment3_buffer, "Augment 3");
+    //// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    //AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (2550.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(augment3_buffer, "Augment 4");
-    // AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (11000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(augment3_buffer, "Augment 4");
+    //// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
+    //AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2000.f * scaleX_augments)), (getWinHeight() / (11000.f * scaleY_augments)), 0.6f * scaleX_augments, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
-    // Rendering texts for the screen
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    if(timeElapsed>=9.5)
-        sprintf_s(gdt1_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
-    else
-        sprintf_s(gdt1_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
-    printf(gdt1_buffer);
-    AEGfxPrint(fontID, gdt1_buffer, (getWinWidth() / (-2500.f * scaleX_augments)), (getWinHeight() / (-1350.f * scaleY_augments)), 1.0f * scaleX_augments, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 }
 void Augments_Free(void) 
 {
