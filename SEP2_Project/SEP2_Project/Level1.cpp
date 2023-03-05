@@ -502,9 +502,11 @@ void Level_1_Init(void)
 	_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 	AE_ASSERT(_Augment_Two);
 
+	
+
 	//9
-	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
-	//AE_ASSERT(_Augment_Three);
+	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
+	AE_ASSERT(_Augment_Three);
 
 	// Gets the scale of 1366x768
 	scaleX_level1 = getWinWidth() / 1366.f;
@@ -873,26 +875,26 @@ void Level_1_Update(void)
 		std::cout << "Once\n";
 	}
 
-	if (AEInputCheckTriggered(AEVK_1))
-	{
-		bossPhase = TYPE_BHELL1;
-	}
-	if (AEInputCheckTriggered(AEVK_2))
-	{
-		bossPhase = TYPE_BHELL2;
-	}
-	if (AEInputCheckTriggered(AEVK_3))
-	{
-		bossPhase = TYPE_BHELL3;
-	}
-	if (AEInputCheckTriggered(AEVK_4))
-	{
-		bossPhase = TYPE_BHELL4;
-	}
-	if (AEInputCheckTriggered(AEVK_5))
-	{
-		bossPhase = TYPE_BOWAP;
-	}
+	//if (AEInputCheckTriggered(AEVK_1))
+	//{
+	//	bossPhase = TYPE_BHELL1;
+	//}
+	//if (AEInputCheckTriggered(AEVK_2))
+	//{
+	//	bossPhase = TYPE_BHELL2;
+	//}
+	//if (AEInputCheckTriggered(AEVK_3))
+	//{
+	//	bossPhase = TYPE_BHELL3;
+	//}
+	//if (AEInputCheckTriggered(AEVK_4))
+	//{
+	//	bossPhase = TYPE_BHELL4;
+	//}
+	//if (AEInputCheckTriggered(AEVK_5))
+	//{
+	//	bossPhase = TYPE_BOWAP;
+	//}
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -952,14 +954,24 @@ void Level_1_Update(void)
 					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
 
-				//if (qInst->pObject->type == TYPE_AUGMENT3)
-				//{
-				//
-				//	AUGMENT_3_FIRE_TIMER = 0.0f;
-				//	AUGMENT_3_FIRE_INTERVAL = 0.0f;
-				//
-				//
-				//}
+				if (qInst->pObject->type == TYPE_AUGMENT3)
+				{
+				
+					AUGMENT_3_FIRE_TIMER = 0.0f;
+					AUGMENT_3_FIRE_INTERVAL = 1.0f;
+					
+					if (AUGMENT_3_FIRE_TIMER > AUGMENT_3_FIRE_INTERVAL)
+					{
+						static float delayAug3 = 0.0f;
+						delayAug3 += g_dt;
+
+						_Augment_Three->showTexture = false;
+					}
+
+				//	GameObjInstances* slashInst = gameObjInstCreate(TYPE_AUGMENT3, BULLET_SIZE * 10, &pInst->position, 0, 0.0f);
+				//	std::cout << "True\n";
+				
+				}
 
 			}
 		}
