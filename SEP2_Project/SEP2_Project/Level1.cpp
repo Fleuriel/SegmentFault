@@ -620,6 +620,96 @@ void Level_1_Update(void)
 
 
 
+	//SAVE.....
+	//if (AEInputCheckTriggered(AEVK_P) && _deltaTime_State >= 1.5f)
+	//{
+	//	std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\save.txt" };
+	//	if (outputStream.is_open())
+	//	{
+	//		std::cout << "Current GameObjects\n";
+	//		for (const auto& gameObjInstance : sGameObjInstList)
+	//		{
+	//			if (gameObjInstance.flag == 0 &&
+	//				gameObjInstance.scale.x == 0 &&
+	//				gameObjInstance.scale.y == 0 &&
+	//				gameObjInstance.position.x == 0 &&
+	//				gameObjInstance.position.y == 0 &&
+	//				gameObjInstance.velocity.x == 0 &&
+	//				gameObjInstance.velocity.y == 0 &&
+	//				gameObjInstance.direction == 0 &&
+	//				gameObjInstance.boundingBox.min.x == 0 &&
+	//				gameObjInstance.boundingBox.min.y == 0 &&
+	//				gameObjInstance.boundingBox.max.x == 0 &&
+	//				gameObjInstance.boundingBox.max.y == 0 &&
+	//				gameObjInstance.health == 0 &&
+	//				gameObjInstance.showTexture == false &&
+	//				gameObjInstance.isInvincible == false &&
+	//				gameObjInstance.iFrame == 0.0)
+	//			{
+	//				continue; // Skip this iteration of the loop
+	//			}
+	//			else
+	//			{
+	//				if (gameObjInstance.pObject != nullptr)
+	//				{
+	//					outputStream
+	//						<< gameObjInstance.pObject->type << " "
+	//						<< gameObjInstance.flag << " "
+	//						<< gameObjInstance.scale.x << " "
+	//						<< gameObjInstance.scale.y << " "
+	//						<< gameObjInstance.position.x << " "
+	//						<< gameObjInstance.position.y << " "
+	//						<< gameObjInstance.velocity.x << " "
+	//						<< gameObjInstance.velocity.y << " "
+	//						<< gameObjInstance.direction << " "
+	//						<< gameObjInstance.boundingBox.min.x << " "
+	//						<< gameObjInstance.boundingBox.min.y << " "
+	//						<< gameObjInstance.boundingBox.max.x << " "
+	//						<< gameObjInstance.boundingBox.max.y << " "
+	//						<< gameObjInstance.transform.m << " "
+	//						<< gameObjInstance.health << " "
+	//						<< gameObjInstance.showTexture << " "
+	//						<< gameObjInstance.isInvincible << " "
+	//						<< gameObjInstance.iFrame
+	//						<< "\n";
+	//				}
+	//			}
+	//		}
+
+
+	//		outputStream << "enemyInstances Positions...\n";
+	//		for (const auto& enemyInstance : _enemyList) {
+	//			outputStream << enemyInstance->flag << " "
+	//				<< enemyInstance->scale.x << " "
+	//				<< enemyInstance->scale.y << " "
+	//				<< enemyInstance->position.x << " "
+	//				<< enemyInstance->position.y << " "
+	//				<< enemyInstance->velocity.x << " "
+	//				<< enemyInstance->velocity.y << " "
+	//				<< enemyInstance->direction << " "
+	//				<< enemyInstance->boundingBox.min.x << " "
+	//				<< enemyInstance->boundingBox.min.y << " "
+	//				<< enemyInstance->boundingBox.max.x << " "
+	//				<< enemyInstance->boundingBox.max.y << " "
+	//				<< enemyInstance->transform.m << " "
+	//				<< enemyInstance->health << " "
+	//				<< enemyInstance->showTexture << " "
+	//				<< enemyInstance->isInvincible << " "
+	//				<< enemyInstance->iFrame
+	//				<< "\n";
+	//		}
+	//		outputStream << "Player Experience and Level...\n";
+	//		outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
+	//	}
+
+	//	outputStream.close();
+
+
+
+	//	gGameStateNext = PAUSE;
+	//	_deltaTime_State = 0.0f;
+	//}
+
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1 && enemyCount<50 && minElapsed < 2)
 	{
@@ -1617,7 +1707,6 @@ void Level_1_Draw(void)
 	AEGfxTexture* spawnerTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\TrollFace.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Invisible.png");
 	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Orb.png");
-	AEGfxTexture* rotatingball = AEGfxTextureLoad("..\\..\\Assets\\Assets\\blackball.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
@@ -1719,13 +1808,9 @@ void Level_1_Draw(void)
 		{
 			texture = bulletTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT1)
+		else if (pInst->pObject->type == TYPE_AUGMENT1 || pInst->pObject->type == TYPE_AUGMENT2)
 		{
 			texture = augmentGunTex;
-		}
-		else if (pInst->pObject->type == TYPE_AUGMENT2)
-		{
-			texture = rotatingball;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -1786,7 +1871,6 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
 	AEGfxTextureUnload(BgroundTexB);
-	AEGfxTextureUnload(rotatingball);
 
 	// Rendering texts for the screen	
 
