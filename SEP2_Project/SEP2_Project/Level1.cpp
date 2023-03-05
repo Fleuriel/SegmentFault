@@ -1336,11 +1336,6 @@ void Level_1_Update(void)
 		AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
 		AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
 		AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
-
-		AEVec2 velocity{};
-		AEVec2Scale(&velocity, &ObjInstance2->velocity, (float)AEFrameRateControllerGetFrameTime());
-		//--Positions of the instances are updated here with the already computed velocity(above)
-		AEVec2Add(&ObjInstance2->position, &ObjInstance2->position, &velocity);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
