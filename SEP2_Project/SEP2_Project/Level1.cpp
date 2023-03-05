@@ -1,5 +1,7 @@
 #include "Main.h"
 #include "GameObjects.h"
+#include <iostream>
+#include <cstdio>
 
 static bool onValueChange = true;
 int reqExp = 15;
@@ -18,6 +20,10 @@ char gdt_buffer[1024]{};
 // Pre-definition of scaling
 double scaleX_level1;
 double scaleY_level1;
+
+//Pre-definition for buffers
+char level_buffer[16]{}, hp_buffer[16]{};
+float textWidth{}, textHeight{};
 
 //// Pre-definition of time
 //float timeElapsed = 0.f;
@@ -1538,6 +1544,24 @@ void Level_1_Draw(void)
 	AEGfxSetTransform(transform2.m);
 	AEGfxMeshDraw(ptrMesh, AE_GFX_MDM_TRIANGLES);
 	//end Exp bar
+
+	//Level print
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	std::string level = "Lv " + std::to_string(_Player_Level);
+	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
+	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
+	AEGfxPrint(fontID, level_buffer, -0.985, 0.935, 0.5f, 1, 1, 1);
+
+	//Hp print
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	std::string hp = "HP " + std::to_string(_Player->health) + "/20";
+	sprintf_s(hp_buffer, sizeof(hp_buffer), "%s", hp.c_str());
+	AEGfxGetPrintSize(fontID, hp_buffer, 1.0f, textWidth, textHeight);
+	AEGfxPrint(fontID, hp_buffer, -0.985, -0.985, 0.5f, 1, 1, 1);
 	
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1602,6 +1626,8 @@ void Level_1_Draw(void)
 		}
 		onValueChange = false;
 	}
+
+	//Unload
 	AEGfxTextureUnload(playerTex);
 	AEGfxTextureUnload(bulletTex);
 	AEGfxTextureUnload(augmentGunTex);
