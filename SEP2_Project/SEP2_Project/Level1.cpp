@@ -2035,6 +2035,6 @@ void Level_1_Unload(void)
 	spawnCheck = 1;
 	enemyCount = 0;
 	OrbCounter = 0;
-	_Player_Level = 0;
+	_Player_Level = 1;
 	_Player_Experience = 0;
 }
