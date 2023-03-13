@@ -511,9 +511,12 @@ void Level_1_Init(void)
 	//8
 
 	
-
 	//9
-	//_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, AUG_GUN_SIZE * 3, nullptr, nullptr, 0.0f);
+	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
+	_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
+	_Augment_Three->scale.y = AUG_GUN_SIZE;
+	_Augment_Three->flag = !FLAG_ACTIVE;
+	//
 	//AE_ASSERT(_Augment_Three);
 
 	// Gets the scale of 1366x768
@@ -889,6 +892,11 @@ void Level_1_Update(void)
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
 		std::cout << "Once\n";
+		_Augment_Three->flag = FLAG_ACTIVE;
+	}
+	if (AEInputCheckTriggered(AEVK_RCTRL))
+	{
+		_Augment_Three->flag = !FLAG_ACTIVE;
 	}
 
 	//if (AEInputCheckTriggered(AEVK_1))
@@ -924,7 +932,7 @@ void Level_1_Update(void)
 
 		if (pInst->pObject->type == TYPE_PLAYER)
 		{
-			for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+			for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 			{
 				GameObjInstances* qInst = sGameObjInstList + j;
 
@@ -970,25 +978,49 @@ void Level_1_Update(void)
 					AEVec2Add(&qInst->position, &pInst->position , &AUGMENT_2_DIRECTION);
 				}
 
-				if (qInst->pObject->type == TYPE_AUGMENT3)
+				if (qInst->pObject->type == TYPE_AUGMENT3 )
 				{
-				
-					AUGMENT_3_FIRE_TIMER = 0.0f;
-					AUGMENT_3_FIRE_INTERVAL = 1.0f;
-					
+					if (_playerScale > 0)
+					{
+						qInst->position.x = pInst->position.x + 50.0f;
+						qInst->position.y = pInst->position.y;
+					}
+					if (_playerScale < 0)
+					{
+						qInst->position.x = pInst->position.x - 50.0f;
+						qInst->position.y = pInst->position.y;
+					}
+					//increment the timer...
+					AUGMENT_3_FIRE_TIMER += g_dt;
+					//Make the timer.. AUGMENT_3_FIRE_INTERVAL is at 1.0f;
 					if (AUGMENT_3_FIRE_TIMER > AUGMENT_3_FIRE_INTERVAL)
 					{
-						static float delayAug3 = 0.0f;
-						delayAug3 += g_dt;
-
-						_Augment_Three->showTexture = false;
+						std::cout << "First\n";
+						qInst->showTexture = true;
+						//Do damage here....
+						//only do ONE INSTANCE of damage per skill.
+						
+						
+						AUGMENT_3_FIRE_TIMER = 0;
 					}
+					//If the instance is active, then every 0.5s, turn off.
+					if (qInst->showTexture == true)
+					{
+						AUGMENT_3_OFF_TIMER += g_dt;
+						if (AUGMENT_3_OFF_TIMER > AUGMENT_3_OFF_INTERVAL)
+						{
+							//Turns off the instance. (prevents damage)
+							qInst->showTexture = false;
+							AUGMENT_3_OFF_TIMER = 0;
 
-				//	GameObjInstances* slashInst = gameObjInstCreate(TYPE_AUGMENT3, BULLET_SIZE * 10, &pInst->position, 0, 0.0f);
-				//	std::cout << "True\n";
-				
+							std::cout << "Second\n";
+						}
+
+					}
+					std::cout << "Once111\n";
+
+
 				}
-
 			}
 		}
 
@@ -1815,6 +1847,15 @@ void Level_1_Draw(void)
 		else if (pInst->pObject->type == TYPE_AUGMENT2)
 		{
 			texture = augment2Tex;
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT3)
+		{
+			if(pInst->showTexture == true)
+				texture = bulletTex;
+			else
+			{
+				texture = InvisibleTex;
+			}
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
