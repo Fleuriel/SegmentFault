@@ -204,4 +204,5 @@ void Upgrade_Free(void)
 void Upgrade_Unload(void) 
 {
 	AEGfxMeshFree(pMeshUpgrade);
+	AEGfxMeshFree(pMeshUpgrade1);
 }

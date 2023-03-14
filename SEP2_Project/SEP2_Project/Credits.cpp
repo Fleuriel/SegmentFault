@@ -147,5 +147,6 @@ void Credits_Free(void)
 }
 void Credits_Unload(void) 
 {
-    AEGfxMeshFree(pMeshCredits);
+    AEGfxMeshFree(pMeshCredits); 
+    AEGfxTextureUnload(startTex_credits);
 }

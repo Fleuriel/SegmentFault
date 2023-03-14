@@ -1311,6 +1311,7 @@ void Level_1_Update(void)
 
 		if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 		{
+			//Show the hitbox indicator of the player.
 			pInst->position.x = _Player->position.x;
 			pInst->position.y = _Player->position.y - 10;
 			if (AEInputCheckCurr(AEVK_LSHIFT))
