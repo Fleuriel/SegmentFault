@@ -224,6 +224,12 @@ std::vector<GameObjInstances*> remainingTargets;
 s16 _playerScale = -1;
 u8  bossPhase = 0;
 
+//Return to position 0, at the end of a calculation..
+f64 BOSS_X_PHASE_4 = 0;
+f64 BOSS_Y_PHASE_4 = 0;
+f64 BOSS_SPEED_PHASE_4 = 0;
+
+
 
 //Augments
 f64 _rotation_Aug = 0.0f;
@@ -245,10 +251,10 @@ AEVec2 AUGMENT_1_DIRECTION;
 AEVec2 AUGMENT_2_DIRECTION;
 
 f64 AUGMENT_3_FIRE_TIMER	  = 0.0f;
-f64 AUGMENT_3_FIRE_INTERVAL   = 1.0f;
+f64 AUGMENT_3_FIRE_INTERVAL   = 2.0f;
 AEVec2 AUGMENT_3_DIRECTION;
 f64 AUGMENT_3_OFF_TIMER       = 0.0f;
-f64 AUGMENT_3_OFF_INTERVAL	  = 0.5f;
+f64 AUGMENT_3_OFF_INTERVAL	  = 0.2f;
 
 f64 AUGMENT_4_FIRE_TIMER;
 f64 AUGMENT_4_FIRE_INTERVAL;

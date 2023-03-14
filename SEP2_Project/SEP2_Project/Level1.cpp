@@ -515,7 +515,6 @@ void Level_1_Init(void)
 	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
 	_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
 	_Augment_Three->scale.y = AUG_GUN_SIZE;
-	_Augment_Three->flag = !FLAG_ACTIVE;
 	//
 	//AE_ASSERT(_Augment_Three);
 
@@ -892,11 +891,11 @@ void Level_1_Update(void)
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
 		std::cout << "Once\n";
-		_Augment_Three->flag = FLAG_ACTIVE;
+		_Augment_Three->showTexture = true;
 	}
 	if (AEInputCheckTriggered(AEVK_RCTRL))
 	{
-		_Augment_Three->flag = !FLAG_ACTIVE;
+		_Augment_Three->showTexture = false;
 	}
 
 	//if (AEInputCheckTriggered(AEVK_1))
@@ -1329,7 +1328,6 @@ void Level_1_Update(void)
 				//16 is the point where they stop..
 				if (_deltaTime_Shooting > 22)
 				{
-					std::cout << "Entry BOWAP\n";
 					_delayTimeBullets = 0;
 					bossPhase = TYPE_BOWAP;
 				}
@@ -1343,11 +1341,10 @@ void Level_1_Update(void)
 				break;
 				//BOWAP
 			case TYPE_BOWAP:
-				std::cout << _deltaTime_Shooting << '\n';
-
-
+				//If Boss hp not lesser than 1,
 				if (pInst->health > 0)
 				{
+					//Give time for the previous bullet hell to be over.
 					DelayMovement = 5.0f;
 					//Updates position..
 					if (hasDelayTimePassed)
@@ -1579,6 +1576,7 @@ void Level_1_Update(void)
 										if (OrbCounter < OrbCap) {
 											gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 											OrbCounter++;
+											//Here
 										}
 									}
 								}
