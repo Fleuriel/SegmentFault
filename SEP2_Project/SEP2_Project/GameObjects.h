@@ -5,7 +5,6 @@
 #include "Main.h"
 
 
-#include <queue>
 #include <set>
 #include <algorithm>
 #include <fstream>
@@ -112,26 +111,26 @@ public:
 
 
 //Parameters: Original Objects
-static GameObjects						sGameObjList[GAME_OBJ_NUM_MAX];
+static GameObjects						*sGameObjList;
 static unsigned long					sGameObjNum;
 
 //Object Instances
-static GameObjInstances					sGameObjInstList[GAME_OBJ_INST_NUM_MAX];
+static GameObjInstances					*sGameObjInstList;
 static unsigned long					sGameObjInstNum;
 
 //Pointer to Objects...
-static GameObjInstances* _Player;
-static GameObjInstances* _Bullet;
-static GameObjInstances* _Boss;
-static GameObjInstances* _BossBullet;
-static GameObjInstances* _Enemy;
-static GameObjInstances* _PlayerHitbox;
-static GameObjInstances* _ExpOrbs;
-static GameObjInstances* _Augment_One;
-static GameObjInstances* _Augment_Two;
-static GameObjInstances* _Augment_Three;
-static GameObjInstances* _Augment_Four;
-static GameObjInstances* _Augment_Five;
+static GameObjInstances					*_Player;
+static GameObjInstances					*_Bullet;
+static GameObjInstances					*_Boss;
+static GameObjInstances					*_BossBullet;
+static GameObjInstances					*_Enemy;
+static GameObjInstances					*_PlayerHitbox;
+static GameObjInstances					*_ExpOrbs;
+static GameObjInstances					*_Augment_One;
+static GameObjInstances					*_Augment_Two;
+static GameObjInstances					*_Augment_Three;
+static GameObjInstances					*_Augment_Four;
+static GameObjInstances					*_Augment_Five;
 
 
 
@@ -211,12 +210,6 @@ f64 rotationAngle = 3600;// number of rotations/360.
 
 
 
-//Creating Vector(List) for instances..
-std::vector<GameObjInstances> _bullet;
-std::vector<GameObjInstances*> _enemyList;
-std::vector<GameObjInstances*> remainingTargets;
-
-
 //Variables for TYPES...
 
 //Parameters: Testing
@@ -280,28 +273,6 @@ int experienceCurve(int level, int& playerExperience, int& reqExp)
 	return level;
 }
 
-
-GameObjInstances* FindNearestEnemy(GameObjInstances* player)
-{
-	float minDistance = FLT_MAX;
-	GameObjInstances* nearestEnemy = nullptr;
-	for (int i = 0; i < GAME_OBJ_INST_NUM_MAX; ++i)
-	{
-		GameObjInstances* pInst = sGameObjInstList + i;
-		if (pInst != player && pInst->pObject->type == TYPE_ENEMY &&
-			pInst->position.x > player->position.x + 200 || pInst->position.x < player->position.x - 200 ||
-			pInst->position.y > player->position.y + 200 || pInst->position.y < player->position.y - 200)
-		{
-			float distance = AEVec2Distance(&pInst->position, &player->position);
-			if (distance < minDistance)
-			{
-				minDistance = distance;
-				nearestEnemy = pInst;
-			}
-		}
-	}
-	return nearestEnemy;
-}
 
 
 GameObjInstances* gameObjInstCreate(unsigned long type,

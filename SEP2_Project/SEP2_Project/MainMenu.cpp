@@ -262,14 +262,16 @@ void Menu_Draw(void)
     sprintf_s(exit_buffer, "X");
     AEGfxGetPrintSize(fontID, exit_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (1466.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 222.0f / 255.f, 49.0f / 255.f, 99.0f / 255.f);
+
 }
 
 void Menu_Free(void) 
 {
-    
+
 }
 void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
-    
+
+    AEGfxTextureUnload(startTex);
 }
