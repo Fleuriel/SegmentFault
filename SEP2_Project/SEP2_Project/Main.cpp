@@ -7,6 +7,7 @@ float	 g_dt;
 double	 g_appTime;
 int		 FPS = 144;
 s8       fontID;
+double	 Currency = 0;
 
 /******************************************************************************/
 /*!

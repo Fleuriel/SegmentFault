@@ -310,73 +310,17 @@ void Level_1_Load(void)
 
 
 
-	/*
+	
 	if (inputFileStream.good())
 	{
-		std::cout << "File Exist\n";
-		std::string ExpText = "Player Experience and Level...";
-		std::string line;
+		/*std::cout << "file exist\n";
+		std::string line = "";
 
-		std::cout << inputFileStream.eof() << '\n';
-		inputFileStream.seekg(0, std::ios::beg);
+		std::cout << "hello\t " << inputfilestream.eof() << '\n';*/
 
 
-
-
-		while (std::getline(inputFileStream, line))
-		{
-			std::cout << line << '\n';
-			if (line == "enemyInstances Positions...")
-			{
-				
-				for (auto it = _enemyList.begin(); it != _enemyList.end(); ) {
-					if (*it == nullptr)
-						continue;
-					if ((*it)->flag == 0) {
-						delete* it;
-						it = _enemyList.erase(it);
-					}
-					else {
-						++it;
-					}
-				}
-
-				std::istringstream iss(line);
-				int flag, direction, health, showTexture, isInvincible, iFrame;
-				float scaleX, scaleY, posX, posY, velX, velY;
-				AABB boundingBox;
-				AEMtx33 transform;
-				
-				iss >> flag >> scaleX >> scaleY >> posX >> posY >> velX >> velY >> direction
-					>> boundingBox.min.x >> boundingBox.min.y >> boundingBox.max.x >> boundingBox.max.y
-					>> transform.m[0][0] >> transform.m[0][1] >> transform.m[0][2]
-					>> transform.m[1][0] >> transform.m[1][1] >> transform.m[1][2]
-					>> transform.m[2][0] >> transform.m[2][1] >> transform.m[2][2]
-					>> health >> showTexture >> isInvincible >> iFrame;
-				
-				AEVec2 positionCreation{ posX, posY };
-				AEVec2 velocityCreation{ velX, velY };
-				std::cout << posX  <<' ' << posY << '\n';
-				
-				GameObjInstances* newEnemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &positionCreation, &velocityCreation, 0.0f);
-				_enemyList.push_back(newEnemyInst);
-
-			
-			}
-			if (line == ExpText)
-			{
-				std::getline(inputFileStream, line);
-				std::istringstream iss(line);
-				//works
-				iss >> _Player_Level >> _Player_Experience;
-				//works
-				std::cout << _Player_Level << " WHOOPSEY " << _Player_Experience << '\n';
-			}
-			else
-			{
-
-			}
-		}
+		inputFileStream >> Currency;
+		std::cout << Currency << '\n';
 
 		inputFileStream.close();
 	}
@@ -385,7 +329,7 @@ void Level_1_Load(void)
 		std::cerr << "Error: \n" ;
 
 	}
-	*/
+	
 
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -603,94 +547,18 @@ void Level_1_Update(void)
 
 
 	//SAVE.....
-	//if (AEInputCheckTriggered(AEVK_P) && _deltaTime_State >= 1.5f)
-	//{
-	//	std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\save.txt" };
-	//	if (outputStream.is_open())
-	//	{
-	//		std::cout << "Current GameObjects\n";
-	//		for (const auto& gameObjInstance : sGameObjInstList)
-	//		{
-	//			if (gameObjInstance.flag == 0 &&
-	//				gameObjInstance.scale.x == 0 &&
-	//				gameObjInstance.scale.y == 0 &&
-	//				gameObjInstance.position.x == 0 &&
-	//				gameObjInstance.position.y == 0 &&
-	//				gameObjInstance.velocity.x == 0 &&
-	//				gameObjInstance.velocity.y == 0 &&
-	//				gameObjInstance.direction == 0 &&
-	//				gameObjInstance.boundingBox.min.x == 0 &&
-	//				gameObjInstance.boundingBox.min.y == 0 &&
-	//				gameObjInstance.boundingBox.max.x == 0 &&
-	//				gameObjInstance.boundingBox.max.y == 0 &&
-	//				gameObjInstance.health == 0 &&
-	//				gameObjInstance.showTexture == false &&
-	//				gameObjInstance.isInvincible == false &&
-	//				gameObjInstance.iFrame == 0.0)
-	//			{
-	//				continue; // Skip this iteration of the loop
-	//			}
-	//			else
-	//			{
-	//				if (gameObjInstance.pObject != nullptr)
-	//				{
-	//					outputStream
-	//						<< gameObjInstance.pObject->type << " "
-	//						<< gameObjInstance.flag << " "
-	//						<< gameObjInstance.scale.x << " "
-	//						<< gameObjInstance.scale.y << " "
-	//						<< gameObjInstance.position.x << " "
-	//						<< gameObjInstance.position.y << " "
-	//						<< gameObjInstance.velocity.x << " "
-	//						<< gameObjInstance.velocity.y << " "
-	//						<< gameObjInstance.direction << " "
-	//						<< gameObjInstance.boundingBox.min.x << " "
-	//						<< gameObjInstance.boundingBox.min.y << " "
-	//						<< gameObjInstance.boundingBox.max.x << " "
-	//						<< gameObjInstance.boundingBox.max.y << " "
-	//						<< gameObjInstance.transform.m << " "
-	//						<< gameObjInstance.health << " "
-	//						<< gameObjInstance.showTexture << " "
-	//						<< gameObjInstance.isInvincible << " "
-	//						<< gameObjInstance.iFrame
-	//						<< "\n";
-	//				}
-	//			}
-	//		}
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+		if (outputStream.is_open())
+		{
+			outputStream << Currency << '\n';
+	
+		}
 
+		outputStream.close();
 
-	//		outputStream << "enemyInstances Positions...\n";
-	//		for (const auto& enemyInstance : _enemyList) {
-	//			outputStream << enemyInstance->flag << " "
-	//				<< enemyInstance->scale.x << " "
-	//				<< enemyInstance->scale.y << " "
-	//				<< enemyInstance->position.x << " "
-	//				<< enemyInstance->position.y << " "
-	//				<< enemyInstance->velocity.x << " "
-	//				<< enemyInstance->velocity.y << " "
-	//				<< enemyInstance->direction << " "
-	//				<< enemyInstance->boundingBox.min.x << " "
-	//				<< enemyInstance->boundingBox.min.y << " "
-	//				<< enemyInstance->boundingBox.max.x << " "
-	//				<< enemyInstance->boundingBox.max.y << " "
-	//				<< enemyInstance->transform.m << " "
-	//				<< enemyInstance->health << " "
-	//				<< enemyInstance->showTexture << " "
-	//				<< enemyInstance->isInvincible << " "
-	//				<< enemyInstance->iFrame
-	//				<< "\n";
-	//		}
-	//		outputStream << "Player Experience and Level...\n";
-	//		outputStream << _Player_Level << ' ' << _Player_Experience << '\n';
-	//	}
-
-	//	outputStream.close();
-
-
-
-	//	gGameStateNext = PAUSE;
-	//	_deltaTime_State = 0.0f;
-	//}
+	}
 
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1 && enemyCount<50 && minElapsed < 2)
@@ -1493,7 +1361,6 @@ void Level_1_Update(void)
 
 
 
-
 	}
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1600,7 +1467,7 @@ void Level_1_Update(void)
 										enemyCount--;
 										if (OrbCounter < OrbCap) {
 											gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
-											OrbCounter++;
+											OrbCounter++;											
 										}
 									}
 								}
@@ -1638,8 +1505,10 @@ void Level_1_Update(void)
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							_Player_Experience++;
+							Currency++;
 							std::cout << "Player Experience: " << _Player_Experience << '\n';
 							std::cout << "Player Level: " << _Player_Level << '\n';
+							std::cout << "Currency:" << Currency << '\n';
 
 							gameObjInstDestroy(ObjInstance1);
 							OrbCounter--;
