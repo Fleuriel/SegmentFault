@@ -190,4 +190,5 @@ void GameOver_Unload(void)
 {
 	AEGfxMeshFree(pMeshGameOver);
 	AEGfxMeshFree(gameOverbMesh);
+	AEGfxTextureUnload(gameOverBGTex);
 }
