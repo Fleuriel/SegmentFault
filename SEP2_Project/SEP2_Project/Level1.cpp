@@ -47,8 +47,8 @@ double augment4Button_transY;
 float overlayTransparency = 0.0f;
 
 // Pre-definition of scaling
-//double scaleX_level1;
-//double scaleY_level1;
+double scaleX_level1;
+double scaleY_level1;
 
 //Pre-definition for buffers
 char level_buffer[16]{};
@@ -448,18 +448,18 @@ void Level_1_Init(void)
 	//AE_ASSERT(_Augment_Three);
 
 	// Gets the scale of 1366x768
-	scaleX = getWinWidth() / 1366.f;
-	scaleY = getWinHeight() / 768.f;
+	scaleX_level1 = getWinWidth() / 1366.f;
+	scaleY_level1 = getWinHeight() / 768.f;
 
 	// Defintion of the translation for augment buttons
-	augment1Button_transX = 0.0f * scaleX;
-	augment1Button_transY = 280.0f * scaleY;
-	augment2Button_transX = 0.0f * scaleX;
-	augment2Button_transY = 195.0f * scaleY;
-	augment3Button_transX = 0.0f * scaleX;
-	augment3Button_transY = 110.0f * scaleY;
-	augment4Button_transX = 0.0f * scaleX;
-	augment4Button_transY = 25.0f * scaleY;
+	augment1Button_transX = 0.0f * scaleX_level1;
+	augment1Button_transY = 280.0f * scaleY_level1;
+	augment2Button_transX = 0.0f * scaleX_level1;
+	augment2Button_transY = 195.0f * scaleY_level1;
+	augment3Button_transX = 0.0f * scaleX_level1;
+	augment3Button_transY = 115.0f * scaleY_level1;
+	augment4Button_transX = 0.0f * scaleX_level1;
+	augment4Button_transY = 30.0f * scaleY_level1;
 
 }
 
@@ -504,7 +504,7 @@ void Level_1_Update(void)
 
 	if (overlayTransparency != 0) {
 		// Overlay button logic and defintions
-		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 1 ++\n");
@@ -515,7 +515,7 @@ void Level_1_Update(void)
 			}
 		}
 
-		if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+		if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX_level1, 50.0f * scaleY_level1, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 2 ++\n");
@@ -523,17 +523,6 @@ void Level_1_Update(void)
 				SkillPoint--;
 				Augment2Range += 0.5;
 				Augment2Level++;
-			}
-		}
-
-		if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
-			printf("Augment 3 ++\n");
-			if (SkillPoint != 0 && Augment2Level != 4) {
-				SkillPoint--;
-				//Augment3Range += 0.5;
-				//Augment3Level++;
 			}
 		}
 	}
@@ -874,13 +863,8 @@ void Level_1_Update(void)
 							//Turns off the instance. (prevents damage)
 							qInst->showTexture = false;
 							AUGMENT_3_OFF_TIMER = 0;
-
-							std::cout << "Second\n";
 						}
-
 					}
-					std::cout << "Once111\n";
-
 
 				}
 			}
@@ -1378,16 +1362,18 @@ void Level_1_Update(void)
 
 
 	}
+	//Update bounding box
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* ObjInstance2 = sGameObjInstList + i;
 		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 			continue;
-
-		AEVec2 boundingRect{};
-		AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
-		AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
-		AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+		if (ObjInstance2->velocity.x > 0 || ObjInstance2->velocity.y > 0) {
+			AEVec2 boundingRect{};
+			AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1430,7 +1416,7 @@ void Level_1_Update(void)
 									std::cout << "Boss HP: " << _Boss->health << '\n';
 									_Boss->iFrame = 50.f;
 									ObjInstance1->health--;
-									if (ObjInstance1->health == 0)
+									if (ObjInstance1->health <= 0)
 									{
 										gameObjInstDestroy(ObjInstance1);
 										enemyCount--;
@@ -1443,7 +1429,7 @@ void Level_1_Update(void)
 							}
 							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
 								ObjInstance1->health--;
-								if (ObjInstance1->health == 0)
+								if (ObjInstance1->health <= 0)
 								{
 									gameObjInstDestroy(ObjInstance1);
 									enemyCount--;
@@ -1540,15 +1526,15 @@ void Level_1_Update(void)
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
-
+					if (_Player->iFrame <= 0)
+						_Player->isInvincible = false;
+					if (_Player->iFrame > 0) {
+						_Player->isInvincible = true;
+						_Player->iFrame -= g_dt;
+					}
 					if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1) {
-						if (_Player->iFrame <= 0)
-							_Player->isInvincible = false;
-						if (_Player->iFrame > 0) {
-							_Player->isInvincible = true;
-							_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
-						}
-						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x)) {
+
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox,ObjInstance1->velocity,ObjInstance2->boundingBox,ObjInstance2->velocity)) {
 							if (_Player->isInvincible == false) {
 								_Player->health--;
 								std::cout << "Player HP: " << _Player->health << '\n';
@@ -1830,41 +1816,19 @@ void Level_1_Draw(void)
 		AEMtx33Concat(&transform5, &translate5, &transform5);
 		AEGfxSetTransform(transform5.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
-
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(overlayTransparency);
-		AEMtx33 scale6 = { 0 };
-		AEMtx33Scale(&scale6, 34.f, 50.f);
-		AEMtx33 rotate6 = { 0 };
-		AEMtx33Rot(&rotate6, 0.f);
-		AEMtx33 translate6 = { 0 };
-		AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
-		AEMtx33 transform6 = { 0 };
-		AEMtx33Concat(&transform6, &rotate6, &scale6);
-		AEMtx33Concat(&transform6, &translate6, &transform6);
-		AEGfxSetTransform(transform6.m);
-		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
-
 		// Rendering texts for overlay
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment1_buffer, "Augment 1");
 		// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1100.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment2_buffer, "Augment 2");
-		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (1595.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment2_buffer, "Augment 3");
-		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (2850.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX_level1)), (getWinHeight() / (1595.f * scaleY_level1)), 0.6f * scaleX_level1, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1876,19 +1840,13 @@ void Level_1_Draw(void)
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (1130.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1130.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (1680.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
-
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (3250.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX_level1)), (getWinHeight() / (1680.f * scaleY_level1)), 1.f * scaleX_level1, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 		// Overlay end
 
 
@@ -1910,7 +1868,6 @@ void Level_1_Draw(void)
 		if (Augment2Level >= 4)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
 	}
 
 	// Rendering texts for the screen	
