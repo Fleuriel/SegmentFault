@@ -1483,7 +1483,10 @@ void Level_1_Update(void)
 					gameObjInstDestroy(ObjInstance1);
 					enemyCount--;
 					_Player_Experience++;
-					gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+					if (OrbCounter<OrbCap) {
+						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+						OrbCounter++;
+					}
 				}
 				if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
@@ -1914,7 +1917,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(boss_hp_buffer, "BOSS HP: %d/%d", _Boss->health, MaxBossHealth);
+		if (_Boss != nullptr) {
+			sprintf_s(boss_hp_buffer, "BOSS HP: %d/%d", _Boss->health, MaxBossHealth);
+		}
 		AEGfxPrint(fontID, boss_hp_buffer, -0.8f, -0.8f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 	}
 }

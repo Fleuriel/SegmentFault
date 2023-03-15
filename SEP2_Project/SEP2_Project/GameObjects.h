@@ -260,14 +260,15 @@ s32 _Player_Level = 1;
 
 int experienceCurve(int level, int& playerExperience, int& reqExp)
 {
-	int increment = 2 * ((level - 1) / 5);
-	reqExp += (level - 1) * increment;
+	
 
 	if (playerExperience >= reqExp) {
 		// Increment the player's level and subtract the required experience from their total
 		playerExperience -= reqExp;
 		level++;
 		SkillPoint++;
+		int increment = 2 * ((level - 1) / 5);
+		reqExp += (level - 1) * increment;
 	}
 
 
