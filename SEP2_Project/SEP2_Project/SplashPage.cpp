@@ -101,4 +101,5 @@ void SplashPage_Free(void)
 void SplashPage_Unload(void) 
 {
     AEGfxMeshFree(pMeshSplash);
+	AEGfxTextureUnload(startTex_Splash);
 }
