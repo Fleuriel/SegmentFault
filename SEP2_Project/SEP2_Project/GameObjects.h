@@ -23,6 +23,7 @@
 //FILE DIRECTORY...
 
 std::ifstream inputFileStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+std::ifstream inputFileStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipmodel.txt" };
 
 
 f32 const PLAYER_SIZE = 60.0f; //Player Size...
