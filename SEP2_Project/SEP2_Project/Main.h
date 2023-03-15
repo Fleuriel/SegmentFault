@@ -32,10 +32,14 @@ extern float	g_dt;
 extern double	g_appTime;
 extern s8       fontID;
 extern double   Currency;
+<<<<<<< Updated upstream
 
 // Pre-definition of scaling
 extern double scaleX;
 extern double scaleY;
 
 
+=======
+extern int		ShipModel;
+>>>>>>> Stashed changes
 // ---------------------------------------------------------------------------

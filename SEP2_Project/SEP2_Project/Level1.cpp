@@ -315,9 +315,7 @@ void Level_1_Load(void)
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 	}
 
-
-
-	
+	//Save file for currency
 	if (inputFileStream.good())
 	{
 		/*std::cout << "file exist\n";
@@ -336,6 +334,27 @@ void Level_1_Load(void)
 		std::cerr << "Error: \n" ;
 
 	}
+
+	//save file for player ship model
+	if (inputFileStream1.good())
+	{
+		/*std::cout << "file exist\n";
+		std::string line = "";
+
+		std::cout << "hello\t " << inputfilestream.eof() << '\n';*/
+
+
+		inputFileStream1 >> ShipModel;
+		std::cout << ShipModel << '\n';
+
+		inputFileStream1.close();
+	}
+	else if (inputFileStream1.fail())
+	{
+		std::cerr << "Error: \n";
+
+	}
+
 	
 
 	//Expbar
@@ -568,7 +587,7 @@ void Level_1_Update(void)
 
 
 	//SAVE.....
-	if (AEInputCheckTriggered(AEVK_P))
+	/*if (AEInputCheckTriggered(AEVK_P))
 	{
 		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 		if (outputStream.is_open())
@@ -579,7 +598,7 @@ void Level_1_Update(void)
 
 		outputStream.close();
 
-	}
+	}*/
 
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1 && enemyCount<MaxEnemyCount)
@@ -883,6 +902,11 @@ void Level_1_Update(void)
 							AUGMENT_3_OFF_TIMER = 0;
 						}
 					}
+<<<<<<< Updated upstream
+=======
+					//std::cout << "Once111\n";
+
+>>>>>>> Stashed changes
 
 				}
 			}
@@ -1505,6 +1529,14 @@ void Level_1_Update(void)
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							Currency++;
+							std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+							if (outputStream.is_open())
+							{
+								outputStream << Currency << '\n';
+
+							}
+
+							outputStream.close();
 							std::cout << "Player Experience: " << _Player_Experience << '\n';
 							std::cout << "Player Level: " << _Player_Level << '\n';
 							std::cout << "Currency:" << Currency << '\n';
@@ -1572,9 +1604,13 @@ void Level_1_Update(void)
 void Level_1_Draw(void)
 {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
-
-	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	if (ShipModel == 0) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	}
+	if (ShipModel == 1) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player1.png");
+	}
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("Assets\\Assets\\drone.png");
 	AEGfxTexture* augment2Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
