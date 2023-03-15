@@ -20,6 +20,7 @@
 #include "SettingsMenu.h"
 #include "Credits.h"
 #include "GameOverMenu.h"
+#include "SplashPage.h"
 
 #include "Utilities.h"
 
@@ -35,4 +36,6 @@ extern double   Currency;
 // Pre-definition of scaling
 extern double scaleX;
 extern double scaleY;
+
+
 // ---------------------------------------------------------------------------

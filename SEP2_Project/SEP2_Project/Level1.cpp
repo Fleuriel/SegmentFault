@@ -47,10 +47,6 @@ double augment4Button_transY;
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
 
-// Pre-definition of scaling
-float scaleX_level1;
-float scaleY_level1;
-
 //Pre-definition for buffers
 char level_buffer[16]{};
 float textWidth{}, textHeight{};
@@ -61,15 +57,19 @@ float minElapsed = 0.f;
 
 int MaxHealth; // Player max hp 
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
-int spawnCheck = 1; // Boss Spawn 
-int MaxBossHealth;
+bool spawnCheck = false; // Boss Spawn 
+int MaxBossHealth; // Max hp of boss
+int MaxEnemyCount = 30; // Max Enemy count
 
-// Initialised variable for augment behaviour
+// Initialised variable for augments
 int Augment1Level = 1;
 int Augment2Level = 0;
+int Augment3Level = 0;
+bool Aug2CreateCheck = false;
+bool Aug3CreateCheck = false;
 float Augment1CD = 1.5f;
-float Augment2Range = 1;
-int Aug2CreateCheck = 0;
+float Augment2Range = 1.f;
+
 
 //Condition check for game over
 static bool onValueChange = true;
@@ -436,16 +436,19 @@ void Level_1_Init(void)
 
 
 	//7
-	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, getCursorRad());
+	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	AE_ASSERT(_Augment_One);
 
 	//8
 
 	
 	//9
-	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
-	_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
-	_Augment_Three->scale.y = AUG_GUN_SIZE;
+	if (Aug3CreateCheck == false && Augment3Level >= 1) {
+		_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
+		_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
+		_Augment_Three->scale.y = AUG_GUN_SIZE;
+		Aug3CreateCheck = true;
+	}
 	//
 	//AE_ASSERT(_Augment_Three);
 
@@ -539,10 +542,10 @@ void Level_1_Update(void)
 			}
 		}
 	}
-	if (Augment2Level == 1 && Aug2CreateCheck == 0) {
+	if (Augment2Level == 1 && Aug2CreateCheck == false) {
 		_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 		AE_ASSERT(_Augment_Two);
-		Aug2CreateCheck = 1;
+		Aug2CreateCheck = true;
 	}
 
 	_deltaTime += g_dt;
@@ -579,7 +582,7 @@ void Level_1_Update(void)
 	}
 
 	//Spawn Enemy
-	if (_deltaTimeEnemySpawner > 1 && enemyCount<50 && minElapsed < 2)
+	if (_deltaTimeEnemySpawner > 1 && enemyCount<MaxEnemyCount)
 	{
 		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
@@ -640,7 +643,7 @@ void Level_1_Update(void)
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 1 && timeElapsed >= 30 && spawnCheck == 1) {
+	if (minElapsed == 3 && timeElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -880,13 +883,8 @@ void Level_1_Update(void)
 							//Turns off the instance. (prevents damage)
 							qInst->showTexture = false;
 							AUGMENT_3_OFF_TIMER = 0;
-
-							std::cout << "Second\n";
 						}
-
 					}
-					std::cout << "Once111\n";
-
 
 				}
 			}
@@ -1379,16 +1377,21 @@ void Level_1_Update(void)
 
 
 	}
+	//Update bounding box
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* ObjInstance2 = sGameObjInstList + i;
 		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 			continue;
-
-		AEVec2 boundingRect{};
-		AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
-		AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
-		AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+		if (spawnCheck != 1) {
+			if (ObjInstance2->velocity.x == 0 || ObjInstance2->velocity.y == 0)
+				continue;
+		}
+			AEVec2 boundingRect{};
+			AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+		
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1424,34 +1427,21 @@ void Level_1_Update(void)
 					//AUGMENT 1 COLLISON
 					if (ObjInstance2->pObject->type == TYPE_BULLET)
 					{
-						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
 						{	
-							if (spawnCheck == 0) {
+							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false) {
 									std::cout << "Boss HP: " << _Boss->health << '\n';
 									_Boss->iFrame = 50.f;
 									ObjInstance1->health--;
-									if (ObjInstance1->health == 0)
-									{
-										gameObjInstDestroy(ObjInstance1);
-										enemyCount--;
-										if (OrbCounter < OrbCap) {
-											gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
-											OrbCounter++;
-										}
-									}
 								}
 							}
 							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
 								ObjInstance1->health--;
-								if (ObjInstance1->health == 0)
+								if (ObjInstance1->health <= 0)
 								{
 									gameObjInstDestroy(ObjInstance1);
 									enemyCount--;
-									if (OrbCounter < OrbCap) {
-										gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
-										OrbCounter++;
-									}
 								}
 							}
 								gameObjInstDestroy(ObjInstance2);
@@ -1470,41 +1460,32 @@ void Level_1_Update(void)
 						}
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{	
-							if (spawnCheck == 0) {
-								if (_Boss->isInvincible == false && spawnCheck == 0) {
+							if (spawnCheck == 1) {
+								if (_Boss->isInvincible == false && spawnCheck == 1) {
 									//Spawn Orbs of Experience at ObjInstance1 Position...
 									//bulletCount--;
 									std::cout << _Boss->health << '\n';
 									_Boss->iFrame = 50.f;
 									ObjInstance1->health--;
-									if (ObjInstance1->health <= 0)
-									{
-										gameObjInstDestroy(ObjInstance1);
-										enemyCount--;
-										if (OrbCounter < OrbCap) {
-											gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
-											OrbCounter++;											
-										}
-									}
 								}
 							}
 							else {
 								ObjInstance1->health--;
-								if (ObjInstance1->health <= 0)
-								{
-									gameObjInstDestroy(ObjInstance1);
-									enemyCount--;
-									if (OrbCounter < OrbCap) {
-										gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
-										OrbCounter++;
-									}
-								}
 							}
 						}
 						//AUGMENT3 COLLISION
 
 					}
 
+				}
+				if ((ObjInstance1->health <= 0) && ObjInstance1->pObject->type != TYPE_BOSS){
+					gameObjInstDestroy(ObjInstance1);
+					enemyCount--;
+					_Player_Experience++;
+					gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+				}
+				if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
+					gameObjInstDestroy(ObjInstance1);
 				}
 			}
 
@@ -1522,7 +1503,6 @@ void Level_1_Update(void)
 					{
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
-							_Player_Experience++;
 							Currency++;
 							std::cout << "Player Experience: " << _Player_Experience << '\n';
 							std::cout << "Player Level: " << _Player_Level << '\n';
@@ -1537,19 +1517,18 @@ void Level_1_Update(void)
 			//PLAYER ENEMY COLLISION
 			if (ObjInstance1->pObject->type == TYPE_PLAYER) {
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-				{
+				{	
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
-
+					if (_Player->iFrame <= 0)
+						_Player->isInvincible = false;
+					if (_Player->iFrame > 0) {
+						_Player->isInvincible = true;
+						_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
+					}
 					if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1) {
-						if (_Player->iFrame <= 0)
-							_Player->isInvincible = false;
-						if (_Player->iFrame > 0) {
-							_Player->isInvincible = true;
-							_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
-						}
-						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x)) {
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity)) {
 							if (_Player->isInvincible == false) {
 								_Player->health--;
 								std::cout << "Player HP: " << _Player->health << '\n';
@@ -1562,6 +1541,7 @@ void Level_1_Update(void)
 			}
 		}
 	}
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////CONCAT MATRIX//////////////////////////////////////////
@@ -1864,8 +1844,8 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment2_buffer, "Augment 3");
-		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (2850.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		sprintf_s(augment3_buffer, "Augment 3");
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (2850.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1911,7 +1891,6 @@ void Level_1_Draw(void)
 		if (Augment2Level >= 4)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
 	}
 
 	// Rendering texts for the screen	
@@ -1930,7 +1909,7 @@ void Level_1_Draw(void)
 	sprintf_s(hp_buffer, "HP: %d/%d", _Player->health, MaxHealth);
 	AEGfxPrint(fontID, hp_buffer, 0.5f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
-	if (spawnCheck == 0) {
+	if (spawnCheck == 1) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -1963,7 +1942,7 @@ void Level_1_Unload(void)
 	Augment2Level = 0;
 	Augment1CD = 1.5f;
 	Augment2Range = 1;
-	Aug2CreateCheck = 0;
+	Aug2CreateCheck = false;
 	timeElapsed = 0;
 	minElapsed = 0;
 	spawnCheck = 1;

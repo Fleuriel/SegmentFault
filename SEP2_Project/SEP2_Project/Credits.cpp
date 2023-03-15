@@ -23,10 +23,6 @@ char credits3_buffer[1024]{};
 char credits4_buffer[1024]{};
 float credits_textWidth{}, credits_textHeight{};
 
-// Pre-definition of scaling
-double scaleX_credits;
-double scaleY_credits;
-
 // Pre-definition of Rotation
 double picRotate{};
 
@@ -53,13 +49,13 @@ void Credits_Load(void)
 }
 void Credits_Init(void) 
 {
-    scaleX_credits = getWinWidth() / 1366.f;
-    scaleY_credits = getWinHeight() / 768.f;
+    scaleX = getWinWidth() / 1366.f;
+    scaleY = getWinHeight() / 768.f;
 
-    creditsPic_transX = -120.f * scaleX_credits;
-    creditsPic_transY = -150.f * scaleY_credits;
-    creditsBackbutton_transX = 640.0f * scaleX_credits;
-    creditsBackbutton_transY = -355.0f * scaleY_credits;
+    creditsPic_transX = -120.f * scaleX;
+    creditsPic_transY = -150.f * scaleY;
+    creditsBackbutton_transX = 640.0f * scaleX;
+    creditsBackbutton_transY = -355.0f * scaleY;
 
 }
 void Credits_Update(void)
@@ -77,13 +73,13 @@ void Credits_Update(void)
     float creditsBackbutton_midX = (getWinWidth() / 2.09) + creditsBackbutton_transX;
     float creditsBackbutton_midY = (getWinHeight() / 2) - creditsBackbutton_transY;
 
-    if (IsAreaClicked(creditsPic_midX, creditsPic_midY, 170.0f * scaleX_credits, 100.0f * scaleY_credits, cursorX, cursorY)) 
+    if (IsAreaClicked(creditsPic_midX, creditsPic_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) 
     {
         picRotate += 100.f;
         // printf("WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
     }
 
-    if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX_credits, 50.0f * scaleY_credits, cursorX, cursorY)
+    if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         // printf("Goto MAIN MENU\n");
@@ -100,7 +96,7 @@ void Credits_Draw(void)
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(startTex_credits, 0, 0);
     AEMtx33 scale = { 0 };
-    AEMtx33Scale(&scale, 100.f * scaleX_credits, 100.f * scaleY_credits);
+    AEMtx33Scale(&scale, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate = { 0 };
     AEMtx33Rot(&rotate, picRotate);
     AEMtx33 translate = { 0 };
@@ -115,7 +111,7 @@ void Credits_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEMtx33 scale1 = { 0 };
-    AEMtx33Scale(&scale1, 80.f * scaleX_credits, 50.f * scaleY_credits);
+    AEMtx33Scale(&scale1, 80.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate1 = { 0 };
     AEMtx33Rot(&rotate1, 0.f);
     AEMtx33 translate1 = { 0 };
@@ -132,14 +128,14 @@ void Credits_Draw(void)
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(credits1_buffer, "SABER BEST GIRL NO CAP");
     AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
-    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-2800.f * scaleX_credits)), (getWinHeight() / (-17000.f * scaleY_credits)), 1.f * scaleX_credits, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-2800.f * scaleX)), (getWinHeight() / (-17000.f * scaleY)), 1.f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(creditsBack_buffer, "Back");
     AEGfxGetPrintSize(fontID, creditsBack_buffer, 1.0f, credits_textWidth, credits_textHeight);
-    AEGfxPrint(fontID, creditsBack_buffer, (getWinWidth() / (1655.f * scaleX_credits)), (getWinHeight() / (-798.f * scaleY_credits)), 0.8f * scaleX_credits, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, creditsBack_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 }
 void Credits_Free(void) 
 {
