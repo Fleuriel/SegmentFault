@@ -176,18 +176,6 @@ void Level_1_Load(void)
 	_Objects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
-		AEGfxTriAdd(
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-		AEGfxTriAdd(
-			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-		_Objects->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
-
-
 		//4	TYPE_ENEMY
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_ENEMY;
