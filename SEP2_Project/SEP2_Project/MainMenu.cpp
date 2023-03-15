@@ -34,6 +34,8 @@ double buttonRotate_settings;
 double buttonRotate_powerups;
 double buttonRotate_credits;
 
+std::ifstream input{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+std::ifstream input2{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
 
 void Menu_Load(void)
 {
@@ -55,7 +57,33 @@ void Menu_Load(void)
 
     pMesh = AEGfxMeshEnd();
 
+    //Open save file of money
+    if (input.good())
+    {
 
+        input >> Currency;
+        std::cout << Currency << '\n';
+
+        input.close();
+    }
+    else if (input.fail())
+    {
+        std::cerr << "Error: \n";
+
+    }
+
+    if (input2.good())
+    {
+        input2 >> currHighScoreMin >> currHighScoreSec;
+        std::cout << "HIGHSCORE: " << currHighScoreMin << currHighScoreSec << '\n';
+
+        input2.close();
+    }
+    else if (input2.fail())
+    {
+        std::cerr << "Error: \n";
+
+    }
 
 
 }
@@ -330,14 +358,14 @@ void Menu_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(highScore_buffer, "Highscore: %d");
+    sprintf_s(highScore_buffer, "Highscore: %.f:%.f", currHighScoreMin, currHighScoreSec);
     AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(gold_buffer, "Gold: %d");
+    sprintf_s(gold_buffer, "Gold: %d", Currency);
     AEGfxGetPrintSize(fontID, gold_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
 

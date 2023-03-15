@@ -24,6 +24,7 @@
 
 std::ifstream inputFileStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 std::ifstream inputFileStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipmodel.txt" };
+std::ifstream inputFileStream2{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
 
 
 f32 const PLAYER_SIZE = 60.0f; //Player Size...
@@ -50,7 +51,7 @@ enum ObjectType {
 	TYPE_BULLET,
 	TYPE_ENEMY,
 	TYPE_PLAYER_HITBOX_INDICATOR,
-	TYPE_EXPERIENCE,
+	TYPE_CURRENCY,
 	TYPE_AUGMENT1,
 	TYPE_AUGMENT2,
 	TYPE_AUGMENT3,

@@ -31,6 +31,8 @@ char augmentAdd_buffer[1024]{};
 char skillpoint_buffer[1024]{};
 char strbuffer1[1024]{};
 char strbuffer2[1024]{};
+char strbuffer3[1024]{};
+char goldbuffer[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
@@ -43,7 +45,6 @@ double augment3Button_transY;
 double augment4Button_transX;
 double augment4Button_transY;
 
-
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
 
@@ -52,7 +53,7 @@ char level_buffer[16]{};
 float textWidth{}, textHeight{};
 
 //// Pre-definition of time
-float timeElapsed = 0.f;
+float secElapsed = 0.f;
 float minElapsed = 0.f;
 
 int MaxHealth; // Player max hp 
@@ -213,7 +214,7 @@ void Level_1_Load(void)
 
 		//6 Exp Orbs
 		_Objects = sGameObjList + sGameObjNum++;
-		_Objects->type = TYPE_EXPERIENCE;
+		_Objects->type = TYPE_CURRENCY;
 
 		AEGfxMeshStart();
 
@@ -357,7 +358,19 @@ void Level_1_Load(void)
 	}
 
 	
+	//Save file for highscore
+	if (inputFileStream2.good())
+	{
+		inputFileStream2 >> currHighScoreMin >> currHighScoreSec;
+		std::cout << "HIGHSCORE: " << currHighScoreMin << currHighScoreSec << '\n';
 
+		inputFileStream.close();
+	}
+	else if (inputFileStream.fail())
+	{
+		std::cerr << "Error: \n";
+
+	}
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
 
@@ -497,10 +510,10 @@ void Level_1_Update(void)
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
 	// Checking for time passed in seconds;
-	timeElapsed += g_dt;
-	if (timeElapsed >= 59.5) {
+	secElapsed += g_dt;
+	if (secElapsed >= 59.5) {
 		minElapsed++;
-		timeElapsed = 0;
+		secElapsed = 0;
 	}
 
 	// Checking if overlay is pressed
@@ -657,12 +670,12 @@ void Level_1_Update(void)
 	if (AEInputCheckTriggered(AEVK_0))
 	{
 		minElapsed = 2;
-		timeElapsed = 45;
+		secElapsed = 55;
 		enemyCount = 100;
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 1 && timeElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 3 && secElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -683,7 +696,7 @@ void Level_1_Update(void)
 				gameObjInstDestroy(ObjInstance1);
 
 			}
-			else if ((ObjInstance1->pObject->type == TYPE_EXPERIENCE)) {
+			else if ((ObjInstance1->pObject->type == TYPE_CURRENCY)) {
 				gameObjInstDestroy(ObjInstance1);
 			}
 
@@ -1393,7 +1406,7 @@ void Level_1_Update(void)
 				pInst->pObject->type == TYPE_AUGMENT3 ||
 				pInst->pObject->type == TYPE_AUGMENT4 ||
 				pInst->pObject->type == TYPE_AUGMENT5 ||
-				pInst->pObject->type == TYPE_EXPERIENCE)
+				pInst->pObject->type == TYPE_CURRENCY)
 			{
 				continue;
 			}
@@ -1522,7 +1535,7 @@ void Level_1_Update(void)
 					enemyCount--;
 					_Player_Experience++;
 					if (OrbCounter<OrbCap) {
-						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
+						gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
 						OrbCounter++;
 					}
 				}
@@ -1532,7 +1545,7 @@ void Level_1_Update(void)
 			}
 
 			// PLAYER COIN COLLISION
-			if (ObjInstance1->pObject->type == TYPE_EXPERIENCE)
+			if (ObjInstance1->pObject->type == TYPE_CURRENCY)
 			{
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 				{
@@ -1636,7 +1649,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* enemyTex = AEGfxTextureLoad("Assets\\Assets\\enemy.png");
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
-	AEGfxTexture* ExpOrbTex = AEGfxTextureLoad("Assets\\Assets\\Orb.png");
+	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
@@ -1775,9 +1788,9 @@ void Level_1_Draw(void)
 			else
 				texture = InvisibleTex;
 		}
-		else if (pInst->pObject->type == TYPE_EXPERIENCE)
+		else if (pInst->pObject->type == TYPE_CURRENCY)
 		{
-			texture = ExpOrbTex;
+			texture = coinTex;
 		}
 		
 		AEGfxTextureSet(texture, 0, 0);
@@ -1788,6 +1801,16 @@ void Level_1_Draw(void)
 		if (_Player->health == 0) {
 			std::cout << "GAME OVER \n";
 			gGameStateNext = GAMEOVER;
+			if (minElapsed >= currHighScoreMin) {
+				if (secElapsed > currHighScoreSec) {
+					std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
+					if (outputStream.is_open())
+					{
+						outputStream << minElapsed << ' ' << secElapsed << '\n';
+					}
+					outputStream.close();
+				}
+			}
 		}
 		onValueChange = false;
 	}
@@ -1802,7 +1825,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(enemyTex);
 	AEGfxTextureUnload(pHitboxTex);
 	AEGfxTextureUnload(InvisibleTex);
-	AEGfxTextureUnload(ExpOrbTex);
+	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
 
 	AEGfxTextureUnload(Expbar0);
@@ -1924,7 +1947,6 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (3250.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
-		// Overlay end
 
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1945,16 +1967,28 @@ void Level_1_Draw(void)
 		if (Augment2Level >= 4)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (Augment3Level != 4)
+			sprintf_s(strbuffer3, "LEVEL %d", Augment3Level);
+		if (Augment3Level >= 4)
+			sprintf_s(strbuffer3, "MAX LEVEL");
+		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.25f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+
+		// Overlay end
 	}
 
 	// Rendering texts for the screen	
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	if (timeElapsed >= 9.5)
-		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
+	if (secElapsed >= 9.5)
+		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, secElapsed);
 	else
-		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
+		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, secElapsed);
 	AEGfxPrint(fontID, gdt_buffer,0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1962,6 +1996,12 @@ void Level_1_Draw(void)
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(hp_buffer, "HP: %d/%d", _Player->health, MaxHealth);
 	AEGfxPrint(fontID, hp_buffer, 0.5f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(goldbuffer, "Gold: %d", Currency);
+	AEGfxPrint(fontID, goldbuffer, -0.925f, 0.725f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	if (spawnCheck == 1) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1999,7 +2039,9 @@ void Level_1_Unload(void)
 	Augment1CD = 1.5f;
 	Augment2Range = 1;
 	Aug2CreateCheck = false;
-	timeElapsed = 0;
+	Aug3CreateCheck = false;
+	Augment3Level = 0;
+	secElapsed = 0;
 	minElapsed = 0;
 	spawnCheck = 0;
 	enemyCount = 0;

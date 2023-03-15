@@ -1,7 +1,5 @@
 #include "Upgrade.h"
 #include "Main.h"
-#include <iostream>
-#include <fstream>
 
 std::ifstream ifs{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 std::ifstream ifs1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
@@ -228,7 +226,7 @@ void Upgrade_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "%.f", Currency);
+	sprintf_s(Upgrade1_buffer, "%d", Currency);
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (1800.f * UpgradescaleX_settings)), (getWinHeight() / (900.f * UpgradescaleY_settings)), 1.0f * UpgradescaleX_settings, 255.f,255.f,0.f);
 

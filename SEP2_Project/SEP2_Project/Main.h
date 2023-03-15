@@ -6,6 +6,7 @@
 #include <chrono>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 
 #include "AEEngine.h"
 #include "Math.h"
@@ -31,7 +32,9 @@
 extern float	g_dt;
 extern double	g_appTime;
 extern s8       fontID;
-extern double   Currency;
+extern int   Currency;
+extern float currHighScoreMin;
+extern float currHighScoreSec;
 //<<<<<<< Updated upstream
 
 // Pre-definition of scaling

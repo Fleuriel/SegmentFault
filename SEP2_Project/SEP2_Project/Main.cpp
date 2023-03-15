@@ -7,8 +7,10 @@ float	 g_dt;
 double	 g_appTime;
 int		 FPS = 144;
 s8       fontID;
-double	 Currency = 0;
+int	 Currency = 0;
 int		 ShipModel;
+float currHighScoreMin = 0.f;
+float currHighScoreSec = 0.f;
 
 // Pre-definition of scaling
 double scaleX;
