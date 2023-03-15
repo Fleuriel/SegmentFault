@@ -29,9 +29,6 @@ char credits_buffer[1024]{};
 char exit_buffer[1024]{};
 float mainMenu_textWidth{}, mainMenu_textHeight{};
 
-// Pre-definition of scaling
-double scaleX;
-double scaleY;
 
 void Menu_Load(void)
 {

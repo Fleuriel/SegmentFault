@@ -8,9 +8,6 @@ AEGfxVertexList* pMeshSettings = nullptr;
 double backButton_transX;
 double backButton_transY;
 
-// Pre-definition of scaling
-double scaleX_settings;
-double scaleY_settings;
 
 // Pre-defintion
 char howtoplay_buffer[1024]{};
@@ -43,12 +40,12 @@ void Settings_Init(void)
 {
 
     // Gets the scale of 1366x768
-    scaleX_settings = getWinWidth() / 1366.f;
-    scaleY_settings = getWinHeight() / 768.f;
+    scaleX = getWinWidth() / 1366.f;
+    scaleY = getWinHeight() / 768.f;
 
     // Back button translation
-    backButton_transX = 640.f * scaleX_settings;
-    backButton_transY = -355.f * scaleY_settings;
+    backButton_transX = 640.f * scaleX;
+    backButton_transY = -355.f * scaleY;
 
 
 }
@@ -66,7 +63,7 @@ void Settings_Update(void)
     // printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX_settings, 100.0f * scaleY_settings, cursorX, cursorY)
+    if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         //printf("MAINMENU\n");
@@ -78,7 +75,7 @@ void Settings_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 scale = { 0 };
-    AEMtx33Scale(&scale, 80.f * scaleX_settings, 50.f * scaleY_settings);
+    AEMtx33Scale(&scale, 80.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate = { 0 };
     AEMtx33Rot(&rotate, 0.f);
     AEMtx33 translate = { 0 };
@@ -93,31 +90,31 @@ void Settings_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(howtoplay_buffer, "HOW TO PLAY:");
-    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (1000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions1_buffer, "Right click for augments.");
-    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (1350.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions2_buffer, "WASD for movement.");
-    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (2000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions3_buffer, "Bullets will follow cursor.");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX_settings)), (getWinHeight() / (4000.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(settingsBackButton_buffer, "Back");
-    AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX_settings)), (getWinHeight() / (-798.f * scaleY_settings)), 0.8f * scaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 }
 void Settings_Free(void)
 {
