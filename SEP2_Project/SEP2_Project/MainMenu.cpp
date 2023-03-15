@@ -24,6 +24,8 @@ char upgrade_buffer[1024]{};
 char settings_buffer[1024]{};
 char credits_buffer[1024]{};
 char exit_buffer[1024]{};
+char highScore_buffer[1024]{};
+char gold_buffer[1024]{};
 float mainMenu_textWidth{}, mainMenu_textHeight{};
 
 // Pre-defintions for Button rotation 
@@ -90,7 +92,8 @@ void Menu_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
-    
+    printf("%d\n", cursorX);
+    printf("%d\n", cursorY);
     //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
 
     // Powerups button mid points
@@ -323,6 +326,20 @@ void Menu_Draw(void)
     sprintf_s(exit_buffer, "X");
     AEGfxGetPrintSize(fontID, exit_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (1466.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 222.0f / 255.f, 49.0f / 255.f, 99.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(highScore_buffer, "Highscore: %d");
+    AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(gold_buffer, "Gold: %d");
+    AEGfxGetPrintSize(fontID, gold_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
 
 }
 
