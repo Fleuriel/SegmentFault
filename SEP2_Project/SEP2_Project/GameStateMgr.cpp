@@ -37,6 +37,14 @@ void GameStateMgrUpdate()
 
 	switch (gGameStateCurr)
 	{
+	case SPLASHPAGE:
+		GameStateLoad = SplashPage_Load;
+		GameStateInit = SplashPage_Init;
+		GameStateUpdate = SplashPage_Update;
+		GameStateDraw = SplashPage_Draw;
+		GameStateFree = SplashPage_Free;
+		GameStateUnload = SplashPage_Unload;
+		break;
 	case MAINMENU:
 		GameStateLoad   = Menu_Load;
 		GameStateInit   = Menu_Init;
@@ -96,6 +104,7 @@ void GameStateMgrUpdate()
 		GameStateFree = GameOver_Free;
 		GameStateUnload = GameOver_Unload;
 		break;
+
 
 	default:
 		AE_FATAL_ERROR("invalid state!!");

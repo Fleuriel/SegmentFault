@@ -6,9 +6,6 @@
 // Pointer to Mesh
 AEGfxVertexList* pMesh = nullptr;
 
-// Pre-definition
-AEGfxTexture* startTex;
-
 // Pre-definition for translations of buttons
 double powerUpButton_transX;
 double powerUpButton_transY;
@@ -50,8 +47,6 @@ void Menu_Load(void)
 
     pMesh = AEGfxMeshEnd();
 
-    // Loading textures
-    startTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\start.png");
 
 
 
@@ -270,5 +265,5 @@ void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
 
-    AEGfxTextureUnload(startTex);
+    // AEGfxTextureUnload(startTex);
 }

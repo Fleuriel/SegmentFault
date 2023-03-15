@@ -21,6 +21,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="SettingsMenu.h" />
+    <ClInclude Include="SplashPage.h" />
     <ClInclude Include="Upgrade.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="SettingsMenu.cpp" />
+    <ClCompile Include="SplashPage.cpp" />
     <ClCompile Include="Upgrade.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
