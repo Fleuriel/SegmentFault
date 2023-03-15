@@ -164,17 +164,17 @@ void Level_1_Load(void)
 
 		AEGfxMeshStart();
 
-	AEGfxTriAdd(
-		-0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
-		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
-		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+		AEGfxTriAdd(
+			-0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+			-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+			0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f);
 
-	AEGfxTriAdd(
-		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
-		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
-		0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
-	_Objects->pMesh = AEGfxMeshEnd();
-	AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
+		AEGfxTriAdd(
+			0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+			-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+			0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+		_Objects->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
 		//4	TYPE_ENEMY
 		_Objects = sGameObjList + sGameObjNum++;
@@ -297,7 +297,25 @@ void Level_1_Load(void)
 		_Objects->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
-		//11 TYPE_AUGMENT5
+		//11 TYPE_AUGMENT4_PROJECTILE
+		_Objects = sGameObjList + sGameObjNum++;
+		_Objects->type = TYPE_AUGMENT4_PROJECTILE;
+
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+		AEGfxTriAdd(
+			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+		_Objects->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
+
+
+		//12 TYPE_AUGMENT5
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT5;
 
@@ -317,7 +335,7 @@ void Level_1_Load(void)
 
 
 
-	
+
 	if (inputFileStream.good())
 	{
 		/*std::cout << "file exist\n";
@@ -331,12 +349,12 @@ void Level_1_Load(void)
 
 		inputFileStream.close();
 	}
-	else if(inputFileStream.fail())
+	else if (inputFileStream.fail())
 	{
-		std::cerr << "Error: \n" ;
+		std::cerr << "Error: \n";
 
 	}
-	
+
 
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -372,7 +390,7 @@ void Level_1_Load(void)
 
 	bMesh = AEGfxMeshEnd();
 	//end Background
-	
+
 	// Create Overlay for Augments
 	AEGfxMeshStart();
 
@@ -409,7 +427,7 @@ void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	_Player->health = MaxHealth =20;
+	_Player->health = MaxHealth = 20;
 	AE_ASSERT(_Player);
 
 
@@ -440,8 +458,8 @@ void Level_1_Init(void)
 	AE_ASSERT(_Augment_One);
 
 	//8
+	//_Augment_Two
 
-	
 	//9
 	if (Aug3CreateCheck == false && Augment3Level >= 1) {
 		_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
@@ -451,6 +469,11 @@ void Level_1_Init(void)
 	}
 	//
 	//AE_ASSERT(_Augment_Three);
+
+	//10
+	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
+	
+
 
 	// Gets the scale of 1366x768
 	scaleX = getWinWidth() / 1366.f;
@@ -513,7 +536,7 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 1 ++\n");
-			if (SkillPoint != 0 && Augment1Level!=4) {
+			if (SkillPoint != 0 && Augment1Level != 4) {
 				SkillPoint--;
 				Augment1CD -= (float)0.3;
 				Augment1Level++;
@@ -563,7 +586,7 @@ void Level_1_Update(void)
 
 
 	_Player_Level = experienceCurve(_Player_Level, _Player_Experience, reqExp);
-	expPercent = _Player_Experience * 10 /reqExp;
+	expPercent = _Player_Experience * 10 / reqExp;
 
 
 
@@ -574,7 +597,7 @@ void Level_1_Update(void)
 		if (outputStream.is_open())
 		{
 			outputStream << Currency << '\n';
-	
+
 		}
 
 		outputStream.close();
@@ -582,7 +605,7 @@ void Level_1_Update(void)
 	}
 
 	//Spawn Enemy
-	if (_deltaTimeEnemySpawner > 1 && enemyCount<MaxEnemyCount)
+	if (_deltaTimeEnemySpawner > 1 && enemyCount < MaxEnemyCount)
 	{
 		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
@@ -617,9 +640,9 @@ void Level_1_Update(void)
 			enemyCount++;
 			//spawn enemy :)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
-			if(enemyInst!= nullptr){
+			if (enemyInst != nullptr) {
 				enemyInst->health = enemyHealth;
-			//std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
+				//std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
 			}
 		}
 		_deltaTimeEnemySpawner = 0;
@@ -636,9 +659,10 @@ void Level_1_Update(void)
 
 	if (AEInputCheckTriggered(AEVK_0))
 	{
-		minElapsed = 2;
+		minElapsed = 3;
 		timeElapsed = 45;
 		enemyCount = 100;
+		spawnCheck = 0;
 	}
 
 	//SPAWN BOSS
@@ -670,8 +694,8 @@ void Level_1_Update(void)
 		}
 	}
 
-		//CHECK TRIGGERED ONLY
-		//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
+	//CHECK TRIGGERED ONLY
+	//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
 	if (AEInputCheckTriggered(AEVK_LEFT) || AEInputCheckTriggered(AEVK_A))
 	{
 		if (_playerScale > 0)
@@ -703,13 +727,13 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-				qInst->position.x -= 5;
+			qInst->position.x -= 5;
 
 		}
 		//Background Offset
 		BG.x -= 0.5f;
 	}
-	
+
 	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -765,7 +789,6 @@ void Level_1_Update(void)
 	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
 	{
 		std::cout << "Once\n";
-		_Augment_Three->showTexture = true;
 	}
 
 	if (AEInputCheckTriggered(AEVK_1))
@@ -832,7 +855,7 @@ void Level_1_Update(void)
 						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad());
 
 						//std::cout << bulletInst->pObject << '\n';
-						if(bulletInst!=nullptr)
+						if (bulletInst != nullptr)
 							AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
 
 						// Reset the fire timer
@@ -842,12 +865,12 @@ void Level_1_Update(void)
 
 				if (qInst->pObject->type == TYPE_AUGMENT2)
 				{
-					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug)* Augment2Range, (f32)sin(_rotation_Aug)* Augment2Range };
-					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f );
-					AEVec2Add(&qInst->position, &pInst->position , &AUGMENT_2_DIRECTION);
+					AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug) * Augment2Range, (f32)sin(_rotation_Aug) * Augment2Range };
+					AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f);
+					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
 
-				if (qInst->pObject->type == TYPE_AUGMENT3 )
+				if (qInst->pObject->type == TYPE_AUGMENT3)
 				{
 					if (_playerScale > 0)
 					{
@@ -868,8 +891,8 @@ void Level_1_Update(void)
 						qInst->showTexture = true;
 						//Do damage here....
 						//only do ONE INSTANCE of damage per skill.
-						
-						
+
+
 						AUGMENT_3_FIRE_TIMER = 0;
 					}
 					//If the instance is active, then every 0.5s, turn off.
@@ -883,6 +906,70 @@ void Level_1_Update(void)
 							AUGMENT_3_OFF_TIMER = 0;
 						}
 					}
+
+				}
+
+
+				if (qInst->pObject->type == TYPE_AUGMENT4)
+				{
+					qInst->position = pInst->position;
+					//Get Mouse cursor Pos
+					AEInputGetCursorPosition(&mouseX, &mouseY);
+
+					//Convert Mouse pos to world space coordinates.
+					AUGMENT_4_MOUSE_POSITION = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
+
+					//Compute the direction of bullet with 60 deg angle discrepancies.
+
+					AUGMENT_4_BULLET_SPEED = AEVec2Length(&AUGMENT_4_DIRECTION);
+
+					AUGMENT_4_DIRECTION = { AUGMENT_4_MOUSE_POSITION.x - qInst->position.x, AUGMENT_4_MOUSE_POSITION.y - qInst->position.y };
+
+					AEVec2Normalize(&AUGMENT_4_DIRECTION, &AUGMENT_4_DIRECTION);
+
+
+					f32 angleDiscrepancy = PI / 180.0f * 30.0f;
+					AUGMENT_4_ANGLE = atan2f(AUGMENT_4_DIRECTION.y, AUGMENT_4_DIRECTION.x) + ((AERandFloat() * 2.0f - 1.0f) * angleDiscrepancy);
+
+
+					AUGMENT_4_DIRECTION.x = cosf(AUGMENT_4_ANGLE);
+					AUGMENT_4_DIRECTION.y = sinf(AUGMENT_4_ANGLE);
+
+					AUGMENT_4_DISTANCE = AEVec2Distance(&qInst->position, &AUGMENT_4_MOUSE_POSITION);
+					AUGMENT_4_DISTANCE_TOLERANCE = 0.1f * AUGMENT_4_DISTANCE;
+
+					AUGMENT_4_TARGET_DISTANCE = AUGMENT_4_DISTANCE + (AERandFloat() * 2.0f - 1.0f) * AUGMENT_4_DISTANCE_TOLERANCE;
+
+					AUGMENT_4_FIRE_TIMER += g_dt;
+
+					GameObjInstances* AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad());
+					if (AUG4_BULLET != nullptr)
+					{
+						AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, BULLET_SPEED);
+					}
+					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL)
+					{
+						//Shoot the bullet to the direction.
+						AUGMENT_4_ACTIVE = true;
+						
+						AUGMENT_4_FIRE_TIMER = 0;
+					}
+
+					//AUGMENT_4_DURATION_TIMER += g_dt;
+					//if (AUGMENT_4_ACTIVE == true)
+					//{
+					//	AUGMENT_4_DURATION_TIMER += g_dt;
+					//}
+
+					//if (AUGMENT_4_DURATION_TIMER > AUGMENT_4_DURATION_INTERVAL)
+					//{
+					//	std::cout << " instance destroy\n";
+					//	if (AUG4_BULLET != nullptr)
+					//	{
+					//		gameObjInstDestroy(AUG4_BULLET);
+					//	}
+					//	AUGMENT_4_DURATION_TIMER = 0;
+					//}
 
 				}
 			}
@@ -1280,7 +1367,7 @@ void Level_1_Update(void)
 			}
 		}
 
-		if (pInst->pObject->type == TYPE_BULLET)
+		if (pInst->pObject->type == TYPE_BULLET || pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
 			//move bullet....
 			pInst->position.x = 2 * pInst->velocity.x * g_dt + pInst->position.x;
@@ -1363,7 +1450,8 @@ void Level_1_Update(void)
 				std::cout << bulletCount << "Out of Screen ." << '\n';
 
 			}
-			gameObjInstDestroy(pInst);
+			if(pInst != nullptr)
+				gameObjInstDestroy(pInst);
 		}
 
 
@@ -1385,11 +1473,11 @@ void Level_1_Update(void)
 			if (ObjInstance2->velocity.x == 0 || ObjInstance2->velocity.y == 0)
 				continue;
 		}
-			AEVec2 boundingRect{};
-			AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
-			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
-			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
-		
+		AEVec2 boundingRect{};
+		AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+		AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
+		AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1426,7 +1514,7 @@ void Level_1_Update(void)
 					if (ObjInstance2->pObject->type == TYPE_BULLET)
 					{
 						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
-						{	
+						{
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false) {
 									std::cout << "Boss HP: " << _Boss->health << '\n';
@@ -1434,7 +1522,7 @@ void Level_1_Update(void)
 									ObjInstance1->health--;
 								}
 							}
-							else if (ObjInstance1->pObject->type == TYPE_ENEMY){
+							else if (ObjInstance1->pObject->type == TYPE_ENEMY) {
 								ObjInstance1->health--;
 								if (ObjInstance1->health <= 0)
 								{
@@ -1442,7 +1530,7 @@ void Level_1_Update(void)
 									enemyCount--;
 								}
 							}
-								gameObjInstDestroy(ObjInstance2);
+							gameObjInstDestroy(ObjInstance2);
 						}
 					}
 					//AUGMENT 2 COLLISION
@@ -1457,7 +1545,7 @@ void Level_1_Update(void)
 							}
 						}
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
-						{	
+						{
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false && spawnCheck == 1) {
 									//Spawn Orbs of Experience at ObjInstance1 Position...
@@ -1476,11 +1564,11 @@ void Level_1_Update(void)
 					}
 
 				}
-				if ((ObjInstance1->health <= 0) && ObjInstance1->pObject->type != TYPE_BOSS){
+				if ((ObjInstance1->health <= 0) && ObjInstance1->pObject->type != TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
 					enemyCount--;
 					_Player_Experience++;
-					if (OrbCounter<OrbCap) {
+					if (OrbCounter < OrbCap) {
 						gameObjInstCreate(TYPE_EXPERIENCE, 10, &ObjInstance1->position, 0, 0);
 						OrbCounter++;
 					}
@@ -1518,7 +1606,7 @@ void Level_1_Update(void)
 			//PLAYER ENEMY COLLISION
 			if (ObjInstance1->pObject->type == TYPE_PLAYER) {
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-				{	
+				{
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
@@ -1566,7 +1654,7 @@ void Level_1_Update(void)
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
 		AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
 	}
-	
+
 }
 
 void Level_1_Draw(void)
@@ -1587,7 +1675,7 @@ void Level_1_Draw(void)
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
-	
+
 	//Draw Background
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
@@ -1595,18 +1683,18 @@ void Level_1_Draw(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(BgroundTexB, 0, 0);
 	AEMtx33 scale0 = { 0 };
-	AEMtx33Scale(&scale0, 1366*1.5, 1000*1.5);
+	AEMtx33Scale(&scale0, 1366 * 1.5, 1000 * 1.5);
 	AEMtx33 rotate0 = { 0 };
 	AEMtx33Rot(&rotate0, 0.f);
 	AEMtx33 translate0 = { 0 };
-	AEMtx33Trans(&translate0, BG.x+1366.f/2.f, BG.y);
+	AEMtx33Trans(&translate0, BG.x + 1366.f / 2.f, BG.y);
 	AEMtx33 transform0 = { 0 };
 	AEMtx33Concat(&transform0, &rotate0, &scale0);
 	AEMtx33Concat(&transform0, &translate0, &transform0);
 	AEGfxSetTransform(transform0.m);
 	AEGfxMeshDraw(bMesh, AE_GFX_MDM_TRIANGLES);
 	//Finish Background draw
-	
+
 
 	//Exp bar start
 	AEGfxTexture* Expbar0 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png");
@@ -1620,16 +1708,16 @@ void Level_1_Draw(void)
 	AEGfxTexture* Expbar8 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png");
 	AEGfxTexture* Expbar9 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png");
 
-	
-	
+
+
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	if (expPercent == 0) {AEGfxTextureSet(Expbar0, 0, 0);}
-	else if (expPercent == 1) {AEGfxTextureSet(Expbar1, 0, 0);}
-	else if (expPercent == 2) {AEGfxTextureSet(Expbar2, 0, 0);}
+	if (expPercent == 0) { AEGfxTextureSet(Expbar0, 0, 0); }
+	else if (expPercent == 1) { AEGfxTextureSet(Expbar1, 0, 0); }
+	else if (expPercent == 2) { AEGfxTextureSet(Expbar2, 0, 0); }
 	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
 	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
 	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
@@ -1638,7 +1726,7 @@ void Level_1_Draw(void)
 	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
 	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
 	//Exp bar end
-	
+
 
 	AEMtx33 scale2 = { 0 };
 	AEMtx33Scale(&scale2, 600.f, 30.f);
@@ -1661,7 +1749,7 @@ void Level_1_Draw(void)
 	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
 	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
 	AEGfxPrint(fontID, level_buffer, -0.985, 0.935, 0.5f, 1, 1, 1);
-	
+
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
 		GameObjInstances* pInst = sGameObjInstList + i;
@@ -1695,12 +1783,20 @@ void Level_1_Draw(void)
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT3)
 		{
-			if(pInst->showTexture == true)
+			if (pInst->showTexture == true)
 				texture = bulletTex;
 			else
 			{
 				texture = InvisibleTex;
 			}
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT4)
+		{
+			texture = augment2Tex;
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
+		{
+			texture = bulletTex;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -1726,7 +1822,7 @@ void Level_1_Draw(void)
 		{
 			texture = ExpOrbTex;
 		}
-		
+
 		AEGfxTextureSet(texture, 0, 0);
 		AEGfxSetTransform(pInst->transform.m);
 		AEGfxMeshDraw(pInst->pObject->pMesh, AE_GFX_MDM_TRIANGLES);
@@ -1902,7 +1998,7 @@ void Level_1_Draw(void)
 		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, timeElapsed);
 	else
 		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, timeElapsed);
-	AEGfxPrint(fontID, gdt_buffer,0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
