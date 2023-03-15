@@ -636,9 +636,8 @@ void Level_1_Update(void)
 
 	if (AEInputCheckTriggered(AEVK_0))
 	{
-		minElapsed = 1;
-		timeElapsed = 31;
-		spawnCheck = 1;
+		minElapsed = 2;
+		timeElapsed = 45;
 		enemyCount = 100;
 	}
 
@@ -650,12 +649,11 @@ void Level_1_Update(void)
 		AE_ASSERT(_Boss);
 		_Boss->position.x = 0;
 		_Boss->position.y = 50;
-
+		spawnCheck = 1;
 
 		//2
 		_BossBullet = gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, BULLET_SIZE, nullptr, nullptr, 0.0f);
 		AE_ASSERT(_BossBullet);
-		spawnCheck = 0;
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
