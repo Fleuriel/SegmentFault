@@ -22,9 +22,6 @@ double gameOverContButton_transY;
 double gameOverQuitButton_transX;
 double gameOverQuitButton_transY;
 
-// Pre-definition of scaling
-double scaleX_gameOver;
-double scaleY_gameOver;
 
 void GameOver_Load(void) 
 {
@@ -66,16 +63,16 @@ void GameOver_Load(void)
 void GameOver_Init(void) 
 {
 	// Gets the scale of 1366x768
-	scaleX_gameOver = getWinWidth() / 1366.f;
-	scaleY_gameOver = getWinHeight() / 768.f;
+	scaleX = getWinWidth() / 1366.f;
+	scaleY = getWinHeight() / 768.f;
 
 	// Continue button translation
-	gameOverContButton_transX = 30.f * scaleX_gameOver;
-	gameOverContButton_transY = 0.f * scaleY_gameOver;
+	gameOverContButton_transX = 30.f * scaleX;
+	gameOverContButton_transY = 0.f * scaleY;
 
 	// Quit button translation
-	gameOverQuitButton_transX = 30.f * scaleX_gameOver;
-	gameOverQuitButton_transY = -100.f * scaleY_gameOver;
+	gameOverQuitButton_transX = 30.f * scaleX;
+	gameOverQuitButton_transY = -100.f * scaleY;
 
 }
 
@@ -98,12 +95,12 @@ void GameOver_Update(void)
 	printf("%d\n%d\n", cursorX, cursorY);  //debug
 	//printf("%f\n%f\n", button1_midX, button1_midY);  //debug
 	// if cursor within buttons, change game state
-	if (IsAreaClicked(gameOverContButton_midX, gameOverContButton_midY, 170.0f * scaleX_gameOver, 50.0f * scaleY_gameOver, cursorX, cursorY)
+	if (IsAreaClicked(gameOverContButton_midX, gameOverContButton_midY, 170.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = PLAY;
 		printf("Goto Play\n");
 	}
-	else if (IsAreaClicked(gameOverQuitButton_midX, gameOverQuitButton_midY, 170.0f * scaleX_gameOver, 50.0f * scaleY_gameOver, cursorX, cursorY)
+	else if (IsAreaClicked(gameOverQuitButton_midX, gameOverQuitButton_midY, 170.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = MAINMENU;
 		printf("Goto Main Menu\n");
@@ -135,7 +132,7 @@ void GameOver_Draw(void)
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEMtx33 scale1 = { 0 };
-	AEMtx33Scale(&scale1, 100.f * scaleX_gameOver, 50.f * scaleY_gameOver);
+	AEMtx33Scale(&scale1, 100.f * scaleX, 50.f * scaleY);
 	AEMtx33 rotate1 = { 0 };
 	AEMtx33Rot(&rotate1, 0.f);
 	AEMtx33 translate1 = { 0 };
@@ -150,7 +147,7 @@ void GameOver_Draw(void)
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEMtx33 scale2 = { 0 };
-	AEMtx33Scale(&scale2, 100.f * scaleX_gameOver, 50.f * scaleY_gameOver);
+	AEMtx33Scale(&scale2, 100.f * scaleX, 50.f * scaleY);
 	AEMtx33 rotate2 = { 0 };
 	AEMtx33Rot(&rotate2, 0.f);
 	AEMtx33 translate2 = { 0 };
@@ -166,19 +163,19 @@ void GameOver_Draw(void)
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(gameOver_buffer, "GAME OVER");
-	AEGfxPrint(fontID, gameOver_buffer, (getWinWidth() / (-7500.f * scaleX_gameOver)), (getWinHeight() / (4000.f * scaleY_gameOver)), 0.8f * scaleX_gameOver, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	AEGfxPrint(fontID, gameOver_buffer, (getWinWidth() / (-7500.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(gameOverCont_buffer, "Continue?");
-	AEGfxPrint(fontID, gameOverCont_buffer, (getWinWidth() / (-12200.f * scaleX_gameOver)), (getWinHeight() / (-25000.f * scaleY_gameOver)), 0.6f * scaleX_gameOver, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	AEGfxPrint(fontID, gameOverCont_buffer, (getWinWidth() / (-12200.f * scaleX)), (getWinHeight() / (-25000.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(gameOverQuit_buffer, "Title screen");
-	AEGfxPrint(fontID, gameOverQuit_buffer, (getWinWidth() / (-10500.f * scaleX_gameOver)), (getWinHeight() / (-2600.f * scaleY_gameOver)), 0.6f * scaleX_gameOver, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	AEGfxPrint(fontID, gameOverQuit_buffer, (getWinWidth() / (-10500.f * scaleX)), (getWinHeight() / (-2600.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 }
 
 void GameOver_Free(void) 
