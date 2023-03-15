@@ -27,3 +27,6 @@ float getWinWidth();
 
 // Function to get window width
 float getWinHeight();
+
+// Function to get angle of cursor to origin in radian
+float getCursorRad();

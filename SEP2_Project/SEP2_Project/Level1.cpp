@@ -2,6 +2,7 @@
 #include "GameObjects.h"
 #include <iostream>
 #include <cstdio>
+#include <cmath>
 
 static bool onValueChange = true;
 int reqExp = 15;
@@ -159,13 +160,14 @@ void Level_1_Load(void)
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-		0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+		-0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+
 	AEGfxTriAdd(
-		-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-		0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
 	_Objects->pMesh = AEGfxMeshEnd();
 	AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
@@ -429,7 +431,7 @@ void Level_1_Init(void)
 
 
 	//7
-	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
+	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, getCursorRad());
 	AE_ASSERT(_Augment_One);
 
 	//8
@@ -806,7 +808,7 @@ void Level_1_Update(void)
 						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
 						// Create a new bullet object and set its velocity to point towards the target
-						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, 0.0f);
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad());
 
 						//std::cout << bulletInst->pObject << '\n';
 						if(bulletInst!=nullptr)
