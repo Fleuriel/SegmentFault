@@ -9,6 +9,10 @@ int		 FPS = 144;
 s8       fontID;
 double	 Currency = 0;
 
+// Pre-definition of scaling
+double scaleX;
+double scaleY;
+
 /******************************************************************************/
 /*!
 	Starting point of the application

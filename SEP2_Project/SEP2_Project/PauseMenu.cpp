@@ -22,9 +22,6 @@ double resumeButton_transY;
 double augmentButton_transX;
 double augmentButton_transY;
 
-// Pre-definition of scaling
-double scaleX_pause;
-double scaleY_pause;
 
 void Pause_Load(void)
 {
@@ -53,20 +50,20 @@ void Pause_Init(void)
     Timer = 0.0f;
 
     // Gets the scale of 1366x768
-    scaleX_pause = getWinWidth() / 1366.f;
-    scaleY_pause = getWinHeight() / 768.f;
+    scaleX = getWinWidth() / 1366.f;
+    scaleY = getWinHeight() / 768.f;
 
     // Quit button translation
-    quitButton_transX = -300.f * scaleX_pause;
-    quitButton_transY = -200.f * scaleY_pause;
+    quitButton_transX = -300.f * scaleX;
+    quitButton_transY = -200.f * scaleY;
 
     // Resume button translation
-    resumeButton_transX = 300.f * scaleX_pause;
-    resumeButton_transY = -200.f * scaleY_pause;
+    resumeButton_transX = 300.f * scaleX;
+    resumeButton_transY = -200.f * scaleY;
 
     // Augment button translation
-    augmentButton_transX = 0.f * scaleX_pause;
-    augmentButton_transY = 200.f * scaleY_pause;
+    augmentButton_transX = 0.f * scaleX;
+    augmentButton_transY = 200.f * scaleY;
 
 
 }
@@ -93,18 +90,18 @@ void Pause_Update(void)
     // printf("%d\n%d\n", cursorX, cursorY);  //debug
     //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
-    if (IsAreaClicked(quitButton_midX, quitButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+    if (IsAreaClicked(quitButton_midX, quitButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
         //printf("MAINMENU\n");
     }
-    else if (IsAreaClicked(resumeButton_midX, resumeButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+    else if (IsAreaClicked(resumeButton_midX, resumeButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = PLAY;
         //printf("RESUME\n");
     }
 
-    else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX_pause, 100.0f * scaleY_pause, cursorX, cursorY)
+    else if (IsAreaClicked(augmentButton_midX, augmentButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = AUGMENTS;
         //printf("AUGMENTS\n");
@@ -128,7 +125,7 @@ void Pause_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 scale = { 0 };
-    AEMtx33Scale(&scale, 100.f * scaleX_pause, 100.f * scaleY_pause);
+    AEMtx33Scale(&scale, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate = { 0 };
     AEMtx33Rot(&rotate, 0.f);
     AEMtx33 translate = { 0 };
@@ -143,7 +140,7 @@ void Pause_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 scale1 = { 0 };
-    AEMtx33Scale(&scale1, 100.f * scaleX_pause, 100.f * scaleY_pause);
+    AEMtx33Scale(&scale1, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate1 = { 0 };
     AEMtx33Rot(&rotate1, 0.f);
     AEMtx33 translate1 = { 0 };
@@ -175,14 +172,14 @@ void Pause_Draw(void)
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(quit_buffer, "Quit");
     AEGfxGetPrintSize(fontID, quit_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, quit_buffer, (getWinWidth() / (-2500.f * scaleX_pause)), (getWinHeight() / (-1350.f * scaleY_pause)), 1.0f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, quit_buffer, (getWinWidth() / (-2500.f * scaleX)), (getWinHeight() / (-1350.f * scaleY)), 1.0f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(resume_buffer, "Resume");
     AEGfxGetPrintSize(fontID, resume_buffer, 1.0f, pause_textWidth, pause_textHeight);
-    AEGfxPrint(fontID, resume_buffer, (getWinWidth() / (4500.f * scaleX_pause)), (getWinHeight() / (-1380.f * scaleY_pause)), 0.7f * scaleX_pause, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, resume_buffer, (getWinWidth() / (4500.f * scaleX)), (getWinHeight() / (-1380.f * scaleY)), 0.7f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     /*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
