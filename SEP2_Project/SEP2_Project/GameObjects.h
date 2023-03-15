@@ -10,7 +10,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <vector>
 
 
 
@@ -270,8 +269,6 @@ int experienceCurve(int level, int& playerExperience, int& reqExp)
 		int increment = 2 * ((level - 1) / 5);
 		reqExp += (level - 1) * increment;
 	}
-
-
 	return level;
 }
 

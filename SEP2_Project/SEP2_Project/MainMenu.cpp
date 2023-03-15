@@ -24,7 +24,15 @@ char upgrade_buffer[1024]{};
 char settings_buffer[1024]{};
 char credits_buffer[1024]{};
 char exit_buffer[1024]{};
+char highScore_buffer[1024]{};
+char gold_buffer[1024]{};
 float mainMenu_textWidth{}, mainMenu_textHeight{};
+
+// Pre-defintions for Button rotation 
+double buttonRotate_play;
+double buttonRotate_settings;
+double buttonRotate_powerups;
+double buttonRotate_credits;
 
 
 void Menu_Load(void)
@@ -70,6 +78,11 @@ void Menu_Init(void)
     exitButton_transX = 663.5f * scaleX;
     exitButton_transY = 355.0f * scaleY;
     
+    buttonRotate_play = 0.f;
+    buttonRotate_powerups = 0.f;
+    buttonRotate_settings = 0.f;
+    buttonRotate_credits = 0.f;
+
 }
 
 void Menu_Update(void) 
@@ -79,7 +92,8 @@ void Menu_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
-    
+    printf("%d\n", cursorX);
+    printf("%d\n", cursorY);
     //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
 
     // Powerups button mid points
@@ -103,23 +117,30 @@ void Menu_Update(void)
     float exitButton_midY = (getWinHeight() / 2) - exitButton_transY;
     
     // printf("%d\n%d\n", cursorX, cursorY);  //debug
-    //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
-    // if cursor within buttons, change game state
+    // printf("%f\n%f\n", button1_midX, button1_midY);  //debug
+    
+    /********************************** Button Collision Logic Start ********************************************/
     if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    {
         gGameStateNext = UPGRADE;
         printf("Goto powerups\n");
     }
+
     else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    {
         gGameStateNext = SETTINGS;
         printf("Goto Settings\n");
     }
+
     else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    {
         gGameStateNext = PLAY;
         printf("Goto Play\n");
     }
+
     /*
     else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
@@ -128,26 +149,77 @@ void Menu_Update(void)
     }*/
 
     else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    {
         gGameStateNext = QUIT;
         printf("QUIT\n");
     }
+    /********************************** Button Collision Logic End ********************************************/
 
 
+    /********************************** Button Animation Logic Start ********************************************/
+    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) 
+    {
+        buttonRotate_powerups = -0.10f;
+    }
+
+    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) 
+    {
+        buttonRotate_settings = -0.10f;
+    }
+
+    else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)) 
+    {
+        buttonRotate_play = -0.10f;
+    }
+
+    
+    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    {
+        gGameStateNext = CREDITS;
+        printf("Goto Credits\n");
+    }
+
+    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_credits = -0.10f;
+    }
+
+    if (!IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_powerups = 0.0f;
+    }
+
+    if (!IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_settings = 0.0f;
+    }
+
+    if (!IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_play = 0.0f;
+    }
+
+    if (!IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_credits = 0.0f;
+    }
+
+    /********************************** Button Animation Logic End ********************************************/
+
+    
 }
 void Menu_Draw(void)
 {
     
-
-
-
     // Button 1, Power-ups button
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEMtx33 scale = { 0 };
     AEMtx33Scale(&scale, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate = { 0 };
-    AEMtx33Rot(&rotate, 0.f);
+    AEMtx33Rot(&rotate, buttonRotate_powerups);
     AEMtx33 translate = { 0 };
     AEMtx33Trans(&translate, powerUpButton_transX, powerUpButton_transY);
     AEMtx33 transform = { 0 };
@@ -162,7 +234,7 @@ void Menu_Draw(void)
     AEMtx33 scale1 = { 0 };
     AEMtx33Scale(&scale1, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate1 = { 0 };
-    AEMtx33Rot(&rotate1, 0.f);
+    AEMtx33Rot(&rotate1, buttonRotate_settings);
     AEMtx33 translate1 = { 0 };
     AEMtx33Trans(&translate1, settingsButton_transX, settingsButton_transY);
     AEMtx33 transform1 = { 0 };
@@ -171,7 +243,7 @@ void Menu_Draw(void)
     AEGfxSetTransform(transform1.m);
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
-    // Button 3, Start button
+    // Button 3, Play button
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -180,7 +252,7 @@ void Menu_Draw(void)
     AEMtx33 scale2 = { 0 };
     AEMtx33Scale(&scale2, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate2 = { 0 };
-    AEMtx33Rot(&rotate2, 0.f);
+    AEMtx33Rot(&rotate2, buttonRotate_play);
     AEMtx33 translate2 = { 0 };
     AEMtx33Trans(&translate2, playButton_transX, playButton_transY);
     AEMtx33 transform2 = { 0 };
@@ -195,7 +267,7 @@ void Menu_Draw(void)
     AEMtx33 scale3 = { 0 };
     AEMtx33Scale(&scale3, 80.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate3 = { 0 };
-    AEMtx33Rot(&rotate3, 0.f);
+    AEMtx33Rot(&rotate3, buttonRotate_credits);
     AEMtx33 translate3 = { 0 };
     AEMtx33Trans(&translate3, creditsButton_transX, creditsButton_transY);
     AEMtx33 transform3 = { 0 };
@@ -254,6 +326,20 @@ void Menu_Draw(void)
     sprintf_s(exit_buffer, "X");
     AEGfxGetPrintSize(fontID, exit_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (1466.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 222.0f / 255.f, 49.0f / 255.f, 99.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(highScore_buffer, "Highscore: %d");
+    AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(gold_buffer, "Gold: %d");
+    AEGfxGetPrintSize(fontID, gold_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
 
 }
 
