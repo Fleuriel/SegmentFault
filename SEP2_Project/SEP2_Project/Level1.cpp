@@ -436,7 +436,7 @@ void Level_1_Init(void)
 
 
 	//7
-	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, getCursorRad());
+	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	AE_ASSERT(_Augment_One);
 
 	//8
