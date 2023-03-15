@@ -634,6 +634,14 @@ void Level_1_Update(void)
 
 		//As of now i will be moving the X and Y coordinates with these, someone need to do the offsets.
 
+	if (AEInputCheckTriggered(AEVK_0))
+	{
+		minElapsed = 1;
+		timeElapsed = 31;
+		spawnCheck = 1;
+		enemyCount = 100;
+	}
+
 	//SPAWN BOSS
 	if (minElapsed == 3 && timeElapsed >= 0 && spawnCheck == 0) {
 		//1
@@ -646,8 +654,8 @@ void Level_1_Update(void)
 
 		//2
 		_BossBullet = gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, BULLET_SIZE, nullptr, nullptr, 0.0f);
-		AE_ASSERT(_Boss);
-		spawnCheck = 1;
+		AE_ASSERT(_BossBullet);
+		spawnCheck = 0;
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
@@ -761,31 +769,27 @@ void Level_1_Update(void)
 		std::cout << "Once\n";
 		_Augment_Three->showTexture = true;
 	}
-	if (AEInputCheckTriggered(AEVK_RCTRL))
-	{
-		_Augment_Three->showTexture = false;
-	}
 
-	//if (AEInputCheckTriggered(AEVK_1))
-	//{
-	//	bossPhase = TYPE_BHELL1;
-	//}
-	//if (AEInputCheckTriggered(AEVK_2))
-	//{
-	//	bossPhase = TYPE_BHELL2;
-	//}
-	//if (AEInputCheckTriggered(AEVK_3))
-	//{
-	//	bossPhase = TYPE_BHELL3;
-	//}
-	//if (AEInputCheckTriggered(AEVK_4))
-	//{
-	//	bossPhase = TYPE_BHELL4;
-	//}
-	//if (AEInputCheckTriggered(AEVK_5))
-	//{
-	//	bossPhase = TYPE_BOWAP;
-	//}
+	if (AEInputCheckTriggered(AEVK_1))
+	{
+		bossPhase = TYPE_BHELL1;
+	}
+	if (AEInputCheckTriggered(AEVK_2))
+	{
+		bossPhase = TYPE_BHELL2;
+	}
+	if (AEInputCheckTriggered(AEVK_3))
+	{
+		bossPhase = TYPE_BHELL3;
+	}
+	if (AEInputCheckTriggered(AEVK_4))
+	{
+		bossPhase = TYPE_BHELL4;
+	}
+	if (AEInputCheckTriggered(AEVK_5))
+	{
+		bossPhase = TYPE_BOWAP;
+	}
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -903,11 +907,6 @@ void Level_1_Update(void)
 				AEVec2Add(&pInst->position, &pInst->position, &direction);
 			}
 
-			if (AEInputCheckCurr(AEVK_MINUS))
-			{
-				pInst->health -= 1;
-				std::cout << pInst->health << '\n';
-			}
 
 			switch (bossPhase)
 			{
@@ -915,7 +914,7 @@ void Level_1_Update(void)
 				DelayShoot = 0.25f;
 				numBulletsBHell = 11;
 				angle = 225;
-				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
+				if (pInst->health <= 0 || _deltaTime_Shooting > 90)
 				{
 					std::cout << "entry Upon this thing\n";
 					double const MAX_DELAY = 4.0f;
@@ -976,7 +975,7 @@ void Level_1_Update(void)
 				angle = 390;
 
 				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
-				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
+				if (pInst->health <= 0 || _deltaTime_Shooting > 90)
 				{
 					double const MAX_DELAY = 4.0f;
 					if (_delayTimeBullets > MAX_DELAY)
@@ -1013,7 +1012,7 @@ void Level_1_Update(void)
 			case TYPE_BHELL3:
 				DelayShoot = 0.15f;
 				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
-				if (pInst->health <= 0 || _deltaTime_Shooting > 10)
+				if (pInst->health <= 0 || _deltaTime_Shooting > 90)
 				{
 					double const MAX_DELAY = 4.0f;
 					if (_delayTimeBullets > MAX_DELAY)
