@@ -138,3 +138,20 @@ float getWinWidth() {
 float getWinHeight() {
 	return AEGfxGetWinMaxY() - AEGfxGetWinMinY();
 }
+
+// Function to get angle of cursor to origin in radian
+float getCursorRad() {
+    s32 cX, cY; //Mouse pos
+    float rad = 0; //radian value to be returned
+    const float pi = 3.1415926; //define pi
+
+    AEInputGetCursorPosition(&cX, &cY);
+    AEVec2 MOUSE_POSITION = { (f32)cX - (1366 / 2), -((f32)cY - (768 / 2)) }; //Mouse pos with reference to window size
+
+    if (MOUSE_POSITION.x > 0 && MOUSE_POSITION.y > 0) { rad = pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }                  //Quad1
+    else if (MOUSE_POSITION.x < 0 && MOUSE_POSITION.y > 0) { rad = 2 / 4 * pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }     //Quad2
+    else if (MOUSE_POSITION.x < 0 && MOUSE_POSITION.y < 0) { rad = 2 / 4 * pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }     //Quad3
+    else if (MOUSE_POSITION.x > 0 && MOUSE_POSITION.y < 0) { rad = pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }             //Quad4
+
+    return rad; //Return radian value
+}

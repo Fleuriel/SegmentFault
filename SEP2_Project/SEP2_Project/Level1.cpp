@@ -2,6 +2,7 @@
 #include "GameObjects.h"
 #include <iostream>
 #include <cstdio>
+#include <cmath>
 
 int reqExp = 15;
 int expPercent = 0;
@@ -47,8 +48,8 @@ double augment4Button_transY;
 float overlayTransparency = 0.0f;
 
 // Pre-definition of scaling
-double scaleX_level1;
-double scaleY_level1;
+float scaleX_level1;
+float scaleY_level1;
 
 //Pre-definition for buffers
 char level_buffer[16]{};
@@ -163,16 +164,17 @@ void Level_1_Load(void)
 
 		AEGfxMeshStart();
 
-		AEGfxTriAdd(
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-		AEGfxTriAdd(
-			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-		_Objects->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
+	AEGfxTriAdd(
+		-0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+
+	AEGfxTriAdd(
+		0.5f, -0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		-0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f,
+		0.5f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+	_Objects->pMesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
 		//4	TYPE_ENEMY
 		_Objects = sGameObjList + sGameObjNum++;
@@ -434,7 +436,7 @@ void Level_1_Init(void)
 
 
 	//7
-	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
+	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, getCursorRad());
 	AE_ASSERT(_Augment_One);
 
 	//8
@@ -490,17 +492,17 @@ void Level_1_Update(void)
 	}
 
 	// Augment buttons mid points
-	float augment1Button_midX = (getWinWidth() / 2.04f) + augment1Button_transX;
-	float augment1Button_midY = (getWinHeight() / 2.f) - augment1Button_transY;
+	f64 augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
+	f64 augment1Button_midY = (getWinHeight() / 2) - augment1Button_transY;
 
-	float augment2Button_midX = (getWinWidth() / 2.04f) + augment2Button_transX;
-	float augment2Button_midY = (getWinHeight() / 2.f) - augment2Button_transY;
+	f64 augment2Button_midX = (getWinWidth() / 2.04) + augment2Button_transX;
+	f64 augment2Button_midY = (getWinHeight() / 2) - augment2Button_transY;
 
-	float augment3Button_midX = (getWinWidth() / 2.04f) + augment3Button_transX;
-	float augment3Button_midY = (getWinHeight() / 2.f) - augment3Button_transY;
+	f64 augment3Button_midX = (getWinWidth() / 2.04) + augment3Button_transX;
+	f64 augment3Button_midY = (getWinHeight() / 2) - augment3Button_transY;
 
-	float augment4Button_midX = (getWinWidth() / 2.04f) + augment4Button_transX;
-	float augment4Button_midY = (getWinHeight() / 2.f) - augment4Button_transY;
+	f64 augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
+	f64 augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
 
 	if (overlayTransparency != 0) {
 		// Overlay button logic and defintions
@@ -510,7 +512,7 @@ void Level_1_Update(void)
 			printf("Augment 1 ++\n");
 			if (SkillPoint != 0 && Augment1Level!=4) {
 				SkillPoint--;
-				Augment1CD -= 0.3;
+				Augment1CD -= (float)0.3;
 				Augment1Level++;
 			}
 		}
@@ -811,7 +813,7 @@ void Level_1_Update(void)
 						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
 						// Create a new bullet object and set its velocity to point towards the target
-						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, 0.0f);
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad());
 
 						//std::cout << bulletInst->pObject << '\n';
 						if(bulletInst!=nullptr)
@@ -917,7 +919,7 @@ void Level_1_Update(void)
 					{
 						for (int i = 0; i < numBulletsBHell; i++)
 						{
-							static f64 angle2 = 0;
+							static f32 angle2 = 0;
 							angle -= 10;
 							if (angle < 134)
 							{
@@ -1014,7 +1016,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 80)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 							for (int i = 0; i < numBulletsBHell; i++)
@@ -1030,7 +1032,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 60 && pInst->health < 80)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 							for (int i = 0; i < numBulletsBHell; i++)
@@ -1045,7 +1047,7 @@ void Level_1_Update(void)
 						if (pInst->health > 40 && pInst->health < 60)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 
@@ -1068,7 +1070,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 0 && pInst->health <= 40)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 
