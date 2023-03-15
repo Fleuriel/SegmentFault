@@ -33,8 +33,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 
 	// Initialize the system
-	//AESysInit(instanceH, show, 1366, 768, 1, FPS, false, NULL);
-	AESysInit(instanceH, show, 1000, 563, 1, FPS, false, NULL);
+	AESysInit(instanceH, show, 1366, 768, 1, FPS, false, NULL);
+	//AESysInit(instanceH, show, 1000, 563, 1, FPS, false, NULL);
 	
 
 	// Changing the window title

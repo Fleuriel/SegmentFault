@@ -452,9 +452,9 @@ void Level_1_Init(void)
 	augment2Button_transX = 0.0f * scaleX;
 	augment2Button_transY = 195.0f * scaleY;
 	augment3Button_transX = 0.0f * scaleX;
-	augment3Button_transY = 115.0f * scaleY;
+	augment3Button_transY = 110.0f * scaleY;
 	augment4Button_transX = 0.0f * scaleX;
-	augment4Button_transY = 30.0f * scaleY;
+	augment4Button_transY = 25.0f * scaleY;
 
 }
 
@@ -518,6 +518,17 @@ void Level_1_Update(void)
 				SkillPoint--;
 				Augment2Range += 0.5;
 				Augment2Level++;
+			}
+		}
+
+		if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//gGameStateNext = QUIT;
+			printf("Augment 3 ++\n");
+			if (SkillPoint != 0 && Augment2Level != 4) {
+				SkillPoint--;
+				//Augment3Range += 0.5;
+				//Augment3Level++;
 			}
 		}
 	}
@@ -1814,6 +1825,22 @@ void Level_1_Draw(void)
 		AEMtx33Concat(&transform5, &translate5, &transform5);
 		AEGfxSetTransform(transform5.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale6 = { 0 };
+		AEMtx33Scale(&scale6, 34.f, 50.f);
+		AEMtx33 rotate6 = { 0 };
+		AEMtx33Rot(&rotate6, 0.f);
+		AEMtx33 translate6 = { 0 };
+		AEMtx33Trans(&translate6, augment3Button_transX, augment3Button_transY);
+		AEMtx33 transform6 = { 0 };
+		AEMtx33Concat(&transform6, &rotate6, &scale6);
+		AEMtx33Concat(&transform6, &translate6, &transform6);
+		AEGfxSetTransform(transform6.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
 		// Rendering texts for overlay
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1827,6 +1854,12 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment2_buffer, "Augment 2");
 		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (1595.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment2_buffer, "Augment 3");
+		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (2850.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -1845,6 +1878,12 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (1680.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (3250.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 		// Overlay end
 
 
@@ -1866,6 +1905,7 @@ void Level_1_Draw(void)
 		if (Augment2Level >= 4)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
 	}
 
 	// Rendering texts for the screen	
