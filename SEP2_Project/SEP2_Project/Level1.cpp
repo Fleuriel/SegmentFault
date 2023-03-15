@@ -1948,7 +1948,7 @@ void Level_1_Unload(void)
 	Aug2CreateCheck = false;
 	timeElapsed = 0;
 	minElapsed = 0;
-	spawnCheck = 1;
+	spawnCheck = 0;
 	enemyCount = 0;
 	OrbCounter = 0;
 	_Player_Level = 1;
