@@ -983,7 +983,7 @@ void Level_1_Update(void)
 
 					AUGMENT_4_FIRE_TIMER += g_dt;
 
-					GameObjInstances* AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad());
+					GameObjInstances* AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
 					if (AUG4_BULLET != nullptr)
 					{
 						AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, BULLET_SPEED);

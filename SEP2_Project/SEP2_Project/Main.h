@@ -39,7 +39,4 @@ extern double scaleX;
 extern double scaleY;
 
 
-//=======
 extern int		ShipModel;
-///*>>>>>>>*/ Stashed changes
-// ---------------------------------------------------------------------------
