@@ -18,7 +18,6 @@
 #include "MainMenu.h"
 #include "PauseMenu.h"
 #include "SettingsMenu.h"
-#include "Augments.h"
 #include "Credits.h"
 #include "GameOverMenu.h"
 
@@ -32,4 +31,8 @@ extern float	g_dt;
 extern double	g_appTime;
 extern s8       fontID;
 extern double   Currency;
+
+// Pre-definition of scaling
+extern double scaleX;
+extern double scaleY;
 // ---------------------------------------------------------------------------
