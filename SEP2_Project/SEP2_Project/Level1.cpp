@@ -48,8 +48,8 @@ double augment4Button_transY;
 float overlayTransparency = 0.0f;
 
 // Pre-definition of scaling
-double scaleX_level1;
-double scaleY_level1;
+float scaleX_level1;
+float scaleY_level1;
 
 //Pre-definition for buffers
 char level_buffer[16]{};
@@ -485,17 +485,17 @@ void Level_1_Update(void)
 	}
 
 	// Augment buttons mid points
-	float augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
-	float augment1Button_midY = (getWinHeight() / 2) - augment1Button_transY;
+	f64 augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
+	f64 augment1Button_midY = (getWinHeight() / 2) - augment1Button_transY;
 
-	float augment2Button_midX = (getWinWidth() / 2.04) + augment2Button_transX;
-	float augment2Button_midY = (getWinHeight() / 2) - augment2Button_transY;
+	f64 augment2Button_midX = (getWinWidth() / 2.04) + augment2Button_transX;
+	f64 augment2Button_midY = (getWinHeight() / 2) - augment2Button_transY;
 
-	float augment3Button_midX = (getWinWidth() / 2.04) + augment3Button_transX;
-	float augment3Button_midY = (getWinHeight() / 2) - augment3Button_transY;
+	f64 augment3Button_midX = (getWinWidth() / 2.04) + augment3Button_transX;
+	f64 augment3Button_midY = (getWinHeight() / 2) - augment3Button_transY;
 
-	float augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
-	float augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
+	f64 augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
+	f64 augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
 
 	if (overlayTransparency != 0) {
 		// Overlay button logic and defintions
@@ -505,7 +505,7 @@ void Level_1_Update(void)
 			printf("Augment 1 ++\n");
 			if (SkillPoint != 0 && Augment1Level!=4) {
 				SkillPoint--;
-				Augment1CD -= 0.3;
+				Augment1CD -= (float)0.3;
 				Augment1Level++;
 			}
 		}
@@ -918,7 +918,7 @@ void Level_1_Update(void)
 					{
 						for (int i = 0; i < numBulletsBHell; i++)
 						{
-							static f64 angle2 = 0;
+							static f32 angle2 = 0;
 							angle -= 10;
 							if (angle < 134)
 							{
@@ -1015,7 +1015,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 80)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 							for (int i = 0; i < numBulletsBHell; i++)
@@ -1031,7 +1031,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 60 && pInst->health < 80)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 							for (int i = 0; i < numBulletsBHell; i++)
@@ -1046,7 +1046,7 @@ void Level_1_Update(void)
 						if (pInst->health > 40 && pInst->health < 60)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 
@@ -1069,7 +1069,7 @@ void Level_1_Update(void)
 						if (pInst->health >= 0 && pInst->health <= 40)
 						{
 							angle = 360;
-							static f64 angleOffset = 0;
+							static f32 angleOffset = 0;
 							DelayShoot = 0.25f;
 							numBulletsBHell = 4;
 

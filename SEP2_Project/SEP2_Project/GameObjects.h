@@ -36,7 +36,7 @@ u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
 s32 bulletCount = 0; // Number of bullets fired
 u32 enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
-f64 enemyHealth = 1;
+f32 enemyHealth = 1;
 bool upgradeToggle = 0;
 extern int SkillPoint = 0;
 
@@ -95,7 +95,7 @@ public:
 	s32				health;
 	bool			showTexture;
 	bool            isInvincible;
-	f64				iFrame;
+	f32				iFrame;
 
 };
 
@@ -137,12 +137,12 @@ static GameObjInstances					*_Augment_Five;
 bool				UIToggle = false;
 
 u32					minutes = 0;
-f64					enemySpeed = 1.0f;
-f64					enemySize = 10.0f;
-f64					_deltaTimeEnemySpawner;
-f64					_deltaTime;
-f64					_deltaTime_Shooting = 0.0f;
-f64					_deltaTime_State = 0.0f;
+f32					enemySpeed = 1.0f;
+f32					enemySize = 10.0f;
+f32					_deltaTimeEnemySpawner;
+f32					_deltaTime;
+f32					_deltaTime_Shooting = 0.0f;
+f32					_deltaTime_State = 0.0f;
 bool				toggleHitBox = false;
 AEVec2				velocity;
 AEVec2				velocity2;
@@ -189,9 +189,9 @@ static bool spawnBulletSpawner = true;
 
 
 //parameters for constructor to fufil..
-const f64 GameObjInstancesSpeed = 1.0f;
+const f32 GameObjInstancesSpeed = 1.0f;
 const f32 projectileSpeed = 90.0f;
-const f64 GameObjInstances_SIZE = 10.0f;
+const f32 GameObjInstances_SIZE = 10.0f;
 
 
 
@@ -203,9 +203,9 @@ s32 mouseX, mouseY;
 
 
 //Creating the objects for enemy and Projectile.
-f64 angle;
-f64 angle2 = 0;
-f64 rotationAngle = 3600;// number of rotations/360.
+f32 angle;
+f32 angle2 = 0;
+f32 rotationAngle = 3600;// number of rotations/360.
 //Projectile projectile(0, 0, angle, projectileSpeed);
 
 
@@ -218,14 +218,14 @@ s16 _playerScale = -1;
 u8  bossPhase = 0;
 
 //Return to position 0, at the end of a calculation..
-f64 BOSS_X_PHASE_4 = 0;
-f64 BOSS_Y_PHASE_4 = 0;
-f64 BOSS_SPEED_PHASE_4 = 0;
+f32 BOSS_X_PHASE_4 = 0;
+f32 BOSS_Y_PHASE_4 = 0;
+f32 BOSS_SPEED_PHASE_4 = 0;
 
 
 
 //Augments
-f64 _rotation_Aug = 0.0f;
+f32 _rotation_Aug = 0.0f;
 
 s16 _enemyScale = 1; //1 is follow right, -1 is turn left,
 
@@ -233,27 +233,27 @@ AEVec2 ENEMY_DIRECTION;
 AEVec2 ENEMY_VELOCITY;
 
 
-f64 AUGMENT_1_FIRE_TIMER      = 0;
-f64 AUGMENT_1_FIRE_INTERVAL   = 2.0f;
+f32 AUGMENT_1_FIRE_TIMER      = 0;
+f32 AUGMENT_1_FIRE_INTERVAL   = 2.0f;
 AEVec2 AUGMENT_1_MOUSE_POSITION;
 AEVec2 AUGMENT_1_DIRECTION;
 
 //NOT REQUIRED AS IT IS JUST A ROLLING ROCK
-//f64 AUGMENT_2_FIRE_TIMER      = 0;
-//f64 AUGMENT_2_FIRE_INTERVAL   = 2.0f;
+//f32 AUGMENT_2_FIRE_TIMER      = 0;
+//f32 AUGMENT_2_FIRE_INTERVAL   = 2.0f;
 AEVec2 AUGMENT_2_DIRECTION;
 
-f64 AUGMENT_3_FIRE_TIMER	  = 0.0f;
-f64 AUGMENT_3_FIRE_INTERVAL   = 2.0f;
+f32 AUGMENT_3_FIRE_TIMER	  = 0.0f;
+f32 AUGMENT_3_FIRE_INTERVAL   = 2.0f;
 AEVec2 AUGMENT_3_DIRECTION;
-f64 AUGMENT_3_OFF_TIMER       = 0.0f;
-f64 AUGMENT_3_OFF_INTERVAL	  = 0.2f;
+f32 AUGMENT_3_OFF_TIMER       = 0.0f;
+f32 AUGMENT_3_OFF_INTERVAL	  = 0.2f;
 
-f64 AUGMENT_4_FIRE_TIMER;
-f64 AUGMENT_4_FIRE_INTERVAL;
+f32 AUGMENT_4_FIRE_TIMER;
+f32 AUGMENT_4_FIRE_INTERVAL;
 
-f64 AUGMENT_5_FIRE_TIMER;
-f64 AUGMENT_5_FIRE_INTERVAL;
+f32 AUGMENT_5_FIRE_TIMER;
+f32 AUGMENT_5_FIRE_INTERVAL;
 
 s32 _Player_Experience = 0;
 s32 _Player_Level = 1;
@@ -269,6 +269,7 @@ int experienceCurve(int level, int& playerExperience, int& reqExp)
 		level++;
 		SkillPoint++;
 	}
+
 
 	return level;
 }
