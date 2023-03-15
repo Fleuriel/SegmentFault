@@ -69,6 +69,7 @@ bool Aug2CreateCheck = false;
 bool Aug3CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
+float offset = 5.f;
 
 
 //Condition check for game over
@@ -642,7 +643,7 @@ void Level_1_Update(void)
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 3 && timeElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 1 && timeElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -689,6 +690,10 @@ void Level_1_Update(void)
 			_playerScale *= -1;
 		}
 	}
+	
+	//spawncheck to lock or unlock camera for boss fight
+	if(spawnCheck == 1){offset = 0;}
+	else if(spawnCheck == 0){offset = 5;}
 
 	//Offset ALL objects instances + adding player velo
 	//KeyDown
@@ -703,9 +708,12 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-				qInst->position.x -= 5;
+				qInst->position.x -= offset;
 
 		}
+		//player movement
+		_Player->position.x += (5 - offset);
+
 		//Background Offset
 		BG.x -= 0.5f;
 	}
@@ -721,8 +729,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.x += 5;
+			qInst->position.x += offset;
 		}
+		//player movement
+		_Player->position.x += (-5 + offset);
+
 		//Background Offset
 		BG.x += 0.5f;
 	}
@@ -737,8 +748,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.y += 5;
+			qInst->position.y += offset;
 		}
+		//player movement
+		_Player->position.y += (-5 + offset);
+
 		//Background Offset
 		BG.y += 0.5f;
 	}
@@ -753,8 +767,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.y -= 5;
+			qInst->position.y -= offset;
 		}
+		//player movement
+		_Player->position.y += (5 - offset);
+
 		//Background Offset
 		BG.y -= 0.5;
 	}
