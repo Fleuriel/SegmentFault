@@ -69,6 +69,7 @@ bool Aug2CreateCheck = false;
 bool Aug3CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
+float offset = 5.f;
 
 
 //Condition check for game over
@@ -333,9 +334,7 @@ void Level_1_Load(void)
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 	}
 
-
-
-
+	//Save file for currency
 	if (inputFileStream.good())
 	{
 		/*std::cout << "file exist\n";
@@ -355,6 +354,27 @@ void Level_1_Load(void)
 
 	}
 
+	//save file for player ship model
+	if (inputFileStream1.good())
+	{
+		/*std::cout << "file exist\n";
+		std::string line = "";
+
+		std::cout << "hello\t " << inputfilestream.eof() << '\n';*/
+
+
+		inputFileStream1 >> ShipModel;
+		std::cout << ShipModel << '\n';
+
+		inputFileStream1.close();
+	}
+	else if (inputFileStream1.fail())
+	{
+		std::cerr << "Error: \n";
+
+	}
+
+	
 
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -591,7 +611,7 @@ void Level_1_Update(void)
 
 
 	//SAVE.....
-	if (AEInputCheckTriggered(AEVK_P))
+	/*if (AEInputCheckTriggered(AEVK_P))
 	{
 		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 		if (outputStream.is_open())
@@ -602,7 +622,7 @@ void Level_1_Update(void)
 
 		outputStream.close();
 
-	}
+	}*/
 
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1 && enemyCount < MaxEnemyCount)
@@ -666,7 +686,7 @@ void Level_1_Update(void)
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 3 && timeElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 1 && timeElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -713,6 +733,10 @@ void Level_1_Update(void)
 			_playerScale *= -1;
 		}
 	}
+	
+	//spawncheck to lock or unlock camera for boss fight
+	if(spawnCheck == 1){offset = 0;}
+	else if(spawnCheck == 0){offset = 5;}
 
 	//Offset ALL objects instances + adding player velo
 	//KeyDown
@@ -727,9 +751,12 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.x -= 5;
+				qInst->position.x -= offset;
 
 		}
+		//player movement
+		_Player->position.x += (5 - offset);
+
 		//Background Offset
 		BG.x -= 0.5f;
 	}
@@ -745,8 +772,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.x += 5;
+			qInst->position.x += offset;
 		}
+		//player movement
+		_Player->position.x += (-5 + offset);
+
 		//Background Offset
 		BG.x += 0.5f;
 	}
@@ -761,8 +791,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.y += 5;
+			qInst->position.y += offset;
 		}
+		//player movement
+		_Player->position.y += (-5 + offset);
+
 		//Background Offset
 		BG.y += 0.5f;
 	}
@@ -777,8 +810,11 @@ void Level_1_Update(void)
 				continue;
 
 			// Update enemy position with player velocity
-			qInst->position.y -= 5;
+			qInst->position.y -= offset;
 		}
+		//player movement
+		_Player->position.y += (5 - offset);
+
 		//Background Offset
 		BG.y -= 0.5;
 	}
@@ -852,7 +888,7 @@ void Level_1_Update(void)
 						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
 						// Create a new bullet object and set its velocity to point towards the target
-						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad());
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
 
 						//std::cout << bulletInst->pObject << '\n';
 						if (bulletInst != nullptr)
@@ -906,6 +942,11 @@ void Level_1_Update(void)
 							AUGMENT_3_OFF_TIMER = 0;
 						}
 					}
+//<<<<<<< Updated upstream
+//=======
+					//std::cout << "Once111\n";
+//
+//>>>>>>> Stashed changes
 
 				}
 
@@ -1593,6 +1634,14 @@ void Level_1_Update(void)
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							Currency++;
+							std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+							if (outputStream.is_open())
+							{
+								outputStream << Currency << '\n';
+
+							}
+
+							outputStream.close();
 							std::cout << "Player Experience: " << _Player_Experience << '\n';
 							std::cout << "Player Level: " << _Player_Level << '\n';
 							std::cout << "Currency:" << Currency << '\n';
@@ -1660,9 +1709,13 @@ void Level_1_Update(void)
 void Level_1_Draw(void)
 {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
-
-	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player.png");
+	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	if (ShipModel == 0) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	}
+	if (ShipModel == 1) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player1.png");
+	}
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("Assets\\Assets\\drone.png");
 	AEGfxTexture* augment2Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
@@ -2044,7 +2097,7 @@ void Level_1_Unload(void)
 	Aug2CreateCheck = false;
 	timeElapsed = 0;
 	minElapsed = 0;
-	spawnCheck = 1;
+	spawnCheck = 0;
 	enemyCount = 0;
 	OrbCounter = 0;
 	_Player_Level = 1;

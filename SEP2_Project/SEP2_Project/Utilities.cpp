@@ -139,19 +139,30 @@ float getWinHeight() {
 	return AEGfxGetWinMaxY() - AEGfxGetWinMinY();
 }
 
-// Function to get angle of cursor to origin in radian
-float getCursorRad() {
+// Function to get angle of cursor to player in radian
+float getCursorRad(float x, float y, bool spawnCheck) {
     s32 cX, cY; //Mouse pos
     float rad = 0; //radian value to be returned
     const float pi = 3.1415926; //define pi
+    float sumx = 0, sumy = 0;
 
     AEInputGetCursorPosition(&cX, &cY);
-    AEVec2 MOUSE_POSITION = { (f32)cX - (1366 / 2), -((f32)cY - (768 / 2)) }; //Mouse pos with reference to window size
+    AEVec2 MP = { (f32)cX - (1366 / 2), -((f32)cY - (768 / 2)) }; //Mouse pos with reference to window size
 
-    if (MOUSE_POSITION.x > 0 && MOUSE_POSITION.y > 0) { rad = pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }                  //Quad1
-    else if (MOUSE_POSITION.x < 0 && MOUSE_POSITION.y > 0) { rad = 2 / 4 * pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }     //Quad2
-    else if (MOUSE_POSITION.x < 0 && MOUSE_POSITION.y < 0) { rad = 2 / 4 * pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }     //Quad3
-    else if (MOUSE_POSITION.x > 0 && MOUSE_POSITION.y < 0) { rad = pi + atan(MOUSE_POSITION.y / MOUSE_POSITION.x); }             //Quad4
+    //mouse position - player pos
+    sumx = MP.x - x;
+    sumy = MP.y - y;
+
+    //if (sumx < 0) { sumx = -sumx; }
+    //if (sumy < 0) { sumy = -sumy; }
+
+    if (spawnCheck == 0) {
+        //for each quadrant
+        if (MP.x > x && MP.y > y) { rad = pi + atan(MP.y / MP.x); }                  //Quad1
+        else if (MP.x < x && MP.y > y) { rad = 2 / 4 * pi + atan(MP.y / MP.x); }     //Quad2
+        else if (MP.x < x && MP.y < y) { rad = 2 / 4 * pi + atan(MP.y / MP.x); }     //Quad3
+        else if (MP.x > x && MP.y < y) { rad = pi + atan(MP.y / MP.x); }             //Quad4
+    }
 
     return rad; //Return radian value
 }
