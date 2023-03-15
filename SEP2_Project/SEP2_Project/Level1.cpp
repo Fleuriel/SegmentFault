@@ -632,7 +632,7 @@ void Level_1_Update(void)
 		//As of now i will be moving the X and Y coordinates with these, someone need to do the offsets.
 
 	//SPAWN BOSS
-	if (minElapsed == 1 && timeElapsed >= 30 && spawnCheck == 1) {
+	if (minElapsed == 0 && timeElapsed >= 30 && spawnCheck == 1) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -1381,9 +1381,15 @@ void Level_1_Update(void)
 		GameObjInstances* ObjInstance2 = sGameObjInstList + i;
 		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 			continue;
-		if (ObjInstance2->velocity.x > 0 || ObjInstance2->velocity.y > 0) {
+		if (spawnCheck != 0 && ObjInstance2->velocity.x != 0 && ObjInstance2->velocity.y!=0) {
 			AEVec2 boundingRect{};
 			AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
+		}
+		else if (spawnCheck == 0) {
+			AEVec2 boundingRect{};
+			AEVec2Set(&boundingRect, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
 			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRect);
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
 		}
@@ -1535,7 +1541,7 @@ void Level_1_Update(void)
 			//PLAYER ENEMY COLLISION
 			if (ObjInstance1->pObject->type == TYPE_PLAYER) {
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-				{
+				{	
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
@@ -1543,11 +1549,10 @@ void Level_1_Update(void)
 						_Player->isInvincible = false;
 					if (_Player->iFrame > 0) {
 						_Player->isInvincible = true;
-						_Player->iFrame -= g_dt;
+						_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
 					}
 					if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1) {
-
-						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox,ObjInstance1->velocity,ObjInstance2->boundingBox,ObjInstance2->velocity)) {
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity)) {
 							if (_Player->isInvincible == false) {
 								_Player->health--;
 								std::cout << "Player HP: " << _Player->health << '\n';
@@ -1560,6 +1565,7 @@ void Level_1_Update(void)
 			}
 		}
 	}
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////CONCAT MATRIX//////////////////////////////////////////
