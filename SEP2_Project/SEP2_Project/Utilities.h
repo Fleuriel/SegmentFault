@@ -28,5 +28,5 @@ float getWinWidth();
 // Function to get window width
 float getWinHeight();
 
-// Function to get angle of cursor to origin in radian
-float getCursorRad();
+// Function to get angle of cursor to player in radian
+float getCursorRad(float x, float y, bool spawnCheck);
