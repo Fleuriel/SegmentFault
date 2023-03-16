@@ -32,14 +32,24 @@
 extern float	g_dt;
 extern double	g_appTime;
 extern s8       fontID;
+<<<<<<< Updated upstream
 extern int   Currency;
 extern float currHighScoreMin;
 extern float currHighScoreSec;
 //<<<<<<< Updated upstream
+=======
+extern double   Currency;
+extern int		ShipModel;
+>>>>>>> Stashed changes
 
 // Pre-definition of scaling
 extern double scaleX;
 extern double scaleY;
 
 
+<<<<<<< Updated upstream
 extern int		ShipModel;
+=======
+
+// ---------------------------------------------------------------------------
+>>>>>>> Stashed changes

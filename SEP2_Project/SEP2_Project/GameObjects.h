@@ -15,7 +15,7 @@
 
 #define MAX_ENEMIES				100
 #define GAME_OBJ_NUM_MAX		16
-#define GAME_OBJ_INST_NUM_MAX	128
+#define GAME_OBJ_INST_NUM_MAX	1024
 
 #define FLAG_ACTIVE				1
 

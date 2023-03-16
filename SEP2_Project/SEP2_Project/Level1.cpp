@@ -955,12 +955,7 @@ void Level_1_Update(void)
 							AUGMENT_3_OFF_TIMER = 0;
 						}
 					}
-//<<<<<<< Updated upstream
-//=======
 					//std::cout << "Once111\n";
-//
-//>>>>>>> Stashed changes
-
 				}
 
 
@@ -1722,7 +1717,7 @@ void Level_1_Update(void)
 void Level_1_Draw(void)
 {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	AEGfxTexture* playerTex = nullptr;
 	if (ShipModel == 0) {
 		playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
 	}

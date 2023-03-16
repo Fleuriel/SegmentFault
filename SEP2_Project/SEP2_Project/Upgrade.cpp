@@ -12,6 +12,7 @@ AEGfxVertexList* pMeshUpgrade = nullptr;
 AEGfxVertexList* pMeshUpgrade1 = nullptr;
 AEGfxVertexList* CoinMesh = nullptr;
 AEGfxVertexList* BuyButtonMesh = nullptr;
+AEGfxVertexList* ShipMesh = nullptr;
 
 // Pre-definition for translations
 double UpgradebackButton_transX;
@@ -91,6 +92,22 @@ void Upgrade_Load(void)
 
 	BuyButtonMesh = AEGfxMeshEnd();
 	//End of Buy Button
+
+
+	//Ship
+	AEGfxMeshStart();
+
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f,
+		-1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFF001736, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.2f, 0.5f, 0xFF001736, 0.0f, 0.0f,
+		-1.2f, -0.5f, 0xFF001736, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
+
+	ShipMesh = AEGfxMeshEnd();
+	//End of Ship
 
 
 	//Open save file of money
@@ -173,13 +190,15 @@ void Upgrade_Update(void)
 		printf("MAINMENU\n");
 	}
 
-	if (IsAreaClicked((getWinHeight() / 2)+187.f, (getWinHeight() / 2)-130.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+
+
+	if (IsAreaClicked((getWinHeight() / 2) + 187.f, (getWinHeight() / 2) + 20.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-		
-		
+
 		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
-		if (Currency >=50)
+
+		if (Currency >= 50)
 		{
 			Currency = Currency - 50;
 			ShipModel = 1;
@@ -198,13 +217,31 @@ void Upgrade_Update(void)
 		outputStream1.close();
 	}
 
+
+	if (IsAreaClicked((getWinHeight() / 2)+187.f, (getWinHeight() / 2)-130.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+		std::ofstream outputStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
+		
+		ShipModel = 0;
+		std::cout << "Thank you for purchase\n";
+
+		outputStream << Currency;
+		outputStream.close();
+		outputStream1 << ShipModel;
+		outputStream1.close();
+	}
+
+	
+
 }
 void Upgrade_Draw(void) 
 {
 
-	
+	//Coin Display
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
-
+	
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -221,6 +258,11 @@ void Upgrade_Draw(void)
 	AEMtx33Concat(&transform4, &translate4, &transform4);
 	AEGfxSetTransform(transform4.m);
 	AEGfxMeshDraw(CoinMesh, AE_GFX_MDM_TRIANGLES);
+
+
+	
+
+
 
 	//Amount of coins player displayed in text
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -298,7 +340,7 @@ void Upgrade_Draw(void)
 	AEMtx33 rotate5 = { 0 };
 	AEMtx33Rot(&rotate5, 0.f);
 	AEMtx33 translate5 = { 0 };
-	AEMtx33Trans(&translate5, UpgradeStatDisplay_transX - 330.f, UpgradeStatDisplay_transY - 210.f);
+	AEMtx33Trans(&translate5, UpgradeStatDisplay_transX - 330.f, UpgradeStatDisplay_transY - 230.f);
 	AEMtx33 transform5 = { 0 };
 	AEMtx33Concat(&transform5, &rotate5, &scale5);
 	AEMtx33Concat(&transform5, &translate5, &transform5);
@@ -313,7 +355,7 @@ void Upgrade_Draw(void)
 	AEMtx33 rotate6 = { 0 };
 	AEMtx33Rot(&rotate6, 0.f);
 	AEMtx33 translate6 = { 0 };
-	AEMtx33Trans(&translate6, UpgradeStatDisplay_transX - 120.f, UpgradeStatDisplay_transY - 210.f);
+	AEMtx33Trans(&translate6, UpgradeStatDisplay_transX - 120.f, UpgradeStatDisplay_transY - 230.f);
 	AEMtx33 transform6 = { 0 };
 	AEMtx33Concat(&transform6, &rotate6, &scale6);
 	AEMtx33Concat(&transform6, &translate6, &transform6);
@@ -328,13 +370,241 @@ void Upgrade_Draw(void)
 	AEMtx33 rotate7 = { 0 };
 	AEMtx33Rot(&rotate7, 0.f);
 	AEMtx33 translate7 = { 0 };
-	AEMtx33Trans(&translate7, UpgradeStatDisplay_transX - 123.5f, UpgradeStatDisplay_transY - 210.f);
+	AEMtx33Trans(&translate7, UpgradeStatDisplay_transX - 123.5f, UpgradeStatDisplay_transY - 230.f);
 	AEMtx33 transform7 = { 0 };
 	AEMtx33Concat(&transform7, &rotate7, &scale7);
 	AEMtx33Concat(&transform7, &translate7, &transform7);
 	AEGfxSetTransform(transform7.m);
 	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
 
+
+	// Ship Model 2 Box
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale8 = { 0 };
+	AEMtx33Scale(&scale8, 250.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate8 = { 0 };
+	AEMtx33Rot(&rotate8, 0.f);
+	AEMtx33 translate8 = { 0 };
+	AEMtx33Trans(&translate8, UpgradeStatDisplay_transX - 330.f, UpgradeStatDisplay_transY - 360.f);
+	AEMtx33 transform8 = { 0 };
+	AEMtx33Concat(&transform8, &rotate8, &scale8);
+	AEMtx33Concat(&transform8, &translate8, &transform8);
+	AEGfxSetTransform(transform8.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	// Ship Model 2 Purchase box1
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale11 = { 0 };
+	AEMtx33Scale(&scale11, 65.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate11 = { 0 };
+	AEMtx33Rot(&rotate11, 0.f);
+	AEMtx33 translate11 = { 0 };
+	AEMtx33Trans(&translate11, UpgradeStatDisplay_transX - 120.f, UpgradeStatDisplay_transY - 360.f);
+	AEMtx33 transform11 = { 0 };
+	AEMtx33Concat(&transform11, &rotate11, &scale11);
+	AEMtx33Concat(&transform11, &translate11, &transform11);
+	AEGfxSetTransform(transform11.m);
+	AEGfxMeshDraw(BuyButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+	// Ship Model 2 Purchase box2
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale12 = { 0 };
+	AEMtx33Scale(&scale12, 55.f * UpgradescaleX_settings, 85.f * UpgradescaleY_settings);
+	AEMtx33 rotate12 = { 0 };
+	AEMtx33Rot(&rotate12, 0.f);
+	AEMtx33 translate12 = { 0 };
+	AEMtx33Trans(&translate12, UpgradeStatDisplay_transX - 123.5f, UpgradeStatDisplay_transY - 360.f);
+	AEMtx33 transform12 = { 0 };
+	AEMtx33Concat(&transform12, &rotate12, &scale12);
+	AEMtx33Concat(&transform12, &translate12, &transform12);
+	AEGfxSetTransform(transform12.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+
+	// Ship Model 3 Box
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale9 = { 0 };
+	AEMtx33Scale(&scale9, 250.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate9 = { 0 };
+	AEMtx33Rot(&rotate9, 0.f);
+	AEMtx33 translate9 = { 0 };
+	AEMtx33Trans(&translate9, UpgradeStatDisplay_transX - 330.f, UpgradeStatDisplay_transY - 490.f);
+	AEMtx33 transform9 = { 0 };
+	AEMtx33Concat(&transform9, &rotate9, &scale9);
+	AEMtx33Concat(&transform9, &translate9, &transform9);
+	AEGfxSetTransform(transform9.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+
+	// Ship Model 4 Box
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale10 = { 0 };
+	AEMtx33Scale(&scale10, 250.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate10 = { 0 };
+	AEMtx33Rot(&rotate10, 0.f);
+	AEMtx33 translate10 = { 0 };
+	AEMtx33Trans(&translate10, UpgradeStatDisplay_transX - 330.f, UpgradeStatDisplay_transY - 620.f);
+	AEMtx33 transform10 = { 0 };
+	AEMtx33Concat(&transform10, &rotate10, &scale10);
+	AEMtx33Concat(&transform10, &translate10, &transform10);
+	AEGfxSetTransform(transform10.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	// Stat Box 1
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale15 = { 0 };
+	AEMtx33Scale(&scale15, 180.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate15 = { 0 };
+	AEMtx33Rot(&rotate15, 0.f);
+	AEMtx33 translate15 = { 0 };
+	AEMtx33Trans(&translate15, UpgradeStatDisplay_transX + 220.f, UpgradeStatDisplay_transY - 230.f);
+	AEMtx33 transform15 = { 0 };
+	AEMtx33Concat(&transform15, &rotate15, &scale15);
+	AEMtx33Concat(&transform15, &translate15, &transform15);
+	AEGfxSetTransform(transform15.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	// Stat Box 1 Purchase box1
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale19 = { 0 };
+	AEMtx33Scale(&scale19, 65.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate19 = { 0 };
+	AEMtx33Rot(&rotate19, 0.f);
+	AEMtx33 translate19 = { 0 };
+	AEMtx33Trans(&translate19, UpgradeStatDisplay_transX + 395.f, UpgradeStatDisplay_transY - 230.f);
+	AEMtx33 transform19 = { 0 };
+	AEMtx33Concat(&transform19, &rotate19, &scale19);
+	AEMtx33Concat(&transform19, &translate19, &transform19);
+	AEGfxSetTransform(transform19.m);
+	AEGfxMeshDraw(BuyButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+	// Stat Box 1 Purchase box2
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale20 = { 0 };
+	AEMtx33Scale(&scale20, 55.f * UpgradescaleX_settings, 85.f * UpgradescaleY_settings);
+	AEMtx33 rotate20 = { 0 };
+	AEMtx33Rot(&rotate20, 0.f);
+	AEMtx33 translate20 = { 0 };
+	AEMtx33Trans(&translate20, UpgradeStatDisplay_transX +391.5f, UpgradeStatDisplay_transY - 230.f);
+	AEMtx33 transform20 = { 0 };
+	AEMtx33Concat(&transform20, &rotate20, &scale20);
+	AEMtx33Concat(&transform20, &translate20, &transform20);
+	AEGfxSetTransform(transform20.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	// Stat Box 2
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale16 = { 0 };
+	AEMtx33Scale(&scale16, 180.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate16 = { 0 };
+	AEMtx33Rot(&rotate16, 0.f);
+	AEMtx33 translate16 = { 0 };
+	AEMtx33Trans(&translate16, UpgradeStatDisplay_transX + 220.f, UpgradeStatDisplay_transY - 360.f);
+	AEMtx33 transform16 = { 0 };
+	AEMtx33Concat(&transform16, &rotate16, &scale16);
+	AEMtx33Concat(&transform16, &translate16,&transform16);
+	AEGfxSetTransform(transform16.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+	
+	// Stat Box 3
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale17 = { 0 };
+	AEMtx33Scale(&scale17, 180.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate17 = { 0 };
+	AEMtx33Rot(&rotate17, 0.f);
+	AEMtx33 translate17 = { 0 };
+	AEMtx33Trans(&translate17, UpgradeStatDisplay_transX + 220.f, UpgradeStatDisplay_transY - 490.f);
+	AEMtx33 transform17 = { 0 };
+	AEMtx33Concat(&transform17, &rotate17, &scale17);
+	AEMtx33Concat(&transform17, &translate17, &transform17);
+	AEGfxSetTransform(transform17.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	// Stat Box 4
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEMtx33 scale18 = { 0 };
+	AEMtx33Scale(&scale18, 180.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings);
+	AEMtx33 rotate18 = { 0 };
+	AEMtx33Rot(&rotate18, 0.f);
+	AEMtx33 translate18 = { 0 };
+	AEMtx33Trans(&translate18, UpgradeStatDisplay_transX + 220.f, UpgradeStatDisplay_transY - 620.f);
+	AEMtx33 transform18 = { 0 };
+	AEMtx33Concat(&transform18, &rotate18, &scale18);
+	AEMtx33Concat(&transform18, &translate18, &transform18);
+	AEGfxSetTransform(transform18.m);
+	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
+
+	//Player Ship 0 Display
+	AEGfxTexture* playership0Tex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(playership0Tex, 0, 0);
+	AEMtx33 scale13 = { 0 };
+	AEMtx33Scale(&scale13, 55, 70);
+	AEMtx33 rotate13 = { 0 };
+	AEMtx33Rot(&rotate13, 0.f);
+	AEMtx33 translate13 = { 0 };
+	AEMtx33Trans(&translate13, UpgradebackButton_transX - 1160, UpgradebackButton_transY + 465);
+	AEMtx33 transform13 = { 0 };
+	AEMtx33Concat(&transform13, &rotate13, &scale13);
+	AEMtx33Concat(&transform13, &translate13, &transform13);
+	AEGfxSetTransform(transform13.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+
+	//Player Ship 1 Display
+	AEGfxTexture* playership1Tex = AEGfxTextureLoad("Assets\\Assets\\player1.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(playership1Tex, 0, 0);
+	AEMtx33 scale14 = { 0 };
+	AEMtx33Scale(&scale14, 55, 70);
+	AEMtx33 rotate14 = { 0 };
+	AEMtx33Rot(&rotate14, 0.f);
+	AEMtx33 translate14 = { 0 };
+	AEMtx33Trans(&translate14, UpgradebackButton_transX - 1160, UpgradebackButton_transY + 335);
+	AEMtx33 transform14 = { 0 };
+	AEMtx33Concat(&transform14, &rotate14, &scale14);
+	AEMtx33Concat(&transform14, &translate14, &transform14);
+	AEGfxSetTransform(transform14.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+	//Heart image display
+	AEGfxTexture* playerHPTex = AEGfxTextureLoad("Assets\\Assets\\Health.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(playerHPTex, 0, 0);
+	AEMtx33 scale21 = { 0 };
+	AEMtx33Scale(&scale21, 55, 70);
+	AEMtx33 rotate21 = { 0 };
+	AEMtx33Rot(&rotate21, 0.f);
+	AEMtx33 translate21 = { 0 };
+	AEMtx33Trans(&translate21, UpgradebackButton_transX - 520, UpgradebackButton_transY + 465);
+	AEMtx33 transform21 = { 0 };
+	AEMtx33Concat(&transform21, &rotate21, &scale21);
+	AEMtx33Concat(&transform21, &translate21, &transform21);
+	AEGfxSetTransform(transform21.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
 
 
 	// "Back" Text
@@ -370,16 +640,37 @@ void Upgrade_Draw(void)
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (6100.f * UpgradescaleX_settings)), (getWinHeight() / (1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 	
-	// "Buy" Text
+	// "Buy" Text for Ship Model 1
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	sprintf_s(Upgrade1_buffer, "BUY");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-6200.f * UpgradescaleX_settings)), (getWinHeight() / (2500.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-6200.f * UpgradescaleX_settings)), (getWinHeight() / (3000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+	// "Buy" Text for Ship Model 2
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(Upgrade1_buffer, "BUY");
+	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-6200.f * UpgradescaleX_settings)), (getWinHeight() / (-8100.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+	// "Buy" Text for Stat 1
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(Upgrade1_buffer, "BUY");
+	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2550.f * UpgradescaleX_settings)), (getWinHeight() / (3000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+
 
 
 	AEGfxTextureUnload(coinTex);
+	AEGfxTextureUnload(playership0Tex);
+	AEGfxTextureUnload(playership1Tex);
+	AEGfxTextureUnload(playerHPTex);
 
 }
 void Upgrade_Free(void) 
@@ -392,4 +683,5 @@ void Upgrade_Unload(void)
 	AEGfxMeshFree(pMeshUpgrade1);
 	AEGfxMeshFree(CoinMesh);
 	AEGfxMeshFree(BuyButtonMesh);
+	AEGfxMeshFree(ShipMesh);
 }
