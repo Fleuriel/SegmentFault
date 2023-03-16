@@ -316,8 +316,25 @@ void Level_1_Load(void)
 		_Objects->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
+		//12 TYPE_AUGMENT4_EXPLOSION
+		_Objects = sGameObjList + sGameObjNum++;
+		_Objects->type = TYPE_AUGMENT4_EXPLOSION;
 
-		//12 TYPE_AUGMENT5
+		AEGfxMeshStart();
+
+		AEGfxTriAdd(
+			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
+			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
+			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
+		AEGfxTriAdd(
+			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
+			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
+			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
+		_Objects->pMesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
+
+
+		//13 TYPE_AUGMENT5
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT5;
 
@@ -504,8 +521,10 @@ void Level_1_Init(void)
 	//AE_ASSERT(_Augment_Three);
 
 	//10
-	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
+//	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	
+	//11
+	_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
 	// Gets the scale of 1366x768
@@ -955,12 +974,6 @@ void Level_1_Update(void)
 							AUGMENT_3_OFF_TIMER = 0;
 						}
 					}
-//<<<<<<< Updated upstream
-//=======
-					//std::cout << "Once111\n";
-//
-//>>>>>>> Stashed changes
-
 				}
 
 
@@ -969,63 +982,89 @@ void Level_1_Update(void)
 					qInst->position = pInst->position;
 					//Get Mouse cursor Pos
 					AEInputGetCursorPosition(&mouseX, &mouseY);
-
+					
 					//Convert Mouse pos to world space coordinates.
 					AUGMENT_4_MOUSE_POSITION = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
-
+					
 					//Compute the direction of bullet with 60 deg angle discrepancies.
-
+					
 					AUGMENT_4_BULLET_SPEED = AEVec2Length(&AUGMENT_4_DIRECTION);
-
+					
 					AUGMENT_4_DIRECTION = { AUGMENT_4_MOUSE_POSITION.x - qInst->position.x, AUGMENT_4_MOUSE_POSITION.y - qInst->position.y };
-
+					
 					AEVec2Normalize(&AUGMENT_4_DIRECTION, &AUGMENT_4_DIRECTION);
-
-
+					
+					
 					f32 angleDiscrepancy = PI / 180.0f * 30.0f;
 					AUGMENT_4_ANGLE = atan2f(AUGMENT_4_DIRECTION.y, AUGMENT_4_DIRECTION.x) + ((AERandFloat() * 2.0f - 1.0f) * angleDiscrepancy);
-
-
+					
+					
 					AUGMENT_4_DIRECTION.x = cosf(AUGMENT_4_ANGLE);
 					AUGMENT_4_DIRECTION.y = sinf(AUGMENT_4_ANGLE);
-
+					
 					AUGMENT_4_DISTANCE = AEVec2Distance(&qInst->position, &AUGMENT_4_MOUSE_POSITION);
 					AUGMENT_4_DISTANCE_TOLERANCE = 0.1f * AUGMENT_4_DISTANCE;
-
+					
 					AUGMENT_4_TARGET_DISTANCE = AUGMENT_4_DISTANCE + (AERandFloat() * 2.0f - 1.0f) * AUGMENT_4_DISTANCE_TOLERANCE;
-
+					
 					AUGMENT_4_FIRE_TIMER += g_dt;
 
-					GameObjInstances* AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
+					GameObjInstances* AUG4_BULLET = nullptr;
+					
+
+					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL)
+					{
+						//Shoot the bullet to the direction.
+						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
+
+						AUGMENT_4_PROJECTILE_ACTIVE = true;
+						
+						AUGMENT_4_FIRE_TIMER = 0;
+					}
 					if (AUG4_BULLET != nullptr)
 					{
 						AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, BULLET_SPEED);
 					}
-					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL)
+				}
+
+				if (qInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
+				{
+					if (AUGMENT_4_PROJECTILE_ACTIVE == true)
 					{
-						//Shoot the bullet to the direction.
-						AUGMENT_4_ACTIVE = true;
-						
-						AUGMENT_4_FIRE_TIMER = 0;
+						AUGMENT_4_PROJECTILE_TIMER += g_dt;
 					}
 
-					//AUGMENT_4_DURATION_TIMER += g_dt;
-					//if (AUGMENT_4_ACTIVE == true)
-					//{
-					//	AUGMENT_4_DURATION_TIMER += g_dt;
-					//}
+					if (AUGMENT_4_PROJECTILE_TIMER > AUGMENT_4_PROJECTILE_INTERVAL)
+					{
+						if (qInst != nullptr)
+						{
+							std::cout << "Work\n";
+							gameObjInstDestroy(qInst);
+							AUGMENT_4_PROJECTILE_ACTIVE = false;
+							gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, 50.0f, &qInst->position, 0, 0);
+							AUGMENT_4_EXPLOSION_ACTIVE = true;
+						}
+						AUGMENT_4_PROJECTILE_TIMER = 0;
+					}
+				}
 
-					//if (AUGMENT_4_DURATION_TIMER > AUGMENT_4_DURATION_INTERVAL)
-					//{
-					//	std::cout << " instance destroy\n";
-					//	if (AUG4_BULLET != nullptr)
-					//	{
-					//		gameObjInstDestroy(AUG4_BULLET);
-					//	}
-					//	AUGMENT_4_DURATION_TIMER = 0;
-					//}
+				if (qInst->pObject->type == TYPE_AUGMENT4_EXPLOSION)
+				{
+					if (AUGMENT_4_EXPLOSION_ACTIVE == true)
+					{
+						AUGMENT_4_EXPLOSION_TIMER += g_dt;
+					}
+
+					if (AUGMENT_4_EXPLOSION_TIMER > AUGMENT_4_EXPLOSION_INTERVAL)
+					{
+						gameObjInstDestroy(qInst);
+						AUGMENT_4_EXPLOSION_ACTIVE = false;
+						AUGMENT_4_EXPLOSION_TIMER = 0;
+					}
 
 				}
+
+
 			}
 		}
 
@@ -1477,6 +1516,44 @@ void Level_1_Update(void)
 			}
 		}
 
+		if (pInst->pObject->type == TYPE_AUGMENT5)
+		{
+			AUGMENT_5_FIRE_TIMER += g_dt;
+			if (AUGMENT_5_FIRE_TIMER > AUGMENT_5_FIRE_INTERVAL)
+			{
+				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
+				{
+					GameObjInstances* qInst = sGameObjInstList + j;
+
+					if ((qInst->flag & FLAG_ACTIVE) == 0 || qInst == nullptr)
+						continue;
+
+
+					if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
+					{
+						if (qInst->position.x < AEGfxGetWinMaxX() &&
+							qInst->position.x > AEGfxGetWinMinX() &&
+							qInst->position.y < AEGfxGetWinMaxY() &&
+							qInst->position.y > AEGfxGetWinMinY())
+						{
+							//Full map attack.
+							qInst->health--;
+							if (qInst->health == 0)
+							{
+								//Remove entity count;
+							}
+							std::cout << "Active\n";
+						}
+					}
+					else
+					{
+						continue;
+					}
+				}
+				AUGMENT_5_FIRE_TIMER = 0;
+			}
+		}
+
 		//Window size is 1366x768
 
 		if (pInst->position.x > AEGfxGetWinMaxX() ||
@@ -1504,8 +1581,7 @@ void Level_1_Update(void)
 				std::cout << bulletCount << "Out of Screen ." << '\n';
 
 			}
-			if(pInst != nullptr)
-				gameObjInstDestroy(pInst);
+			gameObjInstDestroy(pInst);
 		}
 
 
@@ -1722,7 +1798,7 @@ void Level_1_Update(void)
 void Level_1_Draw(void)
 {
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-	AEGfxTexture* playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
+	AEGfxTexture* playerTex = nullptr;
 	if (ShipModel == 0) {
 		playerTex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
 	}
@@ -1843,7 +1919,7 @@ void Level_1_Draw(void)
 		{
 			texture = augmentGunTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT2)
+		else if (pInst->pObject->type == TYPE_AUGMENT2 || pInst->pObject->type == TYPE_AUGMENT4_EXPLOSION)
 		{
 			texture = augment2Tex;
 		}
@@ -1923,6 +1999,8 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
+
+
 
 	AEGfxTextureUnload(Expbar0);
 	AEGfxTextureUnload(Expbar1);
