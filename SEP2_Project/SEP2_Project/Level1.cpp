@@ -504,7 +504,7 @@ void Level_1_Init(void)
 	//AE_ASSERT(_Augment_Three);
 
 	//10
-	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
+	//_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	
 
 
@@ -1930,8 +1930,8 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
 
-	// Rendering texts for the screen	
-
+	
+/********************************** Augment UI Start ********************************************/
 	if (overlayTransparency != 0)
 	{
 		// Drawing the augment overlay on the screen
@@ -1995,6 +1995,21 @@ void Level_1_Draw(void)
 		AEGfxSetTransform(transform6.m);
 		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
 
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(overlayTransparency);
+		AEMtx33 scale7 = { 0 };
+		AEMtx33Scale(&scale7, 34.f, 50.f);
+		AEMtx33 rotate7 = { 0 };
+		AEMtx33Rot(&rotate7, 0.f);
+		AEMtx33 translate7 = { 0 };
+		AEMtx33Trans(&translate7, augment4Button_transX, augment4Button_transY);
+		AEMtx33 transform7 = { 0 };
+		AEMtx33Concat(&transform7, &rotate7, &scale7);
+		AEMtx33Concat(&transform7, &translate7, &transform7);
+		AEGfxSetTransform(transform7.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
 		// Rendering texts for overlay
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2039,6 +2054,12 @@ void Level_1_Draw(void)
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (3250.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augmentAdd_buffer, "+");
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (50000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2068,9 +2089,8 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer3, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.25f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-
-		// Overlay end
 	}
+	/********************************** Augment UI End ********************************************/
 
 	// Rendering texts for the screen	
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
