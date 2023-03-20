@@ -718,7 +718,7 @@ void Level_1_Update(void)
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 3 && secElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 0 && secElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -920,7 +920,7 @@ void Level_1_Update(void)
 						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
 						// Create a new bullet object and set its velocity to point towards the target
-						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position, spawnCheck));
 
 						//std::cout << bulletInst->pObject << '\n';
 						if (bulletInst != nullptr)
@@ -1015,7 +1015,7 @@ void Level_1_Update(void)
 					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL)
 					{
 						//Shoot the bullet to the direction.
-						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position.x, _Player->position.y, spawnCheck));
+						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position, spawnCheck));
 
 						AUGMENT_4_PROJECTILE_ACTIVE = true;
 						
