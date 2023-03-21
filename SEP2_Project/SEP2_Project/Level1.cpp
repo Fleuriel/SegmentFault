@@ -524,7 +524,7 @@ void Level_1_Init(void)
 	//_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	
 	//11
-	_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
+	//_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
 	// Gets the scale of 1366x768
@@ -711,14 +711,14 @@ void Level_1_Update(void)
 
 	if (AEInputCheckTriggered(AEVK_0))
 	{
-		minElapsed = 2;
+		minElapsed = 4;
 		secElapsed = 55;
 		enemyCount = 100;
 		spawnCheck = 0;
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 0 && secElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 		_Boss->health = MaxBossHealth = 100;
@@ -1742,7 +1742,8 @@ void Level_1_Update(void)
 				}
 			}
 			//PLAYER ENEMY COLLISION
-			if (ObjInstance1->pObject->type == TYPE_PLAYER) {
+			if (ObjInstance1->pObject->type == TYPE_PLAYER) 
+			{
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 				{
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
@@ -1935,6 +1936,11 @@ void Level_1_Draw(void)
 		else if (pInst->pObject->type == TYPE_AUGMENT4)
 		{
 			texture = augment2Tex;
+		}
+		else if (pInst->pObject->type == TYPE_AUGMENT5)
+		{
+			//Update this
+			texture = InvisibleTex;
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
