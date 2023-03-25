@@ -588,9 +588,9 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 1 ++\n");
-			if (SkillPoint != 0 && Augment1Level != 4) {
+			if (SkillPoint != 0 && Augment1Level != 8) {
 				SkillPoint--;
-				Augment1CD -= (float)0.3;
+				Augment1CD -= (float)0.15;
 				Augment1Level++;
 			}
 		}
@@ -599,7 +599,7 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 2 ++\n");
-			if (SkillPoint != 0 && Augment2Level != 4) {
+			if (SkillPoint != 0 && Augment2Level != 8) {
 				SkillPoint--;
 				Augment2Range += 0.5;
 				Augment2Level++;
@@ -1616,6 +1616,30 @@ void Level_1_Update(void)
 
 	//TAKE NOTE
 	//ObjInstance1 = Instance 1 to check with :  ObjInstance2 = Instance 2 , SIMILARLY TO THE TOP,
+	if (_Player->iFrame <= 0)
+		_Player->isInvincible = false;
+	if (_Player->iFrame > 0) {
+		_Player->isInvincible = true;
+		_Player->iFrame -= g_dt;
+	}
+	if (spawnCheck == 1) {
+		if (_Boss->iFrame <= 0)
+			_Boss->isInvincible = false;
+		if (_Boss->iFrame > 0) {
+			_Boss->isInvincible = true;
+			_Boss->iFrame -= (float)AEFrameRateControllerGetFrameTime();
+		}
+	}
+	if (_Enemy!=nullptr) {
+		if (_Enemy->iFrame <= 0)
+			_Enemy->isInvincible = false;
+		if (_Enemy->iFrame > 0) {
+			_Enemy->isInvincible = true;
+			_Enemy->iFrame -= (float)AEFrameRateControllerGetFrameTime();
+		}
+	}
+
+	std::cout << "iframe counter: " << _Player->iFrame<<"\n";
 	if (_Player->health > 0) {
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -1632,14 +1656,6 @@ void Level_1_Update(void)
 
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
-					if (ObjInstance1->pObject->type == TYPE_BOSS) {
-						if (_Boss->iFrame <= 0)
-							_Boss->isInvincible = false;
-						if (_Boss->iFrame > 0) {
-							_Boss->isInvincible = true;
-							_Boss->iFrame -= (float)AEFrameRateControllerGetFrameTime();
-						}
-					}
 					//AUGMENT 1 COLLISON
 					if (ObjInstance2->pObject->type == TYPE_BULLET)
 					{
@@ -1648,17 +1664,19 @@ void Level_1_Update(void)
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false) {
 									std::cout << "Boss HP: " << _Boss->health << '\n';
-									_Boss->iFrame = 50.f;
+									_Boss->iFrame = 0.5f;
 									ObjInstance1->health--;
+									break;
 								}
 							}
 							else if (ObjInstance1->pObject->type == TYPE_ENEMY) {
 								ObjInstance1->health--;
-								if (ObjInstance1->health <= 0)
-								{
-									gameObjInstDestroy(ObjInstance1);
-									enemyCount--;
+								if (ObjInstance1->health > 0) {
+									if (_Enemy != nullptr) {
+										_Enemy->iFrame = 0.5f;
+									}
 								}
+								break;
 							}
 							gameObjInstDestroy(ObjInstance2);
 						}
@@ -1666,14 +1684,6 @@ void Level_1_Update(void)
 					//AUGMENT 2 COLLISION
 					if (ObjInstance2->pObject->type == TYPE_AUGMENT2)
 					{
-						if (ObjInstance1->pObject->type == TYPE_BOSS) {
-							if (_Boss->iFrame <= 0)
-								_Boss->isInvincible = false;
-							if (_Boss->iFrame > 0) {
-								_Boss->isInvincible = true;
-								_Boss->iFrame -= (float)AEFrameRateControllerGetFrameTime();
-							}
-						}
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							if (spawnCheck == 1) {
@@ -1681,12 +1691,19 @@ void Level_1_Update(void)
 									//Spawn Orbs of Experience at ObjInstance1 Position...
 									//bulletCount--;
 									std::cout << _Boss->health << '\n';
-									_Boss->iFrame = 50.f;
+									_Boss->iFrame = 1.f;
 									ObjInstance1->health--;
+									break;
 								}
 							}
 							else {
 								ObjInstance1->health--;
+								if (ObjInstance1->health > 0) {
+									if (_Enemy != nullptr) {
+										_Enemy->iFrame = 0.5f;
+									}
+								}
+								break;
 							}
 						}
 						//AUGMENT3 COLLISION
@@ -1698,10 +1715,7 @@ void Level_1_Update(void)
 					gameObjInstDestroy(ObjInstance1);
 					enemyCount--;
 					_Player_Experience++;
-					if (OrbCounter<OrbCap) {
-						gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
-						OrbCounter++;
-					}
+					gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
 				}
 				if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
@@ -1749,19 +1763,13 @@ void Level_1_Update(void)
 					GameObjInstances* ObjInstance2 = sGameObjInstList + j;
 					if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 						continue;
-					if (_Player->iFrame <= 0)
-						_Player->isInvincible = false;
-					if (_Player->iFrame > 0) {
-						_Player->isInvincible = true;
-						_Player->iFrame -= (float)AEFrameRateControllerGetFrameTime();
-					}
 					if (ObjInstance2->pObject->type == TYPE_ENEMY || ObjInstance2->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1) {
 						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity)) {
 							if (_Player->isInvincible == false) {
+								_Player->iFrame = 2.f;
 								_Player->health--;
-								std::cout << "Player HP: " << _Player->health << '\n';
-								_Player->iFrame = 50.f;
 								onValueChange = true;
+								break;
 							}
 						}
 					}
@@ -2153,9 +2161,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		if (Augment1Level != 4)
+		if (Augment1Level != 8)
 			sprintf_s(strbuffer1, "LEVEL %d", Augment1Level);
-		if (Augment1Level == 4)
+		if (Augment1Level == 8)
 			sprintf_s(strbuffer1, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer1, 0.075f, 0.725f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
@@ -2163,9 +2171,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		if (Augment2Level != 4)
+		if (Augment2Level != 8)
 			sprintf_s(strbuffer2, "LEVEL %d", Augment2Level);
-		if (Augment2Level >= 4)
+		if (Augment2Level >= 8)
 			sprintf_s(strbuffer2, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
