@@ -410,8 +410,7 @@ void Menu_Draw(void)
     sprintf_s(gold_buffer, "Gold: %d", Currency);
     AEGfxGetPrintSize(fontID, gold_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
-
-
+    if(BGtexture!=nullptr)
     AEGfxTextureUnload(BGtexture);
 }
 

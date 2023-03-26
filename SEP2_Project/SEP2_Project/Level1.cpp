@@ -74,6 +74,7 @@ float Augment2Range = 1.f;
 float Augment3Range = 0;
 float Augment4Radius = 0;
 float offset = 5.f;
+bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
 
 //Condition check for game over
@@ -552,6 +553,7 @@ void Level_1_Init(void)
 	augment4Button_transX = 0.0f * scaleX;
 	augment4Button_transY = 25.0f * scaleY;
 
+
 }
 
 
@@ -578,6 +580,10 @@ void Level_1_Update(void)
 		else if (overlayTransparency != 0) {
 			overlayTransparency = 0;
 		}
+	}
+	if (AEInputCheckTriggered(AEVK_INSERT))
+	{
+		SkillPoint = 90;
 	}
 
 	// Augment buttons mid points
@@ -620,9 +626,12 @@ void Level_1_Update(void)
 			printf("Augment 3 ++\n");
 			if (SkillPoint != 0 && Augment3Level != 8) {
 				SkillPoint--;
-				Augment3Range += 1.f;
+				Augment3Range += 3.f;
 				Augment3Level++;
-				_Augment_Three->scale.x += Augment3Range;
+				if(_Augment_Three->scale.x >=0)
+					_Augment_Three->scale.x += Augment3Range;
+				else
+					_Augment_Three->scale.x -= Augment3Range;
 			}
 		}
 
@@ -741,15 +750,14 @@ void Level_1_Update(void)
 	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-		_Boss->health = MaxBossHealth = 100;
+		_Boss->health = MaxBossHealth = 10;
 		AE_ASSERT(_Boss);
 		_Boss->position.x = 0;
-		_Boss->position.y = 50;
+		_Boss->position.y = 200;
 		spawnCheck = 1;
 
 		//2
-		_BossBullet = gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, BULLET_SIZE, nullptr, nullptr, 0.0f);
-		AE_ASSERT(_BossBullet);
+
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
@@ -790,9 +798,35 @@ void Level_1_Update(void)
 	if(spawnCheck == 1){offset = 0;}
 	else if(spawnCheck == 0){offset = 5;}
 
+	//Movement flag check
+	if (_Player->position.x > 650) {
+		mRight = false;
+	}
+	else {
+		mRight = true;
+	}
+	if (_Player->position.x < -650) {
+		mLeft = false;
+	}
+	else {
+		mLeft = true;
+	}
+	if (_Player->position.y > 350) {
+		mUp = false;
+	}
+	else {
+		mUp = true;
+	}
+	if (_Player->position.y < -350) {
+		mDown = false;
+	}
+	else {
+		mDown = true;
+	}
+
 	//Offset ALL objects instances + adding player velo
 	//KeyDown
-	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
+	if ((AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D)) && mRight == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -813,7 +847,7 @@ void Level_1_Update(void)
 		BG.x -= 0.5f;
 	}
 
-	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
+	if ((AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A)) && mLeft == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -832,7 +866,7 @@ void Level_1_Update(void)
 		//Background Offset
 		BG.x += 0.5f;
 	}
-	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
+	if ((AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S)) && mDown == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -851,7 +885,7 @@ void Level_1_Update(void)
 		//Background Offset
 		BG.y += 0.5f;
 	}
-	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
+	if ((AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W)) && mUp == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -962,13 +996,18 @@ void Level_1_Update(void)
 				{
 					if (_playerScale > 0)
 					{
-						qInst->position.x = pInst->position.x + 50.0f;
+						qInst->position.x = pInst->position.x + 85.f + Augment3Range;
 						qInst->position.y = pInst->position.y;
+						if (qInst->scale.x <0)
+							qInst->scale.x *= -1;
 					}
 					if (_playerScale < 0)
 					{
-						qInst->position.x = pInst->position.x - 50.0f;
+						qInst->position.x = pInst->position.x - 85.f - Augment3Range;
 						qInst->position.y = pInst->position.y;
+						if(qInst->scale.x >0)
+							qInst->scale.x *= -1;
+
 					}
 					//increment the timer...
 					AUGMENT_3_FIRE_TIMER += g_dt;
@@ -1621,7 +1660,11 @@ void Level_1_Update(void)
 			continue;
 		if (ObjInstance2->pObject->type == TYPE_AUGMENT3) {
 			AEVec2 boundingRectAug3{};
-			AEVec2Set(&boundingRectAug3, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
+			float tempScaleX;
+			tempScaleX = ObjInstance2->scale.x;
+			if (tempScaleX < 0)
+				tempScaleX = -tempScaleX;
+			AEVec2Set(&boundingRectAug3, (BOUNDING_RECT_SIZE / 2.0f)* tempScaleX, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
 			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug3);
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug3);
 		}
@@ -1704,7 +1747,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1731,7 +1774,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1757,7 +1800,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1784,7 +1827,7 @@ void Level_1_Update(void)
 								ObjInstance1->health-=3;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1904,6 +1947,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
+	AEGfxTexture* augment3Tex = AEGfxTextureLoad("Assets\\Assets\\Slash.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
@@ -2016,13 +2060,13 @@ void Level_1_Draw(void)
 		else if (pInst->pObject->type == TYPE_AUGMENT3)
 		{
 			if (pInst->showTexture == true)
-				texture = bulletTex;
+				texture = augment3Tex;
 			else
 			{
 				texture = InvisibleTex;
 			}
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT4 && Augment4Level >0)
+		else if (pInst->pObject->type == TYPE_AUGMENT4)
 		{
 			texture = InvisibleTex;
 		}
@@ -2094,7 +2138,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
-
+	AEGfxTextureUnload(augment3Tex);
 
 
 	AEGfxTextureUnload(Expbar0);
