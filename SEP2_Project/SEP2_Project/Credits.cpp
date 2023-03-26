@@ -24,7 +24,6 @@ char credits4_buffer[1024]{};
 float credits_textWidth{}, credits_textHeight{};
 
 // Pre-definition of Rotation
-double picRotate{};
 double buttonRotate_creditsBack;
 
 void Credits_Load(void) 
@@ -83,6 +82,11 @@ void Credits_Update(void)
     if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_creditsBack = -0.10f;
+    }
+
+    if (!IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_creditsBack = 0.0f;
     }
 }
 void Credits_Draw(void) 

@@ -17,6 +17,9 @@ char instructions3_buffer[1024]{};
 char settingsBackButton_buffer[1024]{};
 float settings_textWidth{}, settings_textHeight{};
 
+// Pre-definition of Rotation
+double buttonRotate_settingsBack;
+
 void Settings_Load(void)
 {
 	AEGfxSetBackgroundColor(0.329f, 0.408f, 0.471f);
@@ -68,6 +71,16 @@ void Settings_Update(void)
         gGameStateNext = MAINMENU;
         //printf("MAINMENU\n");
     }
+
+    if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_settingsBack = -0.10f;
+    }
+
+    if (!IsAreaClicked(backButton_midX, backButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_settingsBack = 0.0f;
+    }
 }
 void Settings_Draw(void)
 {
@@ -77,7 +90,7 @@ void Settings_Draw(void)
     AEMtx33 scale = { 0 };
     AEMtx33Scale(&scale, 80.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate = { 0 };
-    AEMtx33Rot(&rotate, 0.f);
+    AEMtx33Rot(&rotate, buttonRotate_settingsBack);
     AEMtx33 translate = { 0 };
     AEMtx33Trans(&translate, backButton_transX, backButton_transY);
     AEMtx33 transform = { 0 };
