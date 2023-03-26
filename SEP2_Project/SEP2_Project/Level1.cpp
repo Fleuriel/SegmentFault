@@ -552,6 +552,7 @@ void Level_1_Init(void)
 	augment4Button_transX = 0.0f * scaleX;
 	augment4Button_transY = 25.0f * scaleY;
 
+
 }
 
 
@@ -741,15 +742,14 @@ void Level_1_Update(void)
 	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-		_Boss->health = MaxBossHealth = 100;
+		_Boss->health = MaxBossHealth = 10;
 		AE_ASSERT(_Boss);
 		_Boss->position.x = 0;
-		_Boss->position.y = 50;
+		_Boss->position.y = 200;
 		spawnCheck = 1;
 
 		//2
-		_BossBullet = gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, BULLET_SIZE, nullptr, nullptr, 0.0f);
-		AE_ASSERT(_BossBullet);
+
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			GameObjInstances* ObjInstance1 = sGameObjInstList + i;
@@ -1704,7 +1704,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1731,7 +1731,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1757,7 +1757,7 @@ void Level_1_Update(void)
 								ObjInstance1->health--;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -1784,7 +1784,7 @@ void Level_1_Update(void)
 								ObjInstance1->health-=3;
 								if (ObjInstance1->health > 0) {
 									if (_Enemy != nullptr) {
-										_Enemy->iFrame = 0.5f;
+										_Enemy->iFrame = 0.25f;
 									}
 								}
 								break;
@@ -2022,7 +2022,7 @@ void Level_1_Draw(void)
 				texture = InvisibleTex;
 			}
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT4 && Augment4Level >0)
+		else if (pInst->pObject->type == TYPE_AUGMENT4)
 		{
 			texture = InvisibleTex;
 		}
