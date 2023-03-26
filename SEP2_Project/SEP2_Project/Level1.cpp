@@ -72,7 +72,7 @@ bool Aug2CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
 float Augment3Range = 0;
-float Augment4Radius = 5;
+float Augment4Radius = 0;
 float offset = 5.f;
 float Augment4Scale = 50;
 
@@ -1032,7 +1032,7 @@ void Level_1_Update(void)
 					GameObjInstances* AUG4_BULLET = nullptr;
 					
 
-					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL)
+					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL && Augment4Level!=0)
 					{
 						//Shoot the bullet to the direction.
 						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position, spawnCheck));
@@ -1054,7 +1054,7 @@ void Level_1_Update(void)
 						AUGMENT_4_PROJECTILE_TIMER += g_dt;
 					}
 
-					if (AUGMENT_4_PROJECTILE_TIMER > AUGMENT_4_PROJECTILE_INTERVAL)
+					if (AUGMENT_4_PROJECTILE_TIMER > AUGMENT_4_PROJECTILE_INTERVAL && Augment4Level != 0)
 					{
 						if (qInst != nullptr)
 						{
@@ -1625,6 +1625,12 @@ void Level_1_Update(void)
 			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug3);
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug3);
 		}
+		if (ObjInstance2->pObject->type == TYPE_AUGMENT4_EXPLOSION) {
+			AEVec2 boundingRectAug4{};
+			AEVec2Set(&boundingRectAug4, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug4);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug4);
+		}
 		if (spawnCheck != 1) {
 			if (ObjInstance2->velocity.x == 0 || ObjInstance2->velocity.y == 0)
 				continue;
@@ -1761,7 +1767,7 @@ void Level_1_Update(void)
 					//AUGMENT4 COLLISION
 					if (ObjInstance2->pObject->type == TYPE_AUGMENT4_EXPLOSION)
 					{
-						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
 						{
 							std::cout << "HIT!";
 							if (spawnCheck == 1) {
@@ -2016,7 +2022,7 @@ void Level_1_Draw(void)
 				texture = InvisibleTex;
 			}
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT4)
+		else if (pInst->pObject->type == TYPE_AUGMENT4 && Augment4Level >0)
 		{
 			texture = InvisibleTex;
 		}
@@ -2339,6 +2345,9 @@ void Level_1_Unload(void)
 	Aug2CreateCheck = false;
 	Augment3Level = 0;
 	Augment3Range = 0;
+	Augment4Level = 0;
+	Augment4Radius = 0;
+	Augment4Scale = 50;
 	secElapsed = 0;
 	minElapsed = 0;
 	spawnCheck = 0;
