@@ -300,6 +300,7 @@ void Menu_Draw(void)
     // Button 2, Settings button
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetTransparency(1.0f);
     AEMtx33 scale1 = { 0 };
     AEMtx33Scale(&scale1, 100.f * scaleX, 100.f * scaleY);
     AEMtx33 rotate1 = { 0 };

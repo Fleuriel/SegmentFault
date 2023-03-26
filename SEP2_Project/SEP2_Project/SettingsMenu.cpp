@@ -3,6 +3,10 @@
 
 // Pointer to Mesh
 AEGfxVertexList* pMeshSettings = nullptr;
+AEGfxVertexList* BGmesh_settings = nullptr;
+
+// Pre-definition
+AEGfxTexture* BGtexture_settings;
 
 // Pre-definition for translations of buttons
 double backButton_transX;
@@ -37,6 +41,22 @@ void Settings_Load(void)
 
     pMeshSettings = AEGfxMeshEnd();
 
+    //start Background
+    AEGfxMeshStart();
+
+    AEGfxTriAdd(
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+    AEGfxTriAdd(
+        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+    BGmesh_settings = AEGfxMeshEnd();
+
+    // Load texture for BG
+    BGtexture_settings = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
 }
 
 void Settings_Init(void)
@@ -84,6 +104,26 @@ void Settings_Update(void)
 }
 void Settings_Draw(void)
 {
+    
+    //Draw Background
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+    AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(BGtexture_settings, 0, 0);
+    AEMtx33 scale0 = { 0 };
+    AEMtx33Scale(&scale0, 960, 768);
+    AEMtx33 rotate0 = { 0 };
+    AEMtx33Rot(&rotate0, 0.f);
+    AEMtx33 translate0 = { 0 };
+    AEMtx33Trans(&translate0, 220, 0);
+    AEMtx33 transform0 = { 0 };
+    AEMtx33Concat(&transform0, &rotate0, &scale0);
+    AEMtx33Concat(&transform0, &translate0, &transform0);
+    AEGfxSetTransform(transform0.m);
+    AEGfxMeshDraw(BGmesh_settings, AE_GFX_MDM_TRIANGLES);
+    //Finish Background draw
+    
     // Back button
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -128,6 +168,8 @@ void Settings_Draw(void)
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(settingsBackButton_buffer, "Back");
     AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+
 }
 void Settings_Free(void)
 {
@@ -136,4 +178,5 @@ void Settings_Free(void)
 void Settings_Unload(void)
 {
     AEGfxMeshFree(pMeshSettings);
+    AEGfxMeshFree(BGmesh_settings);
 }
