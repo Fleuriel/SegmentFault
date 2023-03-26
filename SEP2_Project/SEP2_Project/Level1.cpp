@@ -67,9 +67,9 @@ int Augment1Level = 1;
 int Augment2Level = 0;
 int Augment3Level = 0;
 bool Aug2CreateCheck = false;
-bool Aug3CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
+float Augment3Range = 0;
 float offset = 5.f;
 
 
@@ -511,12 +511,10 @@ void Level_1_Init(void)
 	//_Augment_Two
 
 	//9
-	if (Aug3CreateCheck == false && Augment3Level >= 1) {
 		_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
 		_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
 		_Augment_Three->scale.y = AUG_GUN_SIZE;
-		Aug3CreateCheck = true;
-	}
+
 	//
 	//AE_ASSERT(_Augment_Three);
 
@@ -610,10 +608,11 @@ void Level_1_Update(void)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			//gGameStateNext = QUIT;
 			printf("Augment 3 ++\n");
-			if (SkillPoint != 0 && Augment2Level != 4) {
+			if (SkillPoint != 0 && Augment3Level != 8) {
 				SkillPoint--;
-				//Augment3Range += 0.5;
-				//Augment3Level++;
+				Augment3Range += 1.f;
+				Augment3Level++;
+				_Augment_Three->scale.x += Augment3Range;
 			}
 		}
 	}
@@ -938,7 +937,7 @@ void Level_1_Update(void)
 					AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 				}
 
-				if (qInst->pObject->type == TYPE_AUGMENT3)
+				if (qInst->pObject->type == TYPE_AUGMENT3 && Augment3Level!=0)
 				{
 					if (_playerScale > 0)
 					{
@@ -1599,6 +1598,12 @@ void Level_1_Update(void)
 		GameObjInstances* ObjInstance2 = sGameObjInstList + i;
 		if ((ObjInstance2->flag & FLAG_ACTIVE) == 0)
 			continue;
+		if (ObjInstance2->pObject->type == TYPE_AUGMENT3) {
+			AEVec2 boundingRectAug3{};
+			AEVec2Set(&boundingRectAug3, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug3);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug3);
+		}
 		if (spawnCheck != 1) {
 			if (ObjInstance2->velocity.x == 0 || ObjInstance2->velocity.y == 0)
 				continue;
@@ -1639,7 +1644,6 @@ void Level_1_Update(void)
 		}
 	}
 
-	std::cout << "iframe counter: " << _Player->iFrame<<"\n";
 	if (_Player->health > 0) {
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -1706,8 +1710,33 @@ void Level_1_Update(void)
 								break;
 							}
 						}
-						//AUGMENT3 COLLISION
-
+					}
+					//AUGMENT3 COLLISION
+					if (ObjInstance2->pObject->type == TYPE_AUGMENT3 && ObjInstance2->showTexture == true)
+					{
+						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
+						{
+							std::cout << "HIT!";
+							if (spawnCheck == 1) {
+								if (_Boss->isInvincible == false && spawnCheck == 1) {
+									//Spawn Orbs of Experience at ObjInstance1 Position...
+									//bulletCount--;
+									std::cout << _Boss->health << '\n';
+									_Boss->iFrame = 1.f;
+									ObjInstance1->health--;
+									break;
+								}
+							}
+							else {
+								ObjInstance1->health--;
+								if (ObjInstance1->health > 0) {
+									if (_Enemy != nullptr) {
+										_Enemy->iFrame = 0.5f;
+									}
+								}
+								break;
+							}
+						}
 					}
 
 				}
@@ -2180,11 +2209,11 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		if (Augment3Level != 4)
+		if (Augment3Level != 8)
 			sprintf_s(strbuffer3, "LEVEL %d", Augment3Level);
-		if (Augment3Level >= 4)
+		if (Augment3Level >= 8)
 			sprintf_s(strbuffer3, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.25f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.275f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 	}
 	/********************************** Augment UI End ********************************************/
@@ -2247,8 +2276,8 @@ void Level_1_Unload(void)
 	Augment1CD = 1.5f;
 	Augment2Range = 1;
 	Aug2CreateCheck = false;
-	Aug3CreateCheck = false;
 	Augment3Level = 0;
+	Augment3Range = 0;
 	secElapsed = 0;
 	minElapsed = 0;
 	spawnCheck = 0;
