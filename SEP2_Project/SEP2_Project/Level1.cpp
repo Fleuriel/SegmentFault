@@ -74,6 +74,7 @@ float Augment2Range = 1.f;
 float Augment3Range = 0;
 float Augment4Radius = 0;
 float offset = 5.f;
+bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
 
 //Condition check for game over
@@ -797,9 +798,35 @@ void Level_1_Update(void)
 	if(spawnCheck == 1){offset = 0;}
 	else if(spawnCheck == 0){offset = 5;}
 
+	//Movement flag check
+	if (_Player->position.x > 650) {
+		mRight = false;
+	}
+	else {
+		mRight = true;
+	}
+	if (_Player->position.x < -650) {
+		mLeft = false;
+	}
+	else {
+		mLeft = true;
+	}
+	if (_Player->position.y > 350) {
+		mUp = false;
+	}
+	else {
+		mUp = true;
+	}
+	if (_Player->position.y < -350) {
+		mDown = false;
+	}
+	else {
+		mDown = true;
+	}
+
 	//Offset ALL objects instances + adding player velo
 	//KeyDown
-	if (AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D))
+	if ((AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D)) && mRight == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -820,7 +847,7 @@ void Level_1_Update(void)
 		BG.x -= 0.5f;
 	}
 
-	if (AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A))
+	if ((AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A)) && mLeft == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -839,7 +866,7 @@ void Level_1_Update(void)
 		//Background Offset
 		BG.x += 0.5f;
 	}
-	if (AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S))
+	if ((AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S)) && mDown == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -858,7 +885,7 @@ void Level_1_Update(void)
 		//Background Offset
 		BG.y += 0.5f;
 	}
-	if (AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W))
+	if ((AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W)) && mUp == true)
 	{
 		for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
