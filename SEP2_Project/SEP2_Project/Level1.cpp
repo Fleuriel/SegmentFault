@@ -843,7 +843,11 @@ void Level_1_Update(void)
 	
 	//spawncheck to lock or unlock camera for boss fight
 	if(spawnCheck == 1){offset = 0;}
-	else if(spawnCheck == 0){offset = 5;}
+	else if(spawnCheck == 0){
+		offset = 5;
+		_Player->position.x -= (_Player->position.x - 0) / 10;
+		_Player->position.y -= (_Player->position.y - 0) / 10;
+	}
 
 	//Movement flag check
 	if (_Player->position.x > 650) {
