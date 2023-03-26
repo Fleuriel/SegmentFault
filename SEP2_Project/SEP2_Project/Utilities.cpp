@@ -145,6 +145,7 @@ float getCursorRad(AEVec2 pos, bool spawnCheck) {
     float rad = 0; //radian value to be returned
     const float pi = 3.1415926; //define pi
     float sumx = 0, sumy = 0;
+    pos.y += 75;
 
     AEInputGetCursorPosition(&cX, &cY);
     AEVec2 MP = { (f32)cX - (1366 / 2), -((f32)cY - (768 / 2)) }; //Mouse pos with reference to window size

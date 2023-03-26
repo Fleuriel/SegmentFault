@@ -471,6 +471,16 @@ void Level_1_Load(void)
 	augmentButtonMesh = AEGfxMeshEnd();
 	// End Overlay
 
+	//// Loads a music from given filepath and assign to ‘audio’
+	AEAudio BGM = AEAudioLoadMusic("Assets\\Music\\Boss Battle Loop #3 by Sirkoto51 Id-443128.wav");
+
+	AEAudioGroup BGM_layer = AEAudioCreateGroup();
+
+	// plays an audio named ‘bgm’ in an 
+	// audio group named ‘bgm_layer’ with 
+	// 100% volume, 100% pitch, looped infinitely.
+	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
+
 }
 
 void Level_1_Init(void)
@@ -2310,5 +2320,7 @@ void Level_1_Unload(void)
 	free(sGameObjInstList);
 	sGameObjInstList = nullptr;
 
+	//Clean up AEModule resources
+	AEAudioExit();
 
 }

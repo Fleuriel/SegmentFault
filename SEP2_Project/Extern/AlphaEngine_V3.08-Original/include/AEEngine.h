@@ -182,7 +182,6 @@
 #include "AEGraphics.h"                 //Graphics library
 #include "AEInput.h"                    //Input library
 #include "AEGameStateMgr.h"             //Gamestates manager
-#include "AEAudio.h"					//Audio library
 
 // ---------------------------------------------------------------------------
 
