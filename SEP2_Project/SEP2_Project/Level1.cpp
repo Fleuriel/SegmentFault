@@ -747,6 +747,21 @@ void Level_1_Update(void)
 		spawnCheck = 0;
 	}
 
+	if (AEInputCheckTriggered(AEVK_9))
+	{
+		minElapsed = 9;
+		secElapsed = 55;
+		enemyCount = 100;
+		spawnCheck = 0;
+	}
+
+	if (AEInputCheckTriggered(AEVK_8))
+	{
+		minElapsed = 14;
+		secElapsed = 55;
+		enemyCount = 100;
+		spawnCheck = 0;
+	}
 	//SPAWN BOSS
 	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0 && BossKills == 0) {
 		//1
@@ -780,6 +795,7 @@ void Level_1_Update(void)
 		_Boss->position.x = 0;
 		_Boss->position.y = 220;
 		spawnCheck = 1;
+		bossPhase = 0;
 
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -1184,13 +1200,6 @@ void Level_1_Update(void)
 			double DelayMovement;
 			bool hasDelayTimePassed = false;
 			double DelayShoot;
-			if (bossPhase == TYPE_BHELL3 && pInst->health > 0 && pInst->health < 80)
-			{
-				AEVec2 direction = { cos(rotationA), sin(rotationA) };
-				//AEVec2Scale(&direction, &direction, 3.0f);
-				AEVec2Add(&pInst->position, &pInst->position, &direction);
-			}
-
 
 			switch (bossPhase)
 			{
@@ -1208,6 +1217,7 @@ void Level_1_Update(void)
 						bossPhase = TYPE_BHELL2;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
+						_Boss->iFrame = 5.f;
 					}
 				}
 				else
@@ -1268,6 +1278,7 @@ void Level_1_Update(void)
 						bossPhase = TYPE_BHELL3;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
+						_Boss->iFrame = 5.f;
 					}
 				}
 				else
@@ -1418,6 +1429,7 @@ void Level_1_Update(void)
 				{
 					_delayTimeBullets = 0;
 					pInst->health = (float)MaxBossHealth * (0.2f);
+					_Boss->iFrame = 5.f;
 					bossPhase = TYPE_BOWAP;
 				}
 
@@ -1836,7 +1848,7 @@ void Level_1_Update(void)
 				}
 				if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
-					_Player_Experience += 10 * (1 + BossKills);
+					_Player_Experience += 30 * (1 + BossKills);
 					spawnCheck = 0;
 					BossKills++;
 					enemyCount = 0;
