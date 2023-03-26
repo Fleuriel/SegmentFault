@@ -580,6 +580,10 @@ void Level_1_Update(void)
 			overlayTransparency = 0;
 		}
 	}
+	if (AEInputCheckTriggered(AEVK_INSERT))
+	{
+		SkillPoint = 90;
+	}
 
 	// Augment buttons mid points
 	f64 augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
@@ -621,9 +625,12 @@ void Level_1_Update(void)
 			printf("Augment 3 ++\n");
 			if (SkillPoint != 0 && Augment3Level != 8) {
 				SkillPoint--;
-				Augment3Range += 1.f;
+				Augment3Range += 3.f;
 				Augment3Level++;
-				_Augment_Three->scale.x += Augment3Range;
+				if(_Augment_Three->scale.x >=0)
+					_Augment_Three->scale.x += Augment3Range;
+				else
+					_Augment_Three->scale.x -= Augment3Range;
 			}
 		}
 
@@ -962,13 +969,18 @@ void Level_1_Update(void)
 				{
 					if (_playerScale > 0)
 					{
-						qInst->position.x = pInst->position.x + 50.0f;
+						qInst->position.x = pInst->position.x + 85.f + Augment3Range;
 						qInst->position.y = pInst->position.y;
+						if (qInst->scale.x <0)
+							qInst->scale.x *= -1;
 					}
 					if (_playerScale < 0)
 					{
-						qInst->position.x = pInst->position.x - 50.0f;
+						qInst->position.x = pInst->position.x - 85.f - Augment3Range;
 						qInst->position.y = pInst->position.y;
+						if(qInst->scale.x >0)
+							qInst->scale.x *= -1;
+
 					}
 					//increment the timer...
 					AUGMENT_3_FIRE_TIMER += g_dt;
@@ -1621,7 +1633,11 @@ void Level_1_Update(void)
 			continue;
 		if (ObjInstance2->pObject->type == TYPE_AUGMENT3) {
 			AEVec2 boundingRectAug3{};
-			AEVec2Set(&boundingRectAug3, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
+			float tempScaleX;
+			tempScaleX = ObjInstance2->scale.x;
+			if (tempScaleX < 0)
+				tempScaleX = -tempScaleX;
+			AEVec2Set(&boundingRectAug3, (BOUNDING_RECT_SIZE / 2.0f)* tempScaleX, (BOUNDING_RECT_SIZE / 2.0f)* ObjInstance2->scale.y);
 			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug3);
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug3);
 		}
@@ -1904,6 +1920,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
+	AEGfxTexture* augment3Tex = AEGfxTextureLoad("Assets\\Assets\\Slash.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
@@ -2016,7 +2033,7 @@ void Level_1_Draw(void)
 		else if (pInst->pObject->type == TYPE_AUGMENT3)
 		{
 			if (pInst->showTexture == true)
-				texture = bulletTex;
+				texture = augment3Tex;
 			else
 			{
 				texture = InvisibleTex;
@@ -2094,7 +2111,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(InvisibleTex);
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
-
+	AEGfxTextureUnload(augment3Tex);
 
 
 	AEGfxTextureUnload(Expbar0);
