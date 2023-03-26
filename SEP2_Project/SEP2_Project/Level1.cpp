@@ -61,7 +61,8 @@ int MaxHealth; // Player max hp
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
 bool spawnCheck = false; // Boss Spawn 
 int MaxBossHealth; // Max hp of boss
-int MaxEnemyCount = 30; // Max Enemy count
+int MaxEnemyCount = 50; // Max Enemy count
+int BossKills = 0;
 
 // Initialised variable for augments
 int Augment1Level = 1;
@@ -616,7 +617,7 @@ void Level_1_Update(void)
 			printf("Augment 2 ++\n");
 			if (SkillPoint != 0 && Augment2Level != 8) {
 				SkillPoint--;
-				Augment2Range += 0.5;
+				Augment2Range += 0.2;
 				Augment2Level++;
 			}
 		}
@@ -747,16 +748,14 @@ void Level_1_Update(void)
 	}
 
 	//SPAWN BOSS
-	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0) {
+	if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0 && BossKills == 0) {
 		//1
 		_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-		_Boss->health = MaxBossHealth = 10;
+		_Boss->health = MaxBossHealth = 100 *(1+BossKills);
 		AE_ASSERT(_Boss);
 		_Boss->position.x = 0;
-		_Boss->position.y = 200;
+		_Boss->position.y = 220;
 		spawnCheck = 1;
-
-		//2
 
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -1843,6 +1842,10 @@ void Level_1_Update(void)
 				}
 				if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
+					_Player_Experience += 10 * (1 + BossKills);
+					spawnCheck = 0;
+					BossKills++;
+					enemyCount = 0;
 				}
 			}
 
@@ -2152,8 +2155,8 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(Expbar8);
 	AEGfxTextureUnload(Expbar9);
 
-	
-/********************************** Augment UI Start ********************************************/
+
+	/********************************** Augment UI Start ********************************************/
 	if (overlayTransparency != 0)
 	{
 		// Drawing the augment overlay on the screen
@@ -2337,7 +2340,7 @@ void Level_1_Draw(void)
 		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, secElapsed);
 	else
 		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, secElapsed);
-	AEGfxPrint(fontID, gdt_buffer,0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -2355,9 +2358,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		if (_Boss != nullptr) {
-			sprintf_s(boss_hp_buffer, "BOSS HP: %d/%d", _Boss->health, MaxBossHealth);
-		}
+		sprintf_s(boss_hp_buffer, "BOSS HP: %d/%d", _Boss->health, MaxBossHealth);
+		if(_Boss == nullptr)
+			sprintf_s(boss_hp_buffer, "0");
 		AEGfxPrint(fontID, boss_hp_buffer, -0.8f, -0.8f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 	}
 }
