@@ -23,7 +23,7 @@ AEVec2 BG = { 0, 0 };
 char gdt_buffer[1024]{};
 char hp_buffer[1024]{};
 char boss_hp_buffer[1024]{};
-char augment1_buffer[1024]{};
+char augment1_buffer[104]{};
 char augment2_buffer[1024]{};
 char augment3_buffer[1024]{};
 char augment4_buffer[1024]{};
@@ -32,6 +32,7 @@ char skillpoint_buffer[1024]{};
 char strbuffer1[1024]{};
 char strbuffer2[1024]{};
 char strbuffer3[1024]{};
+char strbuffer4[1024]{};
 char goldbuffer[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
@@ -66,12 +67,14 @@ int MaxEnemyCount = 30; // Max Enemy count
 int Augment1Level = 1;
 int Augment2Level = 0;
 int Augment3Level = 0;
+int Augment4Level = 0;
 bool Aug2CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
 float Augment3Range = 0;
+float Augment4Radius = 5;
 float offset = 5.f;
-
+float Augment4Scale = 50;
 
 //Condition check for game over
 static bool onValueChange = true;
@@ -529,7 +532,7 @@ void Level_1_Init(void)
 	//AE_ASSERT(_Augment_Three);
 
 	//10
-	//_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
+	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	
 	//11
 	//_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
@@ -594,7 +597,6 @@ void Level_1_Update(void)
 		// Overlay button logic and defintions
 		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
 			printf("Augment 1 ++\n");
 			if (SkillPoint != 0 && Augment1Level != 8) {
 				SkillPoint--;
@@ -605,7 +607,6 @@ void Level_1_Update(void)
 
 		if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
 			printf("Augment 2 ++\n");
 			if (SkillPoint != 0 && Augment2Level != 8) {
 				SkillPoint--;
@@ -616,7 +617,6 @@ void Level_1_Update(void)
 
 		if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
 			printf("Augment 3 ++\n");
 			if (SkillPoint != 0 && Augment3Level != 8) {
 				SkillPoint--;
@@ -628,14 +628,13 @@ void Level_1_Update(void)
 
 		if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//gGameStateNext = QUIT;
 			printf("Augment 4 ++\n");
-			//if (SkillPoint != 0 && Augment3Level != 8) {
-				//SkillPoint--;
-				//Augment3Range += 1.f;
-				//Augment3Level++;
-				//_Augment_Three->scale.x += Augment3Range;
-			//}
+			if (SkillPoint != 0 && Augment4Level != 8) {
+				SkillPoint--;
+				Augment4Level++;
+				Augment4Radius += 5.f;
+				Augment4Scale += Augment4Radius;
+			}
 		}
 	}
 	if (Augment2Level == 1 && Aug2CreateCheck == false) {
@@ -1062,7 +1061,7 @@ void Level_1_Update(void)
 							std::cout << "Work\n";
 							gameObjInstDestroy(qInst);
 							AUGMENT_4_PROJECTILE_ACTIVE = false;
-							gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, 50.0f, &qInst->position, 0, 0);
+							gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
 							AUGMENT_4_EXPLOSION_ACTIVE = true;
 						}
 						AUGMENT_4_PROJECTILE_TIMER = 0;
@@ -1738,7 +1737,6 @@ void Level_1_Update(void)
 					{
 						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
 						{
-							std::cout << "HIT!";
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false && spawnCheck == 1) {
 									//Spawn Orbs of Experience at ObjInstance1 Position...
@@ -1760,7 +1758,33 @@ void Level_1_Update(void)
 							}
 						}
 					}
-
+					//AUGMENT4 COLLISION
+					if (ObjInstance2->pObject->type == TYPE_AUGMENT4_EXPLOSION)
+					{
+						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
+						{
+							std::cout << "HIT!";
+							if (spawnCheck == 1) {
+								if (_Boss->isInvincible == false && spawnCheck == 1) {
+									//Spawn Orbs of Experience at ObjInstance1 Position...
+									//bulletCount--;
+									std::cout << _Boss->health << '\n';
+									_Boss->iFrame = 1.f;
+									ObjInstance1->health-= 3;
+									break;
+								}
+							}
+							else {
+								ObjInstance1->health-=3;
+								if (ObjInstance1->health > 0) {
+									if (_Enemy != nullptr) {
+										_Enemy->iFrame = 0.5f;
+									}
+								}
+								break;
+							}
+						}
+					}
 				}
 				if ((ObjInstance1->health <= 0) && ObjInstance1->pObject->type != TYPE_BOSS) {
 					gameObjInstDestroy(ObjInstance1);
@@ -1994,7 +2018,7 @@ void Level_1_Draw(void)
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4)
 		{
-			texture = augment2Tex;
+			texture = InvisibleTex;
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT5)
 		{
@@ -2242,6 +2266,15 @@ void Level_1_Draw(void)
 		if (Augment3Level >= 8)
 			sprintf_s(strbuffer3, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.275f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (Augment4Level != 8)
+			sprintf_s(strbuffer4, "LEVEL %d", Augment4Level);
+		if (Augment4Level >= 8)
+			sprintf_s(strbuffer4, "MAX LEVEL");
+		AEGfxPrint(fontID, strbuffer4, 0.075f, 0.050f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 	}
 	/********************************** Augment UI End ********************************************/
