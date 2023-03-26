@@ -41,7 +41,7 @@ void GameOver_Load(void)
 		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
 
 	gameOverbMesh = AEGfxMeshEnd();
-	gameOverBGTex = AEGfxTextureLoad("..\\..\\Assets\\Assets\\Background.png");
+	gameOverBGTex = AEGfxTextureLoad("Assets\\Assets\\Background.png");
 	//end Background
 
 	// Create buttons

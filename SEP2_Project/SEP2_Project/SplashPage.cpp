@@ -35,7 +35,7 @@ void SplashPage_Load(void)
     pMeshSplash = AEGfxMeshEnd();
 
     // Loading textures
-    startTex_Splash = AEGfxTextureLoad("..\\..\\Assets\\Assets\\DigiPen_Singapore_WEB_RED.png");
+    startTex_Splash = AEGfxTextureLoad("Assets\\Assets\\DigiPen_Singapore_WEB_RED.png");
 }
 void SplashPage_Init(void) 
 {

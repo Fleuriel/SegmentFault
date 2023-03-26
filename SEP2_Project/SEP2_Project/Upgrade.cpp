@@ -1,8 +1,8 @@
 #include "Upgrade.h"
 #include "Main.h"
 
-std::ifstream ifs{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
-std::ifstream ifs1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
+std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
+std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 
 //bool LevelToggle;
 //f32 Timer;
@@ -195,8 +195,8 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 187.f, (getWinHeight() / 2) + 20.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 
 		if (Currency >= 50)
 		{
@@ -221,8 +221,8 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2)+187.f, (getWinHeight() / 2)-130.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "..\\..\\Assets\\SaveFiles\\PlayerShipModel.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 		
 		ShipModel = 0;
 		std::cout << "Thank you for purchase\n";

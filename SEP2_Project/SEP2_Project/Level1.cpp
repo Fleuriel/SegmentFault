@@ -480,7 +480,7 @@ void Level_1_Load(void)
 	// End Overlay
 
 	//// Loads a music from given filepath and assign to ‘audio’
-	AEAudio BGM = AEAudioLoadMusic("Assets\\Music\\Boss Battle Loop #3 by Sirkoto51 Id-443128.wav");
+	AEAudio BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 
 	AEAudioGroup BGM_layer = AEAudioCreateGroup();
 
@@ -687,22 +687,6 @@ void Level_1_Update(void)
 
 	_Player_Level = experienceCurve(_Player_Level, _Player_Experience, reqExp);
 	expPercent = _Player_Experience * 10 / reqExp;
-
-
-
-	//SAVE.....
-	/*if (AEInputCheckTriggered(AEVK_P))
-	{
-		std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
-		if (outputStream.is_open())
-		{
-			outputStream << Currency << '\n';
-
-		}
-
-		outputStream.close();
-
-	}*/
 
 	//Spawn Enemy
 	if (_deltaTimeEnemySpawner > 1 && enemyCount < MaxEnemyCount)
@@ -1894,7 +1878,7 @@ void Level_1_Update(void)
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							Currency++;
-							std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
+							std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 							if (outputStream.is_open())
 							{
 								outputStream << Currency << '\n';
@@ -2147,7 +2131,7 @@ void Level_1_Draw(void)
 			gGameStateNext = GAMEOVER;
 			if (minElapsed >= currHighScoreMin) {
 				if (secElapsed > currHighScoreSec) {
-					std::ofstream outputStream{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
+					std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
 					if (outputStream.is_open())
 					{
 						outputStream << minElapsed << ' ' << secElapsed << '\n';

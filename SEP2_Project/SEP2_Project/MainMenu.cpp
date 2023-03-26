@@ -35,8 +35,8 @@ double buttonRotate_settings;
 double buttonRotate_powerups;
 double buttonRotate_credits;
 
-std::ifstream input{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
-std::ifstream input2{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
+std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
+std::ifstream input2{ "Assets\\SaveFiles\\HighScore.txt" };
 
 void Menu_Load(void)
 {
