@@ -34,6 +34,9 @@ double buttonRotate_settings;
 double buttonRotate_powerups;
 double buttonRotate_credits;
 
+//Background definition
+AEGfxVertexList* BGmesh = nullptr;
+
 std::ifstream input{ "..\\..\\Assets\\SaveFiles\\Currency.txt" };
 std::ifstream input2{ "..\\..\\Assets\\SaveFiles\\HighScore.txt" };
 
@@ -85,6 +88,23 @@ void Menu_Load(void)
 
     }
 
+
+    //Background
+    AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+    //start Background
+    AEGfxMeshStart();
+
+    AEGfxTriAdd(
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+    AEGfxTriAdd(
+        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+    BGmesh = AEGfxMeshEnd();
+    //end Background
 
 }
 
@@ -240,6 +260,27 @@ void Menu_Update(void)
 }
 void Menu_Draw(void)
 {
+    //Background
+    AEGfxTexture* BGtexture = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
+
+    //Draw Background
+    AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+    AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    AEGfxSetTransparency(1.0f);
+    AEGfxTextureSet(BGtexture, 0, 0);
+    AEMtx33 scale0 = { 0 };
+    AEMtx33Scale(&scale0, 960,768);
+    AEMtx33 rotate0 = { 0 };
+    AEMtx33Rot(&rotate0, 0.f);
+    AEMtx33 translate0 = { 0 };
+    AEMtx33Trans(&translate0,220,0);
+    AEMtx33 transform0 = { 0 };
+    AEMtx33Concat(&transform0, &rotate0, &scale0);
+    AEMtx33Concat(&transform0, &translate0, &transform0);
+    AEGfxSetTransform(transform0.m);
+    AEGfxMeshDraw(BGmesh, AE_GFX_MDM_TRIANGLES);
+    //Finish Background draw
     
     // Button 1, Power-ups button
     AEGfxTextureSet(NULL, 0, 0);
@@ -369,6 +410,8 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, gold_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
 
+
+    AEGfxTextureUnload(BGtexture);
 }
 
 void Menu_Free(void) 
@@ -378,6 +421,7 @@ void Menu_Free(void)
 void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
+    AEGfxMeshFree(BGmesh);
 
     // AEGfxTextureUnload(startTex);
 }
