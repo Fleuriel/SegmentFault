@@ -1687,6 +1687,12 @@ void Level_1_Update(void)
 			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectAug4);
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectAug4);
 		}
+		if (ObjInstance2->pObject->type == TYPE_PLAYER && spawnCheck == 1) {
+			AEVec2 boundingRectPlayer{};
+			AEVec2Set(&boundingRectPlayer, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.x, (BOUNDING_RECT_SIZE / 2.0f) * ObjInstance2->scale.y);
+			AEVec2Sub(&ObjInstance2->boundingBox.min, &ObjInstance2->position, &boundingRectPlayer);
+			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRectPlayer);
+		}
 		if (spawnCheck != 1) {
 			if (ObjInstance2->velocity.x == 0 || ObjInstance2->velocity.y == 0)
 				continue;
