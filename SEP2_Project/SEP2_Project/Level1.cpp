@@ -658,12 +658,11 @@ void Level_1_Update(void)
 		if (IsAreaClicked(augment5Button_midX, augment5Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			printf("Augment 5 ++\n");
-			//if (SkillPoint != 0 && Augment4Level != 8) {
-			//	SkillPoint--;
-			//	Augment4Level++;
-			//	Augment4Radius += 5.f;
-			//	Augment4Scale += Augment4Radius;
-			//}
+			if (SkillPoint != 0 ) {
+				SkillPoint--;
+				MaxHealth++;
+				_Player->health++;
+			}
 		}
 	}
 	if (Augment2Level == 1 && Aug2CreateCheck == false) {
@@ -790,6 +789,7 @@ void Level_1_Update(void)
 		_Boss->position.x = 0;
 		_Boss->position.y = 220;
 		spawnCheck = 1;
+		bossPhase = 0;
 
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
@@ -1234,13 +1234,13 @@ void Level_1_Update(void)
 				{
 					std::cout << "entry Upon this thing\n";
 					double const MAX_DELAY = 4.0f;
+					_Boss->iFrame = MAX_DELAY;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
 						std::cout << "Entry2\n";
 						bossPhase = TYPE_BHELL2;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
-						_Boss->iFrame = 5.f;
 					}
 				}
 				else
@@ -1295,13 +1295,13 @@ void Level_1_Update(void)
 				if (pInst->health <= (float)MaxBossHealth * (0.6f))
 				{
 					double const MAX_DELAY = 4.0f;
+					_Boss->iFrame = MAX_DELAY;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
 						std::cout << "Entry3\n";
 						bossPhase = TYPE_BHELL3;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
-						_Boss->iFrame = 5.f;
 					}
 				}
 				else
@@ -1385,6 +1385,7 @@ void Level_1_Update(void)
 				break;
 				//Peerless Wind God
 			case TYPE_BHELL4:
+				_Boss->iFrame = 1.f;
 				numBullets = 7;
 				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
 				if (_deltaTime_Shooting > 3 && _deltaTime_Shooting < 18)
