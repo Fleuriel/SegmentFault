@@ -58,6 +58,7 @@ void SplashPage_Update(void)
 		splashPage_transparency += 0.005f;
 		if (splashPage_transparency >= 1.f) 
 		{
+			splashPage_transparency += 1.5f;
 			isTransparent = false;
 		}
 	}
