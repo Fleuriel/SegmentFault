@@ -60,7 +60,7 @@ float textWidth{}, textHeight{};
 float secElapsed = 0.f;
 float minElapsed = 0.f;
 
-int MaxHealth; // Player max hp 
+int MaxHealth = MaximumPlayerHealth; // Player max hp 
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
 bool spawnCheck = false; // Boss Spawn 
 int MaxBossHealth; // Max hp of boss
@@ -400,7 +400,6 @@ void Level_1_Load(void)
 
 	}
 
-	
 	//Save file for highscore
 	if (inputFileStream2.good())
 	{
@@ -414,6 +413,15 @@ void Level_1_Load(void)
 		std::cerr << "Error: \n";
 
 	}
+
+	//Save file for player's stats
+	if (inputFileStream3.good())
+	{
+		inputFileStream3 >> MaximumPlayerHealth;
+		inputFileStream3.close();
+	}
+
+
 	//Expbar
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
 
@@ -495,7 +503,7 @@ void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	_Player->health = MaxHealth = 20;
+	_Player->health = MaxHealth = MaximumPlayerHealth;
 	AE_ASSERT(_Player);
 
 

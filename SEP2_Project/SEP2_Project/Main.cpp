@@ -7,8 +7,9 @@ float	 g_dt;
 double	 g_appTime;
 int		 FPS = 144;
 s8       fontID;
-int	 Currency = 0;
+int		 Currency = 0;
 int		 ShipModel;
+int		 MaximumPlayerHealth;
 float currHighScoreMin = 0.f;
 float currHighScoreSec = 0.f;
 

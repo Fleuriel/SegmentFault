@@ -34,7 +34,8 @@ extern double	g_appTime;
 extern s8       fontID;
 
 extern int   Currency;
-extern int		ShipModel;
+extern int	 ShipModel;
+extern int	 MaximumPlayerHealth;
 extern float currHighScoreMin;
 extern float currHighScoreSec;
 //<<<<<<< Updated upstream
