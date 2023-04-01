@@ -93,8 +93,8 @@ void Menu_Load(void)
 void Menu_Init(void) 
 {
     // Gets the scale of 1366x768
-    scaleX = getWinWidth() / 1366.f; 
-    scaleY = getWinHeight() / 768.f;
+    scaleX = getWinWidth() / 1366.0f;
+    scaleY = getWinHeight() / 768.0f;
 
 
     powerUpButton_transX = -120.f * scaleX;
