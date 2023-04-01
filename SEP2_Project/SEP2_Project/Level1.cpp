@@ -67,6 +67,10 @@ int MaxBossHealth; // Max hp of boss
 int MaxEnemyCount = 50; // Max Enemy count
 int BossKills = 0;
 
+//Outerbounds of World Screen
+AEVec2 OuterEnemySpawnBounds = { 1920.f,1080.f };
+
+
 // Initialised variable for augments
 int Augment1Level = 1;
 int Augment2Level = 0;
@@ -551,9 +555,9 @@ void Level_1_Init(void)
 	//_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
-	// Gets the scale of 1366x768
-	scaleX = getWinWidth() / 1366.f;
-	scaleY = getWinHeight() / 768.f;
+	// Gets the scale of Game_Dimension.xxGame_Dimension.y
+	scaleX = getWinWidth() / Game_Dimension.x;
+	scaleY = getWinHeight() / Game_Dimension.y;
 
 	// Defintion of the translation for augment buttons
 	augment1Button_transX = 0.0f * scaleX;
@@ -702,30 +706,30 @@ void Level_1_Update(void)
 		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
 			// Generate a random number to determine which X range to use
-			// Outer Box, 1600x900 , Inner Box 1366x768;
+			// Outer Box, 1600x900 , Inner Box Game_Dimension.xxGame_Dimension.y;
 			//A
 			if (AERandFloat() >= 0 && AERandFloat() < 0.25)
 			{
-				enemySpawnX = -(1600.f / 2.f) + AERandFloat() * (1366.f + (1600.f - 1366.f));
-				enemySpawnY = (768.f / 2.f) + AERandFloat() * ((900.f - 768.f) / 2.f);
+				enemySpawnX = -(OuterEnemySpawnBounds.x / 2.f) + AERandFloat() * (Game_Dimension.x + (OuterEnemySpawnBounds.x - Game_Dimension.x));
+				enemySpawnY = (Game_Dimension.y / 2.f) + AERandFloat() * ((OuterEnemySpawnBounds.y - Game_Dimension.y) / 2.f);
 			}
 			//B
 			else if (AERandFloat() >= 0.25 && AERandFloat() < 0.5)
 			{
-				enemySpawnX = 1366.f / 2.f + AERandFloat() * (1600.f - 1366.f) / 2.f;
-				enemySpawnY = -(768.f / 2.f) + AERandFloat() * (768.f + (900.f - 768.f) / 2.f);
+				enemySpawnX = Game_Dimension.x / 2.f + AERandFloat() * (OuterEnemySpawnBounds.x - Game_Dimension.x) / 2.f;
+				enemySpawnY = -(Game_Dimension.y / 2.f) + AERandFloat() * (Game_Dimension.y + (OuterEnemySpawnBounds.y - Game_Dimension.y) / 2.f);
 			}
 			//C
 			else if (AERandFloat() >= 0.5 && AERandFloat() < 0.75)
 			{
-				enemySpawnX = -(1366.f / 2.f) + AERandFloat() * (1366.f + (1600.f - 1366.f) / 2.f);
-				enemySpawnY = -(900.f / 2.f) + AERandFloat() * ((900.f - 768.f) / 2.f);
+				enemySpawnX = -(Game_Dimension.x / 2.f) + AERandFloat() * (Game_Dimension.x + (OuterEnemySpawnBounds.x - Game_Dimension.x) / 2.f);
+				enemySpawnY = -(OuterEnemySpawnBounds.y / 2.f) + AERandFloat() * ((OuterEnemySpawnBounds.y - Game_Dimension.y) / 2.f);
 			}
 			//D
 			else if (AERandFloat() >= 0.75)
 			{
-				enemySpawnX = -(1366.f / 2.f) - ((1600.f - 1366.f) / 2 * AERandFloat());
-				enemySpawnY = -(900.f / 2.f) + AERandFloat() * (768 + (900.f - 768.f) / 2.f);
+				enemySpawnX = -(Game_Dimension.x / 2.f) - ((OuterEnemySpawnBounds.x - Game_Dimension.x) / 2 * AERandFloat());
+				enemySpawnY = -(OuterEnemySpawnBounds.y / 2.f) + AERandFloat() * (Game_Dimension.y + (OuterEnemySpawnBounds.y - Game_Dimension.y) / 2.f);
 			}
 			AEVec2 enemySpawn = { enemySpawnX, enemySpawnY };
 			AEVec2 velocityEnemy = { 20.0f, 20.0f };
@@ -1045,7 +1049,7 @@ void Level_1_Update(void)
 						AEInputGetCursorPosition(&mouseX, &mouseY);
 
 						// Convert the mouse position to world space
-						AUGMENT_1_MOUSE_POSITION = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
+						AUGMENT_1_MOUSE_POSITION = { (f32)mouseX - (Game_Dimension.x / 2), -((f32)mouseY - (Game_Dimension.y / 2)) };
 
 						// Compute the direction of the bullet
 						AUGMENT_1_DIRECTION = { AUGMENT_1_MOUSE_POSITION.x - qInst->position.x, AUGMENT_1_MOUSE_POSITION.y - qInst->position.y };
@@ -1121,7 +1125,7 @@ void Level_1_Update(void)
 					AEInputGetCursorPosition(&mouseX, &mouseY);
 					
 					//Convert Mouse pos to world space coordinates.
-					AUGMENT_4_MOUSE_POSITION = { (f32)mouseX - (1366 / 2), -((f32)mouseY - (768 / 2)) };
+					AUGMENT_4_MOUSE_POSITION = { (f32)mouseX - (Game_Dimension.x / 2), -((f32)mouseY - (Game_Dimension.y / 2)) };
 					
 					//Compute the direction of bullet with 60 deg angle discrepancies.
 					
@@ -1634,7 +1638,7 @@ void Level_1_Update(void)
 			}
 		}
 
-		//Window size is 1366x768
+		//Window size is Game_Dimension.xxGame_Dimension.y
 
 		if (pInst->position.x > AEGfxGetWinMaxX() ||
 			pInst->position.x < AEGfxGetWinMinX() ||
@@ -1990,11 +1994,11 @@ void Level_1_Draw(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(BgroundTexB, 0, 0);
 	AEMtx33 scale0 = { 0 };
-	AEMtx33Scale(&scale0, 1366 * 1.5, 1000 * 1.5);
+	AEMtx33Scale(&scale0, Game_Dimension.x * 1.5, 1000 * 1.5);
 	AEMtx33 rotate0 = { 0 };
 	AEMtx33Rot(&rotate0, 0.f);
 	AEMtx33 translate0 = { 0 };
-	AEMtx33Trans(&translate0, BG.x + 1366.f / 2.f, BG.y);
+	AEMtx33Trans(&translate0, BG.x + Game_Dimension.x / 2.f, BG.y);
 	AEMtx33 transform0 = { 0 };
 	AEMtx33Concat(&transform0, &rotate0, &scale0);
 	AEMtx33Concat(&transform0, &translate0, &transform0);

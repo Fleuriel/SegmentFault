@@ -148,7 +148,7 @@ float getCursorRad(AEVec2 pos, bool spawnCheck) {
     pos.y += 75;
 
     AEInputGetCursorPosition(&cX, &cY);
-    AEVec2 MP = { (f32)cX - (1366 / 2), -((f32)cY - (768 / 2)) }; //Mouse pos with reference to window size
+    AEVec2 MP = { (f32)cX - (Game_Dimension.x / 2), -((f32)cY - (Game_Dimension.y / 2)) }; //Mouse pos with reference to window size
 
     //mouse position - player pos
     sumx = MP.x - pos.x;

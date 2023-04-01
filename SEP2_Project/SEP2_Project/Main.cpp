@@ -7,6 +7,13 @@ float	 g_dt;
 double	 g_appTime;
 int		 FPS = 144;
 s8       fontID;
+
+
+//Game World Dimensions
+AEVec2	Game_Dimension{ 1600.0f, 900.0f };
+
+
+//Game World Parameters
 int		 Currency = 0;
 int		 ShipModel;
 int		 MaximumPlayerHealth;
@@ -37,7 +44,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
 
 	// Initialize the system
-	AESysInit(instanceH, show, 1366, 768, 1, FPS, false, NULL);
+	AESysInit(instanceH, show, Game_Dimension.x, Game_Dimension.y, 1, FPS, false, NULL);
 	//AESysInit(instanceH, show, 160, 90, 1, FPS, false, NULL);
 	
 
