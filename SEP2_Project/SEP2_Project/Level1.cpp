@@ -881,25 +881,25 @@ void Level_1_Update(void)
 	}
 
 	//Movement flag check
-	if (_Player->position.x > getWinWidth()/2 - PLAYER_SIZE/2) {
+	if (_Player->position.x > 650) {
 		mRight = false;
 	}
 	else {
 		mRight = true;
 	}
-	if (_Player->position.x < -getWinWidth() / 2 + PLAYER_SIZE / 2) {
+	if (_Player->position.x < -650) {
 		mLeft = false;
 	}
 	else {
 		mLeft = true;
 	}
-	if (_Player->position.y > getWinHeight() / 2 - PLAYER_SIZE / 2) {
+	if (_Player->position.y > 350) {
 		mUp = false;
 	}
 	else {
 		mUp = true;
 	}
-	if (_Player->position.y < -getWinHeight() / 2 + PLAYER_SIZE / 2) {
+	if (_Player->position.y < -350) {
 		mDown = false;
 	}
 	else {
@@ -2008,30 +2008,43 @@ void Level_1_Draw(void)
 
 
 	//Exp bar start
-	AEGfxTexture* Expbar[10] = { AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png"),
-								 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png") };
+	AEGfxTexture* Expbar0 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png");
+	AEGfxTexture* Expbar1 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png");
+	AEGfxTexture* Expbar2 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png");
+	AEGfxTexture* Expbar3 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png");
+	AEGfxTexture* Expbar4 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png");
+	AEGfxTexture* Expbar5 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png");
+	AEGfxTexture* Expbar6 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png");
+	AEGfxTexture* Expbar7 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png");
+	AEGfxTexture* Expbar8 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png");
+	AEGfxTexture* Expbar9 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png");
+
+
+
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	AEGfxTextureSet(Expbar[expPercent], 0, 0);
+	if (expPercent == 0) { AEGfxTextureSet(Expbar0, 0, 0); }
+	else if (expPercent == 1) { AEGfxTextureSet(Expbar1, 0, 0); }
+	else if (expPercent == 2) { AEGfxTextureSet(Expbar2, 0, 0); }
+	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
+	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
+	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
+	else if (expPercent == 6) { AEGfxTextureSet(Expbar6, 0, 0); }
+	else if (expPercent == 7) { AEGfxTextureSet(Expbar7, 0, 0); }
+	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
+	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
 	//Exp bar end
+
 
 	AEMtx33 scale2 = { 0 };
 	AEMtx33Scale(&scale2, 600.f, 30.f);
 	AEMtx33 rotate2 = { 0 };
 	AEMtx33Rot(&rotate2, 0.f);
 	AEMtx33 translate2 = { 0 };
-	AEMtx33Trans(&translate2, -getWinWidth()/8, getWinHeight()/2 - getWinHeight() / 50 + getWinHeight()/ getWinHeight());
+	AEMtx33Trans(&translate2, -85, 368);
 	AEMtx33 transform2 = { 0 };
 	AEMtx33Concat(&transform2, &rotate2, &scale2);
 	AEMtx33Concat(&transform2, &translate2, &transform2);
@@ -2046,7 +2059,7 @@ void Level_1_Draw(void)
 	std::string level = "Lv " + std::to_string(_Player_Level);
 	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
 	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
-	AEGfxPrint(fontID, level_buffer, -0.985, 0.94, 0.5f, 1, 1, 1);
+	AEGfxPrint(fontID, level_buffer, -0.985, 0.935, 0.5f, 1, 1, 1);
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -2161,7 +2174,18 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
 	AEGfxTextureUnload(augment3Tex);
-	AEGfxTextureUnload(Expbar[expPercent]);
+
+
+	AEGfxTextureUnload(Expbar0);
+	AEGfxTextureUnload(Expbar1);
+	AEGfxTextureUnload(Expbar2);
+	AEGfxTextureUnload(Expbar3);
+	AEGfxTextureUnload(Expbar4);
+	AEGfxTextureUnload(Expbar5);
+	AEGfxTextureUnload(Expbar6);
+	AEGfxTextureUnload(Expbar7);
+	AEGfxTextureUnload(Expbar8);
+	AEGfxTextureUnload(Expbar9);
 
 
 	/********************************** Augment UI Start ********************************************/
