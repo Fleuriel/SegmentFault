@@ -69,7 +69,7 @@ enum BossPhase {
 	TYPE_BHELL2,
 	TYPE_BHELL3,
 	TYPE_BHELL4,
-	TYPE_BOWAP
+	TYPE_BHELL5
 };
 
 

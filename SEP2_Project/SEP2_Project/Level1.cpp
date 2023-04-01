@@ -1013,7 +1013,7 @@ void Level_1_Update(void)
 	}
 	if (AEInputCheckTriggered(AEVK_5))
 	{
-		bossPhase = TYPE_BOWAP;
+		bossPhase = TYPE_BHELL5;
 	}
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -1450,7 +1450,7 @@ void Level_1_Update(void)
 					_delayTimeBullets = 0;
 					pInst->health = (float)MaxBossHealth * (0.2f);
 					_Boss->iFrame = 5.f;
-					bossPhase = TYPE_BOWAP;
+					bossPhase = TYPE_BHELL5;
 				}
 
 				//std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
@@ -1461,7 +1461,7 @@ void Level_1_Update(void)
 				pInst->position.y = 200.0f + displacementY; // set the y position to a fixed value for now
 				break;
 				//BOWAP
-			case TYPE_BOWAP:
+			case TYPE_BHELL5:
 				_Boss->position.x = 0;
 				_Boss->position.y = 220;
 				//If Boss hp not lesser than 1,
@@ -2474,6 +2474,12 @@ void Level_1_Unload(void)
 	sGameObjList = nullptr;
 	free(sGameObjInstList);
 	sGameObjInstList = nullptr;
+
+
+
+
+
+
 
 	//Clean up AEModule resources
 	AEAudioExit();
