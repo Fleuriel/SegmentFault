@@ -18,6 +18,7 @@ double creditsButton_transX;
 double creditsButton_transY;
 double exitButton_transX;
 double exitButton_transY;
+double BGtransX, BGtransY;
 
 // Pre-defintion for str buffers
 char play_buffer[1024]{};
@@ -106,6 +107,8 @@ void Menu_Init(void)
     creditsButton_transY = -355.0f * scaleY;
     exitButton_transX = 663.5f * scaleX;
     exitButton_transY = 355.0f * scaleY;
+    BGtransX = 220.0f * scaleX;
+    BGtransY = -40 * scaleY;
     
     buttonRotate_play = 0.f;
     buttonRotate_powerups = 0.f;
@@ -269,11 +272,11 @@ void Menu_Draw(void)
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(BGtexture, 0, 0);
     AEMtx33 scale0 = { 0 };
-    AEMtx33Scale(&scale0, 960, 768);
+    AEMtx33Scale(&scale0, 1100, 800);
     AEMtx33 rotate0 = { 0 };
     AEMtx33Rot(&rotate0, 0.f);
     AEMtx33 translate0 = { 0 };
-    AEMtx33Trans(&translate0, 220, 0);
+    AEMtx33Trans(&translate0, BGtransX, BGtransY);
     AEMtx33 transform0 = { 0 };
     AEMtx33Concat(&transform0, &rotate0, &scale0);
     AEMtx33Concat(&transform0, &translate0, &transform0);
