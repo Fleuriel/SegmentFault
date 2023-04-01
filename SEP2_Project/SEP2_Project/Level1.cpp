@@ -2044,7 +2044,7 @@ void Level_1_Draw(void)
 	AEMtx33 rotate2 = { 0 };
 	AEMtx33Rot(&rotate2, 0.f);
 	AEMtx33 translate2 = { 0 };
-	AEMtx33Trans(&translate2, -85, 368);
+	AEMtx33Trans(&translate2, -getWinWidth()/8, getWinHeight()/2 - getWinHeight()/50 + getWinHeight()/ getWinHeight());
 	AEMtx33 transform2 = { 0 };
 	AEMtx33Concat(&transform2, &rotate2, &scale2);
 	AEMtx33Concat(&transform2, &translate2, &transform2);
@@ -2059,7 +2059,7 @@ void Level_1_Draw(void)
 	std::string level = "Lv " + std::to_string(_Player_Level);
 	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
 	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
-	AEGfxPrint(fontID, level_buffer, -0.985, 0.935, 0.5f, 1, 1, 1);
+	AEGfxPrint(fontID, level_buffer, -0.985, 0.94, 0.5f, 1, 1, 1);
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
