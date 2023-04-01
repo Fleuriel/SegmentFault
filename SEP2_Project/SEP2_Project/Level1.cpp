@@ -2008,16 +2008,16 @@ void Level_1_Draw(void)
 
 
 	//Exp bar start
-	AEGfxTexture* Expbar0 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png");
-	AEGfxTexture* Expbar1 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png");
-	AEGfxTexture* Expbar2 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png");
-	AEGfxTexture* Expbar3 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png");
-	AEGfxTexture* Expbar4 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png");
-	AEGfxTexture* Expbar5 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png");
-	AEGfxTexture* Expbar6 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png");
-	AEGfxTexture* Expbar7 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png");
-	AEGfxTexture* Expbar8 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png");
-	AEGfxTexture* Expbar9 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png");
+	AEGfxTexture* Expbar[10] = { AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png") };
 
 
 
@@ -2026,16 +2026,7 @@ void Level_1_Draw(void)
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	if (expPercent == 0) { AEGfxTextureSet(Expbar0, 0, 0); }
-	else if (expPercent == 1) { AEGfxTextureSet(Expbar1, 0, 0); }
-	else if (expPercent == 2) { AEGfxTextureSet(Expbar2, 0, 0); }
-	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
-	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
-	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
-	else if (expPercent == 6) { AEGfxTextureSet(Expbar6, 0, 0); }
-	else if (expPercent == 7) { AEGfxTextureSet(Expbar7, 0, 0); }
-	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
-	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
+	AEGfxTextureSet(Expbar[expPercent], 0, 0);
 	//Exp bar end
 
 
@@ -2175,18 +2166,9 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(BgroundTexB);
 	AEGfxTextureUnload(augment3Tex);
 
-
-	AEGfxTextureUnload(Expbar0);
-	AEGfxTextureUnload(Expbar1);
-	AEGfxTextureUnload(Expbar2);
-	AEGfxTextureUnload(Expbar3);
-	AEGfxTextureUnload(Expbar4);
-	AEGfxTextureUnload(Expbar5);
-	AEGfxTextureUnload(Expbar6);
-	AEGfxTextureUnload(Expbar7);
-	AEGfxTextureUnload(Expbar8);
-	AEGfxTextureUnload(Expbar9);
-
+	for (int i = 0; i < 10; i++) {
+		AEGfxTextureUnload(Expbar[i]);
+	}
 
 	/********************************** Augment UI Start ********************************************/
 	if (overlayTransparency != 0)
