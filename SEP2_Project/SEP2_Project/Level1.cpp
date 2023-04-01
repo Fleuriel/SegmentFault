@@ -1978,7 +1978,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* augment2Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* bossTex = AEGfxTextureLoad("Assets\\Assets\\Boss.png");
 	AEGfxTexture* bossBullet1Tex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
-	AEGfxTexture* enemyTex = AEGfxTextureLoad("Assets\\Assets\\enemy.png");
+	AEGfxTexture* enemyTex = AEGfxTextureLoad("Assets\\Assets\\newenemy.png");
 	AEGfxTexture* pHitboxTex = AEGfxTextureLoad("Assets\\Assets\\circle-512.png");
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
