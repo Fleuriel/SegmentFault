@@ -8,6 +8,7 @@ AEGfxVertexList* BGmesh_credits = nullptr;
 
 // Pre-definition
 AEGfxTexture* BGtexture_credits;
+double BGtransX_credits, BGtransY_credits;
 
 // Pre-definition for translations of buttons
 double creditsPic_transX;
@@ -73,6 +74,9 @@ void Credits_Init(void)
     creditsBackbutton_transY = -355.0f * scaleY;
 
     buttonRotate_creditsBack = 0.f;
+
+    BGtransX_credits = 220.0f * scaleX;
+    BGtransY_credits = -40 * scaleY;
 }
 void Credits_Update(void)
 {
@@ -116,11 +120,11 @@ void Credits_Draw(void)
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(BGtexture_credits, 0, 0);
     AEMtx33 scale0 = { 0 };
-    AEMtx33Scale(&scale0, 960, 768);
+    AEMtx33Scale(&scale0, 1100, 800);
     AEMtx33 rotate0 = { 0 };
     AEMtx33Rot(&rotate0, 0.f);
     AEMtx33 translate0 = { 0 };
-    AEMtx33Trans(&translate0, 220, 0);
+    AEMtx33Trans(&translate0, BGtransX_credits, BGtransY_credits);
     AEMtx33 transform0 = { 0 };
     AEMtx33Concat(&transform0, &rotate0, &scale0);
     AEMtx33Concat(&transform0, &translate0, &transform0);

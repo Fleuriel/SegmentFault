@@ -2008,16 +2008,16 @@ void Level_1_Draw(void)
 
 
 	//Exp bar start
-	AEGfxTexture* Expbar0 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png");
-	AEGfxTexture* Expbar1 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png");
-	AEGfxTexture* Expbar2 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png");
-	AEGfxTexture* Expbar3 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png");
-	AEGfxTexture* Expbar4 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png");
-	AEGfxTexture* Expbar5 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png");
-	AEGfxTexture* Expbar6 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png");
-	AEGfxTexture* Expbar7 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png");
-	AEGfxTexture* Expbar8 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png");
-	AEGfxTexture* Expbar9 = AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png");
+	AEGfxTexture* Expbar[10] = { AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp3.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp4.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp5.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp6.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp7.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png"),
+							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png") };
 
 
 
@@ -2026,16 +2026,7 @@ void Level_1_Draw(void)
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
-	if (expPercent == 0) { AEGfxTextureSet(Expbar0, 0, 0); }
-	else if (expPercent == 1) { AEGfxTextureSet(Expbar1, 0, 0); }
-	else if (expPercent == 2) { AEGfxTextureSet(Expbar2, 0, 0); }
-	else if (expPercent == 3) { AEGfxTextureSet(Expbar3, 0, 0); }
-	else if (expPercent == 4) { AEGfxTextureSet(Expbar4, 0, 0); }
-	else if (expPercent == 5) { AEGfxTextureSet(Expbar5, 0, 0); }
-	else if (expPercent == 6) { AEGfxTextureSet(Expbar6, 0, 0); }
-	else if (expPercent == 7) { AEGfxTextureSet(Expbar7, 0, 0); }
-	else if (expPercent == 8) { AEGfxTextureSet(Expbar8, 0, 0); }
-	else if (expPercent == 9) { AEGfxTextureSet(Expbar9, 0, 0); }
+	AEGfxTextureSet(Expbar[expPercent], 0, 0);
 	//Exp bar end
 
 
@@ -2044,7 +2035,7 @@ void Level_1_Draw(void)
 	AEMtx33 rotate2 = { 0 };
 	AEMtx33Rot(&rotate2, 0.f);
 	AEMtx33 translate2 = { 0 };
-	AEMtx33Trans(&translate2, -85, 368);
+	AEMtx33Trans(&translate2, -getWinWidth()/8, getWinHeight()/2 - getWinHeight()/50 + getWinHeight()/ getWinHeight());
 	AEMtx33 transform2 = { 0 };
 	AEMtx33Concat(&transform2, &rotate2, &scale2);
 	AEMtx33Concat(&transform2, &translate2, &transform2);
@@ -2059,7 +2050,7 @@ void Level_1_Draw(void)
 	std::string level = "Lv " + std::to_string(_Player_Level);
 	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
 	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
-	AEGfxPrint(fontID, level_buffer, -0.985, 0.935, 0.5f, 1, 1, 1);
+	AEGfxPrint(fontID, level_buffer, -0.985, 0.94, 0.5f, 1, 1, 1);
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -2175,18 +2166,9 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(BgroundTexB);
 	AEGfxTextureUnload(augment3Tex);
 
-
-	AEGfxTextureUnload(Expbar0);
-	AEGfxTextureUnload(Expbar1);
-	AEGfxTextureUnload(Expbar2);
-	AEGfxTextureUnload(Expbar3);
-	AEGfxTextureUnload(Expbar4);
-	AEGfxTextureUnload(Expbar5);
-	AEGfxTextureUnload(Expbar6);
-	AEGfxTextureUnload(Expbar7);
-	AEGfxTextureUnload(Expbar8);
-	AEGfxTextureUnload(Expbar9);
-
+	for (int i = 0; i < 10; i++) {
+		AEGfxTextureUnload(Expbar[i]);
+	}
 
 	/********************************** Augment UI Start ********************************************/
 	if (overlayTransparency != 0)
@@ -2288,67 +2270,67 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment1_buffer, "Guns");
 		// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
-		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (1125.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (1550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment2_buffer, "Orbiter");
-		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (1650.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment2_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (2200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment3_buffer, "Slash");
-		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (3000.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment3_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (4200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment4_buffer, "Rocket");
-		AEGfxPrint(fontID, augment4_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (18500.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment4_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment5_buffer, "HP");
-		AEGfxPrint(fontID, augment5_buffer, (getWinWidth() / (-2750.f * scaleX)), (getWinHeight() / (-4000.f * scaleY)), 0.6f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, augment5_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(skillpoint_buffer, "Skill Points: %d", SkillPoint);
-		AEGfxPrint(fontID, skillpoint_buffer, -0.5f, -0.8f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, skillpoint_buffer, -0.45f, -0.7f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (1130.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (1550.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (1680.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (2300.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (3250.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (4500.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (50000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (60000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-34000.f * scaleX)), (getWinHeight() / (-3700.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
+		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (-5000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2357,7 +2339,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer1, "LEVEL %d", Augment1Level);
 		if (Augment1Level == 8)
 			sprintf_s(strbuffer1, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer1, 0.075f, 0.725f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer1, 0.075f, (getWinHeight() / (1500.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -2367,7 +2349,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer2, "LEVEL %d", Augment2Level);
 		if (Augment2Level >= 8)
 			sprintf_s(strbuffer2, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer2, 0.075f, 0.5f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer2, 0.075, (getWinHeight() / (2150.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2376,7 +2358,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer3, "LEVEL %d", Augment3Level);
 		if (Augment3Level >= 8)
 			sprintf_s(strbuffer3, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer3, 0.075f, 0.275f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer3, 0.075f, (getWinHeight() / (4000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2385,7 +2367,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer4, "LEVEL %d", Augment4Level);
 		if (Augment4Level >= 8)
 			sprintf_s(strbuffer4, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer4, 0.075f, 0.050f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer4, 0.075f, (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		//AEGfxTextureSet(NULL, 0, 0);

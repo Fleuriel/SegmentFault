@@ -7,6 +7,7 @@ AEGfxVertexList* BGmesh_settings = nullptr;
 
 // Pre-definition
 AEGfxTexture* BGtexture_settings;
+double BGtransX_settings, BGtransY_settings;
 
 // Pre-definition for translations of buttons
 double backButton_transX;
@@ -26,7 +27,7 @@ double buttonRotate_settingsBack;
 
 void Settings_Load(void)
 {
-	AEGfxSetBackgroundColor(0.329f, 0.408f, 0.471f);
+    AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
     AEGfxMeshStart();
 
@@ -70,6 +71,9 @@ void Settings_Init(void)
     backButton_transX = 640.f * scaleX;
     backButton_transY = -355.f * scaleY;
 
+    BGtransX_settings = 220.0f * scaleX;
+    BGtransY_settings = -40 * scaleY;
+
 
 }
 void Settings_Update(void)
@@ -105,6 +109,7 @@ void Settings_Update(void)
 void Settings_Draw(void)
 {
     
+
     //Draw Background
     AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
     AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
@@ -112,11 +117,11 @@ void Settings_Draw(void)
     AEGfxSetTransparency(1.0f);
     AEGfxTextureSet(BGtexture_settings, 0, 0);
     AEMtx33 scale0 = { 0 };
-    AEMtx33Scale(&scale0, 960, 768);
+    AEMtx33Scale(&scale0, 1100, 800);
     AEMtx33 rotate0 = { 0 };
     AEMtx33Rot(&rotate0, 0.f);
     AEMtx33 translate0 = { 0 };
-    AEMtx33Trans(&translate0, 220, 0);
+    AEMtx33Trans(&translate0, BGtransX_settings, BGtransY_settings);
     AEMtx33 transform0 = { 0 };
     AEMtx33Concat(&transform0, &rotate0, &scale0);
     AEMtx33Concat(&transform0, &translate0, &transform0);
