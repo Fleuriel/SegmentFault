@@ -881,25 +881,25 @@ void Level_1_Update(void)
 	}
 
 	//Movement flag check
-	if (_Player->position.x > 650) {
+	if (_Player->position.x > getWinWidth() / 2 - PLAYER_SIZE / 2) {
 		mRight = false;
 	}
 	else {
 		mRight = true;
 	}
-	if (_Player->position.x < -650) {
+	if (_Player->position.x < -getWinWidth() / 2 + PLAYER_SIZE / 2) {
 		mLeft = false;
 	}
 	else {
 		mLeft = true;
 	}
-	if (_Player->position.y > 350) {
+	if (_Player->position.y > getWinHeight() / 2 - PLAYER_SIZE / 2) {
 		mUp = false;
 	}
 	else {
 		mUp = true;
 	}
-	if (_Player->position.y < -350) {
+	if (_Player->position.y < -getWinHeight() / 2 + PLAYER_SIZE / 2) {
 		mDown = false;
 	}
 	else {
