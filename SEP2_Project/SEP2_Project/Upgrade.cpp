@@ -545,6 +545,8 @@ void Upgrade_Draw(void)
 	AEGfxSetTransform(transform18.m);
 	AEGfxMeshDraw(pMeshUpgrade1, AE_GFX_MDM_TRIANGLES);
 
+
+
 	//Player Ship 0 Display
 	AEGfxTexture* playership0Tex = AEGfxTextureLoad("Assets\\Assets\\player0.png");
 
@@ -586,6 +588,49 @@ void Upgrade_Draw(void)
 	AEGfxSetTransform(transform14.m);
 	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
 
+
+	//Player ship 2 Display
+	AEGfxTexture* playership2Tex = AEGfxTextureLoad("Assets\\Assets\\player2.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(playership2Tex, 0, 0);
+	AEMtx33 scale22 = { 0 };
+	AEMtx33Scale(&scale22, 55, 70);
+	AEMtx33 rotate22 = { 0 };
+	AEMtx33Rot(&rotate22, 0.f);
+	AEMtx33 translate22 = { 0 };
+	AEMtx33Trans(&translate22, UpgradebackButton_transX - 1160, UpgradebackButton_transY + 205);
+	AEMtx33 transform22 = { 0 };
+	AEMtx33Concat(&transform22, &rotate22, &scale22);
+	AEMtx33Concat(&transform22, &translate22, &transform22);
+	AEGfxSetTransform(transform22.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+
+	//Player ship 3 Display
+	AEGfxTexture* playership3Tex = AEGfxTextureLoad("Assets\\Assets\\player3.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(playership3Tex, 0, 0);
+	AEMtx33 scale23 = { 0 };
+	AEMtx33Scale(&scale23, 55, 70);
+	AEMtx33 rotate23 = { 0 };
+	AEMtx33Rot(&rotate23, 0.f);
+	AEMtx33 translate23 = { 0 };
+	AEMtx33Trans(&translate23, UpgradebackButton_transX - 1160, UpgradebackButton_transY + 75);
+	AEMtx33 transform23 = { 0 };
+	AEMtx33Concat(&transform23, &rotate23, &scale23);
+	AEMtx33Concat(&transform23, &translate23, &transform23);
+	AEGfxSetTransform(transform23.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+
 	//Heart image display
 	AEGfxTexture* playerHPTex = AEGfxTextureLoad("Assets\\Assets\\Health.png");
 
@@ -623,6 +668,7 @@ void Upgrade_Draw(void)
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-9000.f * UpgradescaleX_settings)), (getWinHeight() / (900.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+	
 	// "Ship Models" Text
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -670,7 +716,10 @@ void Upgrade_Draw(void)
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(playership0Tex);
 	AEGfxTextureUnload(playership1Tex);
+	AEGfxTextureUnload(playership2Tex);
+	AEGfxTextureUnload(playership3Tex);
 	AEGfxTextureUnload(playerHPTex);
+	
 
 }
 void Upgrade_Free(void) 
