@@ -44,10 +44,21 @@ float augment4Button_transX;
 float augment4Button_transY;
 float augment5Button_transX;
 float augment5Button_transY;
+float augment6Button_transX;
+float augment6Button_transY;
+float mainMenu_Button_transX;
+float mainMenu_Button_transY;
+float quitButton_transX;
+float quitButton_transY;
+float yesButton_transX;
+float yesButton_transY;
+float noButton_transX;
+float noButton_transY;
 
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
+float pauseTransparency = 0.0f;
 
 //Pre-definition for buffers
 char level_buffer[16]{};
@@ -82,8 +93,13 @@ float offset = 5.f;
 bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
 
-//Condition check for game over
+// Condition check for game over
 static bool onValueChange = true;
+
+// Condition check for pause UI
+bool areyouSure = true;
+bool clicked_MainMenu = true;
+bool clicked_Quit = true;
 
 void Level_1_Load(void)
 {
@@ -526,6 +542,8 @@ void Level_1_Init(void)
 	augment4Button_transY = 25.0f * scaleY;
 	augment5Button_transX = 0.0f * scaleX;
 	augment5Button_transY = -60.0f * scaleY;
+	augment6Button_transX = 0.0f * scaleX;
+	augment6Button_transY = -145.0f * scaleY;
 
 
 }
@@ -536,11 +554,78 @@ void Level_1_Update(void)
 
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckTriggered(AEVK_P))
+	if (AEInputCheckReleased(AEVK_P))
 	{
 		pause = !pause;
+		if (pauseTransparency == 0) {
+			pauseTransparency = 0.5;
+		}
+		else if (pauseTransparency != 0) {
+			pauseTransparency = 0;
+		}
+
 	}
 
+	if (pause == true) 
+	{
+		float mainMenu_Button_midX = (getWinWidth() / static_cast<float>(2.09)) + mainMenu_Button_transX;
+		float mainMenu_Button_midY = (getWinHeight() / static_cast<float>(2)) - mainMenu_Button_transY;
+
+		float quitButton_midX = (getWinWidth() / static_cast<float>(2.09)) + quitButton_transX;
+		float quitButton_midY = (getWinHeight() / static_cast<float>(2)) - quitButton_transY;
+
+		float yesButton_midX = (getWinWidth() / static_cast<float>(2.09)) + yesButton_transX;
+		float yesButton_midY = (getWinHeight() / static_cast<float>(2)) - yesButton_transY;
+
+		float noButton_midX = (getWinWidth() / static_cast<float>(2.09)) + noButton_transX;
+		float noButton_midY = (getWinHeight() / static_cast<float>(2)) - noButton_transY;
+
+		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) {
+			// Overlay button logic and defintions
+			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("MainMenu\n");
+				areyouSure = false;
+				clicked_MainMenu = true;
+				pauseTransparency = 0.0f;
+			}
+
+			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("Quit\n");
+				areyouSure = false;
+				clicked_MainMenu = false;
+				pauseTransparency = 0.0f;
+			}
+
+		}
+
+		if (areyouSure == false) {
+			// Overlay button logic and defintions
+			if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				if (clicked_MainMenu) 
+				{
+					printf("Goto Main Menu\n");
+					gGameStateNext = MAINMENU;
+				}
+				else if (!clicked_MainMenu)
+				{
+					printf("Quit\n");
+					gGameStateNext = QUIT;
+				}
+			}
+
+			if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("Go Back to pause UI\n");
+				pauseTransparency = 0.5f;
+				areyouSure = true;
+			}
+
+		}
+
+	}
 
 	if (pause == false)
 	{
@@ -553,7 +638,7 @@ void Level_1_Update(void)
 		}
 
 		// Checking if overlay is pressed
-		if (AEInputCheckTriggered(AEVK_RBUTTON))
+		if (AEInputCheckReleased(AEVK_RBUTTON))
 		{
 			if (overlayTransparency == 0) {
 				overlayTransparency = 0.5;
@@ -562,7 +647,7 @@ void Level_1_Update(void)
 				overlayTransparency = 0;
 			}
 		}
-		if (AEInputCheckTriggered(AEVK_INSERT))
+		if (AEInputCheckReleased(AEVK_INSERT))
 		{
 			SkillPoint = 90;
 		}
@@ -582,6 +667,7 @@ void Level_1_Update(void)
 
 		float augment5Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment5Button_transX;
 		float augment5Button_midY = (getWinHeight() / static_cast<float>(2)) - augment5Button_transY;
+
 
 
 		if (static_cast<double>(overlayTransparency) != static_cast<double>(0)) {
@@ -637,6 +723,7 @@ void Level_1_Update(void)
 			}
 
 		}
+
 		if (Augment2Level == 1 && Aug2CreateCheck == false) {
 			_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 			AE_ASSERT(_Augment_Two);
@@ -2243,6 +2330,176 @@ void Level_1_Draw(void)
 
 	}
 	/********************************** Augment UI End ********************************************/
+
+
+	/********************************** Pause UI Start ********************************************/
+	if (pauseTransparency != 0)
+	{
+		// Drawing the pause overlay on the screen
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEMtx33 scale3 = { 0 };
+		AEMtx33Scale(&scale3, 500.f, 650.f);
+		AEMtx33 rotate3 = { 0 };
+		AEMtx33Rot(&rotate3, 0.f);
+		AEMtx33 translate3 = { 0 };
+		AEMtx33Trans(&translate3, 125.f, -10.f);
+		AEMtx33 transform3 = { 0 };
+		AEMtx33Concat(&transform3, &rotate3, &scale3);
+		AEMtx33Concat(&transform3, &translate3, &transform3);
+		AEGfxSetTransform(transform3.m);
+		AEGfxMeshDraw(augmentMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale4 = { 0 };
+		AEMtx33Scale(&scale4, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate4 = { 0 };
+		AEMtx33Rot(&rotate4, 0);
+		AEMtx33 translate4 = { 0 };
+		AEMtx33Trans(&translate4, mainMenu_Button_transX, mainMenu_Button_transY);
+		AEMtx33 transform4 = { 0 };
+		AEMtx33Concat(&transform4, &rotate4, &scale4);
+		AEMtx33Concat(&transform4, &translate4, &transform4);
+		AEGfxSetTransform(transform4.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale5 = { 0 };
+		AEMtx33Scale(&scale5, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate5 = { 0 };
+		AEMtx33Rot(&rotate5, 0);
+		AEMtx33 translate5 = { 0 };
+		AEMtx33Trans(&translate5, quitButton_transX, quitButton_transY);
+		AEMtx33 transform5 = { 0 };
+		AEMtx33Concat(&transform5, &rotate5, &scale5);
+		AEMtx33Concat(&transform5, &translate5, &transform5);
+		AEGfxSetTransform(transform5.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Rendering texts for overlay
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "How to play:");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (1550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Right mouse click for augments.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (2200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> WASD for movement.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (4200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Bullets will follow cursor movement.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Press 'P' again to resume");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		//AEGfxTextureSet(NULL, 0, 0);
+		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		//sprintf_s(augment1_buffer, "HP");
+		//AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(skillpoint_buffer, "Menu");
+		AEGfxPrint(fontID, skillpoint_buffer, -0.412f, -0.7f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(skillpoint_buffer, "Quit");
+		AEGfxPrint(fontID, skillpoint_buffer, 0.305f, -0.7f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+	}
+
+	if (areyouSure == false)
+	{
+		// Drawing the yes/no overlay on the screen
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(1.0f);
+		AEMtx33 scale3 = { 0 };
+		AEMtx33Scale(&scale3, 500.f, 300.f);
+		AEMtx33 rotate3 = { 0 };
+		AEMtx33Rot(&rotate3, 0.f);
+		AEMtx33 translate3 = { 0 };
+		AEMtx33Trans(&translate3, 125.f, -10.f);
+		AEMtx33 transform3 = { 0 };
+		AEMtx33Concat(&transform3, &rotate3, &scale3);
+		AEMtx33Concat(&transform3, &translate3, &transform3);
+		AEGfxSetTransform(transform3.m);
+		AEGfxMeshDraw(augmentMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(0.3f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale6 = { 0 };
+		AEMtx33Scale(&scale6, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate6 = { 0 };
+		AEMtx33Rot(&rotate6, 0);
+		AEMtx33 translate6 = { 0 };
+		AEMtx33Trans(&translate6, yesButton_transX, yesButton_transY);
+		AEMtx33 transform6 = { 0 };
+		AEMtx33Concat(&transform6, &rotate6, &scale6);
+		AEMtx33Concat(&transform6, &translate6, &transform6);
+		AEGfxSetTransform(transform6.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(0.3f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale7 = { 0 };
+		AEMtx33Scale(&scale7, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate7 = { 0 };
+		AEMtx33Rot(&rotate7, 0);
+		AEMtx33 translate7 = { 0 };
+		AEMtx33Trans(&translate7, noButton_transX, noButton_transY);
+		AEMtx33 transform7 = { 0 };
+		AEMtx33Concat(&transform7, &rotate7, &scale7);
+		AEMtx33Concat(&transform7, &translate7, &transform7);
+		AEGfxSetTransform(transform7.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Rendering texts for overlay
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "ARE YOU SURE?");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (5000.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "YES");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-7000.f * scaleX)), (getWinHeight() / (-5200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "NO");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (11000.f * scaleX)), (getWinHeight() / (-5200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+	}
+	/********************************** Pause UI End ********************************************/
 
 	// Rendering texts for the screen	
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
