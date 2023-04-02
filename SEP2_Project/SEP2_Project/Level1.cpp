@@ -104,6 +104,7 @@ float Augment4Radius = 0;
 float offset = 5.f;
 bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
+float RegenerationTimer = 15.0f;
 
 // Condition check for game over
 static bool onValueChange = true;
@@ -112,6 +113,7 @@ static bool onValueChange = true;
 int areyouSure = true;
 bool clicked_MainMenu = true;
 bool clicked_Quit = true;
+
 
 void Level_1_Load(void)
 {
@@ -403,7 +405,7 @@ void Level_1_Load(void)
 	//Save file for player's stats
 	if (inputFileStream3.good())
 	{
-		inputFileStream3 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
+		inputFileStream3 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Regen_upgrade;
 		inputFileStream3.close();
 	}
 
@@ -482,7 +484,18 @@ void Level_1_Load(void)
 	// audio group named ‘bgm_layer’ with 
 	// 100% volume, 100% pitch, looped infinitely.
 	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
-
+	//Upgrades
+	for (int i = ProjectileSpeed_upgrade; i >= 0; i--) {
+		AUGMENT_1_BULLET_SPEED += 20;
+		Augment2RotSpd += 0.0075f;
+	}
+	for (int i = CD_upgrade; i >= 0; i--) {
+		Augment1CD -= 0.025f;
+		AUGMENT_4_FIRE_INTERVAL -= 0.25f;
+	}
+	for (int i = Regen_upgrade; i >= 0; i--) {
+		RegenerationTimer--;
+	}
 }
 
 void Level_1_Init(void)
@@ -491,9 +504,6 @@ void Level_1_Init(void)
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
 	_Player->health = MaxHealth = 20 + MaximumPlayerHealth;
 	AE_ASSERT(_Player);
-
-
-
 
 	//3
 	/*_Bullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, nullptr, nullptr, 0.0f);
@@ -566,6 +576,7 @@ void Level_1_Init(void)
 	buttonRotate_No = 0.f;
 	buttonRotate_mainMenu = 0.f;
 	buttonRotate_quit = 0.f;
+
 
 }
 
@@ -713,6 +724,14 @@ void Level_1_Update(void)
 
 		if (bossCooldownMin < 0 ) {
 			bossCoolDownCheck = true;
+		}
+
+		if (_Player->health != MaxHealth) {
+			RegenerationTimer -= g_dt;
+		}
+		if (RegenerationTimer <= 0 && _Player->health != MaxHealth) {
+			_Player->health++;
+			RegenerationTimer = 15.f - Regen_upgrade;
 		}
 
 		// Checking if overlay is pressed
@@ -1196,7 +1215,6 @@ void Level_1_Update(void)
 						AUGMENT_4_FIRE_TIMER += g_dt;
 
 						GameObjInstances* AUG4_BULLET = nullptr;
-
 
 						if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL && Augment4Level != 0)
 						{
@@ -1940,6 +1958,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
 	AEGfxTexture* augment3Tex = AEGfxTextureLoad("Assets\\Assets\\Slash.png");
+	AEGfxTexture* augment4Tex = AEGfxTextureLoad("Assets\\Assets\\GrenadeBall.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
@@ -2055,7 +2074,7 @@ void Level_1_Draw(void)
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
-			texture = bulletTex;
+			texture = augment4Tex;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -2106,6 +2125,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
 	AEGfxTextureUnload(augment3Tex);
+	AEGfxTextureUnload(augment4Tex);
 
 	for (int i = 0; i < 10; i++) {
 		AEGfxTextureUnload(Expbar[i]);
@@ -2236,13 +2256,13 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Slash");
+		sprintf_s(augment1_buffer, "Sonic Slash");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (4200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Rocket");
+		sprintf_s(augment1_buffer, "Bomb Launcher");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -2579,6 +2599,7 @@ void Level_1_Unload(void)
 	}
 
 	//AEGfxMeshFree(bMesh);
+	AUGMENT_1_BULLET_SPEED = 100.f;
 	pause = false;
 	Augment1Level = 1;
 	Augment2Level = 0;
@@ -2603,7 +2624,8 @@ void Level_1_Unload(void)
 	bossCoolDownCheck = false;
 	bossCooldownMin = 5;
 	bossCooldownSec = 0.f;
-
+	RegenerationTimer = 15.0f;
+	AUGMENT_4_FIRE_INTERVAL = 4.0f;
 
 
 	

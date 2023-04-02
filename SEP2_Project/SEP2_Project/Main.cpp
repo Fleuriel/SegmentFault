@@ -19,7 +19,7 @@ int		 ShipModel;
 int		 MaximumPlayerHealth;
 int	    ProjectileSpeed_upgrade;
 int	    CD_upgrade;
-int	    Iframe_upgrade;
+int	    Regen_upgrade;
 
 float currHighScoreMin = 0.f;
 float currHighScoreSec = 0.f;

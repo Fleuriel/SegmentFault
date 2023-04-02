@@ -42,7 +42,7 @@ extern float	currHighScoreMin;
 extern float	currHighScoreSec;
 extern int	    ProjectileSpeed_upgrade; 
 extern int	    CD_upgrade;
-extern int	    Iframe_upgrade;
+extern int	    Regen_upgrade;
 
 
 // Pre-definition of scaling

@@ -143,11 +143,6 @@ void Upgrade_Load(void)
 		ifs >> Currency;
 		ifs.close();
 	}
-	else if (ifs.fail())
-	{
-		std::cerr << "Error: \n";
-
-	}
 	//End of Open save file of money
 
 	//Open save file of ship
@@ -158,26 +153,18 @@ void Upgrade_Load(void)
 
 		ifs1.close();
 	}
-	else if (ifs1.fail())
-	{
-		std::cerr << "Error: \n";
 
-	}
 	//End of Open save file of ship
 
 	//Open save file of stats
 	if (ifs2.good())
 	{
 
-		ifs2 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
+		ifs2 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Regen_upgrade;
 
 		ifs2.close();
 	}
-	else if (ifs2.fail())
-	{
-		std::cerr << "Error: \n";
 
-	}
 	if (ifs3.good()) {
 		ifs3 >> CheckIfBoughtModel2 >> CheckIfBoughtModel3 >> CheckIfBoughtModel4;
 		ifs3.close();
@@ -328,21 +315,13 @@ void Upgrade_Update(void)
 	//Purchase Max HP
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 		
 		if (Currency >= 300)
 		{
 			Currency = Currency - 300;
-			MaximumPlayerHealth = MaximumPlayerHealth+1;
-			outputStream << Currency;
-			outputStream.close();
-			outputStream1 << MaximumPlayerHealth;
-			outputStream1.close();
+			MaximumPlayerHealth++;
+
 		}
-		outputStream.close();
-		outputStream1.close();
 		
 	}
 
@@ -351,20 +330,11 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
-
-		if (Currency >= 300)
+		if (Currency >= 300 && ProjectileSpeed_upgrade != 10)
 		{
-			//Write your code here
-			outputStream << Currency;
-			outputStream.close();
-			outputStream1 << ProjectileSpeed_upgrade;
-			outputStream1.close();
+			Currency = Currency - 300;
+			ProjectileSpeed_upgrade++;
 		}
-
-		outputStream.close();
-		outputStream1.close();
 
 	}
 
@@ -372,20 +342,11 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
-
-		if (Currency >= 400)
+		if (Currency >= 400 && CD_upgrade != 10)
 		{
-			//Write your code here
-			outputStream << Currency;
-			outputStream.close();
-			outputStream1 << CD_upgrade;
-			outputStream1.close();
+			Currency = Currency - 400;
+			CD_upgrade++;
 		}
-		outputStream.close();
-		outputStream1.close();
-
 	}
 	
 
@@ -393,20 +354,13 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
-		if (Currency >= 800)
+
+		if (Currency >= 800 && Regen_upgrade != 10)
 		{
-			//Write your code here
-			outputStream << Currency;
-			outputStream.close();
-			outputStream1 << Iframe_upgrade;
-			outputStream1.close();
+			Currency = Currency - 800;
+			Regen_upgrade++;
 		}
-
-		outputStream.close();
-		outputStream1.close();
 
 	}
 
@@ -1288,30 +1242,57 @@ void Upgrade_Draw(void)
 
 
 	// "Buy" Text for Stat 2
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	if (ProjectileSpeed_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 
 	// "Buy" Text for Stat 3
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
-
+	if (CD_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 	// "Buy" Text for Stat 4
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
+	if (Regen_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 	//Start of description text for Stat 2//
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1407,6 +1388,13 @@ void Upgrade_Unload(void)
 		outputStream2 << "1 " << std::endl;
 	else
 		outputStream2 << "0 " << std::endl;
+	std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+
+	outputStream << Currency;
+	outputStream.close();
+	outputStream1 <<MaximumPlayerHealth<<std::endl<< ProjectileSpeed_upgrade << std::endl << CD_upgrade << std::endl <<Regen_upgrade << std::endl;
+	outputStream1.close();
 	outputStream2.close();
 	AEGfxMeshFree(pMeshUpgrade);
 	AEGfxMeshFree(pMeshUpgrade1);
