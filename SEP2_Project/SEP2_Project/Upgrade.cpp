@@ -259,7 +259,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 		
 		if (Currency >= 300)

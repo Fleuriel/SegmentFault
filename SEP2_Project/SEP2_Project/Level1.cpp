@@ -44,8 +44,7 @@ float augment4Button_transX;
 float augment4Button_transY;
 float augment5Button_transX;
 float augment5Button_transY;
-float augment6Button_transX;
-float augment6Button_transY;
+
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
@@ -341,23 +340,6 @@ void Level_1_Load(void)
 		_Objects->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
-
-		//13 TYPE_AUGMENT5
-		_Objects = sGameObjList + sGameObjNum++;
-		_Objects->type = TYPE_AUGMENT5;
-
-		AEGfxMeshStart();
-
-		AEGfxTriAdd(
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-		AEGfxTriAdd(
-			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-		_Objects->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 	}
 
 	//Save file for currency
@@ -527,8 +509,6 @@ void Level_1_Init(void)
 	//10
 	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
-	//11
-	//_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
 	// Gets the scale of Game_Dimension.xxGame_Dimension.y
@@ -546,8 +526,7 @@ void Level_1_Init(void)
 	augment4Button_transY = 25.0f * scaleY;
 	augment5Button_transX = 0.0f * scaleX;
 	augment5Button_transY = -60.0f * scaleY;
-	augment6Button_transX = 0.0f * scaleX;
-	augment6Button_transY = -145.0f * scaleY;
+
 
 }
 
@@ -604,14 +583,11 @@ void Level_1_Update(void)
 		float augment5Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment5Button_transX;
 		float augment5Button_midY = (getWinHeight() / static_cast<float>(2)) - augment5Button_transY;
 
-		float augment6Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment6Button_transX;
-		float augment6Button_midY = (getWinHeight() / static_cast<float>(2)) - augment6Button_transY;
 
 		if (static_cast<double>(overlayTransparency) != static_cast<double>(0)) {
 			// Overlay button logic and defintions
 			if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 1 ++\n");
 				if (SkillPoint != 0 && Augment1Level != 8) {
 					SkillPoint--;
 					Augment1CD -= static_cast<float>(0.15);
@@ -621,7 +597,6 @@ void Level_1_Update(void)
 
 			if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 2 ++\n");
 				if (SkillPoint != 0 && Augment2Level != 8) {
 					SkillPoint--;
 					Augment2Range += static_cast<float>(0.2);
@@ -631,7 +606,6 @@ void Level_1_Update(void)
 
 			if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 3 ++\n");
 				if (SkillPoint != 0 && Augment3Level != 8) {
 					SkillPoint--;
 					Augment3Range += static_cast<float>(3);
@@ -645,7 +619,6 @@ void Level_1_Update(void)
 
 			if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 4 ++\n");
 				if (SkillPoint != 0 && Augment4Level != 8) {
 					SkillPoint--;
 					Augment4Level++;
@@ -656,22 +629,11 @@ void Level_1_Update(void)
 
 			if (IsAreaClicked(augment5Button_midX, augment5Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 5 ++\n");
 				if (SkillPoint != 0) {
 					SkillPoint--;
 					MaxHealth++;
 					_Player->health++;
 				}
-			}
-
-			if (IsAreaClicked(augment6Button_midX, augment6Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 6 ++\n");
-				//if (SkillPoint != 0) {
-				//	SkillPoint--;
-				//	MaxHealth++;
-				//	_Player->health++;
-				//}
 			}
 
 		}
@@ -1553,43 +1515,6 @@ void Level_1_Update(void)
 				}
 			}
 
-			if (pInst->pObject->type == TYPE_AUGMENT5)
-			{
-				AUGMENT_5_FIRE_TIMER += g_dt;
-				if (AUGMENT_5_FIRE_TIMER > AUGMENT_5_FIRE_INTERVAL)
-				{
-					for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-					{
-						GameObjInstances* qInst = sGameObjInstList + j;
-
-						if ((qInst->flag & FLAG_ACTIVE) == 0 || qInst == nullptr)
-							continue;
-
-
-						if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
-						{
-							if (qInst->position.x < AEGfxGetWinMaxX() &&
-								qInst->position.x > AEGfxGetWinMinX() &&
-								qInst->position.y < AEGfxGetWinMaxY() &&
-								qInst->position.y > AEGfxGetWinMinY())
-							{
-								//Full map attack.
-								qInst->health--;
-								if (qInst->health == 0)
-								{
-									//Remove entity count;
-								}
-							}
-						}
-						else
-						{
-							continue;
-						}
-					}
-					AUGMENT_5_FIRE_TIMER = 0;
-				}
-			}
-
 			//Window size is Game_Dimension.xxGame_Dimension.y
 
 			if (pInst->position.x > AEGfxGetWinMaxX() ||
@@ -2034,11 +1959,6 @@ void Level_1_Draw(void)
 		{
 			texture = InvisibleTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT5)
-		{
-			//Update this
-			texture = InvisibleTex;
-		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
 			texture = bulletTex;
@@ -2209,7 +2129,6 @@ void Level_1_Draw(void)
 		AEMtx33 rotate9 = { 0 };
 		AEMtx33Rot(&rotate9, 0.f);
 		AEMtx33 translate9 = { 0 };
-		AEMtx33Trans(&translate9, augment6Button_transX, augment6Button_transY);
 		AEMtx33 transform9 = { 0 };
 		AEMtx33Concat(&transform9, &rotate9, &scale9);
 		AEMtx33Concat(&transform9, &translate9, &transform9);
@@ -2245,14 +2164,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Augment 5");
+		sprintf_s(augment1_buffer, "HP");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "HP");
-		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2290,11 +2204,6 @@ void Level_1_Draw(void)
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (-5000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (-2450.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2333,14 +2242,6 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer4, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer4, static_cast<float>(0.075), (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		//AEGfxTextureSet(NULL, 0, 0);
-		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		//if (Augment5Level != 8)
-		//	sprintf_s(strbuffer5, "LEVEL %d", Augment4Level);
-		//if (Augment5Level >= 8)
-		//	sprintf_s(strbuffer5, "MAX LEVEL");
-		//AEGfxPrint(fontID, strbuffer5, 0.075f, 0.050f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 	}
 	/********************************** Augment UI End ********************************************/
 
