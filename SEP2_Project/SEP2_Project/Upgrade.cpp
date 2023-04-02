@@ -15,15 +15,19 @@ AEGfxVertexList* CoinMesh = nullptr;
 AEGfxVertexList* BuyButtonMesh = nullptr;
 AEGfxVertexList* ShipMesh = nullptr;
 
-// Pre-definition for translations
-double UpgradebackButton_transX;
-double UpgradebackButton_transY;
-double UpgradeStatDisplay_transX;
-double UpgradeStatDisplay_transY;
+// Pre-definition for buttons
+f32 UpgradebackButton_transX;
+f32 UpgradebackButton_transY;
+f32 UpgradeStatDisplay_transX;
+f32 UpgradeStatDisplay_transY;
+
+// Quit button mid point
+f32 backButtonUpgrade_midX;
+f32 backButtonUpgrade_midY;
 
 // Pre-definition of scaling
-double UpgradescaleX_settings;
-double UpgradescaleY_settings;
+f32 UpgradescaleX_settings;
+f32 UpgradescaleY_settings;
 
 // 
 float Upgrade_textWidth{}, Upgrade_textHeight{};
@@ -196,12 +200,12 @@ void Upgrade_Update(void)
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
 	// Quit button mid point
-	float backButton_midX = (getWinWidth() / 2.08) + UpgradebackButton_transX;
-	float backButton_midY = (getWinHeight() / 2) - UpgradebackButton_transY;
+	backButtonUpgrade_midX = static_cast<f32>((getWinWidth() / 2.08) + UpgradebackButton_transX);
+	backButtonUpgrade_midY = static_cast<f32>((getWinHeight() / 2) - UpgradebackButton_transY);
 
 
 	// if cursor within buttons, change game state
-	if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * UpgradescaleX_settings, 100.0f * UpgradescaleY_settings, cursorX, cursorY)
+	if (IsAreaClicked(backButtonUpgrade_midX, backButtonUpgrade_midY, 150.0f * UpgradescaleX_settings, 100.0f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = MAINMENU;
 		printf("MAINMENU\n");

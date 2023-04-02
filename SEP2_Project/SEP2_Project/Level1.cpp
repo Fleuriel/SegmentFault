@@ -1031,7 +1031,7 @@ void Level_1_Update(void)
 						AEVec2Normalize(&AUGMENT_1_DIRECTION, &AUGMENT_1_DIRECTION);
 
 						// Create a new bullet object and set its velocity to point towards the target
-						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position, spawnCheck));
+						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
 
 						if (bulletInst != nullptr)
 							AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
@@ -1129,7 +1129,7 @@ void Level_1_Update(void)
 					if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL && Augment4Level!=0)
 					{
 						//Shoot the bullet to the direction.
-						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position, spawnCheck));
+						AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position));
 
 						AUGMENT_4_PROJECTILE_ACTIVE = true;
 						

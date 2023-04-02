@@ -29,4 +29,4 @@ float getWinWidth();
 float getWinHeight();
 
 // Function to get angle of cursor to player in radian
-float getCursorRad(AEVec2 pos, bool spawnCheck);
+double getCursorRad(AEVec2 pos);

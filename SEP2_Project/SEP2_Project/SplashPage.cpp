@@ -8,11 +8,11 @@ AEGfxVertexList* pMeshSplash = nullptr;
 AEGfxTexture* startTex_Splash;
 
 // Pre-definition for translations of buttons
-double splashPage_transX;
-double splashPage_transY;
+f32 splashPage_transX;
+f32 splashPage_transY;
 
 // Pre-definition for transparency
-double splashPage_transparency;
+f32 splashPage_transparency;
 
 double Elapsed;
 bool isTransparent;

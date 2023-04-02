@@ -7,11 +7,15 @@ AEGfxVertexList* BGmesh_settings = nullptr;
 
 // Pre-definition
 AEGfxTexture* BGtexture_settings;
-double BGtransX_settings, BGtransY_settings;
+f32 BGtransX_settings, BGtransY_settings;
 
-// Pre-definition for translations of buttons
-double backButton_transX;
-double backButton_transY;
+// Pre-definition for buttons
+f32 backButton_transX;
+f32 backButton_transY;
+
+// Quit button mid point
+f32 backButton_midX;
+f32 backButton_midY;
 
 
 // Pre-defintion
@@ -23,7 +27,7 @@ char settingsBackButton_buffer[1024]{};
 float settings_textWidth{}, settings_textHeight{};
 
 // Pre-definition of Rotation
-double buttonRotate_settingsBack;
+f32 buttonRotate_settingsBack;
 
 void Settings_Load(void)
 {
@@ -84,16 +88,13 @@ void Settings_Update(void)
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
     // Quit button mid point
-    float backButton_midX = (getWinWidth() / 2.08) + backButton_transX;
-    float backButton_midY = (getWinHeight() / 2) - backButton_transY;
+    backButton_midX = static_cast<f32>((getWinWidth() / 2.08) + backButton_transX);
+    backButton_midY = static_cast<f32>((getWinHeight() / 2) - backButton_transY);
 
-    // printf("%d\n%d\n", cursorX, cursorY);  //debug
-    //printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     // if cursor within buttons, change game state
     if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
-        //printf("MAINMENU\n");
     }
 
     if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
