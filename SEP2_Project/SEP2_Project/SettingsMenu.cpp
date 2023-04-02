@@ -171,6 +171,12 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(instructions3_buffer, "P to Pause");
+    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (14000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(settingsBackButton_buffer, "Back");
     AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 

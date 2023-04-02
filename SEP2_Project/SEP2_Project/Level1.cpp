@@ -74,13 +74,12 @@ float textWidth{}, textHeight{};
 float secElapsed = 0.f;
 float secElapsedInt = 0.f;
 int minElapsed = 0;
-int bossCooldownMin = 5;
+int bossCooldownMin = 4;
 float bossCooldownSec = 0.f;
 float bossCooldownSecInt = 0.f;
 bool bossCoolDownCheck = false;
 
 int MaxHealth; // Player max hp 
-int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
 bool spawnCheck = false; // Boss Spawn 
 int MaxBossHealth; // Max hp of boss
 int MaxEnemyCount = 50; // Max Enemy count
@@ -114,6 +113,8 @@ int areyouSure = true;
 bool clicked_MainMenu = true;
 bool clicked_Quit = true;
 
+//number of gold coins
+int currencyCount = 0;
 
 void Level_1_Load(void)
 {
@@ -1848,7 +1849,11 @@ void Level_1_Update(void)
 						gameObjInstDestroy(ObjInstance1);
 						enemyCount--;
 						_Player_Experience++;
-						gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
+						if (currencyCount <= 100) {
+							gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
+							currencyCount++;
+							break;
+						}
 					}
 					if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 						gameObjInstDestroy(ObjInstance1);
@@ -1857,7 +1862,7 @@ void Level_1_Update(void)
 						Currency += (1000 * BossKills);
 						enemyCount = 0;
 						bossCoolDownCheck = false;
-						bossCooldownMin = 5;
+						bossCooldownMin = 4;
 						bossCooldownSec = 0.f;
 					}
 				}
@@ -1878,7 +1883,8 @@ void Level_1_Update(void)
 							{
 								Currency++;
 								gameObjInstDestroy(ObjInstance1);
-								OrbCounter--;
+								currencyCount--;
+								break;
 							}
 						}
 					}
@@ -2616,16 +2622,16 @@ void Level_1_Unload(void)
 	minElapsed = 0;
 	spawnCheck = 0;
 	enemyCount = 0;
-	OrbCounter = 0;
 	_Player_Level = 1;
 	_Player_Experience = 0;
 	pause = false;
 	areyouSure = true;
 	bossCoolDownCheck = false;
-	bossCooldownMin = 5;
+	bossCooldownMin = 4;
 	bossCooldownSec = 0.f;
 	RegenerationTimer = 15.0f;
 	AUGMENT_4_FIRE_INTERVAL = 4.0f;
+	currencyCount = 0;
 
 
 	
