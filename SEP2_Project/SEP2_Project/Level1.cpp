@@ -2530,8 +2530,9 @@ void Level_1_Unload(void)
 	OrbCounter = 0;
 	_Player_Level = 1;
 	_Player_Experience = 0;
-
-
+	pause = false;
+	areyouSure = 100;
+	
 	free(sGameObjList);
 	sGameObjList = nullptr;
 	free(sGameObjInstList);
