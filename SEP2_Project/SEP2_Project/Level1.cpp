@@ -1896,7 +1896,7 @@ void Level_1_Update(void)
 						if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 						{
 							Currency++;
-							std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+							std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
 							if (outputStream.is_open())
 							{
 								outputStream << Currency << '\n';
@@ -1972,6 +1972,12 @@ void Level_1_Draw(void)
 	}
 	if (ShipModel == 1) {
 		playerTex = AEGfxTextureLoad("Assets\\Assets\\player1.png");
+	}
+	if (ShipModel == 2) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player2.png");
+	}
+	if (ShipModel == 3) {
+		playerTex = AEGfxTextureLoad("Assets\\Assets\\player3.png");
 	}
 	AEGfxTexture* bulletTex = AEGfxTextureLoad("Assets\\Assets\\YellowTexture.png");
 	AEGfxTexture* augmentGunTex = AEGfxTextureLoad("Assets\\Assets\\drone.png");
