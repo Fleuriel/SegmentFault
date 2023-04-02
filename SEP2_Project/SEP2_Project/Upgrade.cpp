@@ -272,7 +272,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) +90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 
 		if (Currency >= 1000 && ShipModel!=2 && CheckIfBoughtModel3 == false)
@@ -299,7 +299,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 
 		if (Currency >= 3000 && ShipModel!=3 && CheckIfBoughtModel4 == false)
@@ -329,7 +329,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 		
 		if (Currency >= 300)
@@ -351,7 +351,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 		if (Currency >= 300)
@@ -372,7 +372,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 		if (Currency >= 400)
@@ -393,7 +393,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 		if (Currency >= 800)

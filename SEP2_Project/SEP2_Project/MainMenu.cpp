@@ -113,24 +113,11 @@ void Menu_Load(void)
         input >> Currency;
         input.close();
     }
-    else if (input.fail())
-    {
-        std::cerr << "Error:  xdd\n";
-
-    }
-
     if (input2.good())
     {
         input2 >> currHighScoreMin >> currHighScoreSec;
         input2.close();
     }
-    else if (input2.fail())
-    {
-        std::cerr << "Error: xdds\n";
-
-    }
-
-
 }
 
 void Menu_Init(void) 
@@ -511,12 +498,22 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, exit_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (1466.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 222.0f / 255.f, 49.0f / 255.f, 99.0f / 255.f);
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(highScore_buffer, "Highscore: %.f:%.f", currHighScoreMin, currHighScoreSec);
-    AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
-    AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
+    if (currHighScoreSec < 10) {
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        sprintf_s(highScore_buffer, "Highscore: %.f:0%.f", currHighScoreMin, currHighScoreSec);
+        AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+        AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
+    }
+    else {
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        sprintf_s(highScore_buffer, "Highscore: %.f:%.f", currHighScoreMin, currHighScoreSec);
+        AEGfxGetPrintSize(fontID, highScore_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+        AEGfxPrint(fontID, highScore_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (880.f * scaleY)), 1.f * scaleX, 80.0f / 255.f, 200.0f / 255.f, 120.0f / 255.f);
+    }
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);

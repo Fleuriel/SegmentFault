@@ -79,7 +79,7 @@ float bossCooldownSec = 0.f;
 float bossCooldownSecInt = 0.f;
 bool bossCoolDownCheck = false;
 
-int MaxHealth = MaximumPlayerHealth; // Player max hp 
+int MaxHealth; // Player max hp 
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
 bool spawnCheck = false; // Boss Spawn 
 int MaxBossHealth; // Max hp of boss
@@ -380,10 +380,6 @@ void Level_1_Load(void)
 		inputFileStream >> Currency;
 		inputFileStream.close();
 	}
-	else if (inputFileStream.fail())
-	{
-		std::cerr << "Error: \n";
-	}
 
 	//save file for player ship model
 	if (inputFileStream1.good())
@@ -393,8 +389,7 @@ void Level_1_Load(void)
 	}
 	else if (inputFileStream1.fail())
 	{
-		std::cerr << "Error: \n";
-
+		ShipModel = 0;
 	}
 
 	//Save file for highscore
@@ -403,10 +398,7 @@ void Level_1_Load(void)
 		inputFileStream2 >> currHighScoreMin >> currHighScoreSec;
 		inputFileStream.close();
 	}
-	else if (inputFileStream.fail())
-	{
-		std::cerr << "Error: \n";
-	}
+
 
 	//Save file for player's stats
 	if (inputFileStream3.good())
@@ -497,7 +489,7 @@ void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	_Player->health = MaxHealth = MaximumPlayerHealth;
+	_Player->health = MaxHealth = 20 + MaximumPlayerHealth;
 	AE_ASSERT(_Player);
 
 
@@ -1867,14 +1859,6 @@ void Level_1_Update(void)
 							if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 							{
 								Currency++;
-								std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
-								if (outputStream.is_open())
-								{
-									outputStream << Currency << '\n';
-
-								}
-
-								outputStream.close();
 								gameObjInstDestroy(ObjInstance1);
 								OrbCounter--;
 							}
@@ -2105,16 +2089,6 @@ void Level_1_Draw(void)
 	if (onValueChange) {
 		if (_Player->health == 0) {
 			gGameStateNext = GAMEOVER;
-			if (minElapsed >= currHighScoreMin) {
-				if (secElapsed > currHighScoreSec) {
-					std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
-					if (outputStream.is_open())
-					{
-						outputStream << minElapsed << ' ' << secElapsedInt << '\n';
-					}
-					outputStream.close();
-				}
-			}
 		}
 		onValueChange = false;
 	}
@@ -2587,6 +2561,23 @@ void Level_1_Unload(void)
 	AEGfxMeshFree(augmentButtonMesh);
 	AEGfxMeshFree(bMesh);
 
+	if (minElapsed >= currHighScoreMin) {
+		if (secElapsed > currHighScoreSec) {
+			std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
+			if (outputStream.is_open())
+			{
+				outputStream << minElapsed << ' ' << secElapsedInt << '\n';
+			}
+			outputStream.close();
+		}
+	}
+	std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+	if (outputStream.is_open())
+	{
+		outputStream << Currency << '\n';
+		outputStream.close();
+	}
+
 	//AEGfxMeshFree(bMesh);
 	pause = false;
 	Augment1Level = 1;
@@ -2612,6 +2603,9 @@ void Level_1_Unload(void)
 	bossCoolDownCheck = false;
 	bossCooldownMin = 5;
 	bossCooldownSec = 0.f;
+
+
+
 	
 	free(sGameObjList);
 	sGameObjList = nullptr;
