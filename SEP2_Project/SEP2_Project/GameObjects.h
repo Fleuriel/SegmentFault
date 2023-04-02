@@ -27,6 +27,9 @@ std::ifstream inputFileStream1{ "Assets\\SaveFiles\\PlayerShipmodel.txt" };
 std::ifstream inputFileStream2{ "Assets\\SaveFiles\\HighScore.txt" };
 std::ifstream inputFileStream3{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
+bool pause = false;
+
+
 
 f32 const PLAYER_SIZE = 60.0f; //Player Size...
 f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
@@ -41,6 +44,11 @@ f32 const BOUNDING_RECT_SIZE = 1.0f;
 f32 enemyHealth = 1;
 bool upgradeToggle = 0;
 extern int SkillPoint = 0;
+// Initialize cursor coordinates
+s32 cursorX;
+s32 cursorY;
+
+
 
 namespace boss {
 	AEVec2 velocity;
