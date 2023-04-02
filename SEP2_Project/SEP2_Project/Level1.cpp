@@ -544,6 +544,14 @@ void Level_1_Init(void)
 	augment5Button_transY = -60.0f * scaleY;
 	augment6Button_transX = 0.0f * scaleX;
 	augment6Button_transY = -145.0f * scaleY;
+	mainMenu_Button_transX = -255.0f * scaleX;
+	mainMenu_Button_transY = -300.0f * scaleY;
+	quitButton_transX = 310.0f * scaleX;
+	quitButton_transY = -300.0f * scaleY;
+	yesButton_transX = -120.0f * scaleX;
+	yesButton_transY = -65.0f * scaleX;
+	noButton_transX = 168.0f * scaleX;
+	noButton_transY = -65.0f * scaleX;
 
 
 }
