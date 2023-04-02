@@ -847,7 +847,7 @@ void Upgrade_Draw(void)
 	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
 
 	//iframe image display
-	AEGfxTexture* iframeTex = AEGfxTextureLoad("Assets\\Assets\\iframeupgrade.png");
+	AEGfxTexture* iframeTex = AEGfxTextureLoad("Assets\\Assets\\HealthRegen.png");
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1218,7 +1218,7 @@ void Upgrade_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "+ Iframe");
+	sprintf_s(Upgrade1_buffer, "HP Regen");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (9300.f * UpgradescaleX_settings)), (getWinHeight() / (-1600.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
