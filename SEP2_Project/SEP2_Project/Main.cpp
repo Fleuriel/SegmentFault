@@ -21,8 +21,8 @@ float currHighScoreMin = 0.f;
 float currHighScoreSec = 0.f;
 
 // Pre-definition of scaling
-double scaleX;
-double scaleY;
+float scaleX;
+float scaleY;
 
 /******************************************************************************/
 /*!

@@ -34,18 +34,18 @@ char goldbuffer[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
-double augment1Button_transX;
-double augment1Button_transY;
-double augment2Button_transX;
-double augment2Button_transY;
-double augment3Button_transX;
-double augment3Button_transY;
-double augment4Button_transX;
-double augment4Button_transY;
-double augment5Button_transX;
-double augment5Button_transY;
-double augment6Button_transX;
-double augment6Button_transY;
+float augment1Button_transX;
+float augment1Button_transY;
+float augment2Button_transX;
+float augment2Button_transY;
+float augment3Button_transX;
+float augment3Button_transY;
+float augment4Button_transX;
+float augment4Button_transY;
+float augment5Button_transX;
+float augment5Button_transY;
+float augment6Button_transX;
+float augment6Button_transY;
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
@@ -604,32 +604,32 @@ void Level_1_Update(void)
 	}
 
 	// Augment buttons mid points
-	f64 augment1Button_midX = (getWinWidth() / 2.04) + augment1Button_transX;
-	f64 augment1Button_midY = (getWinHeight() / 2) - augment1Button_transY;
+	float augment1Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment1Button_transX;
+	float augment1Button_midY = (getWinHeight() / static_cast<float>(2)) - augment1Button_transY;
 
-	f64 augment2Button_midX = (getWinWidth() / 2.04) + augment2Button_transX;
-	f64 augment2Button_midY = (getWinHeight() / 2) - augment2Button_transY;
+	float augment2Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment2Button_transX;
+	float augment2Button_midY = (getWinHeight() / static_cast<float>(2)) - augment2Button_transY;
 
-	f64 augment3Button_midX = (getWinWidth() / 2.04) + augment3Button_transX;
-	f64 augment3Button_midY = (getWinHeight() / 2) - augment3Button_transY;
+	float augment3Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment3Button_transX;
+	float augment3Button_midY = (getWinHeight() / static_cast<float>(2)) - augment3Button_transY;
 
-	f64 augment4Button_midX = (getWinWidth() / 2.04) + augment4Button_transX;
-	f64 augment4Button_midY = (getWinHeight() / 2) - augment4Button_transY;
+	float augment4Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment4Button_transX;
+	float augment4Button_midY = (getWinHeight() / static_cast<float>(2)) - augment4Button_transY;
 
-	f64 augment5Button_midX = (getWinWidth() / 2.04) + augment5Button_transX;
-	f64 augment5Button_midY = (getWinHeight() / 2) - augment5Button_transY;
+	float augment5Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment5Button_transX;
+	float augment5Button_midY = (getWinHeight() / static_cast<float>(2)) - augment5Button_transY;
 
-	f64 augment6Button_midX = (getWinWidth() / 2.04) + augment6Button_transX;
-	f64 augment6Button_midY = (getWinHeight() / 2) - augment6Button_transY;
+	float augment6Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment6Button_transX;
+	float augment6Button_midY = (getWinHeight() / static_cast<float>(2)) - augment6Button_transY;
 
-	if (overlayTransparency != 0) {
+	if (static_cast<double>(overlayTransparency) != static_cast<double>(0)) {
 		// Overlay button logic and defintions
 		if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 			&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 			printf("Augment 1 ++\n");
 			if (SkillPoint != 0 && Augment1Level != 8) {
 				SkillPoint--;
-				Augment1CD -= (float)0.15;
+				Augment1CD -= static_cast<float>(0.15);
 				Augment1Level++;
 			}
 		}
@@ -639,7 +639,7 @@ void Level_1_Update(void)
 			printf("Augment 2 ++\n");
 			if (SkillPoint != 0 && Augment2Level != 8) {
 				SkillPoint--;
-				Augment2Range += 0.2;
+				Augment2Range += static_cast<float>(0.2);
 				Augment2Level++;
 			}
 		}
@@ -649,7 +649,7 @@ void Level_1_Update(void)
 			printf("Augment 3 ++\n");
 			if (SkillPoint != 0 && Augment3Level != 8) {
 				SkillPoint--;
-				Augment3Range += 3.f;
+				Augment3Range += static_cast<float>(3);
 				Augment3Level++;
 				if(_Augment_Three->scale.x >=0)
 					_Augment_Three->scale.x += Augment3Range;
@@ -714,7 +714,7 @@ void Level_1_Update(void)
 	expPercent = _Player_Experience * 10 / reqExp;
 
 	//Spawn Enemy
-	if (_deltaTimeEnemySpawner > 1 && enemyCount < MaxEnemyCount)
+	if (_deltaTimeEnemySpawner > static_cast<float>(1) && enemyCount < MaxEnemyCount)
 	{
 		for (int i = 0; i < 2 * enemyHealth + 1; i++)
 		{
@@ -750,7 +750,7 @@ void Level_1_Update(void)
 			//spawn enemy :)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
 			if (enemyInst != nullptr) {
-				enemyInst->health = enemyHealth;
+				enemyInst->health = static_cast<s32>(enemyHealth);
 				//std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
 			}
 		}
@@ -1226,18 +1226,11 @@ void Level_1_Update(void)
 
 		if (pInst->pObject->type == TYPE_BOSS)
 		{
-			AEVec2 velocity;
-			AEVec2 velocity2;
-			int numBulletsBHell;
-			double DelayMovement;
-			bool hasDelayTimePassed = false;
-			double DelayShoot;
-
 			switch (bossPhase)
 			{
 			case TYPE_BHELL1:
-				DelayShoot = 0.25f;
-				numBulletsBHell = 11;
+				boss::DelayShoot = 0.25f;
+				boss::numBulletsBHell = 11;
 				angle = 225;
 				if (pInst->health <= (float)MaxBossHealth*(0.8f) )
 				{
@@ -1254,11 +1247,11 @@ void Level_1_Update(void)
 				}
 				else
 				{
-					if (_delayTimeBullets >= DelayShoot)
+					if (_delayTimeBullets >= boss::DelayShoot)
 					{
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < boss::numBulletsBHell; q++)
 						{
-							static f32 angle2 = 0;
+							angle2 = 0;
 							angle -= 10;
 							if (angle < 134)
 							{
@@ -1269,25 +1262,16 @@ void Level_1_Update(void)
 							{
 								angle2 = 60;
 							}
-							velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
-							velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
-							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity2, angle2);
+							boss::velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity, angle);
+							boss::velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
+							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity2, angle2);
 
 
 						}
 						angle = 0;
-						numBulletsBHell = 12;
-						//for (int i = 0; i < numBulletsBHell; i++)
-						//{
-						//	angle += 360/12;
-						//
-						//	velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-						//	gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 20, &pInst->position, &velocity, angle);
-						//
-						//
-						//
-						//}
+
+						boss::numBulletsBHell = 12;
 
 						_delayTimeBullets = 0;
 
@@ -1317,10 +1301,10 @@ void Level_1_Update(void)
 				{
 					if (_delayTimeBullets >= DelayShoot)
 					{
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < numBulletsBHell; q++)
 						{
-							angle = 360 + 40 * sin(g_appTime * 2.0 * PI / 5.0);
-							for (int i = 0; i < 1; i++)
+							angle = static_cast<float>(360) + static_cast<float>((static_cast<float>(40) * sin(g_appTime * 2.0 * PI / 5.0)));
+							for (int w = 0; w < 1; w++)
 							{
 								std::cout << angle << '\n';
 								if (angle < 320)
@@ -1328,7 +1312,7 @@ void Level_1_Update(void)
 									angle = 400;
 								}
 								velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
-								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
+								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, static_cast<float>(5), &pInst->position, &velocity, angle);
 							}
 						}
 						_delayTimeBullets = 0;
@@ -1358,14 +1342,14 @@ void Level_1_Update(void)
 						DelayShoot = 0.25f;
 						numBulletsBHell = 4;
 
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < numBulletsBHell; q++)
 						{
 							f32 angleRadians = AEDegToRad(angle + angleOffset);
 							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
 							angle -= 120;
 						}
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < numBulletsBHell; q++)
 						{
 							f32 angleRadians = AEDegToRad(angle - angleOffset);
 							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
@@ -1373,14 +1357,14 @@ void Level_1_Update(void)
 							angle -= 120;
 						}
 						angle = 90;
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < numBulletsBHell; q++)
 						{
 							f32 angleRadians = AEDegToRad(angle + angleOffset);
 							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
 							angle -= 120;
 						}
-						for (int i = 0; i < numBulletsBHell; i++)
+						for (int q = 0; q < numBulletsBHell; q++)
 						{
 							f32 angleRadians = AEDegToRad(angle - angleOffset);
 							velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
@@ -1400,38 +1384,38 @@ void Level_1_Update(void)
 				if (_deltaTime_Shooting > 3 && _deltaTime_Shooting < 18)
 				{
 					frequency = 1.0f;
-					times = g_appTime;
-					xSpeed += 0.005;
+					times = static_cast<float>(g_appTime);
+					xSpeed += static_cast<float>(0.005);
 					std::cout << xSpeed << '\n';
 				}
 
 				if (_deltaTime_Shooting < 20)
 				{
-					angle += 10;
+					angle += static_cast<float>(10);
 					if (angle > 200 || angle < 160)
 					{
-						angle = 160;
+						angle = static_cast<float>(160);
 					}
 					if (_deltaTime_Shooting < 10)
 					{
 						DelayShoot = 0.2f;
 					}
 
-					if (_deltaTime_Shooting >= 10 && _deltaTime_Shooting <= 14)
+					if (_deltaTime_Shooting >= static_cast<float>(10) && _deltaTime_Shooting <= static_cast<float>(14))
 					{
 						DelayShoot = 0.05f;
 					}
-					if (_deltaTime_Shooting > 14 && _deltaTime_Shooting <= 20)
+					if (_deltaTime_Shooting > static_cast<float>(14) && _deltaTime_Shooting <= static_cast<float>(20))
 					{
-						DelayShoot = 0.015f;
+						DelayShoot = 0.035f;
 					}
 
 					if (_delayTimeBullets > DelayShoot)
 					{
-						for (int i = 0; i < numBullets; i++)
+						for (int q = 0; q < numBullets; q++)
 						{
 							// Calculate the x position for this bullet
-							float xPos = pInst->position.x + (i - numBullets / 2.f) * xSpacing;
+							float xPos = pInst->position.x + (q - numBullets / 2.f) * xSpacing;
 
 							// Calculate the y position for this bullet with a random offset
 							float yPos = pInst->position.y + (rand() % (maxY - minY + 1) + minY);
@@ -1439,7 +1423,7 @@ void Level_1_Update(void)
 							// Set the bullet's position
 							AEVec2 position = { xPos, yPos };
 							// Set the bullet's velocity and angle
-							AEVec2 velocity = { projectileSpeed * sin(AEDegToRad(angle)), projectileSpeed * cos(AEDegToRad(angle)) };
+							velocity = { projectileSpeed * sin(AEDegToRad(angle)), projectileSpeed * cos(AEDegToRad(angle)) };
 							float angleOffset = ((float)rand() / RAND_MAX) * 20 - 80;
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 7, &position, &velocity, angle - angleOffset);
 							_delayTimeBullets = 0;
@@ -1449,26 +1433,26 @@ void Level_1_Update(void)
 
 				if (_deltaTime_Shooting > 19)
 				{
-					xSpeed -= 0.001;
-					if (xSpeed < 0)
+					xSpeed -= static_cast<float>(0.001);
+					if (xSpeed < static_cast<float>(0))
 					{
-						xSpeed = 0;
+						xSpeed = static_cast<float>(0);
 					}
-					ySpeed = 0;
+					ySpeed = static_cast<float>(0);
 				}
 
 				//16 is the point where they stop..
 				if (_deltaTime_Shooting > 22)
 				{
 					_delayTimeBullets = 0;
-					pInst->health = (float)MaxBossHealth * (0.2f);
+					pInst->health = (s32)(MaxBossHealth * (0.2f));
 					_Boss->iFrame = 5.f;
 					bossPhase = TYPE_BHELL5;
 				}
 
 				//std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
-				displacementX = xRange * sinf(xSpeed * g_appTime);
-				displacementY = yRange * sinf(ySpeed * g_appTime);
+				displacementX = xRange * static_cast<float>(sinf(static_cast<float>(xSpeed) * static_cast<float>(g_appTime)));
+				displacementY = yRange * static_cast<float>(sinf(static_cast<float>(ySpeed) * static_cast<float>(g_appTime)));
 				// Set the position of the object
 				pInst->position.x = displacementX;
 				pInst->position.y = 200.0f + displacementY; // set the y position to a fixed value for now
@@ -1503,7 +1487,7 @@ void Level_1_Update(void)
 						else
 						{
 							// Calculate velocity vector based on distance and direction
-							AEVec2 velocity;
+							velocity;
 							AEVec2Scale(&velocity, &direction, distance);
 
 							// Update position of pInst
@@ -1514,13 +1498,13 @@ void Level_1_Update(void)
 					if (_delayTimeBullets > DelayMovement)
 					{
 						numBulletsBHell = 8;
-						angle = rotationAngle * sin(g_appTime / 12 * 3.142);
+						angle = rotationAngle * static_cast<float>(sin(g_appTime / 12 * 3.142));
 
 						//BOWAP					
 						for (int j = 0; j < numBulletsBHell; j++)
 						{
-							double angleT = angle + (30.f * j * 360.f / 14.f);
-							velocity = { projectileSpeed * cos(AEDegToRad(angleT)) , projectileSpeed * sin(AEDegToRad(angleT)) };
+							float angleT = angle + (30.f * j * 360.f / 14.f);
+							velocity = { projectileSpeed * static_cast<float>(cos(AEDegToRad(angleT))) ,projectileSpeed * static_cast<float>(sin(AEDegToRad(angleT))) };
 							gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angleT);
 						}
 					}
@@ -1540,8 +1524,8 @@ void Level_1_Update(void)
 
 			if (bossPhase == TYPE_BHELL1 && pInst->position.y > AEGfxGetWinMaxY())
 			{
-				angle = 180 + 45 * sin(g_appTime * 2.0 * PI / 5.0);
-				for (int i = 0; i < 1; i++)
+				angle = static_cast<float>(180) + static_cast<float>(45) * static_cast<float>(sin(g_appTime * 2.0 * PI / 5.0));
+				for (int q = 0; q < 1; q++)
 				{
 					if (angle < 135)
 					{
@@ -1577,13 +1561,13 @@ void Level_1_Update(void)
 				if (qInst->pObject->type == TYPE_PLAYER)
 				{
 					// Get direction from enemy to player
-					AEVec2 ENEMY_DIRECTION = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
+					ENEMY_DIRECTION = { qInst->position.x - pInst->position.x, qInst->position.y - pInst->position.y };
 
 					// Normalize direction vector to get unit direction
 					AEVec2Normalize(&ENEMY_DIRECTION, &ENEMY_DIRECTION);
 
 					// Calculate velocity vector by scaling unit direction by enemy's movement speed
-					AEVec2 ENEMY_VELOCITY = { ENEMY_DIRECTION.x * 5.0f, ENEMY_DIRECTION.y * 5.0f };
+					ENEMY_VELOCITY = { ENEMY_DIRECTION.x * 5.0f, ENEMY_DIRECTION.y * 5.0f };
 
 					// Scale velocity vector by time since last frame to get distance to move this frame
 					float distanceToMove = AEVec2Length(&ENEMY_VELOCITY) * g_dt;
@@ -2013,7 +1997,7 @@ void Level_1_Draw(void)
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(BgroundTexB, 0, 0);
 	AEMtx33 scale0 = { 0 };
-	AEMtx33Scale(&scale0, Game_Dimension.x * 1.5, 1000 * 1.5);
+	AEMtx33Scale(&scale0, Game_Dimension.x * static_cast<float>(1.5), 1000 * static_cast<float>(1.5));
 	AEMtx33 rotate0 = { 0 };
 	AEMtx33Rot(&rotate0, 0.f);
 	AEMtx33 translate0 = { 0 };
@@ -2069,7 +2053,7 @@ void Level_1_Draw(void)
 	std::string level = "Lv " + std::to_string(_Player_Level);
 	sprintf_s(level_buffer, sizeof(level_buffer), "%s", level.c_str());
 	AEGfxGetPrintSize(fontID, level_buffer, 1.0f, textWidth, textHeight);
-	AEGfxPrint(fontID, level_buffer, -0.985, 0.94, 0.5f, 1, 1, 1);
+	AEGfxPrint(fontID, level_buffer, static_cast<float>(-0.985), static_cast<float>(0.94), 0.5f, static_cast<float>(1), static_cast<float>(1), static_cast<float>(1));
 
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -2385,7 +2369,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer1, "LEVEL %d", Augment1Level);
 		if (Augment1Level == 8)
 			sprintf_s(strbuffer1, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer1, 0.075f, (getWinHeight() / (1500.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer1, static_cast<float>(0.075), (getWinHeight() / (1500.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -2395,7 +2379,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer2, "LEVEL %d", Augment2Level);
 		if (Augment2Level >= 8)
 			sprintf_s(strbuffer2, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer2, 0.075, (getWinHeight() / (2150.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer2, static_cast<float>(0.075), (getWinHeight() / (2150.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2404,7 +2388,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer3, "LEVEL %d", Augment3Level);
 		if (Augment3Level >= 8)
 			sprintf_s(strbuffer3, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer3, 0.075f, (getWinHeight() / (4000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer3, static_cast<float>(0.075), (getWinHeight() / (4000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2413,7 +2397,7 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer4, "LEVEL %d", Augment4Level);
 		if (Augment4Level >= 8)
 			sprintf_s(strbuffer4, "MAX LEVEL");
-		AEGfxPrint(fontID, strbuffer4, 0.075f, (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		AEGfxPrint(fontID, strbuffer4, static_cast<float>(0.075), (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		//AEGfxTextureSet(NULL, 0, 0);

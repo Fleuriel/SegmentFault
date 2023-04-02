@@ -45,8 +45,8 @@ extern float	currHighScoreSec;
 
 
 // Pre-definition of scaling
-extern double	scaleX;
-extern double	scaleY;
+extern float	scaleX;
+extern float	scaleY;
 
 
 

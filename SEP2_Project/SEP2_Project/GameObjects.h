@@ -36,11 +36,20 @@ f32 const ENEMY_SIZE = 25.0f;   //Enemy Size
 f32 const BULLET_SPEED = 100.0f; //Bullet Speed
 u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
 s32 bulletCount = 0; // Number of bullets fired
-u32 enemyCount = 0;
+int enemyCount = 0;
 f32 const BOUNDING_RECT_SIZE = 1.0f;
 f32 enemyHealth = 1;
 bool upgradeToggle = 0;
 extern int SkillPoint = 0;
+
+namespace boss {
+	AEVec2 velocity;
+	AEVec2 velocity2;
+	int numBulletsBHell;
+	double DelayMovement;
+	bool hasDelayTimePassed = false;
+	double DelayShoot;
+}
 
 
 
