@@ -2564,6 +2564,7 @@ void Level_1_Unload(void)
 	AEGfxMeshFree(bMesh);
 
 	//AEGfxMeshFree(bMesh);
+	pause = false;
 	Augment1Level = 1;
 	Augment2Level = 0;
 	Augment1CD = 1.5f;
