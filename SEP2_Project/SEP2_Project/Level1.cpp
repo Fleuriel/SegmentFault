@@ -681,7 +681,7 @@ void Level_1_Update(void)
 		if (static_cast<double>(overlayTransparency) != static_cast<double>(0)) {
 			// Overlay button logic and defintions
 			if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment1Level != 8) {
 					SkillPoint--;
 					Augment1CD -= static_cast<float>(0.15);
@@ -690,7 +690,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment2Level != 8) {
 					SkillPoint--;
 					Augment2Range += static_cast<float>(0.2);
@@ -699,7 +699,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment3Level != 8) {
 					SkillPoint--;
 					Augment3Range += static_cast<float>(3);
@@ -712,7 +712,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment4Level != 8) {
 					SkillPoint--;
 					Augment4Level++;
@@ -722,7 +722,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment5Button_midX, augment5Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0) {
 					SkillPoint--;
 					MaxHealth++;
