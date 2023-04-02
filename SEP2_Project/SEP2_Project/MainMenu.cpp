@@ -49,6 +49,7 @@ f32 exitNoButton_midX;
 f32 exitNoButton_midY;
 
 // Pre-defintion for str buffers
+char text_buffer[100]{};
 char play_buffer[1024]{};
 char upgrade_buffer[1024]{};
 char settings_buffer[1024]{};
@@ -300,12 +301,12 @@ void Menu_Update(void)
         buttonRotate_exit = -0.10f;
     }
 
-    else if (IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    else if (IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_exitYes = -0.10f;
     }
 
-    else if (IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    else if (IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_exitNo = -0.10f;
     }
@@ -335,7 +336,7 @@ void Menu_Update(void)
         buttonRotate_credits = 0.0f;
     }
 
-    if (!IsAreaClicked(exitButton_midX, exitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    if (!IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_exit = 0.0f;
     }
@@ -459,6 +460,22 @@ void Menu_Draw(void)
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
     // Rendering texts for the screen
+
+    // Title start
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(text_buffer, "AMONG");
+    AEGfxPrint(fontID, text_buffer, (getWinWidth() / (-6900.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.5f * scaleX, 180.0f / 255.f, 24.0f / 255.f, 7.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(text_buffer, "THEM");
+    AEGfxPrint(fontID, text_buffer, (getWinWidth() / (-8700.f * scaleX)), (getWinHeight() / (1700.f * scaleY)), 1.5f * scaleX, 180.0f / 255.f, 24.0f / 255.f, 7.0f / 255.f);
+
+    // Title end
+
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -515,13 +532,13 @@ void Menu_Draw(void)
         // Drawing the yes/no overlay on the screen
         AEGfxTextureSet(NULL, 0, 0);
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-        AEGfxSetTransparency(1.0f);
+        AEGfxSetTransparency(0.5f);
         AEMtx33 scale8 = { 0 };
         AEMtx33Scale(&scale8, 500.f, 300.f);
         AEMtx33 rotate8 = { 0 };
         AEMtx33Rot(&rotate8, 0.f);
         AEMtx33 translate8 = { 0 };
-        AEMtx33Trans(&translate8, 125.f, -10.f);
+        AEMtx33Trans(&translate8, 175.f, -10.f);
         AEMtx33 transform8 = { 0 };
         AEMtx33Concat(&transform8, &rotate8, &scale8);
         AEMtx33Concat(&transform8, &translate8, &transform8);

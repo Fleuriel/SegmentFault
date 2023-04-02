@@ -2447,7 +2447,7 @@ void Level_1_Draw(void)
 		// Drawing the yes/no overlay on the screen
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(1.0f);
+		AEGfxSetTransparency(0.5f);
 		AEMtx33 scale3 = { 0 };
 		AEMtx33Scale(&scale3, 500.f, 300.f);
 		AEMtx33 rotate3 = { 0 };
