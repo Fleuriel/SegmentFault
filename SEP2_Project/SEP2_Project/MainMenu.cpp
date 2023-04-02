@@ -163,7 +163,6 @@ void Menu_Update(void)
 
     printf("%d\n", cursorX);
     printf("%d\n", cursorY);
-    //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
 
     // Powerups button mid points
     powerUpButton_midX = static_cast<f32>((getWinWidth() / 2.11) + powerUpButton_transX);
@@ -185,8 +184,6 @@ void Menu_Update(void)
     exitButton_midX = static_cast<f32>((getWinWidth() / 2.04) + exitButton_transX);
     exitButton_midY = static_cast<f32>((getWinHeight() / 2) - exitButton_transY);
     
-    // printf("%d\n%d\n", cursorX, cursorY);  //debug
-    // printf("%f\n%f\n", button1_midX, button1_midY);  //debug
     
     /********************************** Button Collision Logic Start ********************************************/
     if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
@@ -210,12 +207,6 @@ void Menu_Update(void)
         printf("Goto Play\n");
     }
 
-    /*
-    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
-        gGameStateNext = CREDITS;
-        printf("Goto Credits\n");
-    }*/
 
     else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
@@ -445,5 +436,4 @@ void Menu_Unload(void)
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(BGmesh);
 
-    // AEGfxTextureUnload(startTex);
 }

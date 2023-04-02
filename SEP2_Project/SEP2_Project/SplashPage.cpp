@@ -14,7 +14,6 @@ f32 splashPage_transY;
 // Pre-definition for transparency
 f32 splashPage_transparency;
 
-double Elapsed;
 bool isTransparent;
 
 void SplashPage_Load(void) 
@@ -51,7 +50,6 @@ void SplashPage_Init(void)
 }
 void SplashPage_Update(void) 
 {
-	Elapsed += g_dt;
 
 	if (isTransparent) 
 	{
@@ -63,6 +61,7 @@ void SplashPage_Update(void)
 		}
 	}
 
+	// Goes to main menu after it has done one cycle of fading in and out
 	else if (!isTransparent) {
 		splashPage_transparency -= 0.005f;
 		if (splashPage_transparency <= 0.f) 

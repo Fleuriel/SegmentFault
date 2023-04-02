@@ -99,7 +99,7 @@ void GameOver_Update(void)
 	gameOverQuitButton_midY = static_cast<f32>((getWinHeight() / 2) - gameOverQuitButton_transY);
 
 	printf("%d\n%d\n", cursorX, cursorY);  //debug
-	//printf("%f\n%f\n", button1_midX, button1_midY);  //debug
+
 	// if cursor within buttons, change game state
 	if (IsAreaClicked(gameOverContButton_midX, gameOverContButton_midY, 170.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
