@@ -31,6 +31,8 @@ float scaleY;
 /******************************************************************************/
 _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
+	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
 	UNREFERENCED_PARAMETER(prevInstanceH);
 	UNREFERENCED_PARAMETER(command_line);
 
