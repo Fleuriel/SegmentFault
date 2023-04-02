@@ -18,7 +18,6 @@ f32 creditsButton_transX;
 f32 creditsButton_transY;
 f32 exitButton_transX;
 f32 exitButton_transY;
-f32 BGtransX, BGtransY;
 // Powerups button mid points
 f32 powerUpButton_midX;
 f32 powerUpButton_midY;
@@ -55,12 +54,11 @@ f32 buttonRotate_settings;
 f32 buttonRotate_powerups;
 f32 buttonRotate_credits;
 
-std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
-std::ifstream input2{ "Assets\\SaveFiles\\HighScore.txt" };
 
 void Menu_Load(void)
 {
-   
+    std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
+    std::ifstream input2{ "Assets\\SaveFiles\\HighScore.txt" };
 
     AEGfxSetBackgroundColor(0.019f, 0.27f, 0.411f);  // conversion -> rgb value/255
 
@@ -83,26 +81,22 @@ void Menu_Load(void)
     {
 
         input >> Currency;
-        std::cout << Currency << '\n';
-
         input.close();
     }
     else if (input.fail())
     {
-        std::cerr << "Error: \n";
+        std::cerr << "Error:  xdd\n";
 
     }
 
     if (input2.good())
     {
         input2 >> currHighScoreMin >> currHighScoreSec;
-        std::cout << "HIGHSCORE: " << currHighScoreMin << currHighScoreSec << '\n';
-
         input2.close();
     }
     else if (input2.fail())
     {
-        std::cerr << "Error: \n";
+        std::cerr << "Error: xdds\n";
 
     }
 
@@ -161,8 +155,6 @@ void Menu_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
-    printf("%d\n", cursorX);
-    printf("%d\n", cursorY);
 
     // Powerups button mid points
     powerUpButton_midX = static_cast<f32>((getWinWidth() / 2.11) + powerUpButton_transX);
@@ -190,21 +182,18 @@ void Menu_Update(void)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = UPGRADE;
-        printf("Goto powerups\n");
     }
 
     else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = SETTINGS;
-        printf("Goto Settings\n");
     }
 
     else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = PLAY;
-        printf("Goto Play\n");
     }
 
 
@@ -212,7 +201,6 @@ void Menu_Update(void)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = QUIT;
-        printf("QUIT\n");
     }
     /********************************** Button Collision Logic End ********************************************/
 
@@ -238,7 +226,6 @@ void Menu_Update(void)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = CREDITS;
-        printf("Goto Credits\n");
     }
 
     else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
