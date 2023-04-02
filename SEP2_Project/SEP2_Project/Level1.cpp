@@ -46,9 +46,19 @@ float augment5Button_transX;
 float augment5Button_transY;
 float augment6Button_transX;
 float augment6Button_transY;
+float mainMenu_Button_transX;
+float mainMenu_Button_transY;
+float quitButton_transX;
+float quitButton_transY;
+float yesButton_transX;
+float yesButton_transY;
+float noButton_transX;
+float noButton_transY;
+
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
+float pauseTransparency = 0.0f;
 
 //Pre-definition for buffers
 char level_buffer[16]{};
@@ -83,8 +93,13 @@ float offset = 5.f;
 bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
 
-//Condition check for game over
+// Condition check for game over
 static bool onValueChange = true;
+
+// Condition check for pause UI
+bool areyouSure = true;
+bool clicked_MainMenu = true;
+bool clicked_Quit = true;
 
 void Level_1_Load(void)
 {
@@ -341,23 +356,6 @@ void Level_1_Load(void)
 		_Objects->pMesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 
-
-		//13 TYPE_AUGMENT5
-		_Objects = sGameObjList + sGameObjNum++;
-		_Objects->type = TYPE_AUGMENT5;
-
-		AEGfxMeshStart();
-
-		AEGfxTriAdd(
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f,
-			-0.5f, -0.5f, 0x808080, 0.0f, 1.0f,
-			0.5f, -0.5f, 0x696969, 1.0f, 1.0f);
-		AEGfxTriAdd(
-			-0.5f, 0.5f, 0x696969, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0x696969, 0.0f, 1.0f,
-			0.5f, 0.5f, 0x808080, 1.0f, 0.0f);
-		_Objects->pMesh = AEGfxMeshEnd();
-		AE_ASSERT_MESG(_Objects->pMesh, "Fail to create object!!");
 	}
 
 	//Save file for currency
@@ -527,8 +525,6 @@ void Level_1_Init(void)
 	//10
 	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
-	//11
-	//_Augment_Five = gameObjInstCreate(TYPE_AUGMENT5, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
 	// Gets the scale of Game_Dimension.xxGame_Dimension.y
@@ -548,6 +544,15 @@ void Level_1_Init(void)
 	augment5Button_transY = -60.0f * scaleY;
 	augment6Button_transX = 0.0f * scaleX;
 	augment6Button_transY = -145.0f * scaleY;
+	mainMenu_Button_transX = -255.0f * scaleX;
+	mainMenu_Button_transY = -300.0f * scaleY;
+	quitButton_transX = 310.0f * scaleX;
+	quitButton_transY = -300.0f * scaleY;
+	yesButton_transX = -120.0f * scaleX;
+	yesButton_transY = -65.0f * scaleX;
+	noButton_transX = 168.0f * scaleX;
+	noButton_transY = -65.0f * scaleX;
+
 
 }
 
@@ -557,11 +562,78 @@ void Level_1_Update(void)
 
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckTriggered(AEVK_P))
+	if (AEInputCheckReleased(AEVK_P))
 	{
 		pause = !pause;
+		if (pauseTransparency == 0) {
+			pauseTransparency = 0.5;
+		}
+		else if (pauseTransparency != 0) {
+			pauseTransparency = 0;
+		}
+
 	}
 
+	if (pause == true) 
+	{
+		float mainMenu_Button_midX = (getWinWidth() / static_cast<float>(2.09)) + mainMenu_Button_transX;
+		float mainMenu_Button_midY = (getWinHeight() / static_cast<float>(2)) - mainMenu_Button_transY;
+
+		float quitButton_midX = (getWinWidth() / static_cast<float>(2.09)) + quitButton_transX;
+		float quitButton_midY = (getWinHeight() / static_cast<float>(2)) - quitButton_transY;
+
+		float yesButton_midX = (getWinWidth() / static_cast<float>(2.09)) + yesButton_transX;
+		float yesButton_midY = (getWinHeight() / static_cast<float>(2)) - yesButton_transY;
+
+		float noButton_midX = (getWinWidth() / static_cast<float>(2.09)) + noButton_transX;
+		float noButton_midY = (getWinHeight() / static_cast<float>(2)) - noButton_transY;
+
+		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) {
+			// Overlay button logic and defintions
+			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("MainMenu\n");
+				areyouSure = false;
+				clicked_MainMenu = true;
+				pauseTransparency = 0.0f;
+			}
+
+			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("Quit\n");
+				areyouSure = false;
+				clicked_MainMenu = false;
+				pauseTransparency = 0.0f;
+			}
+
+		}
+
+		if (areyouSure == false) {
+			// Overlay button logic and defintions
+			if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				if (clicked_MainMenu) 
+				{
+					printf("Goto Main Menu\n");
+					gGameStateNext = MAINMENU;
+				}
+				else if (!clicked_MainMenu)
+				{
+					printf("Quit\n");
+					gGameStateNext = QUIT;
+				}
+			}
+
+			if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				printf("Go Back to pause UI\n");
+				pauseTransparency = 0.5f;
+				areyouSure = true;
+			}
+
+		}
+
+	}
 
 	if (pause == false)
 	{
@@ -574,7 +646,7 @@ void Level_1_Update(void)
 		}
 
 		// Checking if overlay is pressed
-		if (AEInputCheckTriggered(AEVK_RBUTTON))
+		if (AEInputCheckReleased(AEVK_RBUTTON))
 		{
 			if (overlayTransparency == 0) {
 				overlayTransparency = 0.5;
@@ -583,7 +655,7 @@ void Level_1_Update(void)
 				overlayTransparency = 0;
 			}
 		}
-		if (AEInputCheckTriggered(AEVK_INSERT))
+		if (AEInputCheckReleased(AEVK_INSERT))
 		{
 			SkillPoint = 90;
 		}
@@ -604,14 +676,12 @@ void Level_1_Update(void)
 		float augment5Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment5Button_transX;
 		float augment5Button_midY = (getWinHeight() / static_cast<float>(2)) - augment5Button_transY;
 
-		float augment6Button_midX = (getWinWidth() / static_cast<float>(2.04)) + augment6Button_transX;
-		float augment6Button_midY = (getWinHeight() / static_cast<float>(2)) - augment6Button_transY;
+
 
 		if (static_cast<double>(overlayTransparency) != static_cast<double>(0)) {
 			// Overlay button logic and defintions
 			if (IsAreaClicked(augment1Button_midX, augment1Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 1 ++\n");
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment1Level != 8) {
 					SkillPoint--;
 					Augment1CD -= static_cast<float>(0.15);
@@ -620,8 +690,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment2Button_midX, augment2Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 2 ++\n");
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment2Level != 8) {
 					SkillPoint--;
 					Augment2Range += static_cast<float>(0.2);
@@ -630,8 +699,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment3Button_midX, augment3Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 3 ++\n");
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment3Level != 8) {
 					SkillPoint--;
 					Augment3Range += static_cast<float>(3);
@@ -644,8 +712,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment4Button_midX, augment4Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 4 ++\n");
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0 && Augment4Level != 8) {
 					SkillPoint--;
 					Augment4Level++;
@@ -655,8 +722,7 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(augment5Button_midX, augment5Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 5 ++\n");
+				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (SkillPoint != 0) {
 					SkillPoint--;
 					MaxHealth++;
@@ -664,17 +730,8 @@ void Level_1_Update(void)
 				}
 			}
 
-			if (IsAreaClicked(augment6Button_midX, augment6Button_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckTriggered(AEVK_LBUTTON)) {
-				printf("Augment 6 ++\n");
-				//if (SkillPoint != 0) {
-				//	SkillPoint--;
-				//	MaxHealth++;
-				//	_Player->health++;
-				//}
-			}
-
 		}
+
 		if (Augment2Level == 1 && Aug2CreateCheck == false) {
 			_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
 			AE_ASSERT(_Augment_Two);
@@ -1041,7 +1098,7 @@ void Level_1_Update(void)
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
 
 							if (bulletInst != nullptr)
-								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
+								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
 							// Reset the fire timer
 							AUGMENT_1_FIRE_TIMER = 0.0f;
@@ -1109,7 +1166,6 @@ void Level_1_Update(void)
 
 						//Compute the direction of bullet with 60 deg angle discrepancies.
 
-						AUGMENT_4_BULLET_SPEED = AEVec2Length(&AUGMENT_4_DIRECTION);
 
 						AUGMENT_4_DIRECTION = { AUGMENT_4_MOUSE_POSITION.x - qInst->position.x, AUGMENT_4_MOUSE_POSITION.y - qInst->position.y };
 
@@ -1144,7 +1200,7 @@ void Level_1_Update(void)
 						}
 						if (AUG4_BULLET != nullptr)
 						{
-							AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, BULLET_SPEED);
+							AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, AUGMENT_4_BULLET_SPEED);
 						}
 					}
 
@@ -1550,43 +1606,6 @@ void Level_1_Update(void)
 				else
 				{
 					pInst->showTexture = false;
-				}
-			}
-
-			if (pInst->pObject->type == TYPE_AUGMENT5)
-			{
-				AUGMENT_5_FIRE_TIMER += g_dt;
-				if (AUGMENT_5_FIRE_TIMER > AUGMENT_5_FIRE_INTERVAL)
-				{
-					for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
-					{
-						GameObjInstances* qInst = sGameObjInstList + j;
-
-						if ((qInst->flag & FLAG_ACTIVE) == 0 || qInst == nullptr)
-							continue;
-
-
-						if (qInst->pObject->type == TYPE_ENEMY || qInst->pObject->type == TYPE_BOSS)
-						{
-							if (qInst->position.x < AEGfxGetWinMaxX() &&
-								qInst->position.x > AEGfxGetWinMinX() &&
-								qInst->position.y < AEGfxGetWinMaxY() &&
-								qInst->position.y > AEGfxGetWinMinY())
-							{
-								//Full map attack.
-								qInst->health--;
-								if (qInst->health == 0)
-								{
-									//Remove entity count;
-								}
-							}
-						}
-						else
-						{
-							continue;
-						}
-					}
-					AUGMENT_5_FIRE_TIMER = 0;
 				}
 			}
 
@@ -2034,11 +2053,6 @@ void Level_1_Draw(void)
 		{
 			texture = InvisibleTex;
 		}
-		else if (pInst->pObject->type == TYPE_AUGMENT5)
-		{
-			//Update this
-			texture = InvisibleTex;
-		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
 			texture = bulletTex;
@@ -2209,7 +2223,6 @@ void Level_1_Draw(void)
 		AEMtx33 rotate9 = { 0 };
 		AEMtx33Rot(&rotate9, 0.f);
 		AEMtx33 translate9 = { 0 };
-		AEMtx33Trans(&translate9, augment6Button_transX, augment6Button_transY);
 		AEMtx33 transform9 = { 0 };
 		AEMtx33Concat(&transform9, &rotate9, &scale9);
 		AEMtx33Concat(&transform9, &translate9, &transform9);
@@ -2245,14 +2258,9 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Augment 5");
+		sprintf_s(augment1_buffer, "HP");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "HP");
-		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2290,11 +2298,6 @@ void Level_1_Draw(void)
 		sprintf_s(augmentAdd_buffer, "+");
 		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (-5000.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augmentAdd_buffer, "+");
-		AEGfxPrint(fontID, augmentAdd_buffer, (getWinWidth() / (-47000.f * scaleX)), (getWinHeight() / (-2450.f * scaleY)), 1.f * scaleX, 241.f / 255.f, 23.0f / 171.f, 185.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
@@ -2333,16 +2336,178 @@ void Level_1_Draw(void)
 			sprintf_s(strbuffer4, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer4, static_cast<float>(0.075), (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
+	}
+	/********************************** Augment UI End ********************************************/
+
+
+	/********************************** Pause UI Start ********************************************/
+	if (pauseTransparency != 0)
+	{
+		// Drawing the pause overlay on the screen
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEMtx33 scale3 = { 0 };
+		AEMtx33Scale(&scale3, 500.f, 650.f);
+		AEMtx33 rotate3 = { 0 };
+		AEMtx33Rot(&rotate3, 0.f);
+		AEMtx33 translate3 = { 0 };
+		AEMtx33Trans(&translate3, 125.f, -10.f);
+		AEMtx33 transform3 = { 0 };
+		AEMtx33Concat(&transform3, &rotate3, &scale3);
+		AEMtx33Concat(&transform3, &translate3, &transform3);
+		AEGfxSetTransform(transform3.m);
+		AEGfxMeshDraw(augmentMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale4 = { 0 };
+		AEMtx33Scale(&scale4, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate4 = { 0 };
+		AEMtx33Rot(&rotate4, 0);
+		AEMtx33 translate4 = { 0 };
+		AEMtx33Trans(&translate4, mainMenu_Button_transX, mainMenu_Button_transY);
+		AEMtx33 transform4 = { 0 };
+		AEMtx33Concat(&transform4, &rotate4, &scale4);
+		AEMtx33Concat(&transform4, &translate4, &transform4);
+		AEGfxSetTransform(transform4.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(pauseTransparency);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale5 = { 0 };
+		AEMtx33Scale(&scale5, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate5 = { 0 };
+		AEMtx33Rot(&rotate5, 0);
+		AEMtx33 translate5 = { 0 };
+		AEMtx33Trans(&translate5, quitButton_transX, quitButton_transY);
+		AEMtx33 transform5 = { 0 };
+		AEMtx33Concat(&transform5, &rotate5, &scale5);
+		AEMtx33Concat(&transform5, &translate5, &transform5);
+		AEGfxSetTransform(transform5.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Rendering texts for overlay
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "How to play:");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (1550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Right mouse click for augments.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (2200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> WASD for movement.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (4200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Bullets will follow cursor movement.");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "> Press 'P' again to resume");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
 		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		//AEGfxTextureSet(NULL, 0, 0);
 		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		//if (Augment5Level != 8)
-		//	sprintf_s(strbuffer5, "LEVEL %d", Augment4Level);
-		//if (Augment5Level >= 8)
-		//	sprintf_s(strbuffer5, "MAX LEVEL");
-		//AEGfxPrint(fontID, strbuffer5, 0.075f, 0.050f, 0.3f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+		//sprintf_s(augment1_buffer, "HP");
+		//AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(skillpoint_buffer, "Menu");
+		AEGfxPrint(fontID, skillpoint_buffer, -0.412f, -0.7f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(skillpoint_buffer, "Quit");
+		AEGfxPrint(fontID, skillpoint_buffer, 0.305f, -0.7f, 0.8f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
 	}
-	/********************************** Augment UI End ********************************************/
+
+	if (areyouSure == false)
+	{
+		// Drawing the yes/no overlay on the screen
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(1.0f);
+		AEMtx33 scale3 = { 0 };
+		AEMtx33Scale(&scale3, 500.f, 300.f);
+		AEMtx33 rotate3 = { 0 };
+		AEMtx33Rot(&rotate3, 0.f);
+		AEMtx33 translate3 = { 0 };
+		AEMtx33Trans(&translate3, 125.f, -10.f);
+		AEMtx33 transform3 = { 0 };
+		AEMtx33Concat(&transform3, &rotate3, &scale3);
+		AEMtx33Concat(&transform3, &translate3, &transform3);
+		AEGfxSetTransform(transform3.m);
+		AEGfxMeshDraw(augmentMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(0.3f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale6 = { 0 };
+		AEMtx33Scale(&scale6, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate6 = { 0 };
+		AEMtx33Rot(&rotate6, 0);
+		AEMtx33 translate6 = { 0 };
+		AEMtx33Trans(&translate6, yesButton_transX, yesButton_transY);
+		AEMtx33 transform6 = { 0 };
+		AEMtx33Concat(&transform6, &rotate6, &scale6);
+		AEMtx33Concat(&transform6, &translate6, &transform6);
+		AEGfxSetTransform(transform6.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetTransparency(0.3f);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEMtx33 scale7 = { 0 };
+		AEMtx33Scale(&scale7, 80.f * scaleX, 50.f * scaleY);
+		AEMtx33 rotate7 = { 0 };
+		AEMtx33Rot(&rotate7, 0);
+		AEMtx33 translate7 = { 0 };
+		AEMtx33Trans(&translate7, noButton_transX, noButton_transY);
+		AEMtx33 transform7 = { 0 };
+		AEMtx33Concat(&transform7, &rotate7, &scale7);
+		AEMtx33Concat(&transform7, &translate7, &transform7);
+		AEGfxSetTransform(transform7.m);
+		AEGfxMeshDraw(augmentButtonMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Rendering texts for overlay
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "ARE YOU SURE?");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (5000.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "YES");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-7000.f * scaleX)), (getWinHeight() / (-5200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "NO");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (11000.f * scaleX)), (getWinHeight() / (-5200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+	}
+	/********************************** Pause UI End ********************************************/
 
 	// Rendering texts for the screen	
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);

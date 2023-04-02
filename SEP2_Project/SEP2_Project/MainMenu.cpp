@@ -179,28 +179,35 @@ void Menu_Update(void)
     
     /********************************** Button Collision Logic Start ********************************************/
     if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+        && AEInputCheckReleased(AEVK_LBUTTON)) 
     {
         gGameStateNext = UPGRADE;
     }
 
     else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+        && AEInputCheckReleased(AEVK_LBUTTON))
     {
         gGameStateNext = SETTINGS;
     }
 
     else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+        && AEInputCheckReleased(AEVK_LBUTTON))
     {
         gGameStateNext = PLAY;
     }
 
 
     else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+        && AEInputCheckReleased(AEVK_LBUTTON))
     {
         gGameStateNext = QUIT;
+    }
+
+    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        gGameStateNext = CREDITS;
+        printf("Goto Credits\n");
     }
     /********************************** Button Collision Logic End ********************************************/
 
@@ -226,6 +233,7 @@ void Menu_Update(void)
         && AEInputCheckTriggered(AEVK_LBUTTON)) 
     {
         gGameStateNext = CREDITS;
+        printf("Goto Credits\n");
     }
 
     else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))

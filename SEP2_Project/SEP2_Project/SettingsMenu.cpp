@@ -92,7 +92,7 @@ void Settings_Update(void)
 
     // if cursor within buttons, change game state
     if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckReleased(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
     }
 
@@ -153,7 +153,7 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions1_buffer, "Right click for augments.");
+    sprintf_s(instructions1_buffer, "Right mouse click for augments.");
     AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);

@@ -93,7 +93,7 @@ void Credits_Update(void)
 
 
     if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) {
+        && AEInputCheckReleased(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
     }
 

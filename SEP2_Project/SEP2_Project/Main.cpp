@@ -64,7 +64,7 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 	fontID = AEGfxCreateFont("Assets\\Assets\\Minecraft.ttf", 50);
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(SPLASHPAGE);
+	GameStateMgrInit(PLAY);
 
 	while (gGameStateCurr != QUIT)
 	{
