@@ -66,7 +66,7 @@ float textWidth{}, textHeight{};
 
 //// Pre-definition of time
 float secElapsed = 0.f;
-float minElapsed = 0.f;
+int minElapsed = 0;
 
 int MaxHealth = MaximumPlayerHealth; // Player max hp 
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
@@ -588,10 +588,12 @@ void Level_1_Update(void)
 		float noButton_midX = (getWinWidth() / static_cast<float>(2.09)) + noButton_transX;
 		float noButton_midY = (getWinHeight() / static_cast<float>(2)) - noButton_transY;
 
-		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) {
+		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) 
+		{
 			// Overlay button logic and defintions
 			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) 
+			{
 				printf("MainMenu\n");
 				areyouSure = false;
 				clicked_MainMenu = true;
@@ -599,7 +601,8 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) 
+			{
 				printf("Quit\n");
 				areyouSure = false;
 				clicked_MainMenu = false;
@@ -608,7 +611,8 @@ void Level_1_Update(void)
 
 		}
 
-		if (areyouSure == false) {
+		if (areyouSure == false) 
+		{
 			// Overlay button logic and defintions
 			if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
@@ -822,9 +826,7 @@ void Level_1_Update(void)
 			enemyCount = 100;
 			spawnCheck = 0;
 		}
-		//SPAWN BOSS
-		if (minElapsed == 5 && secElapsed >= 0 && spawnCheck == 0 && BossKills == 0) {
-			//1
+		if (minElapsed % 5 == 0 && spawnCheck == 0 && minElapsed>0) {
 			_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 			_Boss->health = MaxBossHealth = 50 * (1 + BossKills);
 			AE_ASSERT(_Boss);
@@ -849,54 +851,7 @@ void Level_1_Update(void)
 			}
 		}
 
-		if (minElapsed == 10 && secElapsed >= 0 && spawnCheck == 0 && BossKills == 1) {
-			_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-			_Boss->health = MaxBossHealth = 50 * (1 + BossKills);
-			AE_ASSERT(_Boss);
-			_Boss->position.x = 0;
-			_Boss->position.y = 220;
-			spawnCheck = 1;
-			bossPhase = 0;
 
-			for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-			{
-				GameObjInstances* ObjInstance1 = sGameObjInstList + i;
-				if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
-					continue;
-				if ((ObjInstance1->pObject->type == TYPE_ENEMY)) {
-					gameObjInstDestroy(ObjInstance1);
-
-				}
-				else if ((ObjInstance1->pObject->type == TYPE_CURRENCY)) {
-					gameObjInstDestroy(ObjInstance1);
-				}
-
-			}
-		}
-
-		if (minElapsed == 15 && secElapsed >= 0 && spawnCheck == 0 && BossKills == 2) {
-			_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
-			_Boss->health = MaxBossHealth = 50 * (1 + BossKills);
-			AE_ASSERT(_Boss);
-			_Boss->position.x = 0;
-			_Boss->position.y = 220;
-			spawnCheck = 1;
-
-			for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
-			{
-				GameObjInstances* ObjInstance1 = sGameObjInstList + i;
-				if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
-					continue;
-				if ((ObjInstance1->pObject->type == TYPE_ENEMY)) {
-					gameObjInstDestroy(ObjInstance1);
-
-				}
-				else if ((ObjInstance1->pObject->type == TYPE_CURRENCY)) {
-					gameObjInstDestroy(ObjInstance1);
-				}
-
-			}
-		}
 
 		//CHECK TRIGGERED ONLY
 		//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
@@ -1825,9 +1780,9 @@ void Level_1_Update(void)
 					}
 					if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 						gameObjInstDestroy(ObjInstance1);
-						_Player_Experience += 30 * (1 + BossKills);
 						spawnCheck = 0;
-						BossKills++;
+						++BossKills;
+						Currency += (1000 * BossKills);
 						enemyCount = 0;
 					}
 				}
@@ -2420,12 +2375,6 @@ void Level_1_Draw(void)
 		sprintf_s(augment1_buffer, "> Press 'P' again to resume");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
-		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		//AEGfxTextureSet(NULL, 0, 0);
-		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		//sprintf_s(augment1_buffer, "HP");
-		//AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -2514,9 +2463,9 @@ void Level_1_Draw(void)
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	if (secElapsed >= 9.5)
-		sprintf_s(gdt_buffer, "%.0f:%.0f", minElapsed, secElapsed);
+		sprintf_s(gdt_buffer, "%d:%.0f", minElapsed, secElapsed);
 	else
-		sprintf_s(gdt_buffer, "%.0f:0%.0f", minElapsed, secElapsed);
+		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsed);
 	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
