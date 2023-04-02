@@ -56,6 +56,11 @@ float yesButton_transY;
 float noButton_transX;
 float noButton_transY;
 
+// Pre-definition for rotation of buttons in pause
+float buttonRotate_mainMenu;
+float buttonRotate_quit;
+float buttonRotate_Yes;
+float buttonRotate_No;
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
@@ -102,7 +107,7 @@ float Augment4Scale = 50;
 static bool onValueChange = true;
 
 // Condition check for pause UI
-bool areyouSure = true;
+int areyouSure = true;
 bool clicked_MainMenu = true;
 bool clicked_Quit = true;
 
@@ -558,6 +563,11 @@ void Level_1_Init(void)
 	noButton_transX = 168.0f * scaleX;
 	noButton_transY = -65.0f * scaleX;
 
+	// Initialize the button rotation
+	buttonRotate_Yes = 0.f;
+	buttonRotate_No = 0.f;
+	buttonRotate_mainMenu = 0.f;
+	buttonRotate_quit = 0.f;
 
 }
 
@@ -641,6 +651,48 @@ void Level_1_Update(void)
 			}
 
 		}
+
+		/********************************** Button Animation Logic Start ********************************************/
+		if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_mainMenu = -0.10f;
+		}
+
+		else if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_quit = -0.10f;
+		}
+
+		else if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_Yes = -0.10f;
+		}
+
+		else if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_No = -0.10f;
+		}
+
+		if (!IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_mainMenu = 0.0f;
+		}
+
+		if (!IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_quit = 0.0f;
+		}
+
+		if (!IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_Yes = 0.0f;
+		}
+
+		if (!IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_No = 0.0f;
+		}
+		/********************************** Button Animation Logic End ********************************************/
 
 	}
 
@@ -752,6 +804,7 @@ void Level_1_Update(void)
 			}
 
 		}
+
 
 		if (Augment2Level == 1 && Aug2CreateCheck == false) {
 			_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
@@ -2321,7 +2374,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale4 = { 0 };
 		AEMtx33Scale(&scale4, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate4 = { 0 };
-		AEMtx33Rot(&rotate4, 0);
+		AEMtx33Rot(&rotate4, buttonRotate_mainMenu);
 		AEMtx33 translate4 = { 0 };
 		AEMtx33Trans(&translate4, mainMenu_Button_transX, mainMenu_Button_transY);
 		AEMtx33 transform4 = { 0 };
@@ -2336,7 +2389,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale5 = { 0 };
 		AEMtx33Scale(&scale5, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate5 = { 0 };
-		AEMtx33Rot(&rotate5, 0);
+		AEMtx33Rot(&rotate5, buttonRotate_quit);
 		AEMtx33 translate5 = { 0 };
 		AEMtx33Trans(&translate5, quitButton_transX, quitButton_transY);
 		AEMtx33 transform5 = { 0 };
@@ -2395,7 +2448,7 @@ void Level_1_Draw(void)
 		// Drawing the yes/no overlay on the screen
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(1.0f);
+		AEGfxSetTransparency(0.5f);
 		AEMtx33 scale3 = { 0 };
 		AEMtx33Scale(&scale3, 500.f, 300.f);
 		AEMtx33 rotate3 = { 0 };
@@ -2414,7 +2467,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale6 = { 0 };
 		AEMtx33Scale(&scale6, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate6 = { 0 };
-		AEMtx33Rot(&rotate6, 0);
+		AEMtx33Rot(&rotate6, buttonRotate_Yes);
 		AEMtx33 translate6 = { 0 };
 		AEMtx33Trans(&translate6, yesButton_transX, yesButton_transY);
 		AEMtx33 transform6 = { 0 };
@@ -2429,7 +2482,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale7 = { 0 };
 		AEMtx33Scale(&scale7, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate7 = { 0 };
-		AEMtx33Rot(&rotate7, 0);
+		AEMtx33Rot(&rotate7, buttonRotate_No);
 		AEMtx33 translate7 = { 0 };
 		AEMtx33Trans(&translate7, noButton_transX, noButton_transY);
 		AEMtx33 transform7 = { 0 };
@@ -2528,6 +2581,7 @@ void Level_1_Unload(void)
 	AEGfxMeshFree(bMesh);
 
 	//AEGfxMeshFree(bMesh);
+	pause = false;
 	Augment1Level = 1;
 	Augment2Level = 0;
 	Augment1CD = 1.5f;
