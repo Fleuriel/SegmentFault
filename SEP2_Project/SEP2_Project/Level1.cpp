@@ -91,8 +91,6 @@ void Level_1_Load(void)
 	sGameObjList = (GameObjects*)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObjects));
 	sGameObjInstList = (GameObjInstances*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInstances));
 
-
-	std::cout << "Level1_Load\n";
 	sGameObjNum = 0;
 	sGameObjInstNum = 0;
 
@@ -365,35 +363,18 @@ void Level_1_Load(void)
 	//Save file for currency
 	if (inputFileStream.good())
 	{
-		/*std::cout << "file exist\n";
-		std::string line = "";
-
-		std::cout << "hello\t " << inputfilestream.eof() << '\n';*/
-
-
 		inputFileStream >> Currency;
-		std::cout << Currency << '\n';
-
 		inputFileStream.close();
 	}
 	else if (inputFileStream.fail())
 	{
 		std::cerr << "Error: \n";
-
 	}
 
 	//save file for player ship model
 	if (inputFileStream1.good())
 	{
-		/*std::cout << "file exist\n";
-		std::string line = "";
-
-		std::cout << "hello\t " << inputfilestream.eof() << '\n';*/
-
-
 		inputFileStream1 >> ShipModel;
-		std::cout << ShipModel << '\n';
-
 		inputFileStream1.close();
 	}
 	else if (inputFileStream1.fail())
@@ -406,14 +387,11 @@ void Level_1_Load(void)
 	if (inputFileStream2.good())
 	{
 		inputFileStream2 >> currHighScoreMin >> currHighScoreSec;
-		std::cout << "HIGHSCORE: " << currHighScoreMin << currHighScoreSec << '\n';
-
 		inputFileStream.close();
 	}
 	else if (inputFileStream.fail())
 	{
 		std::cerr << "Error: \n";
-
 	}
 
 	//Save file for player's stats
@@ -698,8 +676,6 @@ void Level_1_Update(void)
 
 	_deltaTime += g_dt;
 	_deltaTime_State += g_dt;
-	//std::cout << _deltaTime << '\n';
-	//Increment Minutes... (Health)
 	if (_deltaTime > 60)
 	{
 		enemyHealth += ++minutes;
@@ -751,7 +727,6 @@ void Level_1_Update(void)
 			GameObjInstances* enemyInst = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, &enemySpawn, &velocityEnemy, 0.0f);
 			if (enemyInst != nullptr) {
 				enemyInst->health = static_cast<s32>(enemyHealth);
-				//std::cout << "Enemy Instance Health: " << enemyInst->health << '\n';
 			}
 		}
 		_deltaTimeEnemySpawner = 0;
@@ -759,12 +734,6 @@ void Level_1_Update(void)
 	//Rotation for Augment...
 	//Rotation Increase.
 	_rotation_Aug += 0.04f;
-	//rotationA += 2 * PI / 180;
-	//MAKE SURE THAT BULLETCOUNT IS ALWAYS more than or equals 0
-	/*if (bulletCount < 0)
-		bulletCount = 0;*/
-
-		//As of now i will be moving the X and Y coordinates with these, someone need to do the offsets.
 
 	if (AEInputCheckTriggered(AEVK_0))
 	{
@@ -1001,13 +970,6 @@ void Level_1_Update(void)
 	}
 
 
-
-
-	if (AEInputCheckTriggered(AEVK_SPACE) || AEInputCheckTriggered(AEVK_C))
-	{
-		std::cout << "Once\n";
-	}
-
 	if (AEInputCheckTriggered(AEVK_1))
 	{
 		bossPhase = TYPE_BHELL1;
@@ -1071,7 +1033,6 @@ void Level_1_Update(void)
 						// Create a new bullet object and set its velocity to point towards the target
 						GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position, spawnCheck));
 
-						//std::cout << bulletInst->pObject << '\n';
 						if (bulletInst != nullptr)
 							AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
 
@@ -1109,7 +1070,6 @@ void Level_1_Update(void)
 					//Make the timer.. AUGMENT_3_FIRE_INTERVAL is at 1.0f;
 					if (AUGMENT_3_FIRE_TIMER > AUGMENT_3_FIRE_INTERVAL)
 					{
-						std::cout << "First\n";
 						qInst->showTexture = true;
 						//Do damage here....
 						//only do ONE INSTANCE of damage per skill.
@@ -1192,7 +1152,6 @@ void Level_1_Update(void)
 					{
 						if (qInst != nullptr)
 						{
-							std::cout << "Work\n";
 							gameObjInstDestroy(qInst);
 							AUGMENT_4_PROJECTILE_ACTIVE = false;
 							gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
@@ -1234,12 +1193,10 @@ void Level_1_Update(void)
 				angle = 225;
 				if (pInst->health <= (float)MaxBossHealth*(0.8f) )
 				{
-					std::cout << "entry Upon this thing\n";
 					double const MAX_DELAY = 4.0f;
 					_Boss->iFrame = MAX_DELAY;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
-						std::cout << "Entry2\n";
 						bossPhase = TYPE_BHELL2;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
@@ -1284,14 +1241,12 @@ void Level_1_Update(void)
 				numBulletsBHell = 2;
 				angle = 390;
 
-				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
 				if (pInst->health <= (float)MaxBossHealth * (0.6f))
 				{
 					double const MAX_DELAY = 4.0f;
 					_Boss->iFrame = MAX_DELAY;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
-						std::cout << "Entry3\n";
 						bossPhase = TYPE_BHELL3;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
@@ -1306,7 +1261,6 @@ void Level_1_Update(void)
 							angle = static_cast<float>(360) + static_cast<float>((static_cast<float>(40) * sin(g_appTime * 2.0 * PI / 5.0)));
 							for (int w = 0; w < 1; w++)
 							{
-								std::cout << angle << '\n';
 								if (angle < 320)
 								{
 									angle = 400;
@@ -1322,13 +1276,11 @@ void Level_1_Update(void)
 				break;
 			case TYPE_BHELL3:
 				DelayShoot = 0.15f;
-				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
 				if (pInst->health <= (float)MaxBossHealth * (0.4f))
 				{
 					double const MAX_DELAY = 4.0f;
 					if (_delayTimeBullets > MAX_DELAY)
 					{
-						std::cout << "Entry4\n";
 						bossPhase = TYPE_BHELL4;
 						_deltaTime_Shooting = 0;
 						_delayTimeBullets = 0;
@@ -1380,13 +1332,11 @@ void Level_1_Update(void)
 			case TYPE_BHELL4:
 				_Boss->iFrame = 1.f;
 				numBullets = 7;
-				std::cout << "Current Time: " << _deltaTime_Shooting << '\n';
 				if (_deltaTime_Shooting > 3 && _deltaTime_Shooting < 18)
 				{
 					frequency = 1.0f;
 					times = static_cast<float>(g_appTime);
 					xSpeed += static_cast<float>(0.005);
-					std::cout << xSpeed << '\n';
 				}
 
 				if (_deltaTime_Shooting < 20)
@@ -1450,7 +1400,6 @@ void Level_1_Update(void)
 					bossPhase = TYPE_BHELL5;
 				}
 
-				//std::cout << "Delay " << _delayTimeBullets << " Speed " << xSpeed << '\n';
 				displacementX = xRange * static_cast<float>(sinf(static_cast<float>(xSpeed) * static_cast<float>(g_appTime)));
 				displacementY = yRange * static_cast<float>(sinf(static_cast<float>(ySpeed) * static_cast<float>(g_appTime)));
 				// Set the position of the object
@@ -1623,7 +1572,6 @@ void Level_1_Update(void)
 							{
 								//Remove entity count;
 							}
-							std::cout << "Active\n";
 						}
 					}
 					else
@@ -1659,21 +1607,12 @@ void Level_1_Update(void)
 			if (pInst->pObject->type == TYPE_BULLET)
 			{
 				bulletCount--;
-				std::cout << bulletCount << "Out of Screen ." << '\n';
 
 			}
 			gameObjInstDestroy(pInst);
 		}
-
-
-		//pInst->boundingBox.min.x = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.x + pInst->position.x;
-		//pInst->boundingBox.min.y = -(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.y + pInst->position.y;
-		//pInst->boundingBox.max.x = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.x + pInst->position.x;
-		//pInst->boundingBox.max.y = +(BOUNDING_RECT_SIZE / 2.0f) * pInst->scale.y + pInst->position.y;
-
-
-
 	}
+
 	//Update bounding box
 	for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 	{
@@ -1765,7 +1704,6 @@ void Level_1_Update(void)
 						{
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false) {
-									std::cout << "Boss HP: " << _Boss->health << '\n';
 									_Boss->iFrame = 0.5f;
 									ObjInstance1->health--;
 									break;
@@ -1790,9 +1728,6 @@ void Level_1_Update(void)
 						{
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false && spawnCheck == 1) {
-									//Spawn Orbs of Experience at ObjInstance1 Position...
-									//bulletCount--;
-									std::cout << _Boss->health << '\n';
 									_Boss->iFrame = 1.f;
 									ObjInstance1->health--;
 									break;
@@ -1816,9 +1751,6 @@ void Level_1_Update(void)
 						{
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false && spawnCheck == 1) {
-									//Spawn Orbs of Experience at ObjInstance1 Position...
-									//bulletCount--;
-									std::cout << _Boss->health << '\n';
 									_Boss->iFrame = 1.f;
 									ObjInstance1->health--;
 									break;
@@ -1840,12 +1772,8 @@ void Level_1_Update(void)
 					{
 						if (CollisionIntersection_RectRect(ObjInstance1->boundingBox, ObjInstance1->velocity, ObjInstance2->boundingBox, ObjInstance2->velocity))
 						{
-							std::cout << "HIT!";
 							if (spawnCheck == 1) {
 								if (_Boss->isInvincible == false && spawnCheck == 1) {
-									//Spawn Orbs of Experience at ObjInstance1 Position...
-									//bulletCount--;
-									std::cout << _Boss->health << '\n';
 									_Boss->iFrame = 1.f;
 									ObjInstance1->health-= 3;
 									break;
@@ -1901,10 +1829,6 @@ void Level_1_Update(void)
 							}
 
 							outputStream.close();
-							std::cout << "Player Experience: " << _Player_Experience << '\n';
-							std::cout << "Player Level: " << _Player_Level << '\n';
-							std::cout << "Currency:" << Currency << '\n';
-
 							gameObjInstDestroy(ObjInstance1);
 							OrbCounter--;
 						}
@@ -2139,7 +2063,6 @@ void Level_1_Draw(void)
 	}
 	if (onValueChange) {
 		if (_Player->health == 0) {
-			std::cout << "GAME OVER \n";
 			gGameStateNext = GAMEOVER;
 			if (minElapsed >= currHighScoreMin) {
 				if (secElapsed > currHighScoreSec) {
