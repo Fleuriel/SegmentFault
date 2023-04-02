@@ -516,16 +516,16 @@ void Menu_Draw(void)
         AEGfxTextureSet(NULL, 0, 0);
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         AEGfxSetTransparency(1.0f);
-        AEMtx33 scale3 = { 0 };
-        AEMtx33Scale(&scale3, 500.f, 300.f);
-        AEMtx33 rotate3 = { 0 };
-        AEMtx33Rot(&rotate3, 0.f);
-        AEMtx33 translate3 = { 0 };
-        AEMtx33Trans(&translate3, 125.f, -10.f);
-        AEMtx33 transform3 = { 0 };
-        AEMtx33Concat(&transform3, &rotate3, &scale3);
-        AEMtx33Concat(&transform3, &translate3, &transform3);
-        AEGfxSetTransform(transform3.m);
+        AEMtx33 scale8 = { 0 };
+        AEMtx33Scale(&scale8, 500.f, 300.f);
+        AEMtx33 rotate8 = { 0 };
+        AEMtx33Rot(&rotate8, 0.f);
+        AEMtx33 translate8 = { 0 };
+        AEMtx33Trans(&translate8, 125.f, -10.f);
+        AEMtx33 transform8 = { 0 };
+        AEMtx33Concat(&transform8, &rotate8, &scale8);
+        AEMtx33Concat(&transform8, &translate8, &transform8);
+        AEGfxSetTransform(transform8.m);
         AEGfxMeshDraw(pMesh_exit, AE_GFX_MDM_TRIANGLES);
 
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -586,6 +586,6 @@ void Menu_Free(void)
 void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
+    AEGfxMeshFree(pMesh_exit);
     AEGfxMeshFree(BGmesh);
-
 }
