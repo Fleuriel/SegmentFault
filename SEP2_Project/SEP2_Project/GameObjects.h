@@ -36,7 +36,7 @@ f32 const AUG_GUN_SIZE = 40.0f; //Augment Gun Size
 f32 const BOSS_SIZE = 30.0f;    //Boss Size
 f32 const BULLET_SIZE = 20.0f;  //Bullet Size
 f32 const ENEMY_SIZE = 25.0f;   //Enemy Size
-f32 const BULLET_SPEED = 100.0f; //Bullet Speed
+
 u32 const  MAX_BULLETS = 3; // Maximum number of bullets allowed
 s32 bulletCount = 0; // Number of bullets fired
 int enemyCount = 0;
@@ -258,6 +258,7 @@ f32 AUGMENT_1_FIRE_TIMER      = 0;
 f32 AUGMENT_1_FIRE_INTERVAL   = 2.0f;
 AEVec2 AUGMENT_1_MOUSE_POSITION;
 AEVec2 AUGMENT_1_DIRECTION;
+f32 AUGMENT_1_BULLET_SPEED = 100.0f;
 
 //NOT REQUIRED AS IT IS JUST A ROLLING ROCK
 //f32 AUGMENT_2_FIRE_TIMER      = 0;
@@ -290,8 +291,7 @@ f32 AUGMENT_4_ANGLE = 0.0f;
 f32 AUGMENT_4_DISTANCE = 0.0f;
 f32 AUGMENT_4_DISTANCE_TOLERANCE = 0.0f;
 f32 AUGMENT_4_TARGET_DISTANCE = 0.0f;
-f32 AUGMENT_4_BULLET_SPEED = 0.0f;
-
+f32 const AUGMENT_4_BULLET_SPEED = 100.0f; //Bullet Speed
 
 
 f32 AUGMENT_5_FIRE_TIMER = 0.0f;
