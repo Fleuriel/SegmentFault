@@ -7,7 +7,6 @@ std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 //bool LevelToggle;
 //f32 Timer;
-float Timer = 0.0f;
 
 
 //Pointer to Mesh
@@ -216,41 +215,35 @@ void Upgrade_Update(void)
 	}
 
 
-
-	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+	//Purchase ship model 1
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-
-		ShipModel = 0;
-		std::cout << "Thank you for purchase\n";
-
+		if (ShipModel != 0)
+		{
+			ShipModel = 0;
+			std::cout << "DEFAULT FOR THE WIN\n";
+		}
+		else if (ShipModel == 0) {
+			std::cout << "You are already using this ship model!!!\n";
+		}
 		outputStream << Currency;
 		outputStream.close();
 		outputStream1 << ShipModel;
 		outputStream1.close();
 	}
 
-	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -93.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+	//Purchase ship model 2
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-		Timer += g_dt;
-		if (Currency >= 200)
-		{
 		
-			
-			if (Timer >0) {
-				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxTextureSet(NULL, 0, 0);
-				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-				sprintf_s(Upgrade1_buffer, "Thank you for purchase");
-				AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-				AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
-				Timer -= g_dt;
-			}
+		if (Currency >= 200 && ShipModel!=1)
+		{
 			Currency = Currency - 200;
 			ShipModel = 1;
 			std::cout << "Thank you for purchase\n";
@@ -259,8 +252,9 @@ void Upgrade_Update(void)
 			outputStream.close();
 			outputStream1 << ShipModel;
 			outputStream1.close();
-
-			
+		}
+		else if (Currency >= 200 && ShipModel == 1) {
+			std::cout << "You are already using this ship model!!!\n";
 		}
 		else
 		{
@@ -268,19 +262,82 @@ void Upgrade_Update(void)
 		}
 		outputStream.close();
 		outputStream1.close();
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+		/*AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(Upgrade1_buffer, "Thank you for purchase");
 		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);*/
+	}
+
+	//Purchase ship model 3
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) +90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+
+		if (Currency >= 1000 && ShipModel!=2)
+		{
+			Currency = Currency - 1000;
+			ShipModel = 2;
+			std::cout << "Thank you for purchase\n";
+
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << ShipModel;
+			outputStream1.close();
+		}
+		else if (Currency >= 1000 && ShipModel == 2) {
+			std::cout << "You are already using this ship model!!!\n";
+		}
+		else
+		{
+			std::cout << "You don't have enough gold..\n";
+		}
+		outputStream.close();
+		outputStream1.close();
+	}
+
+	//Purchase ship model 4
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+		
+		if (Currency >= 3000 && ShipModel!=3)
+		{
+			Currency = Currency - 3000;
+			ShipModel = 3;
+			std::cout << "Thank you for purchase\n";
+
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << ShipModel;
+			outputStream1.close();
+		}
+		else if (Currency >= 3000 && ShipModel == 3) {
+			std::cout << "You are already using this ship model!!!\n";
+		}
+		else
+		{
+			std::cout << "You don't have enough gold..\n";
+		}
+		outputStream.close();
+		outputStream1.close();
 	}
 
 
-	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+
+
+
+	//Purchase Max HP
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
 		
 		if (Currency >= 300)
@@ -303,7 +360,88 @@ void Upgrade_Update(void)
 		
 	}
 
+
+	//Purchase Bullet speed
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+
+		if (Currency >= 300)
+		{
+			//Write your code here
+			
+			std::cout << "Thank you for purchase\n";
+
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << ProjectileSpeed_upgrade;
+			outputStream1.close();
+		}
+		else
+		{
+			std::cout << "You don't have enough gold..\n";
+		}
+		outputStream.close();
+		outputStream1.close();
+
+	}
+
+	//Purchase Cooldown reduction
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+
+		if (Currency >= 400)
+		{
+			//Write your code here
+
+			std::cout << "Thank you for purchase\n";
+
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << CD_upgrade;
+			outputStream1.close();
+		}
+		else
+		{
+			std::cout << "You don't have enough gold..\n";
+		}
+		outputStream.close();
+		outputStream1.close();
+
+	}
 	
+
+	//Purchase HP regen
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+
+		if (Currency >= 800)
+		{
+			//Write your code here
+
+			std::cout << "Thank you for purchase\n";
+
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << Iframe_upgrade;
+			outputStream1.close();
+		}
+		else
+		{
+			std::cout << "You don't have enough gold..\n";
+		}
+		outputStream.close();
+		outputStream1.close();
+
+	}
 
 }
 void Upgrade_Draw(void) 
