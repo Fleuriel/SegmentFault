@@ -102,7 +102,7 @@ float Augment4Scale = 50;
 static bool onValueChange = true;
 
 // Condition check for pause UI
-bool areyouSure = true;
+int areyouSure = true;
 bool clicked_MainMenu = true;
 bool clicked_Quit = true;
 
