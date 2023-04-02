@@ -309,6 +309,8 @@ void Upgrade_Draw(void)
 	AEGfxMeshDraw(BackgroundMesh, AE_GFX_MDM_TRIANGLES);
 	//Finish Background draw
 
+	AEGfxTextureUnload(BGtexture);
+
 	//Coin Display
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
 	
@@ -994,4 +996,5 @@ void Upgrade_Unload(void)
 	AEGfxMeshFree(CoinMesh);
 	AEGfxMeshFree(BuyButtonMesh);
 	AEGfxMeshFree(ShipMesh);
+	AEGfxMeshFree(BackgroundMesh);
 }
