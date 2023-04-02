@@ -8,17 +8,36 @@ AEGfxVertexList* pMesh = nullptr;
 AEGfxVertexList* BGmesh = nullptr;
 
 // Pre-definition for translations of buttons
-double powerUpButton_transX;
-double powerUpButton_transY;
-double settingsButton_transX;
-double settingsButton_transY;
-double playButton_transX;
-double playButton_transY;
-double creditsButton_transX;
-double creditsButton_transY;
-double exitButton_transX;
-double exitButton_transY;
-double BGtransX, BGtransY;
+f32 powerUpButton_transX;
+f32 powerUpButton_transY;
+f32 settingsButton_transX;
+f32 settingsButton_transY;
+f32 playButton_transX;
+f32 playButton_transY;
+f32 creditsButton_transX;
+f32 creditsButton_transY;
+f32 exitButton_transX;
+f32 exitButton_transY;
+f32 BGtransX, BGtransY;
+// Powerups button mid points
+f32 powerUpButton_midX;
+f32 powerUpButton_midY;
+
+// Settings button mid points
+f32 settingsButton_midX;
+f32 settingsButton_midY;
+
+// Play button mid points
+f32 playButton_midX;
+f32 playButton_midY;
+
+// Credits button mid points
+f32 creditsButton_midX;
+f32 creditsButton_midY;
+
+// Exit button mid points
+f32 exitButton_midX;
+f32 exitButton_midY;
 
 // Pre-defintion for str buffers
 char play_buffer[1024]{};
@@ -31,10 +50,10 @@ char gold_buffer[1024]{};
 float mainMenu_textWidth{}, mainMenu_textHeight{};
 
 // Pre-defintions for Button rotation 
-double buttonRotate_play;
-double buttonRotate_settings;
-double buttonRotate_powerups;
-double buttonRotate_credits;
+f32 buttonRotate_play;
+f32 buttonRotate_settings;
+f32 buttonRotate_powerups;
+f32 buttonRotate_credits;
 
 std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
 std::ifstream input2{ "Assets\\SaveFiles\\HighScore.txt" };
@@ -147,24 +166,24 @@ void Menu_Update(void)
     //printf("%d\n%f\n", AEGetWindowHeight(), getWinHeight());
 
     // Powerups button mid points
-    float powerUpButton_midX = (getWinWidth() / 2.11) + powerUpButton_transX;
-    float powerUpButton_midY = (getWinHeight() / 2) - powerUpButton_transY;
+    powerUpButton_midX = static_cast<f32>((getWinWidth() / 2.11) + powerUpButton_transX);
+    powerUpButton_midY = static_cast<f32>((getWinHeight() / 2) - powerUpButton_transY);
 
     // Settings button mid points
-    float settingsButton_midX = (getWinWidth() / 2.11) + settingsButton_transX;
-    float settingsButton_midY = (getWinHeight() / 2) - settingsButton_transY;
+    settingsButton_midX = static_cast<f32>((getWinWidth() / 2.11) + settingsButton_transX);
+    settingsButton_midY = static_cast<f32>((getWinHeight() / 2) - settingsButton_transY);
 
     // Play button mid points
-    float playButton_midX = (getWinWidth() / 2.11) + playButton_transX;
-    float playButton_midY = getWinHeight() / 2 - playButton_transY;
+    playButton_midX = static_cast<f32>((getWinWidth() / 2.11) + playButton_transX);
+    playButton_midY = static_cast<f32>((getWinHeight() / 2 - playButton_transY));
 
     // Credits button mid points
-    float creditsButton_midX = (getWinWidth() / 2.09) + creditsButton_transX;
-    float creditsButton_midY = (getWinHeight() / 2) - creditsButton_transY;
+    creditsButton_midX = static_cast<f32>((getWinWidth() / 2.09) + creditsButton_transX);
+    creditsButton_midY = static_cast<f32>((getWinHeight() / 2) - creditsButton_transY);
 
     // Exit button mid points
-    float exitButton_midX = (getWinWidth() / 2.04) + exitButton_transX;
-    float exitButton_midY = (getWinHeight() / 2) - exitButton_transY;
+    exitButton_midX = static_cast<f32>((getWinWidth() / 2.04) + exitButton_transX);
+    exitButton_midY = static_cast<f32>((getWinHeight() / 2) - exitButton_transY);
     
     // printf("%d\n%d\n", cursorX, cursorY);  //debug
     // printf("%f\n%f\n", button1_midX, button1_midY);  //debug

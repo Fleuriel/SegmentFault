@@ -44,7 +44,7 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 
 	// Initialize the system
-	AESysInit(instanceH, show, Game_Dimension.x, Game_Dimension.y, 1, FPS, false, NULL);
+	AESysInit(instanceH, show, static_cast<s32>(Game_Dimension.x), static_cast<s32>(Game_Dimension.y), 1, FPS, false, NULL);
 	//AESysInit(instanceH, show, 160, 90, 1, FPS, false, NULL);
 	
 

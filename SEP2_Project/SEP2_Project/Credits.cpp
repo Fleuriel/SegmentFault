@@ -8,13 +8,15 @@ AEGfxVertexList* BGmesh_credits = nullptr;
 
 // Pre-definition
 AEGfxTexture* BGtexture_credits;
-double BGtransX_credits, BGtransY_credits;
+f32 BGtransX_credits, BGtransY_credits;
 
 // Pre-definition for translations of buttons
-double creditsPic_transX;
-double creditsPic_transY;
-double creditsBackbutton_transX;
-double creditsBackbutton_transY;
+f32 creditsPic_transX;
+f32 creditsPic_transY;
+f32 creditsBackbutton_transX;
+f32 creditsBackbutton_transY;
+f32 creditsBackbutton_midX;
+f32 creditsBackbutton_midY;
 
 
 // Pre-defintion for str buffers
@@ -23,7 +25,7 @@ char credits1_buffer[1024]{};
 float credits_textWidth{}, credits_textHeight{};
 
 // Pre-definition of Rotation
-double buttonRotate_creditsBack;
+f32 buttonRotate_creditsBack;
 
 void Credits_Load(void) 
 {
@@ -85,13 +87,9 @@ void Credits_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
-    // Credits pic mid points
-    float creditsPic_midX = (getWinWidth() / 2.11) + creditsPic_transX;
-    float creditsPic_midY = (getWinHeight() / 2) - creditsPic_transY;
-
     // Credits back button mid points
-    float creditsBackbutton_midX = (getWinWidth() / 2.09) + creditsBackbutton_transX;
-    float creditsBackbutton_midY = (getWinHeight() / 2) - creditsBackbutton_transY;
+    creditsBackbutton_midX = static_cast<f32>((getWinWidth() / 2.09) + creditsBackbutton_transX);
+    creditsBackbutton_midY = static_cast<f32>((getWinHeight() / 2) - creditsBackbutton_transY);
 
 
     if (IsAreaClicked(creditsBackbutton_midX, creditsBackbutton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
