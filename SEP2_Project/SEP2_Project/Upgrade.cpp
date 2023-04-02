@@ -1,9 +1,6 @@
 #include "Upgrade.h"
 #include "Main.h"
 
-std::ifstream ifs{ "Assets\\SaveFiles\\Tester.txt" };
-std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 //bool LevelToggle;
 //f32 Timer;
@@ -40,6 +37,9 @@ char Upgrade1_buffer[1024]{};
 
 void Upgrade_Load(void) 
 {
+	std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+	std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 	AEGfxSetBackgroundColor(0.f, 0.f, 255.f);
 
 	AEGfxMeshStart();
@@ -220,7 +220,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 
 		ShipModel = 0;
@@ -235,7 +235,7 @@ void Upgrade_Update(void)
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -93.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 		Timer += g_dt;
 		if (Currency >= 200)

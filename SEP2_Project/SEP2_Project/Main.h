@@ -7,7 +7,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-
+#include <math.h>
 #include "AEEngine.h"
 #include "Math.h"
 
@@ -21,7 +21,6 @@
 #include "Credits.h"
 #include "GameOverMenu.h"
 #include "SplashPage.h"
-
 #include "Utilities.h"
 
 

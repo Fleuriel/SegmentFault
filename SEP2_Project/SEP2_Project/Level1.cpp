@@ -31,6 +31,7 @@ char strbuffer2[1024]{};
 char strbuffer3[1024]{};
 char strbuffer4[1024]{};
 char goldbuffer[1024]{};
+char bossCD[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
@@ -67,6 +68,10 @@ float textWidth{}, textHeight{};
 //// Pre-definition of time
 float secElapsed = 0.f;
 int minElapsed = 0;
+int bossCooldownMin = 5;
+float bossCooldownSec = 0.f;
+float bossCooldownSecInt = 0.f;
+bool bossCoolDownCheck = false;
 
 int MaxHealth = MaximumPlayerHealth; // Player max hp 
 int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
@@ -649,6 +654,17 @@ void Level_1_Update(void)
 			secElapsed = 0;
 		}
 
+		bossCooldownSec -= g_dt;
+		if (bossCooldownSec <0) {
+			bossCooldownMin--;
+			bossCooldownSec = 60.f;
+		}
+		modf(bossCooldownSec, &bossCooldownSecInt);
+
+		if (bossCooldownMin < 0 ) {
+			bossCoolDownCheck = true;
+		}
+
 		// Checking if overlay is pressed
 		if (AEInputCheckReleased(AEVK_RBUTTON))
 		{
@@ -659,6 +675,7 @@ void Level_1_Update(void)
 				overlayTransparency = 0;
 			}
 		}
+
 		if (AEInputCheckReleased(AEVK_INSERT))
 		{
 			SkillPoint = 90;
@@ -805,34 +822,19 @@ void Level_1_Update(void)
 
 		if (AEInputCheckTriggered(AEVK_0))
 		{
-			minElapsed = 4;
-			secElapsed = 55;
+			bossCooldownMin = 0;
+			bossCooldownSec = 5;
 			enemyCount = 100;
 			spawnCheck = 0;
 		}
 
-		if (AEInputCheckTriggered(AEVK_9))
-		{
-			minElapsed = 9;
-			secElapsed = 55;
-			enemyCount = 100;
-			spawnCheck = 0;
-		}
-
-		if (AEInputCheckTriggered(AEVK_8))
-		{
-			minElapsed = 14;
-			secElapsed = 55;
-			enemyCount = 100;
-			spawnCheck = 0;
-		}
-		if (minElapsed % 5 == 0 && spawnCheck == 0 && minElapsed>0) {
+		if (spawnCheck == false && bossCoolDownCheck == true) {
+			spawnCheck = 1;
 			_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 			_Boss->health = MaxBossHealth = 50 * (1 + BossKills);
 			AE_ASSERT(_Boss);
 			_Boss->position.x = 0;
 			_Boss->position.y = 220;
-			spawnCheck = 1;
 			bossPhase = 0;
 
 			for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -1784,6 +1786,9 @@ void Level_1_Update(void)
 						++BossKills;
 						Currency += (1000 * BossKills);
 						enemyCount = 0;
+						bossCoolDownCheck = false;
+						bossCooldownMin = 5;
+						bossCooldownSec = 0.f;
 					}
 				}
 
@@ -1862,10 +1867,6 @@ void Level_1_Update(void)
 			AEMtx33Concat((AEMtx33*)pInst->transform.m, &rotate, &scale);
 			AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
 		}
-	}
-	else
-	{
-
 	}
 }
 
@@ -2468,6 +2469,23 @@ void Level_1_Draw(void)
 		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsed);
 	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
+	if (spawnCheck != true) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (bossCooldownSec >= 9.5)
+			sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:%.0f", bossCooldownMin, bossCooldownSecInt);
+		else {
+			if (bossCooldownSec >= 60.0f)
+				sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:59", bossCooldownMin);
+			else
+				sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:0%.0f", bossCooldownMin, bossCooldownSecInt);
+		}
+
+		AEGfxPrint(fontID, gdt_buffer, 0.25f, 0.75f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+	}
+
+
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -2490,7 +2508,6 @@ void Level_1_Draw(void)
 		AEGfxPrint(fontID, boss_hp_buffer, -0.8f, -0.8f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 	}
 }
-
 
 void Level_1_Free(void)
 {
@@ -2529,7 +2546,7 @@ void Level_1_Unload(void)
 	_Player_Level = 1;
 	_Player_Experience = 0;
 	pause = false;
-	areyouSure = 100;
+	areyouSure = true;
 	
 	free(sGameObjList);
 	sGameObjList = nullptr;
