@@ -17,6 +17,10 @@ AEVec2	Game_Dimension{ 1600.0f, 900.0f };
 int		 Currency = 0;
 int		 ShipModel;
 int		 MaximumPlayerHealth;
+int	    ProjectileSpeed_upgrade;
+int	    CD_upgrade;
+int	    Iframe_upgrade;
+
 float currHighScoreMin = 0.f;
 float currHighScoreSec = 0.f;
 
@@ -60,7 +64,7 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 	fontID = AEGfxCreateFont("Assets\\Assets\\Minecraft.ttf", 50);
 
 	//Set game state to GS_ASTEROIDS.
-	GameStateMgrInit(PLAY);
+	GameStateMgrInit(MAINMENU);
 
 	while (gGameStateCurr != QUIT)
 	{

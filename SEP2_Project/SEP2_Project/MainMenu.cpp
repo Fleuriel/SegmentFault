@@ -6,6 +6,7 @@
 // Pointer to Mesh
 AEGfxVertexList* pMesh = nullptr;
 AEGfxVertexList* BGmesh = nullptr;
+AEGfxVertexList* pMesh_exit = nullptr;
 
 // Pre-definition for translations of buttons
 f32 powerUpButton_transX;
@@ -18,6 +19,11 @@ f32 creditsButton_transX;
 f32 creditsButton_transY;
 f32 exitButton_transX;
 f32 exitButton_transY;
+f32 exitYesButton_transX;
+f32 exitYesButton_transY;
+f32 exitNoButton_transX;
+f32 exitNoButton_transY;
+
 // Powerups button mid points
 f32 powerUpButton_midX;
 f32 powerUpButton_midY;
@@ -37,6 +43,10 @@ f32 creditsButton_midY;
 // Exit button mid points
 f32 exitButton_midX;
 f32 exitButton_midY;
+f32 exitYesButton_midX;
+f32 exitYesButton_midY;
+f32 exitNoButton_midX;
+f32 exitNoButton_midY;
 
 // Pre-defintion for str buffers
 char play_buffer[1024]{};
@@ -53,7 +63,12 @@ f32 buttonRotate_play;
 f32 buttonRotate_settings;
 f32 buttonRotate_powerups;
 f32 buttonRotate_credits;
+f32 buttonRotate_exit;
+f32 buttonRotate_exitYes;
+f32 buttonRotate_exitNo;
 
+// Condition check for exit button
+bool mainMenu_areyouSure = true;
 
 void Menu_Load(void)
 {
@@ -75,6 +90,20 @@ void Menu_Load(void)
         0.5f, 0.5f, 0xFF001736, 1.0f, 0.0f);
 
     pMesh = AEGfxMeshEnd();
+
+    // Create buttons
+    AEGfxMeshStart();
+
+    AEGfxTriAdd(
+        0.5f, 0.5f, 0xFFADD8E6, 1.0f, 0.0f,
+        -1.2f, -0.5f, 0xFFADD8E6, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFADD8E6, 1.0f, 1.0f);
+    AEGfxTriAdd(
+        -1.2f, 0.5f, 0xFFADD8E6, 0.0f, 0.0f,
+        -1.2f, -0.5f, 0xFFADD8E6, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFFADD8E6, 1.0f, 0.0f);
+
+    pMesh_exit = AEGfxMeshEnd();
 
     //Open save file of money
     if (input.good())
@@ -127,7 +156,9 @@ void Menu_Init(void)
     buttonRotate_powerups = 0.f;
     buttonRotate_settings = 0.f;
     buttonRotate_credits = 0.f;
-
+    buttonRotate_exit = 0.f;
+    buttonRotate_exitYes = 0.f;
+    buttonRotate_exitNo = 0.f;
 
     //Background
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -146,6 +177,12 @@ void Menu_Init(void)
     BGmesh = AEGfxMeshEnd();
     //end Background
 
+    // Exit button confirmation translation
+    exitYesButton_transX = -210.0f * scaleX;
+    exitYesButton_transY = -65.0f * scaleX;
+    exitNoButton_transX = 168.0f * scaleX;
+    exitNoButton_transY = -65.0f * scaleX;
+
 }
 
 void Menu_Update(void) 
@@ -155,6 +192,32 @@ void Menu_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
+    if (mainMenu_areyouSure == false)
+    {
+        // Powerups button mid points
+        exitYesButton_midX = static_cast<f32>((getWinWidth() / 2.11) + exitYesButton_transX);
+        exitYesButton_midY = static_cast<f32>((getWinHeight() / 2) - exitYesButton_transY);
+
+        // Settings button mid points
+        exitNoButton_midX = static_cast<f32>((getWinWidth() / 2.11) + exitNoButton_transX);
+        exitNoButton_midY = static_cast<f32>((getWinHeight() / 2) - exitNoButton_transY);
+
+        // Overlay button logic and defintions
+        if (IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON)) 
+        {
+            printf("Quit\n");
+            gGameStateNext = QUIT;
+        }
+
+        if (IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON)) 
+        {
+            printf("Go Back to mainmenu UI\n");
+            mainMenu_areyouSure = true;
+        }
+
+    }
 
     // Powerups button mid points
     powerUpButton_midX = static_cast<f32>((getWinWidth() / 2.11) + powerUpButton_transX);
@@ -178,37 +241,41 @@ void Menu_Update(void)
     
     
     /********************************** Button Collision Logic Start ********************************************/
-    if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckReleased(AEVK_LBUTTON)) 
+    if (mainMenu_areyouSure) 
     {
-        gGameStateNext = UPGRADE;
+        if (IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            gGameStateNext = UPGRADE;
+        }
+
+        else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            gGameStateNext = SETTINGS;
+        }
+
+        else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            gGameStateNext = PLAY;
+        }
+
+
+        else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            mainMenu_areyouSure = false;
+        }
+
+        else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            gGameStateNext = CREDITS;
+            printf("Goto Credits\n");
+        }
     }
 
-    else if (IsAreaClicked(settingsButton_midX, settingsButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckReleased(AEVK_LBUTTON))
-    {
-        gGameStateNext = SETTINGS;
-    }
-
-    else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckReleased(AEVK_LBUTTON))
-    {
-        gGameStateNext = PLAY;
-    }
-
-
-    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckReleased(AEVK_LBUTTON))
-    {
-        gGameStateNext = QUIT;
-    }
-
-    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckReleased(AEVK_LBUTTON))
-    {
-        gGameStateNext = CREDITS;
-        printf("Goto Credits\n");
-    }
     /********************************** Button Collision Logic End ********************************************/
 
 
@@ -228,12 +295,19 @@ void Menu_Update(void)
         buttonRotate_play = -0.10f;
     }
 
-    
-    else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-        && AEInputCheckTriggered(AEVK_LBUTTON)) 
+    else if (IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
-        gGameStateNext = CREDITS;
-        printf("Goto Credits\n");
+        buttonRotate_exit = -0.10f;
+    }
+
+    else if (IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_exitYes = -0.10f;
+    }
+
+    else if (IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_exitNo = -0.10f;
     }
 
     else if (IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
@@ -259,6 +333,21 @@ void Menu_Update(void)
     if (!IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_credits = 0.0f;
+    }
+
+    if (!IsAreaClicked(exitButton_midX, exitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_exit = 0.0f;
+    }
+
+    if (!IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_exitYes = 0.0f;
+    }
+
+    if (!IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_exitNo = 0.0f;
     }
 
     /********************************** Button Animation Logic End ********************************************/
@@ -360,7 +449,7 @@ void Menu_Draw(void)
     AEMtx33 scale4 = { 0 };
     AEMtx33Scale(&scale4, 34.f * scaleX, 50.f * scaleY);
     AEMtx33 rotate4 = { 0 };
-    AEMtx33Rot(&rotate4, 0.f);
+    AEMtx33Rot(&rotate4, buttonRotate_exit);
     AEMtx33 translate4 = { 0 };
     AEMtx33Trans(&translate4, exitButton_transX, exitButton_transY);
     AEMtx33 transform4 = { 0 };
@@ -420,6 +509,74 @@ void Menu_Draw(void)
     AEGfxPrint(fontID, gold_buffer, (getWinWidth() / (-1400.f * scaleX)), (getWinHeight() / (1100.f * scaleY)), 1.f * scaleX, 212.0f / 255.f, 175.0f / 255.f, 55.0f / 255.f);
     if(BGtexture!=nullptr)
     AEGfxTextureUnload(BGtexture);
+
+    if (mainMenu_areyouSure == false)
+    {
+        // Drawing the yes/no overlay on the screen
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxSetTransparency(1.0f);
+        AEMtx33 scale3 = { 0 };
+        AEMtx33Scale(&scale3, 500.f, 300.f);
+        AEMtx33 rotate3 = { 0 };
+        AEMtx33Rot(&rotate3, 0.f);
+        AEMtx33 translate3 = { 0 };
+        AEMtx33Trans(&translate3, 125.f, -10.f);
+        AEMtx33 transform3 = { 0 };
+        AEMtx33Concat(&transform3, &rotate3, &scale3);
+        AEMtx33Concat(&transform3, &translate3, &transform3);
+        AEGfxSetTransform(transform3.m);
+        AEGfxMeshDraw(pMesh_exit, AE_GFX_MDM_TRIANGLES);
+
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxSetTransparency(0.3f);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEMtx33 scale6 = { 0 };
+        AEMtx33Scale(&scale6, 80.f * scaleX, 50.f * scaleY);
+        AEMtx33 rotate6 = { 0 };
+        AEMtx33Rot(&rotate6, buttonRotate_exitYes);
+        AEMtx33 translate6 = { 0 };
+        AEMtx33Trans(&translate6, exitYesButton_transX, exitYesButton_transY);
+        AEMtx33 transform6 = { 0 };
+        AEMtx33Concat(&transform6, &rotate6, &scale6);
+        AEMtx33Concat(&transform6, &translate6, &transform6);
+        AEGfxSetTransform(transform6.m);
+        AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxSetTransparency(0.3f);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEMtx33 scale7 = { 0 };
+        AEMtx33Scale(&scale7, 80.f * scaleX, 50.f * scaleY);
+        AEMtx33 rotate7 = { 0 };
+        AEMtx33Rot(&rotate7, buttonRotate_exitNo);
+        AEMtx33 translate7 = { 0 };
+        AEMtx33Trans(&translate7, exitNoButton_transX, exitNoButton_transY);
+        AEMtx33 transform7 = { 0 };
+        AEMtx33Concat(&transform7, &rotate7, &scale7);
+        AEMtx33Concat(&transform7, &translate7, &transform7);
+        AEGfxSetTransform(transform7.m);
+        AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+        // Rendering texts for overlay
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        sprintf_s(exit_buffer, "ARE YOU SURE?");
+        AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (-3000.f * scaleX)), (getWinHeight() / (5000.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        sprintf_s(exit_buffer, "YES");
+        AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (-3425.f * scaleX)), (getWinHeight() / (-3800.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+        AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+        AEGfxTextureSet(NULL, 0, 0);
+        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+        sprintf_s(exit_buffer, "NO");
+        AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (8100.f * scaleX)), (getWinHeight() / (-3800.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+    }
 }
 
 void Menu_Free(void) 

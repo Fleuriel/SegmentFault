@@ -80,6 +80,7 @@ void GameOver_Init(void)
 	gameOverQuitButton_transX = 30.f * scaleX;
 	gameOverQuitButton_transY = -100.f * scaleY;
 
+
 }
 
 void GameOver_Update(void) 
