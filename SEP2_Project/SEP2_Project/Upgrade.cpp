@@ -240,14 +240,16 @@ void Upgrade_Update(void)
 		Timer += g_dt;
 		if (Currency >= 200)
 		{
+		
 			
-			if (Timer < 60) {
+			if (Timer >0) {
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 				AEGfxTextureSet(NULL, 0, 0);
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				sprintf_s(Upgrade1_buffer, "Thank you for purchase");
 				AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 				AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
+				Timer -= g_dt;
 			}
 			Currency = Currency - 200;
 			ShipModel = 1;
