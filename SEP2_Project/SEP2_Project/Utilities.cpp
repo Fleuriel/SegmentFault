@@ -140,10 +140,10 @@ float getWinHeight() {
 }
 
 // Function to get angle of cursor to player in radian
-float getCursorRad(AEVec2 pos, bool spawnCheck) {
+double getCursorRad(AEVec2 pos) {
     s32 cX, cY; //Mouse pos
-    float rad = 0; //radian value to be returned
-    const float pi = 3.1415926; //define pi
+    double rad = 0; //radian value to be returned
+    const double pi = 3.1415926; //define pi
     float sumx = 0, sumy = 0;
     pos.y += 75;
 

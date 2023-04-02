@@ -313,7 +313,7 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 	float scale,
 	AEVec2* pPos,
 	AEVec2* pVel,
-	float dir)
+	double dir)
 {
 	AEVec2 zero;
 	AEVec2Zero(&zero);
@@ -334,7 +334,7 @@ GameObjInstances* gameObjInstCreate(unsigned long type,
 			pInst->scale.y = scale;
 			pInst->position = pPos ? *pPos : zero;
 			pInst->velocity = pVel ? *pVel : zero;
-			pInst->direction = dir;
+			pInst->direction = static_cast<f32>(dir);
 			// return the newly created instance
 			return pInst;
 		}
