@@ -588,10 +588,12 @@ void Level_1_Update(void)
 		float noButton_midX = (getWinWidth() / static_cast<float>(2.09)) + noButton_transX;
 		float noButton_midY = (getWinHeight() / static_cast<float>(2)) - noButton_transY;
 
-		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) {
+		if (static_cast<double>(pauseTransparency) != static_cast<double>(0)) 
+		{
 			// Overlay button logic and defintions
 			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) 
+			{
 				printf("MainMenu\n");
 				areyouSure = false;
 				clicked_MainMenu = true;
@@ -599,7 +601,8 @@ void Level_1_Update(void)
 			}
 
 			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
-				&& AEInputCheckReleased(AEVK_LBUTTON)) {
+				&& AEInputCheckReleased(AEVK_LBUTTON)) 
+			{
 				printf("Quit\n");
 				areyouSure = false;
 				clicked_MainMenu = false;
@@ -608,7 +611,8 @@ void Level_1_Update(void)
 
 		}
 
-		if (areyouSure == false) {
+		if (areyouSure == false) 
+		{
 			// Overlay button logic and defintions
 			if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
@@ -2370,12 +2374,6 @@ void Level_1_Draw(void)
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment1_buffer, "> Press 'P' again to resume");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
-
-		//AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		//AEGfxTextureSet(NULL, 0, 0);
-		//AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		//sprintf_s(augment1_buffer, "HP");
-		//AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-2550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
