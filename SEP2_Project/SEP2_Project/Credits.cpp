@@ -351,4 +351,5 @@ void Credits_Unload(void)
 {
     AEGfxMeshFree(pMeshCredits); 
     AEGfxMeshFree(BGmesh_credits);
+    AEGfxTextureUnload(BGtexture_credits);
 }

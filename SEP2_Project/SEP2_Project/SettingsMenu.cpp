@@ -175,6 +175,8 @@ void Settings_Draw(void)
     AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 
+   
+
 }
 void Settings_Free(void)
 {
@@ -184,4 +186,5 @@ void Settings_Unload(void)
 {
     AEGfxMeshFree(pMeshSettings);
     AEGfxMeshFree(BGmesh_settings);
+    AEGfxTextureUnload(BGtexture_settings);
 }
