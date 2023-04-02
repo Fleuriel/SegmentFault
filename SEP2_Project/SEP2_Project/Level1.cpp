@@ -98,6 +98,7 @@ int Augment4Level = 0;
 bool Aug2CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
+float Augment2RotSpd = 0.f;
 float Augment3Range = 0;
 float Augment4Radius = 0;
 float offset = 5.f;
@@ -114,6 +115,10 @@ bool clicked_Quit = true;
 
 void Level_1_Load(void)
 {
+	std::ifstream inputFileStream{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ifstream inputFileStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+	std::ifstream inputFileStream2{ "Assets\\SaveFiles\\HighScore.txt" };
+	std::ifstream inputFileStream3{ "Assets\\SaveFiles\\PlayerStats.txt" };
 	sGameObjList = (GameObjects*)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObjects));
 	sGameObjInstList = (GameObjInstances*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInstances));
 
@@ -768,6 +773,7 @@ void Level_1_Update(void)
 				if (SkillPoint != 0 && Augment2Level != 8) {
 					SkillPoint--;
 					Augment2Range += static_cast<float>(0.2);
+					Augment2RotSpd += 0.005f;
 					Augment2Level++;
 				}
 			}
@@ -872,7 +878,7 @@ void Level_1_Update(void)
 		}
 		//Rotation for Augment...
 		//Rotation Increase.
-		_rotation_Aug += 0.04f;
+		_rotation_Aug += (0.04f+ Augment2RotSpd);
 
 		if (AEInputCheckTriggered(AEVK_0))
 		{
@@ -2587,6 +2593,7 @@ void Level_1_Unload(void)
 	Augment2Level = 0;
 	Augment1CD = 1.5f;
 	Augment2Range = 1;
+	Augment2RotSpd = 0.f;
 	Aug2CreateCheck = false;
 	Augment3Level = 0;
 	Augment3Range = 0;
