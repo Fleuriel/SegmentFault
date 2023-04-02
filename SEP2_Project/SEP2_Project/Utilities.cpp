@@ -156,8 +156,8 @@ double getCursorRad(AEVec2 pos) {
 
     //for each quadrant
     if (MP.x > pos.x && MP.y > pos.y) { rad = pi + atan(sumy / sumx); }                  //Quad1
-    else if (MP.x < pos.x && MP.y > pos.y) { rad = 2 / 4 * pi + atan(sumy / sumx); }     //Quad2
-    else if (MP.x < pos.x && MP.y < pos.y) { rad = 2 / 4 * pi + atan(sumy / sumx); }     //Quad3
+    else if (MP.x < pos.x && MP.y > pos.y) { rad = pi + atan(sumy / sumx); }     //Quad2
+    else if (MP.x < pos.x && MP.y < pos.y) { rad = pi + atan(sumy / sumx); }     //Quad3
     else if (MP.x > pos.x && MP.y < pos.y) { rad = pi + atan(sumy / sumx); }             //Quad4
 
     return rad; //Return radian value

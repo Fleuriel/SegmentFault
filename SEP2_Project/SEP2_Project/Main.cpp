@@ -24,6 +24,8 @@ float currHighScoreSec = 0.f;
 float scaleX;
 float scaleY;
 
+f32 BGtransX, BGtransY;
+
 /******************************************************************************/
 /*!
 	Starting point of the application

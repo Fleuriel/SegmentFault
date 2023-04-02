@@ -349,9 +349,6 @@ void gameObjInstDestroy(GameObjInstances* pInst)
 	// if instance is destroyed before, just return
 	if (pInst->flag == 0)
 		return;
-	//	std::cout << "Destroyed" << pInst->pObject->type << '\n';
-
-		// zero out the flag
 	pInst->flag = 0;
 
 }

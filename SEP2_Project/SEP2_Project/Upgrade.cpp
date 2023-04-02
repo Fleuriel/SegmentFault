@@ -1,7 +1,7 @@
 #include "Upgrade.h"
 #include "Main.h"
 
-std::ifstream ifs{ "Assets\\SaveFiles\\Tester.txt" };
+std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
 std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
@@ -14,6 +14,8 @@ AEGfxVertexList* pMeshUpgrade1 = nullptr;
 AEGfxVertexList* CoinMesh = nullptr;
 AEGfxVertexList* BuyButtonMesh = nullptr;
 AEGfxVertexList* ShipMesh = nullptr;
+AEGfxVertexList* BackgroundMesh = nullptr;
+
 
 // Pre-definition for buttons
 f32 UpgradebackButton_transX;
@@ -36,7 +38,6 @@ char Upgrade1_buffer[1024]{};
 
 void Upgrade_Load(void) 
 {
-	//std::cout << "Upgrade_Load\n";
 	AEGfxSetBackgroundColor(0.f, 0.f, 255.f);
 
 	AEGfxMeshStart();
@@ -113,15 +114,28 @@ void Upgrade_Load(void)
 
 	ShipMesh = AEGfxMeshEnd();
 	//End of Ship
+		//Background
+	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	//start Background
+	AEGfxMeshStart();
 
+	AEGfxTriAdd(
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+	AEGfxTriAdd(
+		-1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+		-1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+	BackgroundMesh = AEGfxMeshEnd();
+	//end Background
 
 	//Open save file of money
 	if (ifs.good())
 	{
 
 		ifs >> Currency;
-		std::cout << Currency << '\n';
-
 		ifs.close();
 	}
 	else if (ifs.fail())
@@ -136,7 +150,6 @@ void Upgrade_Load(void)
 	{
 
 		ifs1 >> ShipModel;
-		std::cout << ShipModel << '\n';
 
 		ifs1.close();
 	}
@@ -152,7 +165,6 @@ void Upgrade_Load(void)
 	{
 
 		ifs2 >> MaximumPlayerHealth;
-		std::cout << MaximumPlayerHealth << '\n';
 
 		ifs2.close();
 	}
@@ -185,15 +197,6 @@ void Upgrade_Init(void)
 }
 void Upgrade_Update(void) 
 {
-	//Timer += g_dt;
-
-	//if (AEInputCheckPrev(AEVK_P) && Timer >= 1.5f)
-	//{
-	//	gGameStateNext = PLAY;
-	//	std::cout << "Back\n";
-	//	Timer = 0;
-	//}
-
 	// Initialize cursor coordinates
 	s32 cursorX;
 	s32 cursorY;
@@ -208,7 +211,6 @@ void Upgrade_Update(void)
 	if (IsAreaClicked(backButtonUpgrade_midX, backButtonUpgrade_midY, 150.0f * UpgradescaleX_settings, 100.0f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = MAINMENU;
-		printf("MAINMENU\n");
 	}
 
 
@@ -285,6 +287,27 @@ void Upgrade_Update(void)
 }
 void Upgrade_Draw(void) 
 {
+	//Background
+	AEGfxTexture* BGtexture = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
+
+	//Draw Background
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(0.8f, 0.8f, 0.8f, 0.8f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(BGtexture, 0, 0);
+	AEMtx33 scale0 = { 0 };
+	AEMtx33Scale(&scale0, 1100, 800);
+	AEMtx33 rotate0 = { 0 };
+	AEMtx33Rot(&rotate0, 0.f);
+	AEMtx33 translate0 = { 0 };
+	AEMtx33Trans(&translate0, BGtransX, BGtransY);
+	AEMtx33 transform0 = { 0 };
+	AEMtx33Concat(&transform0, &rotate0, &scale0);
+	AEMtx33Concat(&transform0, &translate0, &transform0);
+	AEGfxSetTransform(transform0.m);
+	AEGfxMeshDraw(BackgroundMesh, AE_GFX_MDM_TRIANGLES);
+	//Finish Background draw
 
 	//Coin Display
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");

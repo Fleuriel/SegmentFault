@@ -47,6 +47,7 @@ extern float	currHighScoreSec;
 extern float	scaleX;
 extern float	scaleY;
 
+extern f32 BGtransX, BGtransY;
 
 
 
