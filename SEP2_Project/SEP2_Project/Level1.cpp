@@ -1003,7 +1003,7 @@ void Level_1_Update(void)
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
 
 							if (bulletInst != nullptr)
-								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, BULLET_SPEED);
+								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
 							// Reset the fire timer
 							AUGMENT_1_FIRE_TIMER = 0.0f;
@@ -1071,7 +1071,6 @@ void Level_1_Update(void)
 
 						//Compute the direction of bullet with 60 deg angle discrepancies.
 
-						AUGMENT_4_BULLET_SPEED = AEVec2Length(&AUGMENT_4_DIRECTION);
 
 						AUGMENT_4_DIRECTION = { AUGMENT_4_MOUSE_POSITION.x - qInst->position.x, AUGMENT_4_MOUSE_POSITION.y - qInst->position.y };
 
@@ -1106,7 +1105,7 @@ void Level_1_Update(void)
 						}
 						if (AUG4_BULLET != nullptr)
 						{
-							AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, BULLET_SPEED);
+							AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, AUGMENT_4_BULLET_SPEED);
 						}
 					}
 
