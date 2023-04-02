@@ -1,12 +1,14 @@
 #include "Upgrade.h"
 #include "Main.h"
 
-std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
+std::ifstream ifs{ "Assets\\SaveFiles\\Tester.txt" };
 std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
 std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 //bool LevelToggle;
 //f32 Timer;
+float Timer = 0.0f;
+
 
 //Pointer to Mesh
 AEGfxVertexList* pMeshUpgrade = nullptr;
@@ -160,11 +162,11 @@ void Upgrade_Load(void)
 	}
 	//End of Open save file of ship
 
-	//Open save file of ship
+	//Open save file of stats
 	if (ifs2.good())
 	{
 
-		ifs2 >> MaximumPlayerHealth;
+		ifs2 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
 
 		ifs2.close();
 	}
@@ -173,7 +175,7 @@ void Upgrade_Load(void)
 		std::cerr << "Error: \n";
 
 	}
-	//End of Open save file of ship
+	//End of Open save file of stats
 }
 
 void Upgrade_Init(void) 
@@ -235,9 +237,18 @@ void Upgrade_Update(void)
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-
+		Timer += g_dt;
 		if (Currency >= 200)
 		{
+			
+			if (Timer < 60) {
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxTextureSet(NULL, 0, 0);
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				sprintf_s(Upgrade1_buffer, "Thank you for purchase");
+				AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+				AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
+			}
 			Currency = Currency - 200;
 			ShipModel = 1;
 			std::cout << "Thank you for purchase\n";
@@ -246,6 +257,8 @@ void Upgrade_Update(void)
 			outputStream.close();
 			outputStream1 << ShipModel;
 			outputStream1.close();
+
+			
 		}
 		else
 		{
@@ -253,6 +266,12 @@ void Upgrade_Update(void)
 		}
 		outputStream.close();
 		outputStream1.close();
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "Thank you for purchase");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
 	}
 
 
@@ -787,6 +806,67 @@ void Upgrade_Draw(void)
 	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
 
 
+	//Projectile image display
+	AEGfxTexture* ProjectileTex = AEGfxTextureLoad("Assets\\Assets\\Bulletspeed.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(ProjectileTex, 0, 0);
+	AEMtx33 scale30 = { 0 };
+	AEMtx33Scale(&scale30, 55, 70);
+	AEMtx33 rotate30 = { 0 };
+	AEMtx33Rot(&rotate30, 0.f);
+	AEMtx33 translate30 = { 0 };
+	AEMtx33Trans(&translate30, UpgradebackButton_transX - 670, UpgradebackButton_transY + 455);
+	AEMtx33 transform30 = { 0 };
+	AEMtx33Concat(&transform30, &rotate30, &scale30);
+	AEMtx33Concat(&transform30, &translate30, &transform30);
+	AEGfxSetTransform(transform30.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+	//Projectile image display
+	AEGfxTexture* CooldownTex = AEGfxTextureLoad("Assets\\Assets\\Cooldown.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(CooldownTex, 0, 0);
+	AEMtx33 scale31 = { 0 };
+	AEMtx33Scale(&scale31, 55, 70);
+	AEMtx33 rotate31 = { 0 };
+	AEMtx33Rot(&rotate31, 0.f);
+	AEMtx33 translate31 = { 0 };
+	AEMtx33Trans(&translate31, UpgradebackButton_transX - 670, UpgradebackButton_transY + 325);
+	AEMtx33 transform31 = { 0 };
+	AEMtx33Concat(&transform31, &rotate31, &scale31);
+	AEMtx33Concat(&transform31, &translate31, &transform31);
+	AEGfxSetTransform(transform31.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+	//iframe image display
+	AEGfxTexture* iframeTex = AEGfxTextureLoad("Assets\\Assets\\iframeupgrade.png");
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxTextureSet(iframeTex, 0, 0);
+	AEMtx33 scale32 = { 0 };
+	AEMtx33Scale(&scale32, 55, 70);
+	AEMtx33 rotate32 = { 0 };
+	AEMtx33Rot(&rotate32, 0.f);
+	AEMtx33 translate32 = { 0 };
+	AEMtx33Trans(&translate32, UpgradebackButton_transX - 670, UpgradebackButton_transY + 195);
+	AEMtx33 transform32 = { 0 };
+	AEMtx33Concat(&transform32, &rotate32, &scale32);
+	AEMtx33Concat(&transform32, &translate32, &transform32);
+	AEGfxSetTransform(transform32.m);
+	AEGfxMeshDraw(ShipMesh, AE_GFX_MDM_TRIANGLES);
+
+
 	// "Back" Text
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -982,6 +1062,9 @@ void Upgrade_Draw(void)
 	AEGfxTextureUnload(playership2Tex);
 	AEGfxTextureUnload(playership3Tex);
 	AEGfxTextureUnload(playerHPTex);
+	AEGfxTextureUnload(ProjectileTex);
+	AEGfxTextureUnload(CooldownTex);
+	AEGfxTextureUnload(iframeTex);
 	
 
 }

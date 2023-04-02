@@ -397,7 +397,7 @@ void Level_1_Load(void)
 	//Save file for player's stats
 	if (inputFileStream3.good())
 	{
-		inputFileStream3 >> MaximumPlayerHealth;
+		inputFileStream3 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
 		inputFileStream3.close();
 	}
 
