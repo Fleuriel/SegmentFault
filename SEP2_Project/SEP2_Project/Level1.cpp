@@ -72,6 +72,7 @@ float textWidth{}, textHeight{};
 
 //// Pre-definition of time
 float secElapsed = 0.f;
+float secElapsedInt = 0.f;
 int minElapsed = 0;
 int bossCooldownMin = 5;
 float bossCooldownSec = 0.f;
@@ -705,7 +706,7 @@ void Level_1_Update(void)
 			minElapsed++;
 			secElapsed = 0;
 		}
-
+		modf(secElapsed, &secElapsedInt);
 		bossCooldownSec -= g_dt;
 		if (bossCooldownSec <0) {
 			bossCooldownMin--;
@@ -2103,7 +2104,7 @@ void Level_1_Draw(void)
 					std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
 					if (outputStream.is_open())
 					{
-						outputStream << minElapsed << ' ' << secElapsed << '\n';
+						outputStream << minElapsed << ' ' << secElapsedInt << '\n';
 					}
 					outputStream.close();
 				}
@@ -2516,17 +2517,17 @@ void Level_1_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	if (secElapsed >= 9.5)
-		sprintf_s(gdt_buffer, "%d:%.0f", minElapsed, secElapsed);
+	if (secElapsedInt > 9)
+		sprintf_s(gdt_buffer, "%d:%.0f", minElapsed, secElapsedInt);
 	else
-		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsed);
+		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsedInt);
 	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
 	if (spawnCheck != true) {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		if (bossCooldownSec >= 9.5)
+		if (bossCooldownSecInt > 9)
 			sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:%.0f", bossCooldownMin, bossCooldownSecInt);
 		else {
 			if (bossCooldownSec >= 60.0f)
@@ -2601,6 +2602,9 @@ void Level_1_Unload(void)
 	_Player_Experience = 0;
 	pause = false;
 	areyouSure = true;
+	bossCoolDownCheck = false;
+	bossCooldownMin = 5;
+	bossCooldownSec = 0.f;
 	
 	free(sGameObjList);
 	sGameObjList = nullptr;
