@@ -13,7 +13,6 @@ enum
 	PLAY,
 	// special game state. Do not change
 	SPLASHPAGE,
-	PAUSE,
 	UPGRADE,
 	RESTART,
 	SETTINGS,

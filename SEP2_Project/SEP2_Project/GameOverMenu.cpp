@@ -14,13 +14,19 @@ char gameOverCont_buffer[1024]{};
 char gameOverQuit_buffer[1024]{};
 float gameOver_textWidth{}, gameOver_textHeight{};
 
-// Pre-definition for translations of buttons
-//double augmentsBackbutton_transX;
-//double augmentsBackbutton_transY;
-double gameOverContButton_transX;
-double gameOverContButton_transY;
-double gameOverQuitButton_transX;
-double gameOverQuitButton_transY;
+// Pre-definition for buttons
+f32 gameOverContButton_transX;
+f32 gameOverContButton_transY;
+f32 gameOverQuitButton_transX;
+f32 gameOverQuitButton_transY;
+
+// Continue button mid points
+f32 gameOverContButton_midX;
+f32 gameOverContButton_midY;
+
+// Quit button mid points
+f32 gameOverQuitButton_midX;
+f32 gameOverQuitButton_midY;
 
 
 void GameOver_Load(void) 
@@ -85,12 +91,12 @@ void GameOver_Update(void)
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
 	// Continue button mid points
-	float gameOverContButton_midX = (getWinWidth() / 2.11) + gameOverContButton_transX;
-	float gameOverContButton_midY = (getWinHeight() / 2) - gameOverContButton_transY;
+	gameOverContButton_midX = static_cast<f32>((getWinWidth() / 2.11) + gameOverContButton_transX);
+	gameOverContButton_midY = static_cast<f32>((getWinHeight() / 2) - gameOverContButton_transY);
 
 	// Quit button mid points
-	float gameOverQuitButton_midX = (getWinWidth() / 2.11) + gameOverQuitButton_transX;
-	float gameOverQuitButton_midY = (getWinHeight() / 2) - gameOverQuitButton_transY;
+	gameOverQuitButton_midX = static_cast<f32>((getWinWidth() / 2.11) + gameOverQuitButton_transX);
+	gameOverQuitButton_midY = static_cast<f32>((getWinHeight() / 2) - gameOverQuitButton_transY);
 
 	printf("%d\n%d\n", cursorX, cursorY);  //debug
 	//printf("%f\n%f\n", button1_midX, button1_midY);  //debug

@@ -79,15 +79,6 @@ void GameStateMgrUpdate()
 		GameStateFree = Settings_Free;
 		GameStateUnload = Settings_Unload;
 		break;
-
-	case PAUSE:
-		GameStateLoad = Pause_Load;
-		GameStateInit = Pause_Init;
-		GameStateUpdate = Pause_Update;
-		GameStateDraw = Pause_Draw;
-		GameStateFree = Pause_Free;
-		GameStateUnload = Pause_Unload;
-		break;
 	case CREDITS:
 		GameStateLoad = Credits_Load;
 		GameStateInit = Credits_Init;
