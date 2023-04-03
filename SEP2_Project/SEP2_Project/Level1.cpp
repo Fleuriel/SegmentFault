@@ -2,7 +2,7 @@
 /*!
 \file       Level1.cpp
 \project    Among Them
-\authors    Liu Xujie, l.xujie,  (20%)
+\authors    Liu Xujie, l.xujie, 2203183 (20%)
 			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (7.5%)
 			Lim Zhan Peng, zhanpeng.lim, 2203452 (7.5%)
 			Angus Tan Yit Hoe, tan.a, 2200711 (60%)
@@ -516,7 +516,12 @@ void Level_1_Load(void)
 
 	augmentButtonMesh = AEGfxMeshEnd();
 	// End Overlay
-
+	/*!*****************************************************************
+	\author
+	Liu Xujie
+	\brief
+	Audio Loading
+	********************************************************************/
 	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
@@ -1901,7 +1906,12 @@ void Level_1_Update(void)
 			AEVec2Add(&ObjInstance2->boundingBox.max, &ObjInstance2->position, &boundingRect);
 
 		}
-
+		/*!*****************************************************************
+		\author
+		Liu Xujie
+		\brief
+		Collision for the game
+		********************************************************************/
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////COLLISION////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////////////////
@@ -2750,7 +2760,13 @@ void Level_1_Draw(void)
 	}
 	/********************************** Pause UI End ********************************************/
 
-	// Rendering texts for the screen	
+	// Rendering texts for the screen
+	/*!*****************************************************************
+	\author
+		Liu Xujie
+	\brief
+		Rendering of timer onto screen
+	********************************************************************/
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -2775,7 +2791,7 @@ void Level_1_Draw(void)
 
 		AEGfxPrint(fontID, gdt_buffer, 0.25f, 0.75f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 	}
-
+	/********************************** Timer Rendering End ********************************************/
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -2818,7 +2834,12 @@ void Level_1_Unload(void)
 	AEGfxMeshFree(augmentMesh);
 	AEGfxMeshFree(augmentButtonMesh);
 	AEGfxMeshFree(bMesh);
-
+	/*!*****************************************************************
+	\author
+	Liu Xujie
+	\brief
+	Saving of gold and highscore
+	********************************************************************/
 	if (minElapsed >= currHighScoreMin) {
 		if (secElapsed > currHighScoreSec) {
 			std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
