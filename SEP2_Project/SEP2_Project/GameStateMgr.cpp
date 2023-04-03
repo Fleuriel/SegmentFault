@@ -1,3 +1,27 @@
+/******************************************************************************/
+/*!
+\file       GameStateMgr.cpp
+\project    Among Them
+
+\authors    Angus Tan Yit Hoe, tan.a, 2200711 (20%)
+			Liu Xujie, l.xujie,  (20%)
+			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (20%)
+			Lim Zhan Peng, zhanpeng.lim, 2203452 (20%)
+			Emery Quek Cheng Kwang, c.quek, 2201955 (20%)
+
+\par        tan.a@digipen.edu
+\brief      This .cpp file contains the necessary implementations for game state
+			to occur and change to load different levels/menu.
+
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
+
 #include "GameStateMgr.h"
 #include "main.h"
 

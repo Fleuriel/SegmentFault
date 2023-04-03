@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*!
-\file        Utilities.cpp
+\file       Utilities.cpp
 \project    Among Them
 \authors    Liu Xujie, l.xujie, 2203183 (25%)
             Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
@@ -10,7 +10,7 @@
             a.junshengaloysius@digipen.edu
             zhanpeng.lim@digipen.edu
             tan.a@digipen.edu
-\brief        Definition of function helpers
+\brief      Definition of function helpers
 
 Copyright (C) 2023 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents

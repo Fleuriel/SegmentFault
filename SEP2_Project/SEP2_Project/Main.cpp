@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*!
-\file       Main.h
+\file       Main.cpp
 \project    Among Them
 
 \authors    Angus Tan Yit Hoe, tan.a, 2200711 (20%)
@@ -38,21 +38,21 @@ AEVec2	Game_Dimension{ 1600.0f, 900.0f };
 
 
 //Game World Parameters
-int		 Currency = 0;
-int		 ShipModel;
-int		 MaximumPlayerHealth;
+int		Currency = 0;
+int		ShipModel;
+int		MaximumPlayerHealth;
 int	    ProjectileSpeed_upgrade;
 int	    CD_upgrade;
 int	    Regen_upgrade;
 
-float currHighScoreMin = 0.f;
-float currHighScoreSec = 0.f;
+float	currHighScoreMin = 0.f;
+float	currHighScoreSec = 0.f;
 
 // Pre-definition of scaling
-float scaleX;
-float scaleY;
+float	scaleX;
+float	scaleY;
 
-f32 BGtransX, BGtransY;
+f32		BGtransX, BGtransY;
 
 /******************************************************************************/
 /*!
@@ -63,8 +63,6 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 {
 	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
-	UNREFERENCED_PARAMETER(prevInstanceH);
-	UNREFERENCED_PARAMETER(command_line);
 
 	// Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
@@ -122,9 +120,6 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 			AESysFrameEnd();
 
-
-
-
 			g_dt = (f32)AEFrameRateControllerGetFrameTime();
 			g_appTime += g_dt;
 		}
@@ -136,7 +131,6 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 		gGameStatePrev = gGameStateCurr;
 		gGameStateCurr = gGameStateNext;
-
 	}
 
 	AEGfxDestroyFont(fontID);
