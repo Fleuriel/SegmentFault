@@ -593,7 +593,7 @@ void Level_1_Update(void)
 	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckReleased(AEVK_P) || AEInputCheckReleased(AEVK_ESCAPE))
+	if (AEInputCheckReleased(AEVK_ESCAPE))
 	{
 		pause = !pause;
 		if (pauseTransparency == 0) {
@@ -602,7 +602,6 @@ void Level_1_Update(void)
 		else if (pauseTransparency != 0) {
 			pauseTransparency = 0;
 		}
-
 	}
 
 	if (pause == true) 
@@ -625,21 +624,17 @@ void Level_1_Update(void)
 			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) 
 			{
-				printf("MainMenu\n");
 				areyouSure = false;
 				clicked_MainMenu = true;
 				pauseTransparency = 0.0f;
 			}
-
 			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) 
 			{
-				printf("Quit\n");
 				areyouSure = false;
 				clicked_MainMenu = false;
 				pauseTransparency = 0.0f;
 			}
-
 		}
 
 		if (areyouSure == false) 
@@ -649,23 +644,19 @@ void Level_1_Update(void)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (clicked_MainMenu) 
 				{
-					printf("Goto Main Menu\n");
 					gGameStateNext = MAINMENU;
 				}
 				else if (!clicked_MainMenu)
 				{
-					printf("Quit\n");
 					gGameStateNext = QUIT;
 				}
 			}
 
 			if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
-				printf("Go Back to pause UI\n");
 				pauseTransparency = 0.5f;
 				areyouSure = true;
 			}
-
 		}
 
 		/********************************** Button Animation Logic Start ********************************************/
@@ -2480,7 +2471,7 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "> Press 'P' or 'esc' again to resume");
+		sprintf_s(augment1_buffer, "> Press 'esc' again to resume");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);

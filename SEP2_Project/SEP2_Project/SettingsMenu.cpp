@@ -33,7 +33,7 @@ f32 buttonRotate_settingsBack;
 
 // Volume and sfx initialization
 float volume = 1.f;
-float sfx = 1;
+float sfx = 1.f;
 
 void Settings_Load(void)
 {
@@ -153,70 +153,60 @@ void Settings_Update(void)
     else if (IsAreaClicked(vol1_midX, vol1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("0 Vol\n");
         volume = 0.f;
     }
 
     else if (IsAreaClicked(vol2_midX, vol2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("25 Vol\n");
         volume = 0.25f;
     }
 
     else if (IsAreaClicked(vol3_midX, vol3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("50 Vol\n");
         volume = 0.50f;
     }
 
     else if (IsAreaClicked(vol4_midX, vol4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("75 Vol\n");
         volume = 0.75f;
     }
 
     else if (IsAreaClicked(vol5_midX, vol5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("100 Vol\n");
         volume = 1.00f;
     }
 
     else if (IsAreaClicked(sfx1_midX, sfx1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("0 Sfx\n");
         sfx = 0;
     }
 
     else if (IsAreaClicked(sfx2_midX, sfx2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("25 Sfx\n");
         sfx = 0.25;
     }
 
     else if (IsAreaClicked(sfx3_midX, sfx3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("50 Sfx\n");
         sfx = 0.50;
     }
 
     else if (IsAreaClicked(sfx4_midX, sfx4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("75 Sfx\n");
         sfx = 0.75;
     }
 
     else if (IsAreaClicked(sfx5_midX, sfx5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
-        printf("100 Sfx\n");
         sfx = 1.00;
     }
 
@@ -434,10 +424,12 @@ void Settings_Draw(void)
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 }
+
 void Settings_Free(void)
 {
 
 }
+
 void Settings_Unload(void)
 {
     AEGfxMeshFree(pMeshSettings);

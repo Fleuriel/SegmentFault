@@ -1,6 +1,5 @@
 #include "MainMenu.h"
 #include "Main.h"
-// #include "SettingsMenu.h"
 
 
 // Pointer to Mesh
@@ -233,14 +232,12 @@ void Menu_Update(void)
         if (IsAreaClicked(exitYesButton_midX, exitYesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
             && AEInputCheckReleased(AEVK_LBUTTON)) 
         {
-            printf("Quit\n");
             gGameStateNext = QUIT;
         }
 
         if (IsAreaClicked(exitNoButton_midX, exitNoButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
             && AEInputCheckReleased(AEVK_LBUTTON)) 
         {
-            printf("Go Back to mainmenu UI\n");
             mainMenu_areyouSure = true;
         }
 
@@ -304,7 +301,6 @@ void Menu_Update(void)
             && AEInputCheckReleased(AEVK_LBUTTON))
         {
             gGameStateNext = CREDITS;
-            printf("Goto Credits\n");
         }
 
         else if (IsAreaClicked(howToButton_midX, howToButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)

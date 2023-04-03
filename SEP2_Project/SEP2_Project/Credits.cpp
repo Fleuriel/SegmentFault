@@ -270,7 +270,7 @@ void Credits_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(credits1_buffer, "GERALD WONG HANG FENG");
+    sprintf_s(credits1_buffer, "GERALD WONG HAN FENG");
     AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
     AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (3800.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
