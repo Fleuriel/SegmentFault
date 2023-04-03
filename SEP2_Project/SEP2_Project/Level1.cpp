@@ -1,3 +1,22 @@
+/******************************************************************************/
+/*!
+\file       Level1.cpp
+\project    Among Them
+\authors	Angus Tan Yit Hoe, tan.a (80%)
+			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
+			Lim Zhan Peng, zhanpeng.lim, 2203452 (25%)
+
+\par        tan.a@digipen.edu
+\brief      This .cpp file contains the functions necessary for the game to run
+			namely, Load, Initialize, Update,Free,Unload...
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Main.h"
 #include "GameObjects.h"
 #include <iostream>
@@ -116,9 +135,9 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
-AEAudio BGM, BlastSFX, slashSFX, explode1SFX, explode2SFX;
+AEAudio BGM, BlastSFX;
 AEAudioGroup BGM_layer, SFX_layer;
-extern float volume, sfx;
+extern float volume;
 
 void Level_1_Load(void)
 {
@@ -494,12 +513,9 @@ void Level_1_Load(void)
 	augmentButtonMesh = AEGfxMeshEnd();
 	// End Overlay
 
-	//// Loads a music from given filepath and assign to �audio�
+	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
-	slashSFX = AEAudioLoadSound("Assets\\Music\\slash.wav");
-	explode1SFX = AEAudioLoadSound("Assets\\Music\\explode1.wav");
-	explode2SFX = AEAudioLoadSound("Assets\\Music\\explode2.wav");
 	BGM_layer = AEAudioCreateGroup();
 	SFX_layer = AEAudioCreateGroup();
 	//Upgrades
@@ -580,8 +596,8 @@ void Level_1_Init(void)
 	buttonRotate_mainMenu = 0.f;
 	buttonRotate_quit = 0.f;
 
-	// plays an audio named �bgm� in an 
-	// audio group named �bgm_layer� with 
+	// plays an audio named ‘bgm’ in an 
+	// audio group named ‘bgm_layer’ with 
 	// 100% volume, 100% pitch, looped infinitely.
 	AEAudioPlay(BGM, BGM_layer, volume, 1.f, -1);
 }
@@ -1173,7 +1189,6 @@ void Level_1_Update(void)
 
 							//Reset timner to 0
 							AUGMENT_3_FIRE_TIMER = 0;
-							AEAudioPlay(slashSFX, SFX_layer, sfx, 1.f, 0);
 						}
 						//If the instance is active, then every 0.5s, turn off.
 						if (qInst->showTexture == true)
@@ -1184,7 +1199,6 @@ void Level_1_Update(void)
 								//Turns off the instance. (prevents damage)
 								qInst->showTexture = false;
 								AUGMENT_3_OFF_TIMER = 0;
-								AEAudioPlay(BlastSFX, SFX_layer, sfx/1.5f, 1.f, 0);
 							}
 						}
 					}
@@ -1243,7 +1257,6 @@ void Level_1_Update(void)
 
 							//Set Timer to 0
 							AUGMENT_4_FIRE_TIMER = 0;
-							AEAudioPlay(explode1SFX, SFX_layer, sfx/2, 1.f, 0);
 						}
 						if (AUG4_BULLET != nullptr)
 						{
@@ -1278,7 +1291,6 @@ void Level_1_Update(void)
 								gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
 								//Show the explosion...
 								AUGMENT_4_EXPLOSION_ACTIVE = true;
-								AEAudioPlay(explode2SFX, SFX_layer, sfx / 2, 1.f, 0);
 							}
 							//Reset timer.
 							AUGMENT_4_PROJECTILE_TIMER = 0;
