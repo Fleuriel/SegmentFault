@@ -34,11 +34,6 @@ Technology is prohibited.
 bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
     const AABB& aabb2, const AEVec2& vel2)
 {
-    UNREFERENCED_PARAMETER(aabb1);
-    UNREFERENCED_PARAMETER(vel1);
-    UNREFERENCED_PARAMETER(aabb2);
-    UNREFERENCED_PARAMETER(vel2);
-
     // Check static collision
 
     if (aabb1.max.x > aabb2.min.x && aabb1.max.y > aabb2.min.y && aabb2.max.x > aabb1.min.x && aabb2.max.y > aabb1.min.y) {
