@@ -1,3 +1,16 @@
+/******************************************************************************/
+/*!
+\file		SettingsMenu.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Contains the definitions of functions that control the music and sfx volumes.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
 #include "SettingsMenu.h"
 #include "Main.h"
 
@@ -35,6 +48,20 @@ f32 buttonRotate_settingsBack;
 float volume = 1.f;
 float sfx = 1.f;
 
+/******************************************************************************/
+/*!
+    "Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
+
+  \brief
+      Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Load(void)
 {
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -70,6 +97,20 @@ void Settings_Load(void)
     BGtexture_settings = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
 }
 
+/******************************************************************************/
+/*!
+    "Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Initializes the variables needed for the draw function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Init(void)
 {
 
@@ -109,6 +150,21 @@ void Settings_Init(void)
     sfx5_transY = 0.0f;
 
 }
+
+/******************************************************************************/
+/*!
+    "Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Collision/animation logic of buttons are here.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Update(void)
 {
     // Initialize cursor coordinates
@@ -220,6 +276,21 @@ void Settings_Update(void)
         buttonRotate_settingsBack = 0.0f;
     }
 }
+
+/******************************************************************************/
+/*!
+    "Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Renders the background, draws the shapes of the objects and prints text onto the screen.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Draw(void)
 {
     
@@ -425,11 +496,39 @@ void Settings_Draw(void)
 
 }
 
+/******************************************************************************/
+/*!
+    "Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Kill each active game object instance if any.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Free(void)
 {
 
 }
 
+/******************************************************************************/
+/*!
+    "Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Settings_Unload(void)
 {
     AEGfxMeshFree(pMeshSettings);
