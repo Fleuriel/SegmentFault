@@ -150,8 +150,16 @@ void Menu_Load(void)
 
     //Audio
     MMBGM = AEAudioLoadMusic("Assets\\Music\\Musical, Loop, Intro, 80s Pop Music SND70455.wav");
+    if (AEAudioIsValidGroup(MMBGM_layer) == 0)
+        MMBGM_layer = AEAudioCreateGroup();
 
-    MMBGM_layer = AEAudioCreateGroup();
+    // plays an audio named bgm in an 
+    // audio group named bgm_layer with 
+    // 100% volume, 100% pitch, looped infinitely.
+    if (Audio_Playing == false) {
+        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
+        Audio_Playing = true;
+    }
 }
 
 void Menu_Init(void) 
@@ -190,13 +198,6 @@ void Menu_Init(void)
     exitNoButton_transX = 168.0f * scaleX;
     exitNoButton_transY = -65.0f * scaleX;
 
-    // plays an audio named bgm in an 
-    // audio group named bgm_layer with 
-    // 100% volume, 100% pitch, looped infinitely.
-    if (Audio_Playing == false) {
-        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
-        Audio_Playing = true;
-    }
 }
 
 void Menu_Update(void) 
@@ -668,10 +669,11 @@ void Menu_Free(void)
 }
 void Menu_Unload(void)
 {
+    std::cout << gGameStatePrev << "\n";
+    std::cout << gGameStateNext <<"\n";
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(pMesh_exit);
     AEGfxMeshFree(BGmesh);
-    if (gGameStateNext == PLAY) {
+    if(gGameStateNext == 1)
         Audio_Playing = false;
-    }
 }
