@@ -1,9 +1,9 @@
 #pragma once
 /******************************************************************************/
 /*!
-\file        Utilities.cpp
+\file       Utilities.h
 \project    Among Them
-\authors    Liu Xujie, l.xujie,  (25%)
+\authors    Liu Xujie, l.xujie, 2203183 (25%)
 			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
 			Lim Zhan Peng, zhanpeng.lim, 2203452 (25%)
 			Angus Tan Yit Hoe, tan.a, 2200711 (15%)
