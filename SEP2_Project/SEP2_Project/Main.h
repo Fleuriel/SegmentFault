@@ -1,5 +1,27 @@
 #pragma once
 
+/******************************************************************************/
+/*!
+\file       Level1.cpp
+\project    Among Them
+\authors	Liu Xujie, l.xujie,  (20%)
+            Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (20%)
+            Lim Zhan Peng, zhanpeng.lim, 2203452 (20%)
+            Angus Tan Yit Hoe, tan.a, 2200711 (20%)
+            Emery Quek Cheng Kwang, c.quek
+
+\par        tan.a@digipen.edu
+\brief      This .cpp file contains the functions necessary for the game to run
+			namely, Load, Initialize, Update,Free,Unload...
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
+
 
 
 // includes

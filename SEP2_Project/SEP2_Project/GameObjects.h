@@ -2,14 +2,14 @@
 /******************************************************************************/
 /*!
 \file       GameObjects.h
-
 \project    Among Them
-\authors	Angus Tan Yit Hoe, tan.a (90%)
+\authors	Angus Tan Yit Hoe, tan.a (100%)
 			
 
 \par        tan.a@digipen.edu
-\brief      This .cpp file contains the functions necessary for the game to run
-			namely, Load, Initialize, Update,Free,Unload...
+\brief      This .h file contains the declaration, definition and functions for
+			gameobject instance creation, deletion and other parameters required
+			to run the level1.cpp files...
 
 Copyright (C) 2023 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
