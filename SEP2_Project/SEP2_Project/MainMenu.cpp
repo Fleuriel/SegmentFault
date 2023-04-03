@@ -81,6 +81,7 @@ bool mainMenu_areyouSure = true;
 //Audio declaration
 AEAudio MMBGM;
 AEAudioGroup MMBGM_layer;
+bool Audio_Playing = false;
 
 void Menu_Load(void)
 {
@@ -192,7 +193,10 @@ void Menu_Init(void)
     // plays an audio named bgm in an 
     // audio group named bgm_layer with 
     // 100% volume, 100% pitch, looped infinitely.
-    AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
+    if (Audio_Playing == false) {
+        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
+        Audio_Playing = true;
+    }
 }
 
 void Menu_Update(void) 
@@ -272,6 +276,7 @@ void Menu_Update(void)
         else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
             && AEInputCheckReleased(AEVK_LBUTTON))
         {
+            AEAudioStopGroup(MMBGM_layer);
             gGameStateNext = PLAY;
         }
 
@@ -666,5 +671,7 @@ void Menu_Unload(void)
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(pMesh_exit);
     AEGfxMeshFree(BGmesh);
-    AEAudioStopGroup(MMBGM_layer);
+    if (gGameStateNext == PLAY) {
+        Audio_Playing = false;
+    }
 }

@@ -37,9 +37,6 @@ bool CheckIfBoughtModel2 = false;
 bool CheckIfBoughtModel3 = false;
 bool CheckIfBoughtModel4 = false;
 
-//Audio declaration
-AEAudio UBGM;
-AEAudioGroup UBGM_layer;
 
 void Upgrade_Load(void) 
 {
@@ -176,10 +173,6 @@ void Upgrade_Load(void)
 	}
 	//End of Open save file of stats
 
-
-	//Audio
-	UBGM = AEAudioLoadMusic("Assets\\Music\\Musical, Loop, Intro, 80s Pop Music SND70455.wav");
-	UBGM_layer = AEAudioCreateGroup();
 }
 
 void Upgrade_Init(void) 
@@ -197,12 +190,6 @@ void Upgrade_Init(void)
 
 	UpgradeStatDisplay_transX = 33 * UpgradescaleX_settings;
 	UpgradeStatDisplay_transY = 340.f * UpgradescaleY_settings;
-
-
-	// plays an audio named bgm in an 
-	// audio group named bgm_layer with 
-	// 100% volume, 100% pitch, looped infinitely.
-	AEAudioPlay(UBGM, UBGM_layer, 0.5f, 1.f, -1);
 
 }
 void Upgrade_Update(void) 
@@ -1430,6 +1417,4 @@ void Upgrade_Unload(void)
 	AEGfxMeshFree(BuyButtonMesh);
 	AEGfxMeshFree(ShipMesh);
 	AEGfxMeshFree(BackgroundMesh);
-
-	AEAudioStopGroup(UBGM_layer);
 }
