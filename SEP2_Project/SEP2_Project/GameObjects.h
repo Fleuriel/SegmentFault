@@ -1,5 +1,22 @@
 #pragma once
+/******************************************************************************/
+/*!
+\file       GameObjects.h
+\project    Among Them
+\authors	Angus Tan Yit Hoe, tan.a (100%)
+			
 
+\par        tan.a@digipen.edu
+\brief      This .h file contains the declaration, definition and functions for
+			gameobject instance creation, deletion and other parameters required
+			to run the level1.cpp files...
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
 
 #include "AEEngine.h"
 #include "Main.h"
@@ -33,6 +50,7 @@ f32 const						BOUNDING_RECT_SIZE = 1.0f;	//Definition of Bounding Rect Size to 
 f32								enemyHealth = 1;			//Definition of enemyHealth
 bool							upgradeToggle = 0;			//Definition of upgradeToggle
 extern int						SkillPoint = 0;				//Definition of SkillPoint
+
 // Initialize cursor coordinates
 s32								cursorX;					//Declaration of cursorX
 s32								cursorY;					//Declaration of cursorY

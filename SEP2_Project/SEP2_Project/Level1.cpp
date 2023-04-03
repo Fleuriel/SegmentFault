@@ -123,7 +123,7 @@ float Augment2Range = 1.f;
 float Augment2RotSpd = 0.f;
 float Augment3Range = 0;
 float Augment4Radius = 0;
-float offset = 5.f, mapoffset = 0.5f;
+float offset = 5.f;
 bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
 float RegenerationTimer = 15.0f;
@@ -139,9 +139,9 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
-AEAudio BGM, BlastSFX, slashSFX, explode1SFX, explode2SFX;
+AEAudio BGM, BlastSFX;
 AEAudioGroup BGM_layer, SFX_layer;
-extern float volume, sfx;
+extern float volume;
 
 void Level_1_Load(void)
 {
@@ -517,12 +517,9 @@ void Level_1_Load(void)
 	augmentButtonMesh = AEGfxMeshEnd();
 	// End Overlay
 
-	//// Loads a music from given filepath and assign to �audio�
+	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
-	slashSFX = AEAudioLoadSound("Assets\\Music\\slash.wav");
-	explode1SFX = AEAudioLoadSound("Assets\\Music\\explode1.wav");
-	explode2SFX = AEAudioLoadSound("Assets\\Music\\explode2.wav");
 	BGM_layer = AEAudioCreateGroup();
 	SFX_layer = AEAudioCreateGroup();
 	//Upgrades
@@ -603,8 +600,8 @@ void Level_1_Init(void)
 	buttonRotate_mainMenu = 0.f;
 	buttonRotate_quit = 0.f;
 
-	// plays an audio named �bgm� in an 
-	// audio group named �bgm_layer� with 
+	// plays an audio named ‘bgm’ in an 
+	// audio group named ‘bgm_layer’ with 
 	// 100% volume, 100% pitch, looped infinitely.
 	AEAudioPlay(BGM, BGM_layer, volume, 1.f, -1);
 }
@@ -957,14 +954,9 @@ void Level_1_Update(void)
 		}
 
 
-		/*!*****************************************************************
-		\author
-			Lim Zhan Peng
-		\brief
-			Changes the direction the ship is facing
-			using key trigger
-			Left/Right
-		********************************************************************/
+
+		//CHECK TRIGGERED ONLY
+		//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
 		if (AEInputCheckTriggered(AEVK_LEFT) || AEInputCheckTriggered(AEVK_A))
 		{
 			//This allocates the player looking position. 
@@ -976,6 +968,7 @@ void Level_1_Update(void)
 				_playerScale *= -1;
 			}
 		}
+
 		if (AEInputCheckTriggered(AEVK_RIGHT) || AEInputCheckTriggered(AEVK_D))
 		{
 			//This allocates the player looking position. 
@@ -988,18 +981,7 @@ void Level_1_Update(void)
 			}
 		}
 
-		/*!*****************************************************************
-		\author
-			Lim Zhan Peng
-		\brief
-			Check for boss spawn status using spawnCheck
-			If boss is spawned,
-			Camera is no longer locked with player in the middle of the window
-			Player can now move within the window away from the middle
-			Else if boss did not spawn,
-			Return offset value to lock player in the middle of the window
-			Return player to the middle of the window
-		********************************************************************/
+		//spawncheck to lock or unlock camera for boss fight
 		if (spawnCheck == 1) { offset = 0; }
 		else if (spawnCheck == 0) {
 			offset = 5;
@@ -1007,14 +989,7 @@ void Level_1_Update(void)
 			_Player->position.y -= (_Player->position.y - 0) / 10;
 		}
 
-		/*!*****************************************************************
-		\author
-			Lim Zhan Peng
-		\brief
-			Creates a bounding box to prevent player from moving outside
-			of the window
-			Works with different window size
-		********************************************************************/
+		//Movement flag check
 		if (_Player->position.x > getWinWidth() / 2 - PLAYER_SIZE / 2) {
 			mRight = false;
 		}
@@ -1040,15 +1015,8 @@ void Level_1_Update(void)
 			mDown = true;
 		}
 
-		/*!*****************************************************************
-		\author
-			Lim Zhan Peng
-		\brief
-			Movement
-			Checks for WASD or Up, Down, Right, Left keys with movement flag
-			Offsets all other game objects
-			Also offsets background
-		********************************************************************/
+		//Offset ALL objects instances + adding player velo
+		//KeyDown
 		if ((AEInputCheckCurr(AEVK_RIGHT) || AEInputCheckCurr(AEVK_D)) && mRight == true)
 		{
 			for (int i = 1; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -1067,7 +1035,7 @@ void Level_1_Update(void)
 			_Player->position.x += (5 - offset);
 
 			//Background Offset
-			BG.x -= mapoffset;
+			BG.x -= 0.5f;
 		}
 
 		if ((AEInputCheckCurr(AEVK_LEFT) || AEInputCheckCurr(AEVK_A)) && mLeft == true)
@@ -1087,7 +1055,7 @@ void Level_1_Update(void)
 			_Player->position.x += (-5 + offset);
 
 			//Background Offset
-			BG.x += mapoffset;
+			BG.x += 0.5f;
 		}
 		if ((AEInputCheckCurr(AEVK_DOWN) || AEInputCheckCurr(AEVK_S)) && mDown == true)
 		{
@@ -1106,7 +1074,7 @@ void Level_1_Update(void)
 			_Player->position.y += (-5 + offset);
 
 			//Background Offset
-			BG.y += mapoffset;
+			BG.y += 0.5f;
 		}
 		if ((AEInputCheckCurr(AEVK_UP) || AEInputCheckCurr(AEVK_W)) && mUp == true)
 		{
@@ -1125,7 +1093,7 @@ void Level_1_Update(void)
 			_Player->position.y += (5 - offset);
 
 			//Background Offset
-			BG.y -= mapoffset;
+			BG.y -= 0.5;
 		}
 
 
@@ -1233,7 +1201,6 @@ void Level_1_Update(void)
 
 							//Reset timner to 0
 							AUGMENT_3_FIRE_TIMER = 0;
-							AEAudioPlay(slashSFX, SFX_layer, sfx, 1.f, 0);
 						}
 						//If the instance is active, then every 0.5s, turn off.
 						if (qInst->showTexture == true)
@@ -1244,7 +1211,6 @@ void Level_1_Update(void)
 								//Turns off the instance. (prevents damage)
 								qInst->showTexture = false;
 								AUGMENT_3_OFF_TIMER = 0;
-								AEAudioPlay(BlastSFX, SFX_layer, sfx/1.5f, 1.f, 0);
 							}
 						}
 					}
@@ -1303,7 +1269,6 @@ void Level_1_Update(void)
 
 							//Set Timer to 0
 							AUGMENT_4_FIRE_TIMER = 0;
-							AEAudioPlay(explode1SFX, SFX_layer, sfx/2, 1.f, 0);
 						}
 						if (AUG4_BULLET != nullptr)
 						{
@@ -1338,7 +1303,6 @@ void Level_1_Update(void)
 								gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
 								//Show the explosion...
 								AUGMENT_4_EXPLOSION_ACTIVE = true;
-								AEAudioPlay(explode2SFX, SFX_layer, sfx / 2, 1.f, 0);
 							}
 							//Reset timer.
 							AUGMENT_4_PROJECTILE_TIMER = 0;
@@ -2172,12 +2136,6 @@ void Level_1_Update(void)
 
 void Level_1_Draw(void)
 {
-	/*!*****************************************************************
-	\author
-		Lim Zhan Peng
-	\brief
-		Draw in game objects
-	********************************************************************/
 	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 	AEGfxTexture* playerTex = nullptr;
 	if (ShipModel == 0) {
@@ -2204,12 +2162,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* augment3Tex = AEGfxTextureLoad("Assets\\Assets\\Slash.png");
 	AEGfxTexture* augment4Tex = AEGfxTextureLoad("Assets\\Assets\\GrenadeBall.png");
 
-	/*!*****************************************************************
-	\author
-		Lim Zhan Peng
-	\brief
-		Draws background
-	********************************************************************/
+	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
 
 	//Draw Background
@@ -2232,16 +2185,7 @@ void Level_1_Draw(void)
 	//Finish Background draw
 
 
-	/*!*****************************************************************
-	\author
-		Lim Zhan Peng
-	\brief
-		Texture array consisting of Expbar sprite sheet
-		Renders Exp bar
-		Scales Expbar according to window size
-		Translate Expbar according to windowsize
-	********************************************************************/
-	//start Expbar
+	//Exp bar start
 	AEGfxTexture* Expbar[10] = { AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp0.png"),
 							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp1.png"),
 							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp2.png"),
@@ -2253,14 +2197,19 @@ void Level_1_Draw(void)
 							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp8.png"),
 							 AEGfxTextureLoad("Assets\\Assets\\Expbar\\xp9.png") };
 
+
+
+
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
 	AEGfxTextureSet(Expbar[expPercent], 0, 0);
+	//Exp bar end
+
 
 	AEMtx33 scale2 = { 0 };
-	AEMtx33Scale(&scale2, getWinWidth()/2.5f, getWinHeight() / 30.f);
+	AEMtx33Scale(&scale2, 600.f, 30.f);
 	AEMtx33 rotate2 = { 0 };
 	AEMtx33Rot(&rotate2, 0.f);
 	AEMtx33 translate2 = { 0 };
@@ -2270,15 +2219,8 @@ void Level_1_Draw(void)
 	AEMtx33Concat(&transform2, &translate2, &transform2);
 	AEGfxSetTransform(transform2.m);
 	AEGfxMeshDraw(ptrMesh, AE_GFX_MDM_TRIANGLES);
-	//end Expbar
+	//end Exp bar
 
-	/*!*****************************************************************
-	\author
-		Lim Zhan Peng
-	\brief
-		Prints Player level text in Expbar
-		Scales to window size
-	********************************************************************/
 	//Level print
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -2387,12 +2329,6 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(augment3Tex);
 	AEGfxTextureUnload(augment4Tex);
 
-	/*!*****************************************************************
-	\author
-		Lim Zhan Peng
-	\brief
-		Unloads all texture in Expbar array
-	********************************************************************/
 	for (int i = 0; i < 10; i++) {
 		AEGfxTextureUnload(Expbar[i]);
 	}

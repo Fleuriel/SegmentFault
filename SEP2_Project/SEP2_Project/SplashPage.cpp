@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		SplashPage.cpp
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Contains the definitions of functions that allows the Digipen Logo to fade in and out of the screen

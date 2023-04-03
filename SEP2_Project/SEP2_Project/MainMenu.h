@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		MainMenu.h
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Starting point of the game, where all the buttons to lead to other states are at.
