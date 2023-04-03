@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
+#include "SettingsMenu.h"
 
 int reqExp = 15;
 int expPercent = 0;
@@ -118,6 +119,7 @@ int currencyCount = 0;
 
 AEAudio BGM;
 AEAudioGroup BGM_layer;
+extern float volume;
 
 void Level_1_Load(void)
 {
@@ -581,7 +583,7 @@ void Level_1_Init(void)
 	// plays an audio named ‘bgm’ in an 
 	// audio group named ‘bgm_layer’ with 
 	// 100% volume, 100% pitch, looped infinitely.
-	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
+	AEAudioPlay(BGM, BGM_layer, volume, 1.f, -1);
 }
 
 

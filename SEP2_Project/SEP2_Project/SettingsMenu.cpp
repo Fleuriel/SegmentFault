@@ -32,8 +32,8 @@ float settings_textWidth{}, settings_textHeight{};
 f32 buttonRotate_settingsBack;
 
 // Volume and sfx initialization
-int volume = 100;
-int sfx = 100;
+float volume = 1.f;
+float sfx = 1;
 
 void Settings_Load(void)
 {
@@ -154,35 +154,35 @@ void Settings_Update(void)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("0 Vol\n");
-        volume = 0;
+        volume = 0.f;
     }
 
     else if (IsAreaClicked(vol2_midX, vol2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("25 Vol\n");
-        volume = 25;
+        volume = 0.25f;
     }
 
     else if (IsAreaClicked(vol3_midX, vol3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("50 Vol\n");
-        volume = 50;
+        volume = 0.50f;
     }
 
     else if (IsAreaClicked(vol4_midX, vol4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("75 Vol\n");
-        volume = 75;
+        volume = 0.75f;
     }
 
     else if (IsAreaClicked(vol5_midX, vol5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("100 Vol\n");
-        volume = 100;
+        volume = 1.00f;
     }
 
     else if (IsAreaClicked(sfx1_midX, sfx1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
@@ -436,13 +436,13 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "Volume: %d", volume);
+    sprintf_s(settingsText_buffer, "Volume: %0.f", volume* 100);
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-3000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "Sfx: %d", sfx);
+    sprintf_s(settingsText_buffer, "Sfx: %0.f", sfx);
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 
