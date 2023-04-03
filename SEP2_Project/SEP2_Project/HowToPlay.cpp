@@ -1,3 +1,17 @@
+/******************************************************************************/
+/*!
+\file		HowToPlay.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Contains the definitions of functions that print out instructions for the game onto the screen.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "HowToPlay.h"
 #include "Main.h"
 
@@ -28,6 +42,21 @@ float howTo_textWidth{}, howTo_textHeight{};
 // Pre-definition of Rotation
 f32 buttonRotate_howToBack;
 
+
+/******************************************************************************/
+/*!
+    "Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
+
+  \brief
+      Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Load(void)
 {
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -63,6 +92,20 @@ void HowToPlay_Load(void)
     BGtexture_HowToPlay = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
 }
 
+/******************************************************************************/
+/*!
+    "Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Initializes the variables needed for the draw function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Init(void)
 {
 
@@ -77,8 +120,22 @@ void HowToPlay_Init(void)
     BGtransX_HowToPlay = 220.0f * scaleX;
     BGtransY_HowToPlay = -40 * scaleY;
 
-
 }
+
+/******************************************************************************/
+/*!
+    "Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Collision/animation logic of buttons are here.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Update(void)
 {
     // Initialize cursor coordinates
@@ -106,6 +163,21 @@ void HowToPlay_Update(void)
         buttonRotate_howToBack = 0.0f;
     }
 }
+
+/******************************************************************************/
+/*!
+    "Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Renders the background, draws the shapes of the objects and prints text onto the screen.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Draw(void)
 {
 
@@ -184,10 +256,40 @@ void HowToPlay_Draw(void)
 
 
 }
+
+/******************************************************************************/
+/*!
+    "Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Kill each active game object instance if any.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Free(void)
 {
 
 }
+
+/******************************************************************************/
+/*!
+    "Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void HowToPlay_Unload(void)
 {
     AEGfxMeshFree(pMeshHowToPlay);
