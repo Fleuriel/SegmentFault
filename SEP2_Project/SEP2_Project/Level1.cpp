@@ -132,6 +132,7 @@ void Level_1_Load(void)
 	sGameObjNum = 0;
 	sGameObjInstNum = 0;
 
+	//Initialze the values that have been declared in GameObjects.h
 	_Player = nullptr;
 	_Bullet = nullptr;
 	_Boss = nullptr;
@@ -173,6 +174,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_BOSS;
 
+		//Mesh for TYPE_BOSS
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -192,6 +194,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_BOSS_BULLETHELL_BULLET_1;
 
+		//Mesh for TYPE_BOSS_BULLETHELL_BULLET_1
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -210,6 +213,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_BULLET;
 
+		//Mesh for TYPE_BULLET
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -228,6 +232,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_ENEMY;
 
+		//Mesh for TYPE_ENEMY
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -245,6 +250,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_PLAYER_HITBOX_INDICATOR;
 
+		//Mesh for TYPE_PLAYER_HITBOX_INDICATOR
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -262,6 +268,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_CURRENCY;
 
+		//Mesh for  Exp Orbs
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -281,6 +288,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT1;
 
+		//Mesh for TYPE_AUGMENT1
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -298,6 +306,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT2;
 
+		//Mesh for TYPE_AUGMENT2
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -315,6 +324,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT3;
 
+		//Mesh for TYPE_AUGMENT3
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -332,6 +342,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT4;
 
+		//Mesh for TYPE_AUGMENT4
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -349,6 +360,7 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT4_PROJECTILE;
 
+		//Mesh for TYPE_AUGMENT4_PROJECTILE
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -366,6 +378,8 @@ void Level_1_Load(void)
 		_Objects = sGameObjList + sGameObjNum++;
 		_Objects->type = TYPE_AUGMENT4_EXPLOSION;
 
+
+		//Mesh for TYPE_AUGMENT4_EXPLOSION
 		AEGfxMeshStart();
 
 		AEGfxTriAdd(
@@ -501,47 +515,32 @@ void Level_1_Load(void)
 
 void Level_1_Init(void)
 {
-	//0
+	//0 Player Initialization
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
 	_Player->health = MaxHealth = 20 + MaximumPlayerHealth;
 	AE_ASSERT(_Player);
 
-	//3
-	/*_Bullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, nullptr, nullptr, 0.0f);
-	AE_ASSERT(_Bullet);*/
 
 
-	//4
-	//_Enemy = gameObjInstCreate(TYPE_ENEMY, ENEMY_SIZE, nullptr, nullptr, 0.0f);
-	//AE_ASSERT(_Enemy);
-
-	//5
+	//5 Player Hitbox Initialization
 	_PlayerHitbox = gameObjInstCreate(TYPE_PLAYER_HITBOX_INDICATOR, 20.0f, nullptr, nullptr, 0.0f);
 	_PlayerHitbox->showTexture = false;
 
-	//_PlayerHitbox->flag = !FLAG_ACTIVE;
-
-	//6 Exp Orbs
-	//_ExpOrbs = gameObjInstCreate(TYPE_EXPERIENCE, 10, nullptr, nullptr, 0.0f);
-	//AE_ASSERT(_ExpOrbs);
 
 
-	//7
+
+	//7 Augment_One Initialization
 	_Augment_One = gameObjInstCreate(TYPE_AUGMENT1, AUG_GUN_SIZE, nullptr, nullptr, 0);
 	AE_ASSERT(_Augment_One);
 
-	//8
-	//_Augment_Two
 
-	//9
+	//9 Augment_Three Initialization
 	_Augment_Three = gameObjInstCreate(TYPE_AUGMENT3, 0.0f, nullptr, nullptr, 0.0f);
 	_Augment_Three->scale.x = AUG_GUN_SIZE * 3;
 	_Augment_Three->scale.y = AUG_GUN_SIZE;
 
-	//
-	//AE_ASSERT(_Augment_Three);
 
-	//10
+	//10 Augment_Four initialization
 	_Augment_Four = gameObjInstCreate(TYPE_AUGMENT4, AUG_GUN_SIZE, nullptr, nullptr, 0);
 
 
@@ -886,8 +885,10 @@ void Level_1_Update(void)
 		//Rotation Increase.
 		_rotation_Aug += (0.04f+ Augment2RotSpd);
 
+		//Cheat Code to make boss spawn faster.
 		if (AEInputCheckTriggered(AEVK_0))
 		{
+			//Parameters to make the boss spawn in 5 seconds and STOP SPAWNING OF ENEMY
 			bossCooldownMin = 0;
 			bossCooldownSec = 5;
 			enemyCount = 100;
@@ -906,8 +907,10 @@ void Level_1_Update(void)
 			for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 			{
 				GameObjInstances* ObjInstance1 = sGameObjInstList + i;
+				//If ObjInstance1 is not active, skip
 				if ((ObjInstance1->flag & FLAG_ACTIVE) == 0)
 					continue;
+				//If ObjInstance1 is of TYPE_ENEMY OR TYPE_CURRENCY, destroy
 				if ((ObjInstance1->pObject->type == TYPE_ENEMY)) {
 					gameObjInstDestroy(ObjInstance1);
 
@@ -925,6 +928,9 @@ void Level_1_Update(void)
 		//THE FOLLOWING ONLY CHECK ONCE WHEN PRESSED.
 		if (AEInputCheckTriggered(AEVK_LEFT) || AEInputCheckTriggered(AEVK_A))
 		{
+			//This allocates the player looking position. 
+			//If player press left, skills that would shoot left would face towards the left and
+			//Target Left.
 			if (_playerScale > 0)
 			{
 				_Player->scale.x *= -1;
@@ -934,6 +940,9 @@ void Level_1_Update(void)
 
 		if (AEInputCheckTriggered(AEVK_RIGHT) || AEInputCheckTriggered(AEVK_D))
 		{
+			//This allocates the player looking position. 
+			//If player press right, skills that would shoot right would face towards the right and
+			//Target right.
 			if (_playerScale < 0)
 			{
 				_Player->scale.x *= -1;
@@ -1057,54 +1066,39 @@ void Level_1_Update(void)
 		}
 
 
-		if (AEInputCheckTriggered(AEVK_1))
-		{
-			bossPhase = TYPE_BHELL1;
-		}
-		if (AEInputCheckTriggered(AEVK_2))
-		{
-			bossPhase = TYPE_BHELL2;
-		}
-		if (AEInputCheckTriggered(AEVK_3))
-		{
-			bossPhase = TYPE_BHELL3;
-		}
-		if (AEInputCheckTriggered(AEVK_4))
-		{
-			bossPhase = TYPE_BHELL4;
-		}
-		if (AEInputCheckTriggered(AEVK_5))
-		{
-			bossPhase = TYPE_BHELL5;
-		}
-
 		for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
 		{
 			GameObjInstances* pInst = sGameObjInstList + i;
 
+			//if pInst->flag is NOT ACTIVE OR nullptr then continue.
 			if ((pInst->flag & FLAG_ACTIVE) == 0)
 				continue;
 
 			if (pInst->pObject == nullptr)
 				continue;
 
+			//TYPE_PLAYER CHECK
 			if (pInst->pObject->type == TYPE_PLAYER)
 			{
 				for (unsigned long j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
 				{
 					GameObjInstances* qInst = sGameObjInstList + j;
 
+					//if qInst->flag is NOT ACTIVE continue.
 					if ((qInst->flag & FLAG_ACTIVE) == 0)
 						continue;
 
+					//if qInst is of TYPE_AUGMENT1
 					if (qInst->pObject->type == TYPE_AUGMENT1)
 					{
+						//Position Augment 1 (X) on pInst (Player's) X coordinate
 						qInst->position.x = pInst->position.x;
+						//Position Augment 1 (Y) on pInst (Player's) Y coordinate + offset of 75.0f so as not to obstruct player
 						qInst->position.y = pInst->position.y + 75.0f;
 
-						AUGMENT_1_FIRE_INTERVAL = Augment1CD;
-
+						//Accumulate the timer, per frame
 						AUGMENT_1_FIRE_TIMER += g_dt;
+						//Checks  if Timer > Augment1CD
 						if (AUGMENT_1_FIRE_TIMER >= Augment1CD)
 						{
 							// Get the mouse cursor position
@@ -1120,6 +1114,8 @@ void Level_1_Update(void)
 							// Create a new bullet object and set its velocity to point towards the target
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
 							AEAudioPlay(BlastSFX, SFX_layer, volume, 1.f, 0);
+
+							//checks if the bullet instance is it nullptr, if it is then continue, else move the bullet.
 							if (bulletInst != nullptr)
 								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
@@ -1128,26 +1124,38 @@ void Level_1_Update(void)
 						}
 					}
 
+
+					//if qInst is of TYPE_AUGMENT2
 					if (qInst->pObject->type == TYPE_AUGMENT2)
 					{
+						//Moving about center (Player)
 						AUGMENT_2_DIRECTION = { (f32)cos(_rotation_Aug) * Augment2Range, (f32)sin(_rotation_Aug) * Augment2Range };
+						//Scales the Vector by 100
 						AEVec2Scale(&AUGMENT_2_DIRECTION, &AUGMENT_2_DIRECTION, 100.0f);
+						//Adds the vector
 						AEVec2Add(&qInst->position, &pInst->position, &AUGMENT_2_DIRECTION);
 					}
 
+					//if qInst is of TYPE_AUGMENT3
 					if (qInst->pObject->type == TYPE_AUGMENT3 && Augment3Level != 0)
 					{
+						//Facing Left...
 						if (_playerScale > 0)
 						{
+							//Offset the slash to not be in the player
 							qInst->position.x = pInst->position.x + 85.f + Augment3Range;
 							qInst->position.y = pInst->position.y;
+							//Similarly to the facing left and right, this does the same
 							if (qInst->scale.x < 0)
 								qInst->scale.x *= -1;
 						}
+						//Facing Right...
 						if (_playerScale < 0)
 						{
+							//Offset the slash to not be in the player
 							qInst->position.x = pInst->position.x - 85.f - Augment3Range;
 							qInst->position.y = pInst->position.y;
+							//Similarly to the facing left and right, this does the same
 							if (qInst->scale.x > 0)
 								qInst->scale.x *= -1;
 
@@ -1157,11 +1165,10 @@ void Level_1_Update(void)
 						//Make the timer.. AUGMENT_3_FIRE_INTERVAL is at 1.0f;
 						if (AUGMENT_3_FIRE_TIMER > AUGMENT_3_FIRE_INTERVAL)
 						{
+							//Shows the texture
 							qInst->showTexture = true;
-							//Do damage here....
-							//only do ONE INSTANCE of damage per skill.
 
-
+							//Reset timner to 0
 							AUGMENT_3_FIRE_TIMER = 0;
 						}
 						//If the instance is active, then every 0.5s, turn off.
@@ -1177,10 +1184,12 @@ void Level_1_Update(void)
 						}
 					}
 
-
+					//if qInst is of TYPE_AUGMENT4
 					if (qInst->pObject->type == TYPE_AUGMENT4)
 					{
+						//set the position of qInst to be the same with pInst (Shoots from the center of the player)
 						qInst->position = pInst->position;
+
 						//Get Mouse cursor Pos
 						AEInputGetCursorPosition(&mouseX, &mouseY);
 
@@ -1189,74 +1198,106 @@ void Level_1_Update(void)
 
 						//Compute the direction of bullet with 60 deg angle discrepancies.
 
-
+						//Calculates the direction of which the mouse is headed towards.
 						AUGMENT_4_DIRECTION = { AUGMENT_4_MOUSE_POSITION.x - qInst->position.x, AUGMENT_4_MOUSE_POSITION.y - qInst->position.y };
 
+						//Normalize the values...
 						AEVec2Normalize(&AUGMENT_4_DIRECTION, &AUGMENT_4_DIRECTION);
 
-
+						//TYPE_AUGMENT4 is a bomb skill which travels after a certain time.
+						//Which would allow splash damage and clears hoardes of enemies
+						//This would balance it a bit by making the targetting system not accurate as is with most splash weapons in other games.
+						//Angle Discrepancies of 30 degrees +/- of the mouse direction.
 						f32 angleDiscrepancy = PI / 180.0f * 30.0f;
 						AUGMENT_4_ANGLE = atan2f(AUGMENT_4_DIRECTION.y, AUGMENT_4_DIRECTION.x) + ((AERandFloat() * 2.0f - 1.0f) * angleDiscrepancy);
 
-
+						
 						AUGMENT_4_DIRECTION.x = cosf(AUGMENT_4_ANGLE);
 						AUGMENT_4_DIRECTION.y = sinf(AUGMENT_4_ANGLE);
 
 						AUGMENT_4_DISTANCE = AEVec2Distance(&qInst->position, &AUGMENT_4_MOUSE_POSITION);
 						AUGMENT_4_DISTANCE_TOLERANCE = 0.1f * AUGMENT_4_DISTANCE;
 
+						//Fly towards the location.
 						AUGMENT_4_TARGET_DISTANCE = AUGMENT_4_DISTANCE + (AERandFloat() * 2.0f - 1.0f) * AUGMENT_4_DISTANCE_TOLERANCE;
 
+						//Accumulate the fire timer.
 						AUGMENT_4_FIRE_TIMER += g_dt;
 
+						//set AUG4_BULLET to nullptr.
 						GameObjInstances* AUG4_BULLET = nullptr;
 
+						//if timer is more than interval...
 						if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL && Augment4Level != 0)
 						{
 							//Shoot the bullet to the direction.
 							AUG4_BULLET = gameObjInstCreate(TYPE_AUGMENT4_PROJECTILE, BULLET_SIZE, &qInst->position, &AUGMENT_4_DIRECTION, getCursorRad(_Player->position));
 
+							//Projectile is true as condition is met...
 							AUGMENT_4_PROJECTILE_ACTIVE = true;
 
+							//Set Timer to 0
 							AUGMENT_4_FIRE_TIMER = 0;
 						}
 						if (AUG4_BULLET != nullptr)
 						{
+							//Scale the AUG4_BULLET velocity
 							AEVec2Scale(&AUG4_BULLET->velocity, &AUG4_BULLET->velocity, AUGMENT_4_BULLET_SPEED);
 						}
 					}
 
+					//if qInst is of TYPE_AUGMENT4_PROJECTILE
+					//This is the projectile shot from the above.
 					if (qInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 					{
+						//if the projectile is true...
 						if (AUGMENT_4_PROJECTILE_ACTIVE == true)
 						{
+							//Accumulate the timer.
 							AUGMENT_4_PROJECTILE_TIMER += g_dt;
 						}
 
+						//If the Projectile Timer is more than the interval...
 						if (AUGMENT_4_PROJECTILE_TIMER > AUGMENT_4_PROJECTILE_INTERVAL && Augment4Level != 0)
 						{
+							//if qInst is NOT NULLPTR...
 							if (qInst != nullptr)
 							{
+								//destroy the instance (shell)
 								gameObjInstDestroy(qInst);
+								//ACTIVE = false...
 								AUGMENT_4_PROJECTILE_ACTIVE = false;
+								
+								//Create the explosion effect
 								gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
+								//Show the explosion...
 								AUGMENT_4_EXPLOSION_ACTIVE = true;
 							}
+							//Reset timer.
 							AUGMENT_4_PROJECTILE_TIMER = 0;
 						}
 					}
 
+					//if qInst is of TYPE_AUGMENT4_EXPLOSION...
 					if (qInst->pObject->type == TYPE_AUGMENT4_EXPLOSION)
 					{
+						//As Above, if TRUE...
 						if (AUGMENT_4_EXPLOSION_ACTIVE == true)
 						{
+							//Accumulate the timer.
 							AUGMENT_4_EXPLOSION_TIMER += g_dt;
 						}
 
+						//if Explosion Timer is more than interval...
 						if (AUGMENT_4_EXPLOSION_TIMER > AUGMENT_4_EXPLOSION_INTERVAL)
 						{
+
+							//Destroy game object
 							gameObjInstDestroy(qInst);
+							//Active is FALSE
 							AUGMENT_4_EXPLOSION_ACTIVE = false;
+							
+							//Explosion Timer reset to 0...
 							AUGMENT_4_EXPLOSION_TIMER = 0;
 						}
 
@@ -1266,137 +1307,202 @@ void Level_1_Update(void)
 				}
 			}
 
-
-
+			//if pInst is of TYPE_BOSS........
 			if (pInst->pObject->type == TYPE_BOSS)
 			{
+				//switch case of boss phase
 				switch (bossPhase)
 				{
+				//TYPE_BHELL1
 				case TYPE_BHELL1:
+					//Delay Shooting of 0.25 seconds OR 250milliseconds every shot from the boss
 					boss::DelayShoot = 0.25f;
+					//Swarm the enemies with bullets per shot (13)
 					boss::numBulletsBHell = 13;
+					//initial angle of 225...
 					angle = 225;
+
+					//if the BOSS health is lesser than the maximum boss health (80%)
 					if (pInst->health <= (float)MaxBossHealth * (0.8f))
 					{
+						//Delay...
 						double const MAX_DELAY = 4.0f;
+						//invincibility Frame timer...
 						_Boss->iFrame = MAX_DELAY;
+						//if the timer is more than the delay,
 						if (_delayTimeBullets > MAX_DELAY)
 						{
+							//switch case to TYPE_BHELL2
 							bossPhase = TYPE_BHELL2;
+							//reset shooting timer
 							_deltaTime_Shooting = 0;
+							//reset delayTimeBullets...
 							_delayTimeBullets = 0;
 						}
 					}
+					//the 'Fun' happens (Bullet Hell Phase 1)
 					else
 					{
+						//if the delayTime increases past the delay shoot.......
 						if (_delayTimeBullets >= boss::DelayShoot)
 						{
+							//Bullet Hell consist of a up and down shots
+							//angle is for the down,
+							//angle2 is for the up
 							angle2 = 84;
+
 							for (int q = 0; q < boss::numBulletsBHell; q++)
 							{
-								
+								//ALL angle -= 10
 								angle -= 10;
+								//DOWN BULLET HELL
+								//if the angle that has been decreased is below 134, then reset the values to 225...
+								//This creates the illusion of a bullet hell spread evenly 10 degrees.
 								if (angle < 134)
 								{
 									angle = 225;
 								}
-
+								
+								//UP BULLET HELL
+								//if the angle that has been decreased is below -84, then reset valuyes to 84...
+								//This creates the illusion of a bullet hell spread evenly 12 degrees.
 								angle2 -= 12;
 								if (angle2 < -84)
 								{
 									angle2 = 84;
 								}
 
-								std::cout << angle2 << '\n';
-
-
+								//Velocity of the bullet (DOWN)
 								boss::velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity, angle);
 
 
+								//Velocity of the bullet (UP)
 								boss::velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity2, angle2);
 
 
 							}
+							//reset angle = 0 for future uses.
 							angle = 0;
-
-							boss::numBulletsBHell = 12;
-
+							//Reset Parameters
+							boss::numBulletsBHell = 13;
+							//Shoot to 0..
 							_delayTimeBullets = 0;
 
 						}
 					}
-
+					//Break out of this loop...
 					break;
+				//TYPE_BHELL2
 				case TYPE_BHELL2:
+					//DelayShoot is 0.05s...
 					DelayShoot = 0.05f;
+					//number of bullets is 2...
 					numBulletsBHell = 2;
+					//angle is 390
 					angle = 390;
 
+					//if current boss health is <= 60% HP..
 					if (pInst->health <= (float)MaxBossHealth * (0.6f))
 					{
+						//invincibility frame for boss..
 						double const MAX_DELAY = 4.0f;
 						_Boss->iFrame = MAX_DELAY;
+						//if delay is more than  MAX_DELAY...
 						if (_delayTimeBullets > MAX_DELAY)
 						{
+							//set bossPhase to TYPE_BHELL3
 							bossPhase = TYPE_BHELL3;
+							//reset parameters...
 							_deltaTime_Shooting = 0;
 							_delayTimeBullets = 0;
 						}
 					}
+					//TYPE_BHELL2 Bullet Hell...
 					else
 					{
+						//Relatively easier bullet hell fight compared to TYPE_BHELL1.
+						
+						//if DelayTime > DelayShoot
 						if (_delayTimeBullets >= DelayShoot)
 						{
+							//For Loop for the bullets...
 							for (int q = 0; q < numBulletsBHell; q++)
 							{
+								//angle would be sweeping left to right 
 								angle = static_cast<float>(360) + static_cast<float>((static_cast<float>(40) * sin(g_appTime * 2.0 * PI / 5.0)));
 								for (int w = 0; w < 1; w++)
 								{
+									//if angle is lesser than 320, reset to 400...
 									if (angle < 320)
 									{
 										angle = 400;
 									}
+									//Velocity of the bullet...
 									velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+									//create bullet...
 									gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, static_cast<float>(5), &pInst->position, &velocity, angle);
 								}
 							}
+							//Delay set to 0
 							_delayTimeBullets = 0;
 						}
 					}
-
+					//break out of the TYPE_BHELL2
 					break;
+				//TYPE_BHELL3
 				case TYPE_BHELL3:
+					//DelayShoot 0.15f
 					DelayShoot = 0.15f;
+
+					//if BOSS health is <= 40% HP...
 					if (pInst->health <= (float)MaxBossHealth * (0.4f))
 					{
+						//delay
 						double const MAX_DELAY = 4.0f;
+						//if delay > maxdelay...
 						if (_delayTimeBullets > MAX_DELAY)
 						{
+							//set bossPhase to BHELL4
 							bossPhase = TYPE_BHELL4;
+							//Reset Parameters
 							_deltaTime_Shooting = 0;
 							_delayTimeBullets = 0;
 						}
 					}
+					//TYPE_BHELL3
 					else {
+						//This boss is where difficulty starts to ramp up from TYPE_BHELL2...
+
+						//Intricate Patterns would apprear and graze down the player...
+						//if delay > delayshoot...
 						if (_delayTimeBullets >= DelayShoot)
 						{
+							//Set angle to 360
 							angle = 360;
+							//set angleOffset
 							static f32 angleOffset = 0;
+							//DelayShoot = 0.24f
 							DelayShoot = 0.25f;
+							//number of bullets = 4...
 							numBulletsBHell = 4;
 
+							//
 							for (int q = 0; q < numBulletsBHell; q++)
 							{
+								//Set angle...
 								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								//Velocity of bullet...
 								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
 								angle -= 120;
 							}
 							for (int q = 0; q < numBulletsBHell; q++)
 							{
+								//Set Angle
 								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								//Velocity of Bullets
 								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
 								angle -= 120;
@@ -1404,14 +1510,18 @@ void Level_1_Update(void)
 							angle = 90;
 							for (int q = 0; q < numBulletsBHell; q++)
 							{
+								//Set Angle
 								f32 angleRadians = AEDegToRad(angle + angleOffset);
+								//Velocity of Bullets.
 								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle + angleOffset);
 								angle -= 120;
 							}
 							for (int q = 0; q < numBulletsBHell; q++)
 							{
+								//Set Angle
 								f32 angleRadians = AEDegToRad(angle - angleOffset);
+								//Velocity of Bullets.
 								velocity = { projectileSpeed * sin(angleRadians), projectileSpeed * cos(angleRadians) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, -angle - angleOffset);
 								angle -= 120;
@@ -1420,41 +1530,65 @@ void Level_1_Update(void)
 							_delayTimeBullets = 0;
 						}
 					}
+					//break
 					break;
-					//Peerless Wind God
+				//TYPE_BHELL4
 				case TYPE_BHELL4:
+					//This bullet hell DOES NOT REQUIRE THE PLAYER TO SHOOT THE BOSS...
+					//THE BULLET HELL PREMISE IS SUCH THAT THEY HAVE TO SURVIVE THE ONSLAUGHT OF BULLETS COMING FROM THE BOSS..
+					//AFTER 22 SECONDS... 
+					//Automatically transitions into TYPE_BHELL5
+					
+					
+					//set boss iframe to 1...
 					_Boss->iFrame = 1.f;
+					//number of bullets to 7...
 					numBullets = 7;
+
+					//Move the boss
 					if (_deltaTime_Shooting > 3 && _deltaTime_Shooting < 18)
 					{
+						//Frequency
 						frequency = 1.0f;
+						//the time
 						times = static_cast<float>(g_appTime);
+						//Speed of the boss
 						xSpeed += static_cast<float>(0.005);
 					}
 
+					//if deltaTime < 20......
 					if (_deltaTime_Shooting < 20)
 					{
+						//angle += 10.0f
 						angle += static_cast<float>(10);
+						//if angle is more than 200 OR leser than 160, then set 160
 						if (angle > 200 || angle < 160)
 						{
 							angle = static_cast<float>(160);
 						}
+						//if shooting < 10 while within 20...
+						//shoot 0.2f per hit
 						if (_deltaTime_Shooting < 10)
 						{
 							DelayShoot = 0.2f;
 						}
-
+						//shooting >= 10 <= 14, 
+						//shoot faster
 						if (_deltaTime_Shooting >= static_cast<float>(10) && _deltaTime_Shooting <= static_cast<float>(14))
 						{
 							DelayShoot = 0.05f;
 						}
+						//shooting >= 14 <=20
+						//shoot very very fast
 						if (_deltaTime_Shooting > static_cast<float>(14) && _deltaTime_Shooting <= static_cast<float>(20))
 						{
 							DelayShoot = 0.035f;
 						}
 
+						//The brain of the bullet hell spawning
 						if (_delayTimeBullets > DelayShoot)
 						{
+							//for EACH of the bullets...
 							for (int q = 0; q < numBullets; q++)
 							{
 								// Calculate the x position for this bullet
@@ -1467,20 +1601,25 @@ void Level_1_Update(void)
 								AEVec2 position = { xPos, yPos };
 								// Set the bullet's velocity and angle
 								velocity = { projectileSpeed * sin(AEDegToRad(angle)), projectileSpeed * cos(AEDegToRad(angle)) };
+								//set the offset of the angle
 								float angleOffset = ((float)rand() / RAND_MAX) * 20 - 80;
+								//Create the game object instance
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 7, &position, &velocity, angle - angleOffset);
+								//set delayTime =0;
 								_delayTimeBullets = 0;
 							}
 						}
 					}
-
+					//if >19, then slowdown the boss
 					if (_deltaTime_Shooting > 19)
 					{
+						//speed minus
 						xSpeed -= static_cast<float>(0.001);
 						if (xSpeed < static_cast<float>(0))
 						{
 							xSpeed = static_cast<float>(0);
 						}
+						//y to 0
 						ySpeed = static_cast<float>(0);
 					}
 
@@ -1488,19 +1627,25 @@ void Level_1_Update(void)
 					if (_deltaTime_Shooting > 22)
 					{
 						_delayTimeBullets = 0;
+						//Health automatically sets to 20%HP. 40% --> 20% HP is ignored as the player main objective is to survive.
 						pInst->health = (s32)(MaxBossHealth * (0.2f));
 						_Boss->iFrame = 5.f;
+						//Transition to TYPE_BHELL5
 						bossPhase = TYPE_BHELL5;
 					}
 
+					//Displacement of the X and Y
 					displacementX = xRange * static_cast<float>(sinf(static_cast<float>(xSpeed) * static_cast<float>(g_appTime)));
 					displacementY = yRange * static_cast<float>(sinf(static_cast<float>(ySpeed) * static_cast<float>(g_appTime)));
 					// Set the position of the object
 					pInst->position.x = displacementX;
 					pInst->position.y = 200.0f + displacementY; // set the y position to a fixed value for now
+					//Break
 					break;
-					//BOWAP
+
+				//TYPE_BHELL5
 				case TYPE_BHELL5:
+					//set boss position x = 0, y = 220..
 					_Boss->position.x = 0;
 					_Boss->position.y = 220;
 					//If Boss hp not lesser than 1,
@@ -1540,49 +1685,63 @@ void Level_1_Update(void)
 						if (_delayTimeBullets > DelayMovement)
 						{
 							numBulletsBHell = 8;
+							//make the angle alternate between 0 ~ 360 using sine wave for EACH OF THE BULLETS (12 of them)
 							angle = rotationAngle * static_cast<float>(sin(g_appTime / 12 * 3.142));
 
-							//BOWAP					
+							//This creates the illusion of the bullets spinning left and right whenever it is approaching the sine curve...
 							for (int j = 0; j < numBulletsBHell; j++)
 							{
+								//angleT adds for ALL bullets angle
 								float angleT = angle + (30.f * j * 360.f / 14.f);
+								//velocity for ALL BULLET PROJECTILES
 								velocity = { projectileSpeed * static_cast<float>(cos(AEDegToRad(angleT))) ,projectileSpeed * static_cast<float>(sin(AEDegToRad(angleT))) };
+								//Create GameObject Instnace...
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angleT);
 							}
 						}
 					}
+					//break
 					break;
 				default:
+					//break
 					break;
 
 				}
 			}
-
+			//if TYPE_BOSS_BULLETHELL_BULLET_1
 			if (pInst->pObject->type == TYPE_BOSS_BULLETHELL_BULLET_1)
 			{
+				//moves posx and posy for TYPE_BOSS_bULLETHELL_BULLET1
 				pInst->position.x = 2 * pInst->velocity.x * g_dt + pInst->position.x;
 				pInst->position.y = 2 * pInst->velocity.y * g_dt + pInst->position.y;
-				//
-
+				
+				//in TYPE_BHELL1, After bullets spray to the top,
 				if (bossPhase == TYPE_BHELL1 && pInst->position.y > AEGfxGetWinMaxY())
 				{
+					//Create an angle which falls down inversely(rains down the player)
 					angle = static_cast<float>(180) + static_cast<float>(45) * static_cast<float>(sin(g_appTime * 2.0 * PI / 5.0));
 					for (int q = 0; q < 1; q++)
 					{
+						//if angle <135
 						if (angle < 135)
 						{
+							//reset to 225...
 							angle = 225;
 						}
+						//velocity of the bullet
 						velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
+						//Create GameObjectInstance 
 						gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &velocity, angle);
 					}
 				}
+				//if TYPE_BHELL2 and the bullet fly up to the max window width, it will appear from the bottom of the screen...
 				if (bossPhase == TYPE_BHELL2 && pInst->position.y > AEGfxGetWinMaxY())
 				{
 					pInst->position.y = AEGfxGetWinMinY();
 				}
 			}
 
+			//move TYPE_BULLET and TYPE_AUGMENT4_PROJECTILE
 			if (pInst->pObject->type == TYPE_BULLET || pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 			{
 				//move bullet....
@@ -1590,6 +1749,7 @@ void Level_1_Update(void)
 				pInst->position.y = 2 * pInst->velocity.y * g_dt + pInst->position.y;
 			}
 
+			//TYPE_ENEMY...
 			if (pInst->pObject->type == TYPE_ENEMY)
 			{
 				for (int j = 0; j < GAME_OBJ_INST_NUM_MAX; j++)
@@ -1599,7 +1759,7 @@ void Level_1_Update(void)
 
 					if ((qInst->flag & FLAG_ACTIVE) == 0)
 						continue;
-
+					// if player...
 					if (qInst->pObject->type == TYPE_PLAYER)
 					{
 						// Get direction from enemy to player
@@ -1623,12 +1783,13 @@ void Level_1_Update(void)
 					}
 				}
 			}
-
+			//hitbox for the player...
 			if (pInst->pObject->type == TYPE_PLAYER_HITBOX_INDICATOR)
 			{
 				//Show the hitbox indicator of the player.
 				pInst->position.x = _Player->position.x;
 				pInst->position.y = _Player->position.y - 10;
+				//show hitbox
 				if (AEInputCheckCurr(AEVK_LSHIFT))
 				{
 					pInst->showTexture = true;
@@ -1640,12 +1801,12 @@ void Level_1_Update(void)
 			}
 
 			//Window size is Game_Dimension.xxGame_Dimension.y
-
 			if (pInst->position.x > AEGfxGetWinMaxX() ||
 				pInst->position.x < AEGfxGetWinMinX() ||
 				pInst->position.y > AEGfxGetWinMaxY() ||
 				pInst->position.y < AEGfxGetWinMinY())
 			{
+				//if parameters are like this...
 				if (pInst->pObject->type == TYPE_PLAYER ||
 					pInst->pObject->type == TYPE_AUGMENT1 ||
 					pInst->pObject->type == TYPE_ENEMY ||
@@ -1660,11 +1821,13 @@ void Level_1_Update(void)
 					continue;
 				}
 
+				//reduce bullet count...
 				if (pInst->pObject->type == TYPE_BULLET)
 				{
 					bulletCount--;
 
 				}
+				//delete the object instnace.
 				gameObjInstDestroy(pInst);
 			}
 		}
@@ -2666,9 +2829,12 @@ void Level_1_Unload(void)
 	currencyCount = 0;
 
 
-	
+	//free sGameObjList
 	free(sGameObjList);
+	//set sGameObjList to nullptr
 	sGameObjList = nullptr;
+	//free sGameObjInstList
 	free(sGameObjInstList);
+	//set sGameObjInstList to nullptr
 	sGameObjInstList = nullptr;
 }
