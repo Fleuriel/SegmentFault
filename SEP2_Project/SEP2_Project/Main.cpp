@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*!
-\file       Main.h
+\file       Main.cpp
 \project    Among Them
 
 \authors    Angus Tan Yit Hoe, tan.a, 2200711 (20%)
