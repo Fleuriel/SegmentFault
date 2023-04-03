@@ -36,6 +36,8 @@ char Upgrade1_buffer[1024]{};
 bool CheckIfBoughtModel2 = false;
 bool CheckIfBoughtModel3 = false;
 bool CheckIfBoughtModel4 = false;
+
+
 void Upgrade_Load(void) 
 {
 	std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
@@ -170,6 +172,7 @@ void Upgrade_Load(void)
 		ifs3.close();
 	}
 	//End of Open save file of stats
+
 }
 
 void Upgrade_Init(void) 
@@ -188,8 +191,6 @@ void Upgrade_Init(void)
 	UpgradeStatDisplay_transX = 33 * UpgradescaleX_settings;
 	UpgradeStatDisplay_transY = 340.f * UpgradescaleY_settings;
 
-
-
 }
 void Upgrade_Update(void) 
 {
@@ -205,14 +206,14 @@ void Upgrade_Update(void)
 
 	// if cursor within buttons, change game state
 	if (IsAreaClicked(backButtonUpgrade_midX, backButtonUpgrade_midY, 150.0f * UpgradescaleX_settings, 100.0f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 		gGameStateNext = MAINMENU;
 	}
 
 
 	//Purchase ship model 1
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
@@ -229,7 +230,7 @@ void Upgrade_Update(void)
 
 	//Purchase ship model 2
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
@@ -257,7 +258,7 @@ void Upgrade_Update(void)
 
 	//Purchase ship model 3
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) +90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
@@ -284,7 +285,7 @@ void Upgrade_Update(void)
 
 	//Purchase ship model 4
 	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
@@ -314,7 +315,7 @@ void Upgrade_Update(void)
 
 	//Purchase Max HP
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 		
 		if (Currency >= 300)
 		{
@@ -328,7 +329,7 @@ void Upgrade_Update(void)
 
 	//Purchase Bullet speed
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		if (Currency >= 300 && ProjectileSpeed_upgrade != 10)
 		{
@@ -340,7 +341,7 @@ void Upgrade_Update(void)
 
 	//Purchase Cooldown reduction
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 		if (Currency >= 400 && CD_upgrade != 10)
 		{
@@ -352,7 +353,7 @@ void Upgrade_Update(void)
 
 	//Purchase HP regen
 	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
-		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+		&& AEInputCheckReleased(AEVK_LBUTTON)) {
 
 
 

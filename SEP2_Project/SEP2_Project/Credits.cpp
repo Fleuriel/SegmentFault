@@ -1,6 +1,19 @@
+/******************************************************************************/
+/*!
+\file		Credits.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Contains the definitions of functions that print out credits onto the screen.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Credits.h"
 #include "Main.h"
-
 
 // Pointer to Mesh
 AEGfxVertexList* pMeshCredits = nullptr;
@@ -26,6 +39,11 @@ float credits_textWidth{}, credits_textHeight{};
 
 // Pre-definition of Rotation
 f32 buttonRotate_creditsBack;
+
+
+//Audio declaration
+AEAudio CBGM;
+AEAudioGroup CBGM_layer;
 
 void Credits_Load(void) 
 {
@@ -63,8 +81,22 @@ void Credits_Load(void)
     BGtexture_credits = AEGfxTextureLoad("Assets\\Assets\\MainMenuBackground.png");
 
     //end Background
-
 }
+
+/******************************************************************************/
+/*!
+    "Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Initializes the variables needed for the draw function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Init(void) 
 {
     scaleX = getWinWidth() / 1366.f;
@@ -79,7 +111,26 @@ void Credits_Init(void)
 
     BGtransX_credits = 220.0f * scaleX;
     BGtransY_credits = -40 * scaleY;
+
+    // plays an audio named bgm in an 
+    // audio group named bgm_layer with 
+    // 100% volume, 100% pitch, looped infinitely.
 }
+
+/******************************************************************************/
+/*!
+    "Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Collision/animation logic of buttons are here.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Update(void)
 {
     // Initialize cursor coordinates
@@ -107,6 +158,21 @@ void Credits_Update(void)
         buttonRotate_creditsBack = 0.0f;
     }
 }
+
+/******************************************************************************/
+/*!
+    "Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Renders the background, draws the shapes of the objects and prints text onto the screen.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Draw(void) 
 {
 
@@ -144,8 +210,7 @@ void Credits_Draw(void)
     AEGfxSetTransform(transform.m);
     AEGfxMeshDraw(pMeshCredits, AE_GFX_MDM_TRIANGLES);
     
-    // Rendering texts for the screen
-
+    //------------------------------------------------------------------------Rendering Text for the screen------------------------------------------------------------------------------//
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -222,6 +287,27 @@ void Credits_Draw(void)
     sprintf_s(credits1_buffer, "CLAUDE COMAIR");
     AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
     AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-3000.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "Special thanks to:");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-1650.f * scaleY)), 0.6f * scaleX, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "SOUNDLY");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-1200.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "CRAFTON GAMING (DAFONT)");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-950.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
@@ -341,14 +427,46 @@ void Credits_Draw(void)
     sprintf_s(creditsBack_buffer, "Back");
     AEGfxGetPrintSize(fontID, creditsBack_buffer, 1.0f, credits_textWidth, credits_textHeight);
     AEGfxPrint(fontID, creditsBack_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 }
+
+/******************************************************************************/
+/*!
+    "Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Kill each active game object instance if any.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Free(void) 
 {
 
 }
+
+/******************************************************************************/
+/*!
+    "Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Unload(void) 
 {
     AEGfxMeshFree(pMeshCredits); 
     AEGfxMeshFree(BGmesh_credits);
     AEGfxTextureUnload(BGtexture_credits);
+AEAudioStopGroup(CBGM_layer);
 }

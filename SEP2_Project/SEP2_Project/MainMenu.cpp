@@ -1,5 +1,7 @@
 #include "MainMenu.h"
 #include "Main.h"
+#include "SettingsMenu.h"
+
 
 
 
@@ -78,6 +80,12 @@ f32 buttonRotate_exitNo;
 // Condition check for exit button
 bool mainMenu_areyouSure = true;
 
+//Audio declaration
+ AEAudio MMBGM;
+ AEAudioGroup MMBGM_layer;
+bool Audio_Playing = false;
+extern float volume;
+
 void Menu_Load(void)
 {
     std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
@@ -142,10 +150,33 @@ void Menu_Load(void)
         input2 >> currHighScoreMin >> currHighScoreSec;
         input2.close();
     }
+
+    //Audio
+    MMBGM = AEAudioLoadMusic("Assets\\Music\\Intro.wav");
+    if (AEAudioIsValidGroup(MMBGM_layer) == 0) {
+        MMBGM_layer = AEAudioCreateGroup();
+    }
+    else
+        AEAudioSetGroupVolume(MMBGM_layer, volume);
+    if (Audio_Playing == false) {
+        if (volume == 0.f) {
+            Audio_Playing = false;
+        }
+        else {
+            AEAudioPlay(MMBGM, MMBGM_layer, volume, 1.f, -1);
+            Audio_Playing = true;
+        }
+    }
+    // plays an audio named bgm in an 
+    // audio group named bgm_layer with 
+    // 100% volume, 100% pitch, looped infinitely.
+
+    
 }
 
 void Menu_Init(void) 
 {
+
     // Gets the scale of 1366x768
     scaleX = getWinWidth() / 1366.0f;
     scaleY = getWinHeight() / 768.0f;
@@ -179,6 +210,7 @@ void Menu_Init(void)
     exitYesButton_transY = -65.0f * scaleX;
     exitNoButton_transX = 168.0f * scaleX;
     exitNoButton_transY = -65.0f * scaleX;
+
 
 }
 
@@ -259,6 +291,7 @@ void Menu_Update(void)
         else if (IsAreaClicked(playButton_midX, playButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
             && AEInputCheckReleased(AEVK_LBUTTON))
         {
+            AEAudioStopGroup(MMBGM_layer);
             gGameStateNext = PLAY;
         }
 
@@ -650,7 +683,11 @@ void Menu_Free(void)
 }
 void Menu_Unload(void)
 {
+    std::cout << gGameStatePrev << "\n";
+    std::cout << gGameStateNext <<"\n";
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(pMesh_exit);
     AEGfxMeshFree(BGmesh);
+    if(gGameStateNext == 1)
+        Audio_Playing = false;
 }
