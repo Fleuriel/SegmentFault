@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		SettingsMenu.cpp
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Contains the definitions of functions that control the music and sfx volumes.

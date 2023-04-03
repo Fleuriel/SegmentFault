@@ -1,9 +1,16 @@
 /******************************************************************************/
 /*!
-\file		Utilities.cpp
-\author		Liu Xujie, l.xujie, 2203183
-\par		l.xujie@digipen.edu
-\brief		Definition of function helpers
+\file        Utilities.cpp
+\project    Among Them
+\authors    Liu Xujie, l.xujie,  (25%)
+            Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
+            Lim Zhan Peng, zhanpeng.lim, 2203452 (25%)
+            Angus Tan Yit Hoe, tan.a, 2200711 (15%)
+\par        l.xujie@digipen.edu
+            a.junshengaloysius@digipen.edu
+            zhanpeng.lim@digipen.edu
+            tan.a@digipen.edu
+\brief        Definition of function helpers
 
 Copyright (C) 2023 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -126,7 +133,22 @@ bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
 
     return true;
 }
-
+/*!*****************************************************************
+  \author
+   Angus 
+  \brief
+   This function checks for the collision between two Circles
+  \param[in] center1
+   center of circle1
+  \param[in] radius1
+  radius of circle 1
+  \param[in] center2
+   center of circle 2
+  \param[in] radius2
+   radius of cicle 2
+  \return
+   true if colliding false if not colliding
+********************************************************************/
 
 bool CollisionCircleCircle(const AEVec2& center1, f32 radius1, const AEVec2& center2, f32 radius2)
 {

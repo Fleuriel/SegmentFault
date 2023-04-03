@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		HowToPlay.cpp
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Contains the definitions of functions that print out instructions for the game onto the screen.

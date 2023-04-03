@@ -1,11 +1,17 @@
 #pragma once
 /******************************************************************************/
 /*!
-\file		Utilities.h
-\author		Liu Xujie, l.xujie, 2203183
-\par		l.xujie@digipen.edu
-\brief		This is a header file for Utilities.cpp which contain the function 
-			declarations
+\file        Utilities.cpp
+\project    Among Them
+\authors    Liu Xujie, l.xujie,  (25%)
+			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
+			Lim Zhan Peng, zhanpeng.lim, 2203452 (25%)
+			Angus Tan Yit Hoe, tan.a, 2200711 (15%)
+\par        l.xujie@digipen.edu
+			a.junshengaloysius@digipen.edu
+			zhanpeng.lim@digipen.edu
+			tan.a@digipen.edu
+\brief        Definition of function helpers
 
 Copyright (C) 2023 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
