@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "Main.h"
+#include "SettingsMenu.h"
 
 
 
@@ -82,6 +83,7 @@ bool mainMenu_areyouSure = true;
 AEAudio MMBGM;
 AEAudioGroup MMBGM_layer;
 bool Audio_Playing = false;
+extern float volume;
 
 void Menu_Load(void)
 {
@@ -197,6 +199,7 @@ void Menu_Init(void)
     exitYesButton_transY = -65.0f * scaleX;
     exitNoButton_transX = 168.0f * scaleX;
     exitNoButton_transY = -65.0f * scaleX;
+
 
 }
 

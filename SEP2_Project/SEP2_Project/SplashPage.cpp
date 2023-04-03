@@ -1,3 +1,18 @@
+/******************************************************************************/
+/*!
+\file		SplashPage.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Contains the definitions of functions that allows the Digipen Logo to fade in and out of the screen
+			before heading to the main menu.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "SplashPage.h"
 #include "Main.h"
 
@@ -14,10 +29,26 @@ f32 splashPage_transY;
 // Pre-definition for transparency
 f32 splashPage_transparency;
 
+// Boolean to check if screen is transparent
 bool isTransparent;
 
+/******************************************************************************/
+/*!
+	"Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
+
+  \brief
+	  Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Load(void) 
 {
+	// Set BG color
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
 
     AEGfxMeshStart();
@@ -35,7 +66,23 @@ void SplashPage_Load(void)
 
     // Loading textures
     startTex_Splash = AEGfxTextureLoad("Assets\\Assets\\DigiPen_Singapore_WEB_RED.png");
+
 }
+
+/******************************************************************************/
+/*!
+	"Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Initializes the variables needed for the draw function.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Init(void) 
 {
 	scaleX = getWinWidth() / 1366.f;
@@ -48,16 +95,32 @@ void SplashPage_Init(void)
 	isTransparent = true;
 
 }
+
+/******************************************************************************/
+/*!
+	"Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Logic of the fading lies here.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Update(void) 
 {
-
+	//----------------------------------------LOGIC FOR FADING-----------------------------------------//
+	// if starts as transparent, fades into the logo
 	if (isTransparent) 
 	{
 		splashPage_transparency += 0.005f;
 		if (splashPage_transparency >= 1.f) 
 		{
 			splashPage_transparency += 1.5f;
-			isTransparent = false;
+			isTransparent = false;  // Toggles transparency to off after logo shows
 		}
 	}
 
@@ -70,9 +133,24 @@ void SplashPage_Update(void)
 			gGameStateNext = MAINMENU;
 		}
 	}
-
+	//-------------------------------------------------------------------------------------------------//
 
 }
+
+/******************************************************************************/
+/*!
+	"Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Renders the background onto the screen.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Draw(void) 
 {
 	//Draw Background
@@ -93,11 +171,42 @@ void SplashPage_Draw(void)
 	AEGfxSetTransform(transform0.m);
 	AEGfxMeshDraw(pMeshSplash, AE_GFX_MDM_TRIANGLES);
 	//Finish Background draw
+
 }
+
+/******************************************************************************/
+/*!
+	"Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Kill each active game object instance if any.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Free(void) 
 {
 
 }
+
+/******************************************************************************/
+/*!
+	"Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void SplashPage_Unload(void) 
 {
     AEGfxMeshFree(pMeshSplash);
