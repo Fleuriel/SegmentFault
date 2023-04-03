@@ -1,3 +1,16 @@
+/******************************************************************************/
+/*!
+\file		GameOverMenu.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Contains the definitions of functions that allows players to continue or go back to title screen.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
 #include "GameOverMenu.h"
 #include "Main.h"
 
@@ -28,7 +41,20 @@ f32 gameOverContButton_midY;
 f32 gameOverQuitButton_midX;
 f32 gameOverQuitButton_midY;
 
+/******************************************************************************/
+/*!
+	"Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
 
+  \brief
+	  Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Load(void) 
 {
 
@@ -66,6 +92,20 @@ void GameOver_Load(void)
 
 }
 
+/******************************************************************************/
+/*!
+	"Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Initializes the variables needed for the draw function.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Init(void) 
 {
 	// Gets the scale of 1366x768
@@ -83,6 +123,20 @@ void GameOver_Init(void)
 
 }
 
+/******************************************************************************/
+/*!
+	"Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Collision/animation logic of buttons are here.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Update(void) 
 {
 
@@ -114,6 +168,20 @@ void GameOver_Update(void)
 	}
 }
 
+/******************************************************************************/
+/*!
+	"Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Renders the background, draws the shapes of the objects and prints text onto the screen.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Draw(void) 
 {
 	//Draw Background
@@ -185,11 +253,39 @@ void GameOver_Draw(void)
 	AEGfxPrint(fontID, gameOverQuit_buffer, (getWinWidth() / (-10500.f * scaleX)), (getWinHeight() / (-2600.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 }
 
+/******************************************************************************/
+/*!
+	"Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Kill each active game object instance if any.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Free(void) 
 {
 
 }
 
+/******************************************************************************/
+/*!
+	"Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+	  Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+	  Takes in no params.
+
+********************************************************************/
 void GameOver_Unload(void) 
 {
 	AEGfxMeshFree(pMeshGameOver);
