@@ -94,7 +94,8 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 			GameStateDraw();
 
 			AESysFrameEnd();
-
+			if (AESysDoesWindowExist() == false)
+				gGameStateNext = QUIT;
 
 
 
@@ -109,6 +110,7 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 		gGameStatePrev = gGameStateCurr;
 		gGameStateCurr = gGameStateNext;
+
 	}
 
 	AEGfxDestroyFont(fontID);
