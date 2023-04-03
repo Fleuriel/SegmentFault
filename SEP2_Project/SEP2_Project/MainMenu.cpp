@@ -78,6 +78,10 @@ f32 buttonRotate_exitNo;
 // Condition check for exit button
 bool mainMenu_areyouSure = true;
 
+//Audio declaration
+AEAudio MMBGM;
+AEAudioGroup MMBGM_layer;
+
 void Menu_Load(void)
 {
     std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
@@ -142,6 +146,11 @@ void Menu_Load(void)
         input2 >> currHighScoreMin >> currHighScoreSec;
         input2.close();
     }
+
+    //Audio
+    MMBGM = AEAudioLoadMusic("Assets\\Music\\Musical, Loop, Intro, 80s Pop Music SND70455.wav");
+
+    MMBGM_layer = AEAudioCreateGroup();
 }
 
 void Menu_Init(void) 
@@ -180,6 +189,10 @@ void Menu_Init(void)
     exitNoButton_transX = 168.0f * scaleX;
     exitNoButton_transY = -65.0f * scaleX;
 
+    // plays an audio named bgm in an 
+    // audio group named bgm_layer with 
+    // 100% volume, 100% pitch, looped infinitely.
+    AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
 }
 
 void Menu_Update(void) 
@@ -653,4 +666,5 @@ void Menu_Unload(void)
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(pMesh_exit);
     AEGfxMeshFree(BGmesh);
+    AEAudioStopGroup(MMBGM_layer);
 }

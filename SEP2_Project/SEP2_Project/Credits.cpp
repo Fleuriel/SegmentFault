@@ -27,6 +27,11 @@ float credits_textWidth{}, credits_textHeight{};
 // Pre-definition of Rotation
 f32 buttonRotate_creditsBack;
 
+
+//Audio declaration
+AEAudio CBGM;
+AEAudioGroup CBGM_layer;
+
 void Credits_Load(void) 
 {
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
@@ -64,6 +69,9 @@ void Credits_Load(void)
 
     //end Background
 
+    //Audio
+    CBGM = AEAudioLoadMusic("Assets\\Music\\Musical, Loop, Intro, 80s Pop Music SND70455.wav");
+    CBGM_layer = AEAudioCreateGroup();
 }
 void Credits_Init(void) 
 {
@@ -79,6 +87,11 @@ void Credits_Init(void)
 
     BGtransX_credits = 220.0f * scaleX;
     BGtransY_credits = -40 * scaleY;
+
+    // plays an audio named bgm in an 
+    // audio group named bgm_layer with 
+    // 100% volume, 100% pitch, looped infinitely.
+    AEAudioPlay(CBGM, CBGM_layer, 0.5f, 1.f, -1);
 }
 void Credits_Update(void)
 {
@@ -351,4 +364,5 @@ void Credits_Unload(void)
     AEGfxMeshFree(pMeshCredits); 
     AEGfxMeshFree(BGmesh_credits);
     AEGfxTextureUnload(BGtexture_credits);
+AEAudioStopGroup(CBGM_layer);
 }
