@@ -587,5 +587,6 @@ void Menu_Unload(void)
 {
     AEGfxMeshFree(pMesh);
     AEGfxMeshFree(BGmesh);
+    AEGfxMeshFree(pMesh_exit);
 
 }
