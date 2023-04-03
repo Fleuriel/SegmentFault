@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		GameOverMenu.h
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Contains the declarations of functions that allows players to continue or go back to title screen.

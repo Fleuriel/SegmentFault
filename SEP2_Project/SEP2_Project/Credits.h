@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		Credits.h
+\project    Among Them
 \author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
 \par		a.junshengaloysius@digipen.edu
 \brief		Contains the declarations of functions that print out credits onto the screen.

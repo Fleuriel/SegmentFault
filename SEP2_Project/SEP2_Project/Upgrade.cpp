@@ -1,6 +1,7 @@
 /******************************************************************************/
 /*!
 \file		Upgrade.cpp
+\project    Among Them
 \author		Emery Quek Cheng Kwang, c.quek, 2201955
 \par		c.quek@digipen.edu
 \brief		This is a source file which contains functions and UI for purchasing
