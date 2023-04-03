@@ -33,7 +33,7 @@ f32 buttonRotate_settingsBack;
 
 // Volume and sfx initialization
 float volume = 1.f;
-float sfx = 1;
+float sfx = 1.f;
 
 void Settings_Load(void)
 {
@@ -434,10 +434,12 @@ void Settings_Draw(void)
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 }
+
 void Settings_Free(void)
 {
 
 }
+
 void Settings_Unload(void)
 {
     AEGfxMeshFree(pMeshSettings);
