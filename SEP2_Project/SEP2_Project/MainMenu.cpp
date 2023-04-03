@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "Main.h"
+#include "SettingsMenu.h"
 
 
 
@@ -82,6 +83,7 @@ bool mainMenu_areyouSure = true;
 AEAudio MMBGM;
 AEAudioGroup MMBGM_layer;
 bool Audio_Playing = false;
+extern float volume;
 
 void Menu_Load(void)
 {
@@ -194,7 +196,7 @@ void Menu_Init(void)
     // audio group named bgm_layer with 
     // 100% volume, 100% pitch, looped infinitely.
     if (Audio_Playing == false) {
-        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
+        AEAudioPlay(MMBGM, MMBGM_layer, volume, 1.f, -1);
         Audio_Playing = true;
     }
 }
