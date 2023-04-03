@@ -601,7 +601,6 @@ void Level_1_Update(void)
 		else if (pauseTransparency != 0) {
 			pauseTransparency = 0;
 		}
-
 	}
 
 	if (pause == true) 
@@ -629,7 +628,6 @@ void Level_1_Update(void)
 				clicked_MainMenu = true;
 				pauseTransparency = 0.0f;
 			}
-
 			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) 
 			{
@@ -638,7 +636,6 @@ void Level_1_Update(void)
 				clicked_MainMenu = false;
 				pauseTransparency = 0.0f;
 			}
-
 		}
 
 		if (areyouSure == false) 
@@ -664,7 +661,6 @@ void Level_1_Update(void)
 				pauseTransparency = 0.5f;
 				areyouSure = true;
 			}
-
 		}
 
 		/********************************** Button Animation Logic Start ********************************************/
