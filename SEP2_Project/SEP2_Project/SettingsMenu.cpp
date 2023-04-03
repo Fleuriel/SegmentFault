@@ -266,6 +266,7 @@ void Settings_Update(void)
         sfx = 1.00;
     }
 
+    // Rotation logic
     if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_settingsBack = -0.10f;

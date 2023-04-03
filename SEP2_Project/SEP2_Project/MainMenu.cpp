@@ -1,3 +1,18 @@
+/******************************************************************************/
+/*!
+\file		MainMenu.cpp
+\author		Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807
+\par		a.junshengaloysius@digipen.edu
+\brief		Starting point of the game, where all the buttons to lead to other states are at.
+            Contains the definitions of functions for the main menu to change its state, such as to the play state or settings state.
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "MainMenu.h"
 #include "Main.h"
 
@@ -83,6 +98,20 @@ AEAudioGroup MMBGM_layer;
 bool Audio_Playing = false;
 extern float volume;
 
+/******************************************************************************/
+/*!
+    "Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
+
+  \brief
+      Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Load(void)
 {
     std::ifstream input{ "Assets\\SaveFiles\\Currency.txt" };
@@ -171,6 +200,20 @@ void Menu_Load(void)
     
 }
 
+/******************************************************************************/
+/*!
+    "Initialize" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Initializes the variables needed for the draw function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Init(void) 
 {
 
@@ -211,6 +254,20 @@ void Menu_Init(void)
 
 }
 
+/******************************************************************************/
+/*!
+    "Update" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Collision/animation logic of buttons are here.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Update(void) 
 {
     // Initialize cursor coordinates
@@ -218,6 +275,7 @@ void Menu_Update(void)
     s32 cursorY;
     AEInputGetCursorPosition(&cursorX, &cursorY);
 
+    // Logic for main menu quit
     if (mainMenu_areyouSure == false)
     {
         // Powerups button mid points
@@ -398,6 +456,21 @@ void Menu_Update(void)
 
     
 }
+
+/******************************************************************************/
+/*!
+    "Draw" function of this state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Renders the background, draws the shapes of the objects and prints text onto the screen.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Draw(void)
 {
     //Background
@@ -422,7 +495,7 @@ void Menu_Draw(void)
     AEGfxMeshDraw(BGmesh, AE_GFX_MDM_TRIANGLES);
     //Finish Background draw
    
- 
+    /********************************** Drawing of buttons start ********************************************/
     // Button 1, Power-ups button
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -517,9 +590,10 @@ void Menu_Draw(void)
     AEGfxSetTransform(transform5.m);
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
-    // Rendering texts for the screen
+    /********************************** Drawing of buttons end ********************************************/
 
-    // Title start
+    /********************************** Rendering of text start ********************************************/
+    // Title
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -532,8 +606,7 @@ void Menu_Draw(void)
     sprintf_s(text_buffer, "THEM");
     AEGfxPrint(fontID, text_buffer, (getWinWidth() / (-8700.f * scaleX)), (getWinHeight() / (1700.f * scaleY)), 1.5f * scaleX, 180.0f / 255.f, 24.0f / 255.f, 7.0f / 255.f);
 
-    // Title end
-
+    // Play Button text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -541,6 +614,7 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, play_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, play_buffer, (getWinWidth() / (-17200.f * scaleX)), (getWinHeight() / (-17000.f * scaleY)), 1.f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+    // Upgrade button text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -548,6 +622,7 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, upgrade_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, upgrade_buffer, (getWinWidth() / ( - 3950.f * scaleX)), (getWinHeight() / (- 1800.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+    // Settings button text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -555,6 +630,7 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, settings_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, settings_buffer, (getWinWidth() / (13300.f * scaleX)), (getWinHeight() / ( - 1800.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+    // Credits button text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -562,6 +638,7 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, credits_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, credits_buffer, (getWinWidth() / ( - 1393.f * scaleX)), (getWinHeight() / ( - 800.f * scaleY)), 0.7f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+    // How to play button text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -569,6 +646,7 @@ void Menu_Draw(void)
     AEGfxGetPrintSize(fontID, credits_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, credits_buffer, (getWinWidth() / (1690.f * scaleX)), (getWinHeight() / (-800.f * scaleY)), 0.45f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
+    // Exit text
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -602,6 +680,8 @@ void Menu_Draw(void)
     if(BGtexture!=nullptr)
     AEGfxTextureUnload(BGtexture);
 
+
+    // If user decides to quit game, prompt user with a confirmation before quitting
     if (mainMenu_areyouSure == false)
     {
         // Drawing the yes/no overlay on the screen
@@ -650,7 +730,7 @@ void Menu_Draw(void)
         AEGfxSetTransform(transform7.m);
         AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
-        // Rendering texts for overlay
+        // Prompts for quitting
         AEGfxSetRenderMode(AE_GFX_RM_COLOR);
         AEGfxTextureSet(NULL, 0, 0);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -669,12 +749,42 @@ void Menu_Draw(void)
         sprintf_s(exit_buffer, "NO");
         AEGfxPrint(fontID, exit_buffer, (getWinWidth() / (8100.f * scaleX)), (getWinHeight() / (-3800.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
     }
+    /********************************** Rendering of text end ********************************************/
 }
 
+/******************************************************************************/
+/*!
+    "Free" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Kill each active game object instance if any.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Free(void) 
 {
 
 }
+
+/******************************************************************************/
+/*!
+    "Unload" function of the state
+*/
+/******************************************************************************/
+/*!*****************************************************************
+
+  \brief
+      Free each used game object (shape) using the "AEGfxMeshFree"/"AEGfxTextureUnload" function.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Menu_Unload(void)
 {
     std::cout << gGameStatePrev << "\n";

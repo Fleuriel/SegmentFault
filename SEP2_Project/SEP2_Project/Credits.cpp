@@ -45,6 +45,20 @@ f32 buttonRotate_creditsBack;
 AEAudio CBGM;
 AEAudioGroup CBGM_layer;
 
+/******************************************************************************/
+/*!
+    "Load" function of this state
+*/
+/******************************************************************************/
+/*****************************************************************
+
+  \brief
+      Loads backgrounds and creates the shapes of the objects.
+
+  \param[in] void
+      Takes in no params.
+
+********************************************************************/
 void Credits_Load(void) 
 {
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);  // conversion -> rgb value/255
