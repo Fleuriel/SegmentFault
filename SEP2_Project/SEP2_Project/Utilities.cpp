@@ -1,14 +1,39 @@
+/******************************************************************************/
+/*!
+\file		Utilities.cpp
+\author		Liu Xujie, l.xujie, 2203183
+\par		l.xujie@digipen.edu
+\brief		Definition of function helpers
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Main.h"
 
-
+/*!*****************************************************************
+  \author
+   Liu Xujie
+  \brief
+   This function checks for the collision between two rectangular
+   object
+  \param[in] aabb1
+   struct of the min and max x y values for object 1
+  \param[in] vel1
+   velocity vector for object 1
+  \param[in] aabb2
+   struct of the min and max x y values for object 2
+  \param[in] aabb2
+   velocity vector for object 2
+  \return
+   true if colliding false if not colliding
+********************************************************************/
 bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
     const AABB& aabb2, const AEVec2& vel2)
 {
-    UNREFERENCED_PARAMETER(aabb1);
-    UNREFERENCED_PARAMETER(vel1);
-    UNREFERENCED_PARAMETER(aabb2);
-    UNREFERENCED_PARAMETER(vel2);
-
     // Check static collision
 
     if (aabb1.max.x > aabb2.min.x && aabb1.max.y > aabb2.min.y && aabb2.max.x > aabb1.min.x && aabb2.max.y > aabb1.min.y) {
@@ -116,7 +141,27 @@ bool CollisionCircleCircle(const AEVec2& center1, f32 radius1, const AEVec2& cen
 	return distanceSquared <= radiusSum * radiusSum;
 }
 
-// Function to check if the area is being touched/clicked
+/*!*****************************************************************
+  \author
+   Ang Jun Sheng Aloysius
+  \brief
+   This function checks for the collision in a rectangle.
+   object
+  \param[in] area_center_x
+   Center of the rectangle's X position
+  \param[in] area_center_y
+   Center of the rectangle's Y position
+  \param[in] area_width
+   Width of the rectangle
+  \param[in] area_height
+   Height of the rectangle
+  \param[in] click_x
+   X-coordinate of mouse cursor
+  \param[in] click_y
+   Y-coordinate of mouse cursor
+  \return
+   1 if true, 0 if false
+********************************************************************/
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, int click_x, int click_y)
 {
 	// TODO
@@ -129,21 +174,46 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	return 0;
 }
 
-// Function to get window width
+/*!*****************************************************************
+  \author
+   Ang Jun Sheng Aloysius
+  \brief
+   This function gets the width of the window.
+  \param[in] none
+  \return
+   Width of the window
+********************************************************************/
 float getWinWidth() {
 	return AEGfxGetWinMaxX() - AEGfxGetWinMinX();
 }
 
-// Function to get window width
+/*!*****************************************************************
+  \author
+   Ang Jun Sheng Aloysius
+  \brief
+   This function gets the height of the window.
+  \param[in] none
+  \return
+   Height of the window
+********************************************************************/
 float getWinHeight() {
 	return AEGfxGetWinMaxY() - AEGfxGetWinMinY();
 }
 
-// Function to get angle of cursor to player in radian
+/*!*****************************************************************
+\author
+Lim Zhan Peng
+\brief
+This function returns the angle between the cursor and player drone
+\param[in] pos
+Player position
+\return
+angle in radian
+********************************************************************/
 double getCursorRad(AEVec2 pos) {
-    s32 cX, cY; //Mouse pos
-    double rad = 0; //radian value to be returned
-    const double pi = 3.1415926; //define pi
+    s32 cX, cY;                     //Mouse position
+    double rad = 0;                 //radian value to be returned
+    const double pi = 3.1415926;    //define pi
     float sumx = 0, sumy = 0;
     pos.y += 75;
 
@@ -155,10 +225,10 @@ double getCursorRad(AEVec2 pos) {
     sumy = MP.y - pos.y;
 
     //for each quadrant
-    if (MP.x > pos.x && MP.y > pos.y) { rad = pi + atan(sumy / sumx); }                  //Quad1
+    if (MP.x > pos.x && MP.y > pos.y) { rad = pi + atan(sumy / sumx); }          //Quad1
     else if (MP.x < pos.x && MP.y > pos.y) { rad = pi + atan(sumy / sumx); }     //Quad2
     else if (MP.x < pos.x && MP.y < pos.y) { rad = pi + atan(sumy / sumx); }     //Quad3
-    else if (MP.x > pos.x && MP.y < pos.y) { rad = pi + atan(sumy / sumx); }             //Quad4
+    else if (MP.x > pos.x && MP.y < pos.y) { rad = pi + atan(sumy / sumx); }     //Quad4
 
     return rad; //Return radian value
 }
