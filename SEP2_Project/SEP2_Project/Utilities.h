@@ -1,7 +1,7 @@
 #pragma once
 /******************************************************************************/
 /*!
-\file        Utilities.h
+\file       Utilities.h
 \project    Among Them
 \authors    Liu Xujie, l.xujie,  (25%)
 			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (35%)
