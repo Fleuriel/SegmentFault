@@ -113,14 +113,6 @@ public:
 
 };
 
-//struct CompareDist
-//{
-//	bool operator()(const std::pair<float, GameObjInstances*>& p1, const std::pair<float, GameObjInstances*>& p2) const
-//	{
-//		return p1.first > p2.first;
-//	}
-//};
-
 
 
 

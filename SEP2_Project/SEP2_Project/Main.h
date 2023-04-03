@@ -3,16 +3,11 @@
 
 
 // includes
-#include <chrono>
-#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <math.h>
-#include "AEEngine.h"
-#include "Math.h"
 
 #include "GameStateMgr.h"
-#include "GameStateList.h"
 
 #include "Level1.h"
 #include "Upgrade.h"
@@ -22,6 +17,8 @@
 #include "Credits.h"
 #include "GameOverMenu.h"
 #include "SplashPage.h"
+
+//Utilities.h contains AEngine.h
 #include "Utilities.h"
 
 

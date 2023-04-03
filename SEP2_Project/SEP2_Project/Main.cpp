@@ -93,14 +93,8 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 			GameStateDraw();
 
-			if ((AESysDoesWindowExist() == false) || AEInputCheckTriggered(AEVK_Q))
-			{
-
-				//PROMPT
-
-
+			if (AESysDoesWindowExist() == false)
 				gGameStateNext = QUIT;
-			}
 
 			AESysFrameEnd();
 
