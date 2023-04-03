@@ -2261,7 +2261,6 @@ void Level_1_Draw(void)
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		sprintf_s(augment1_buffer, "Guns");
-		// AEGfxGetPrintSize(fontID, augment1_buffer, 1.0f, pause_textWidth, pause_textHeight);
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (1550.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -2362,6 +2361,36 @@ void Level_1_Draw(void)
 		if (Augment4Level >= 8)
 			sprintf_s(strbuffer4, "MAX LEVEL");
 		AEGfxPrint(fontID, strbuffer4, static_cast<float>(0.075), (getWinHeight() / (25000.f * scaleY)), 0.4f, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Increase Frequency");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (8000.f * scaleX)), (getWinHeight() / (1500.f * scaleY)), 0.4f * scaleX, 128.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Increase Range/Speed");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (8000.f * scaleX)), (getWinHeight() / (2150.f * scaleY)), 0.35f * scaleX, 128.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Increase Range");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (8000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.4f * scaleX, 128.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Increase AOE");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (8000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.4f * scaleX, 128.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
+
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(augment1_buffer, "Increase HP by 1");
+		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (8000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.4f * scaleX, 128.0f / 255.f, 0.0f / 255.f, 0.0f / 255.f);
 
 	}
 	/********************************** Augment UI End ********************************************/
