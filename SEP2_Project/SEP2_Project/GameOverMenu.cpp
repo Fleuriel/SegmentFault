@@ -153,18 +153,14 @@ void GameOver_Update(void)
 	gameOverQuitButton_midX = static_cast<f32>((getWinWidth() / 2.11) + gameOverQuitButton_transX);
 	gameOverQuitButton_midY = static_cast<f32>((getWinHeight() / 2) - gameOverQuitButton_transY);
 
-	printf("%d\n%d\n", cursorX, cursorY);  //debug
-
 	// if cursor within buttons, change game state
 	if (IsAreaClicked(gameOverContButton_midX, gameOverContButton_midY, 170.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = PLAY;
-		printf("Goto Play\n");
 	}
 	else if (IsAreaClicked(gameOverQuitButton_midX, gameOverQuitButton_midY, 170.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		gGameStateNext = MAINMENU;
-		printf("Goto Main Menu\n");
 	}
 }
 
