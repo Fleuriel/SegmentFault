@@ -116,9 +116,9 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
-AEAudio BGM, BlastSFX;
+AEAudio BGM, BlastSFX, slashSFX, explode1SFX, explode2SFX;
 AEAudioGroup BGM_layer, SFX_layer;
-extern float volume;
+extern float volume, sfx;
 
 void Level_1_Load(void)
 {
@@ -483,6 +483,9 @@ void Level_1_Load(void)
 	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
+	slashSFX = AEAudioLoadSound("Assets\\Music\\slash.wav");
+	explode1SFX = AEAudioLoadSound("Assets\\Music\\explode1.wav");
+	explode2SFX = AEAudioLoadSound("Assets\\Music\\explode2.wav");
 	BGM_layer = AEAudioCreateGroup();
 	SFX_layer = AEAudioCreateGroup();
 	//Upgrades
@@ -1128,7 +1131,7 @@ void Level_1_Update(void)
 
 							// Create a new bullet object and set its velocity to point towards the target
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
-							AEAudioPlay(BlastSFX, SFX_layer, volume, 1.f, 0);
+							AEAudioPlay(BlastSFX, SFX_layer, sfx, 1.f, 0);
 							if (bulletInst != nullptr)
 								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
@@ -1172,6 +1175,7 @@ void Level_1_Update(void)
 
 
 							AUGMENT_3_FIRE_TIMER = 0;
+							AEAudioPlay(slashSFX, SFX_layer, sfx, 1.f, 0);
 						}
 						//If the instance is active, then every 0.5s, turn off.
 						if (qInst->showTexture == true)
@@ -1182,6 +1186,7 @@ void Level_1_Update(void)
 								//Turns off the instance. (prevents damage)
 								qInst->showTexture = false;
 								AUGMENT_3_OFF_TIMER = 0;
+								AEAudioPlay(BlastSFX, SFX_layer, sfx/1.5, 1.f, 0);
 							}
 						}
 					}
@@ -1228,6 +1233,7 @@ void Level_1_Update(void)
 							AUGMENT_4_PROJECTILE_ACTIVE = true;
 
 							AUGMENT_4_FIRE_TIMER = 0;
+							AEAudioPlay(explode1SFX, SFX_layer, sfx/2, 1.f, 0);
 						}
 						if (AUG4_BULLET != nullptr)
 						{
@@ -1250,6 +1256,7 @@ void Level_1_Update(void)
 								AUGMENT_4_PROJECTILE_ACTIVE = false;
 								gameObjInstCreate(TYPE_AUGMENT4_EXPLOSION, Augment4Scale, &qInst->position, 0, 0);
 								AUGMENT_4_EXPLOSION_ACTIVE = true;
+								AEAudioPlay(explode2SFX, SFX_layer, sfx / 2, 1.f, 0);
 							}
 							AUGMENT_4_PROJECTILE_TIMER = 0;
 						}
