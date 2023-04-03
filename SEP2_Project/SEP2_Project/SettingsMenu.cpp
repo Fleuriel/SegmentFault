@@ -371,18 +371,6 @@ void Settings_Draw(void)
     AEGfxSetTransform(transform.m);
     AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
     // SFX Buttons End //
-    
-    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    //AEGfxTextureSet(NULL, 0, 0);
-    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    //sprintf_s(settingsText_buffer, "HOW TO PLAY:");
-    //AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
-    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-    //AEGfxTextureSet(NULL, 0, 0);
-    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    //sprintf_s(settingsText_buffer, "Right mouse click for augments.");
-    //AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
