@@ -33,9 +33,7 @@ f32 howTobackButton_midY;
 
 // Pre-defintion
 char howtoplay_buffer[1024]{};
-char instructions1_buffer[1024]{};
-char instructions2_buffer[1024]{};
-char instructions3_buffer[1024]{};
+char instructions_buffer[1024]{};
 char howToBackButton_buffer[1024]{};
 float howTo_textWidth{}, howTo_textHeight{};
 
@@ -220,31 +218,55 @@ void HowToPlay_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(howtoplay_buffer, "How to play:");
-    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions1_buffer, "> Right mouse click for augments.");
-    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(instructions_buffer, "> Right mouse click for augments upgrades.");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions2_buffer, "> WASD for movement.");
-    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(instructions_buffer, "> WASD for movement.");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "> Bullets will follow cursor movement.");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(instructions_buffer, "> Bullets will follow cursor movement.");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "> Press 'P' or 'esc' to Pause");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-25000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(instructions_buffer, "> Press 'esc' to Pause.");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (-25000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(instructions_buffer, "Goals of the Game:");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (-3500 * scaleY)), 0.8f * scaleX, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(instructions_buffer, "> Survive for as long as possible!");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (-1800 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(instructions_buffer, "> Collect Gold in game to spend on items in the shop.");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (-1250 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(instructions_buffer, "> Have fun!");
+    AEGfxPrint(fontID, instructions_buffer, (getWinWidth() / (-2000.f * scaleX)), (getWinHeight() / (-980 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);

@@ -1,3 +1,18 @@
+/******************************************************************************/
+/*!
+\file		Upgrade.cpp
+\author		Emery Quek Cheng Kwang, c.quek, 2201955
+\par		c.quek@digipen.edu
+\brief		This is a source file which contains functions and UI for purchasing
+			ship models & player stat upgrades.
+
+			Copyright (C) 2023 DigiPen Institute of Technology.
+			Reproduction or disclosure of this file or its contents
+			without the prior written consent of DigiPen Institute of
+			Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Upgrade.h"
 #include "Main.h"
 
