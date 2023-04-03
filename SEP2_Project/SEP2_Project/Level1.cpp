@@ -116,6 +116,9 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
+AEAudio BGM;
+AEAudioGroup BGM_layer;
+
 void Level_1_Load(void)
 {
 	std::ifstream inputFileStream{ "Assets\\SaveFiles\\Currency.txt" };
@@ -477,14 +480,11 @@ void Level_1_Load(void)
 	// End Overlay
 
 	//// Loads a music from given filepath and assign to ‘audio’
-	AEAudio BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
+	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 
-	AEAudioGroup BGM_layer = AEAudioCreateGroup();
+	BGM_layer = AEAudioCreateGroup();
 
-	// plays an audio named ‘bgm’ in an 
-	// audio group named ‘bgm_layer’ with 
-	// 100% volume, 100% pitch, looped infinitely.
-	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
+
 	//Upgrades
 	for (int i = ProjectileSpeed_upgrade; i >= 0; i--) {
 		AUGMENT_1_BULLET_SPEED += 20;
@@ -578,13 +578,16 @@ void Level_1_Init(void)
 	buttonRotate_mainMenu = 0.f;
 	buttonRotate_quit = 0.f;
 
-
+	// plays an audio named ‘bgm’ in an 
+	// audio group named ‘bgm_layer’ with 
+	// 100% volume, 100% pitch, looped infinitely.
+	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
 }
 
 
 void Level_1_Update(void)
 {
-
+	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
 	if (AEInputCheckReleased(AEVK_P))
@@ -2586,6 +2589,7 @@ void Level_1_Free(void)
 
 void Level_1_Unload(void)
 {
+	AEAudioStopGroup(BGM_layer);
 	for (unsigned long i = 0; i < sGameObjNum; i++)
 	{
 		AEGfxMeshFree(sGameObjList[i].pMesh);
@@ -2647,14 +2651,4 @@ void Level_1_Unload(void)
 	sGameObjList = nullptr;
 	free(sGameObjInstList);
 	sGameObjInstList = nullptr;
-
-
-
-
-
-
-
-	//Clean up AEModule resources
-	AEAudioExit();
-
 }
