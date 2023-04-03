@@ -590,7 +590,7 @@ void Level_1_Update(void)
 	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckReleased(AEVK_P) || AEInputCheckReleased(AEVK_ESCAPE))
+	if (AEInputCheckReleased(AEVK_ESCAPE))
 	{
 		pause = !pause;
 		if (pauseTransparency == 0) {
