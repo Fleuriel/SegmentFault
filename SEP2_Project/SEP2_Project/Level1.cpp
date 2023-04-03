@@ -1,3 +1,26 @@
+/******************************************************************************/
+/*!
+\file       Level1.cpp
+\project    Among Them
+\authors    Liu Xujie, l.xujie,  (20%)
+			Ang Jun Sheng Aloysius, a.junshengaloysius, 2201807 (7.5%)
+			Lim Zhan Peng, zhanpeng.lim, 2203452 (7.5%)
+			Angus Tan Yit Hoe, tan.a, 2200711 (60%)
+			Emery Quek Cheng Kwang, c.quek, 2201955 (5%)
+
+\par        l.xujie@digipen.edu
+			a.junshengaloysius@digipen.edu
+			zhanpeng.lim@digipen.edu
+			tan.a@digipen.edu
+\brief      Definition of function helpers
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Main.h"
 #include "GameObjects.h"
 #include <iostream>
@@ -590,8 +613,16 @@ void Level_1_Init(void)
 void Level_1_Update(void)
 {
 	AEAudioUpdate();
-	AEInputGetCursorPosition(&cursorX, &cursorY);
 
+	/*!*****************************************************************
+	\author
+		Ang Jun Sheng Aloysius
+	\brief
+		The whole logic for the augment and pause UI for the play state.
+		Toggles pause if esc is clicked and toggles augment menu when right click is clicked.
+	********************************************************************/
+	/********************************** Augment and Pause UI Start ********************************************/
+	AEInputGetCursorPosition(&cursorX, &cursorY);
 	if (AEInputCheckReleased(AEVK_ESCAPE))
 	{
 		pause = !pause;
@@ -819,7 +850,7 @@ void Level_1_Update(void)
 			}
 
 		}
-
+		/********************************** Augment and Pause UI End **********************************************/
 
 		if (Augment2Level == 1 && Aug2CreateCheck == false) {
 			_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
@@ -2366,6 +2397,12 @@ void Level_1_Draw(void)
 		AEGfxTextureUnload(Expbar[i]);
 	}
 
+	/*!*****************************************************************
+	\author
+		Ang Jun Sheng Aloysius
+	\brief
+		The whole rendering of the augment and pause UI for the play state
+	********************************************************************/
 	/********************************** Augment UI Start ********************************************/
 	if (overlayTransparency != 0)
 	{
