@@ -95,9 +95,6 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 
 			AESysFrameEnd();
 
-			// check if forcing the application to quit
-			if ((AESysDoesWindowExist() == false) || AEInputCheckTriggered(AEVK_ESCAPE))
-				gGameStateNext = QUIT;
 
 
 
@@ -113,6 +110,8 @@ _Use_decl_annotations_ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevIns
 		gGameStatePrev = gGameStateCurr;
 		gGameStateCurr = gGameStateNext;
 	}
+
+	AEGfxDestroyFont(fontID);
 
 	// free the system
 	AESysExit();
