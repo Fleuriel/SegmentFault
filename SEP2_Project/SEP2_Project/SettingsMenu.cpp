@@ -18,10 +18,6 @@ f32 backButton_midX;
 f32 backButton_midY;
 
 // Pre-defintion
-//char howtoplay_buffer[1024]{};
-//char instructions1_buffer[1024]{};
-//char instructions2_buffer[1024]{};
-//char instructions3_buffer[1024]{};
 char settingsText_buffer[100]{};
 char settingsBackButton_buffer[1024]{};
 float settings_textWidth{}, settings_textHeight{};

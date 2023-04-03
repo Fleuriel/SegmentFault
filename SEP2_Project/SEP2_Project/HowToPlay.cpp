@@ -148,31 +148,31 @@ void HowToPlay_Draw(void)
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(howtoplay_buffer, "How to play:");
-    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions1_buffer, "> Right mouse click for augments.");
-    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions2_buffer, "> WASD for movement.");
-    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions3_buffer, "> Bullets will follow cursor movement.");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(instructions3_buffer, "> Press 'P' to Pause");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (-16000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-25000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
