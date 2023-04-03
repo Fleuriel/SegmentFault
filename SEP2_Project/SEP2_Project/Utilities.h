@@ -49,6 +49,22 @@ struct AABB
 ********************************************************************/
 bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
 	const AABB& aabb2, const AEVec2& vel2);
+/*!*****************************************************************
+  \author
+   Angus
+  \brief
+   This function checks for the collision between two Circles
+  \param[in] center1
+   center of circle1
+  \param[in] radius1
+  radius of circle 1
+  \param[in] center2
+   center of circle 2
+  \param[in] radius2
+   radius of cicle 2
+  \return
+   true if colliding false if not colliding
+********************************************************************/
 
 bool CollisionCircleCircle(const AEVec2& center1, f32 radius1, const AEVec2& center2, f32 radius2);
 
