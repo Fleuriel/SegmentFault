@@ -4,6 +4,7 @@
 
 
 
+
 // Pointer to Mesh
 AEGfxVertexList* pMesh = nullptr;
 AEGfxVertexList* BGmesh = nullptr;
@@ -80,8 +81,8 @@ f32 buttonRotate_exitNo;
 bool mainMenu_areyouSure = true;
 
 //Audio declaration
-AEAudio MMBGM;
-AEAudioGroup MMBGM_layer;
+ AEAudio MMBGM;
+ AEAudioGroup MMBGM_layer;
 bool Audio_Playing = false;
 extern float volume;
 
@@ -151,21 +152,31 @@ void Menu_Load(void)
     }
 
     //Audio
-    MMBGM = AEAudioLoadMusic("Assets\\Music\\Musical, Loop, Intro, 80s Pop Music SND70455.wav");
-    if (AEAudioIsValidGroup(MMBGM_layer) == 0)
+    MMBGM = AEAudioLoadMusic("Assets\\Music\\Intro.wav");
+    if (AEAudioIsValidGroup(MMBGM_layer) == 0) {
         MMBGM_layer = AEAudioCreateGroup();
-
+    }
+    else
+        AEAudioSetGroupVolume(MMBGM_layer, volume);
+    if (Audio_Playing == false) {
+        if (volume == 0.f) {
+            Audio_Playing = false;
+        }
+        else {
+            AEAudioPlay(MMBGM, MMBGM_layer, volume, 1.f, -1);
+            Audio_Playing = true;
+        }
+    }
     // plays an audio named bgm in an 
     // audio group named bgm_layer with 
     // 100% volume, 100% pitch, looped infinitely.
-    if (Audio_Playing == false) {
-        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
-        Audio_Playing = true;
-    }
+
+    
 }
 
 void Menu_Init(void) 
 {
+
     // Gets the scale of 1366x768
     scaleX = getWinWidth() / 1366.0f;
     scaleY = getWinHeight() / 768.0f;

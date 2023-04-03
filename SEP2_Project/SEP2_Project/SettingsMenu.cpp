@@ -1,5 +1,6 @@
 #include "SettingsMenu.h"
 #include "Main.h"
+#include "MainMenu.h"
 
 // Pointer to Mesh
 AEGfxVertexList* pMeshSettings = nullptr;
@@ -432,7 +433,6 @@ void Settings_Draw(void)
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(settingsText_buffer, "Sfx: %0.f", sfx);
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
 
 }
 void Settings_Free(void)
