@@ -79,6 +79,14 @@ void GameStateMgrUpdate()
 		GameStateFree = Settings_Free;
 		GameStateUnload = Settings_Unload;
 		break;
+	case HOWTOPLAY:
+		GameStateLoad = HowToPlay_Load;
+		GameStateInit = HowToPlay_Init;
+		GameStateUpdate = HowToPlay_Update;
+		GameStateDraw = HowToPlay_Draw;
+		GameStateFree = HowToPlay_Free;
+		GameStateUnload = HowToPlay_Unload;
+		break;
 	case CREDITS:
 		GameStateLoad = Credits_Load;
 		GameStateInit = Credits_Init;

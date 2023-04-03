@@ -31,6 +31,7 @@ char strbuffer2[1024]{};
 char strbuffer3[1024]{};
 char strbuffer4[1024]{};
 char goldbuffer[1024]{};
+char bossCD[1024]{};
 float augments_textWidth{}, augments_textHeight{};
 
 // Pre-definition for translations of buttons
@@ -55,6 +56,11 @@ float yesButton_transY;
 float noButton_transX;
 float noButton_transY;
 
+// Pre-definition for rotation of buttons in pause
+float buttonRotate_mainMenu;
+float buttonRotate_quit;
+float buttonRotate_Yes;
+float buttonRotate_No;
 
 // Pre-definition of overlay transparency
 float overlayTransparency = 0.0f;
@@ -66,10 +72,14 @@ float textWidth{}, textHeight{};
 
 //// Pre-definition of time
 float secElapsed = 0.f;
+float secElapsedInt = 0.f;
 int minElapsed = 0;
+int bossCooldownMin = 4;
+float bossCooldownSec = 0.f;
+float bossCooldownSecInt = 0.f;
+bool bossCoolDownCheck = false;
 
-int MaxHealth = MaximumPlayerHealth; // Player max hp 
-int OrbCap = 30, OrbCounter = 0; // EXP Orb cap 
+int MaxHealth; // Player max hp 
 bool spawnCheck = false; // Boss Spawn 
 int MaxBossHealth; // Max hp of boss
 int MaxEnemyCount = 50; // Max Enemy count
@@ -87,22 +97,34 @@ int Augment4Level = 0;
 bool Aug2CreateCheck = false;
 float Augment1CD = 1.5f;
 float Augment2Range = 1.f;
+float Augment2RotSpd = 0.f;
 float Augment3Range = 0;
 float Augment4Radius = 0;
 float offset = 5.f;
 bool mUp = true, mDown = true, mRight = true, mLeft = true;
 float Augment4Scale = 50;
+float RegenerationTimer = 15.0f;
 
 // Condition check for game over
 static bool onValueChange = true;
 
 // Condition check for pause UI
-bool areyouSure = true;
+int areyouSure = true;
 bool clicked_MainMenu = true;
 bool clicked_Quit = true;
 
+//number of gold coins
+int currencyCount = 0;
+
+AEAudio BGM;
+AEAudioGroup BGM_layer;
+
 void Level_1_Load(void)
 {
+	std::ifstream inputFileStream{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ifstream inputFileStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+	std::ifstream inputFileStream2{ "Assets\\SaveFiles\\HighScore.txt" };
+	std::ifstream inputFileStream3{ "Assets\\SaveFiles\\PlayerStats.txt" };
 	sGameObjList = (GameObjects*)calloc(GAME_OBJ_NUM_MAX, sizeof(GameObjects));
 	sGameObjInstList = (GameObjInstances*)calloc(GAME_OBJ_INST_NUM_MAX, sizeof(GameObjInstances));
 
@@ -364,10 +386,6 @@ void Level_1_Load(void)
 		inputFileStream >> Currency;
 		inputFileStream.close();
 	}
-	else if (inputFileStream.fail())
-	{
-		std::cerr << "Error: \n";
-	}
 
 	//save file for player ship model
 	if (inputFileStream1.good())
@@ -377,8 +395,7 @@ void Level_1_Load(void)
 	}
 	else if (inputFileStream1.fail())
 	{
-		std::cerr << "Error: \n";
-
+		ShipModel = 0;
 	}
 
 	//Save file for highscore
@@ -387,15 +404,12 @@ void Level_1_Load(void)
 		inputFileStream2 >> currHighScoreMin >> currHighScoreSec;
 		inputFileStream.close();
 	}
-	else if (inputFileStream.fail())
-	{
-		std::cerr << "Error: \n";
-	}
+
 
 	//Save file for player's stats
 	if (inputFileStream3.good())
 	{
-		inputFileStream3 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
+		inputFileStream3 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Regen_upgrade;
 		inputFileStream3.close();
 	}
 
@@ -466,26 +480,31 @@ void Level_1_Load(void)
 	// End Overlay
 
 	//// Loads a music from given filepath and assign to ‘audio’
-	AEAudio BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
+	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
 
-	AEAudioGroup BGM_layer = AEAudioCreateGroup();
+	BGM_layer = AEAudioCreateGroup();
 
-	// plays an audio named ‘bgm’ in an 
-	// audio group named ‘bgm_layer’ with 
-	// 100% volume, 100% pitch, looped infinitely.
-	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
 
+	//Upgrades
+	for (int i = ProjectileSpeed_upgrade; i >= 0; i--) {
+		AUGMENT_1_BULLET_SPEED += 20;
+		Augment2RotSpd += 0.0075f;
+	}
+	for (int i = CD_upgrade; i >= 0; i--) {
+		Augment1CD -= 0.025f;
+		AUGMENT_4_FIRE_INTERVAL -= 0.25f;
+	}
+	for (int i = Regen_upgrade; i >= 0; i--) {
+		RegenerationTimer--;
+	}
 }
 
 void Level_1_Init(void)
 {
 	//0
 	_Player = gameObjInstCreate(TYPE_PLAYER, PLAYER_SIZE, nullptr, nullptr, 0.0f);
-	_Player->health = MaxHealth = MaximumPlayerHealth;
+	_Player->health = MaxHealth = 20 + MaximumPlayerHealth;
 	AE_ASSERT(_Player);
-
-
-
 
 	//3
 	/*_Bullet = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, nullptr, nullptr, 0.0f);
@@ -553,13 +572,22 @@ void Level_1_Init(void)
 	noButton_transX = 168.0f * scaleX;
 	noButton_transY = -65.0f * scaleX;
 
+	// Initialize the button rotation
+	buttonRotate_Yes = 0.f;
+	buttonRotate_No = 0.f;
+	buttonRotate_mainMenu = 0.f;
+	buttonRotate_quit = 0.f;
 
+	// plays an audio named ‘bgm’ in an 
+	// audio group named ‘bgm_layer’ with 
+	// 100% volume, 100% pitch, looped infinitely.
+	AEAudioPlay(BGM, BGM_layer, 0.2f, 1.f, -1);
 }
 
 
 void Level_1_Update(void)
 {
-
+	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
 	if (AEInputCheckReleased(AEVK_P))
@@ -637,6 +665,48 @@ void Level_1_Update(void)
 
 		}
 
+		/********************************** Button Animation Logic Start ********************************************/
+		if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_mainMenu = -0.10f;
+		}
+
+		else if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_quit = -0.10f;
+		}
+
+		else if (IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_Yes = -0.10f;
+		}
+
+		else if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_No = -0.10f;
+		}
+
+		if (!IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_mainMenu = 0.0f;
+		}
+
+		if (!IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_quit = 0.0f;
+		}
+
+		if (!IsAreaClicked(yesButton_midX, yesButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_Yes = 0.0f;
+		}
+
+		if (!IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+		{
+			buttonRotate_No = 0.0f;
+		}
+		/********************************** Button Animation Logic End ********************************************/
+
 	}
 
 	if (pause == false)
@@ -647,6 +717,25 @@ void Level_1_Update(void)
 		if (secElapsed >= 59.5) {
 			minElapsed++;
 			secElapsed = 0;
+		}
+		modf(secElapsed, &secElapsedInt);
+		bossCooldownSec -= g_dt;
+		if (bossCooldownSec <0) {
+			bossCooldownMin--;
+			bossCooldownSec = 60.f;
+		}
+		modf(bossCooldownSec, &bossCooldownSecInt);
+
+		if (bossCooldownMin < 0 ) {
+			bossCoolDownCheck = true;
+		}
+
+		if (_Player->health != MaxHealth) {
+			RegenerationTimer -= g_dt;
+		}
+		if (RegenerationTimer <= 0 && _Player->health != MaxHealth) {
+			_Player->health++;
+			RegenerationTimer = 15.f - Regen_upgrade;
 		}
 
 		// Checking if overlay is pressed
@@ -659,6 +748,7 @@ void Level_1_Update(void)
 				overlayTransparency = 0;
 			}
 		}
+
 		if (AEInputCheckReleased(AEVK_INSERT))
 		{
 			SkillPoint = 90;
@@ -698,6 +788,7 @@ void Level_1_Update(void)
 				if (SkillPoint != 0 && Augment2Level != 8) {
 					SkillPoint--;
 					Augment2Range += static_cast<float>(0.2);
+					Augment2RotSpd += 0.005f;
 					Augment2Level++;
 				}
 			}
@@ -735,6 +826,7 @@ void Level_1_Update(void)
 			}
 
 		}
+
 
 		if (Augment2Level == 1 && Aug2CreateCheck == false) {
 			_Augment_Two = gameObjInstCreate(TYPE_AUGMENT2, AUG_GUN_SIZE, nullptr, nullptr, 0.0f);
@@ -801,38 +893,23 @@ void Level_1_Update(void)
 		}
 		//Rotation for Augment...
 		//Rotation Increase.
-		_rotation_Aug += 0.04f;
+		_rotation_Aug += (0.04f+ Augment2RotSpd);
 
 		if (AEInputCheckTriggered(AEVK_0))
 		{
-			minElapsed = 4;
-			secElapsed = 55;
+			bossCooldownMin = 0;
+			bossCooldownSec = 5;
 			enemyCount = 100;
 			spawnCheck = 0;
 		}
 
-		if (AEInputCheckTriggered(AEVK_9))
-		{
-			minElapsed = 9;
-			secElapsed = 55;
-			enemyCount = 100;
-			spawnCheck = 0;
-		}
-
-		if (AEInputCheckTriggered(AEVK_8))
-		{
-			minElapsed = 14;
-			secElapsed = 55;
-			enemyCount = 100;
-			spawnCheck = 0;
-		}
-		if (minElapsed % 5 == 0 && spawnCheck == 0 && minElapsed>0) {
+		if (spawnCheck == false && bossCoolDownCheck == true) {
+			spawnCheck = 1;
 			_Boss = gameObjInstCreate(TYPE_BOSS, BOSS_SIZE, nullptr, nullptr, 0.0f);
 			_Boss->health = MaxBossHealth = 50 * (1 + BossKills);
 			AE_ASSERT(_Boss);
 			_Boss->position.x = 0;
 			_Boss->position.y = 220;
-			spawnCheck = 1;
 			bossPhase = 0;
 
 			for (unsigned long i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -1143,7 +1220,6 @@ void Level_1_Update(void)
 
 						GameObjInstances* AUG4_BULLET = nullptr;
 
-
 						if (AUGMENT_4_FIRE_TIMER > AUGMENT_4_FIRE_INTERVAL && Augment4Level != 0)
 						{
 							//Shoot the bullet to the direction.
@@ -1207,7 +1283,7 @@ void Level_1_Update(void)
 				{
 				case TYPE_BHELL1:
 					boss::DelayShoot = 0.25f;
-					boss::numBulletsBHell = 11;
+					boss::numBulletsBHell = 13;
 					angle = 225;
 					if (pInst->health <= (float)MaxBossHealth * (0.8f))
 					{
@@ -1224,21 +1300,29 @@ void Level_1_Update(void)
 					{
 						if (_delayTimeBullets >= boss::DelayShoot)
 						{
+							angle2 = 84;
 							for (int q = 0; q < boss::numBulletsBHell; q++)
 							{
-								angle2 = 0;
+								
 								angle -= 10;
 								if (angle < 134)
 								{
 									angle = 225;
 								}
-								angle2 -= 20;
-								if (angle2 < -60)
+
+								angle2 -= 12;
+								if (angle2 < -84)
 								{
-									angle2 = 60;
+									angle2 = 84;
 								}
+
+								std::cout << angle2 << '\n';
+
+
 								boss::velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity, angle);
+
+
 								boss::velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity2, angle2);
 
@@ -1776,7 +1860,11 @@ void Level_1_Update(void)
 						gameObjInstDestroy(ObjInstance1);
 						enemyCount--;
 						_Player_Experience++;
-						gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
+						if (currencyCount <= 100) {
+							gameObjInstCreate(TYPE_CURRENCY, 10, &ObjInstance1->position, 0, 0);
+							currencyCount++;
+							break;
+						}
 					}
 					if (ObjInstance1->health <= 0 && ObjInstance1->pObject->type == TYPE_BOSS) {
 						gameObjInstDestroy(ObjInstance1);
@@ -1784,6 +1872,9 @@ void Level_1_Update(void)
 						++BossKills;
 						Currency += (1000 * BossKills);
 						enemyCount = 0;
+						bossCoolDownCheck = false;
+						bossCooldownMin = 4;
+						bossCooldownSec = 0.f;
 					}
 				}
 
@@ -1802,16 +1893,9 @@ void Level_1_Update(void)
 							if (CollisionCircleCircle(ObjInstance1->position, ObjInstance1->scale.x, ObjInstance2->position, ObjInstance2->scale.x))
 							{
 								Currency++;
-								std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
-								if (outputStream.is_open())
-								{
-									outputStream << Currency << '\n';
-
-								}
-
-								outputStream.close();
 								gameObjInstDestroy(ObjInstance1);
-								OrbCounter--;
+								currencyCount--;
+								break;
 							}
 						}
 					}
@@ -1863,10 +1947,6 @@ void Level_1_Update(void)
 			AEMtx33Concat((AEMtx33*)pInst->transform.m, &translate, (AEMtx33*)pInst->transform.m);
 		}
 	}
-	else
-	{
-
-	}
 }
 
 void Level_1_Draw(void)
@@ -1895,6 +1975,7 @@ void Level_1_Draw(void)
 	AEGfxTexture* InvisibleTex = AEGfxTextureLoad("Assets\\Assets\\Invisible.png");
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
 	AEGfxTexture* augment3Tex = AEGfxTextureLoad("Assets\\Assets\\Slash.png");
+	AEGfxTexture* augment4Tex = AEGfxTextureLoad("Assets\\Assets\\GrenadeBall.png");
 
 	//Background
 	AEGfxTexture* BgroundTexB = AEGfxTextureLoad("Assets\\Assets\\Background.png");
@@ -2010,7 +2091,7 @@ void Level_1_Draw(void)
 		}
 		else if (pInst->pObject->type == TYPE_AUGMENT4_PROJECTILE)
 		{
-			texture = bulletTex;
+			texture = augment4Tex;
 		}
 		else if (pInst->pObject->type == TYPE_BOSS)
 		{
@@ -2044,16 +2125,6 @@ void Level_1_Draw(void)
 	if (onValueChange) {
 		if (_Player->health == 0) {
 			gGameStateNext = GAMEOVER;
-			if (minElapsed >= currHighScoreMin) {
-				if (secElapsed > currHighScoreSec) {
-					std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
-					if (outputStream.is_open())
-					{
-						outputStream << minElapsed << ' ' << secElapsed << '\n';
-					}
-					outputStream.close();
-				}
-			}
 		}
 		onValueChange = false;
 	}
@@ -2071,6 +2142,7 @@ void Level_1_Draw(void)
 	AEGfxTextureUnload(coinTex);
 	AEGfxTextureUnload(BgroundTexB);
 	AEGfxTextureUnload(augment3Tex);
+	AEGfxTextureUnload(augment4Tex);
 
 	for (int i = 0; i < 10; i++) {
 		AEGfxTextureUnload(Expbar[i]);
@@ -2201,13 +2273,13 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Slash");
+		sprintf_s(augment1_buffer, "Sonic Slash");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (4200.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "Rocket");
+		sprintf_s(augment1_buffer, "Bomb Launcher");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (26500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -2320,7 +2392,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale4 = { 0 };
 		AEMtx33Scale(&scale4, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate4 = { 0 };
-		AEMtx33Rot(&rotate4, 0);
+		AEMtx33Rot(&rotate4, buttonRotate_mainMenu);
 		AEMtx33 translate4 = { 0 };
 		AEMtx33Trans(&translate4, mainMenu_Button_transX, mainMenu_Button_transY);
 		AEMtx33 transform4 = { 0 };
@@ -2335,7 +2407,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale5 = { 0 };
 		AEMtx33Scale(&scale5, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate5 = { 0 };
-		AEMtx33Rot(&rotate5, 0);
+		AEMtx33Rot(&rotate5, buttonRotate_quit);
 		AEMtx33 translate5 = { 0 };
 		AEMtx33Trans(&translate5, quitButton_transX, quitButton_transY);
 		AEMtx33 transform5 = { 0 };
@@ -2394,7 +2466,7 @@ void Level_1_Draw(void)
 		// Drawing the yes/no overlay on the screen
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetTransparency(1.0f);
+		AEGfxSetTransparency(0.5f);
 		AEMtx33 scale3 = { 0 };
 		AEMtx33Scale(&scale3, 500.f, 300.f);
 		AEMtx33 rotate3 = { 0 };
@@ -2413,7 +2485,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale6 = { 0 };
 		AEMtx33Scale(&scale6, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate6 = { 0 };
-		AEMtx33Rot(&rotate6, 0);
+		AEMtx33Rot(&rotate6, buttonRotate_Yes);
 		AEMtx33 translate6 = { 0 };
 		AEMtx33Trans(&translate6, yesButton_transX, yesButton_transY);
 		AEMtx33 transform6 = { 0 };
@@ -2428,7 +2500,7 @@ void Level_1_Draw(void)
 		AEMtx33 scale7 = { 0 };
 		AEMtx33Scale(&scale7, 80.f * scaleX, 50.f * scaleY);
 		AEMtx33 rotate7 = { 0 };
-		AEMtx33Rot(&rotate7, 0);
+		AEMtx33Rot(&rotate7, buttonRotate_No);
 		AEMtx33 translate7 = { 0 };
 		AEMtx33Trans(&translate7, noButton_transX, noButton_transY);
 		AEMtx33 transform7 = { 0 };
@@ -2462,11 +2534,28 @@ void Level_1_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	if (secElapsed >= 9.5)
-		sprintf_s(gdt_buffer, "%d:%.0f", minElapsed, secElapsed);
+	if (secElapsedInt > 9)
+		sprintf_s(gdt_buffer, "%d:%.0f", minElapsed, secElapsedInt);
 	else
-		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsed);
+		sprintf_s(gdt_buffer, "%d:0%.0f", minElapsed, secElapsedInt);
 	AEGfxPrint(fontID, gdt_buffer, 0.85f, 0.85f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+
+	if (spawnCheck != true) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		if (bossCooldownSecInt > 9)
+			sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:%.0f", bossCooldownMin, bossCooldownSecInt);
+		else {
+			if (bossCooldownSec >= 60.0f)
+				sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:59", bossCooldownMin);
+			else
+				sprintf_s(gdt_buffer, "BOSS APPROACHING IN %d:0%.0f", bossCooldownMin, bossCooldownSecInt);
+		}
+
+		AEGfxPrint(fontID, gdt_buffer, 0.25f, 0.75f, 0.8f, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+	}
+
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
@@ -2491,7 +2580,6 @@ void Level_1_Draw(void)
 	}
 }
 
-
 void Level_1_Free(void)
 {
 	for (unsigned int i = 0; i < GAME_OBJ_INST_NUM_MAX; i++)
@@ -2501,6 +2589,7 @@ void Level_1_Free(void)
 
 void Level_1_Unload(void)
 {
+	AEAudioStopGroup(BGM_layer);
 	for (unsigned long i = 0; i < sGameObjNum; i++)
 	{
 		AEGfxMeshFree(sGameObjList[i].pMesh);
@@ -2510,12 +2599,31 @@ void Level_1_Unload(void)
 	AEGfxMeshFree(augmentButtonMesh);
 	AEGfxMeshFree(bMesh);
 
+	if (minElapsed >= currHighScoreMin) {
+		if (secElapsed > currHighScoreSec) {
+			std::ofstream outputStream{ "Assets\\SaveFiles\\HighScore.txt" };
+			if (outputStream.is_open())
+			{
+				outputStream << minElapsed << ' ' << secElapsedInt << '\n';
+			}
+			outputStream.close();
+		}
+	}
+	std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+	if (outputStream.is_open())
+	{
+		outputStream << Currency << '\n';
+		outputStream.close();
+	}
+
 	//AEGfxMeshFree(bMesh);
+	AUGMENT_1_BULLET_SPEED = 100.f;
 	pause = false;
 	Augment1Level = 1;
 	Augment2Level = 0;
 	Augment1CD = 1.5f;
 	Augment2Range = 1;
+	Augment2RotSpd = 0.f;
 	Aug2CreateCheck = false;
 	Augment3Level = 0;
 	Augment3Range = 0;
@@ -2526,24 +2634,21 @@ void Level_1_Unload(void)
 	minElapsed = 0;
 	spawnCheck = 0;
 	enemyCount = 0;
-	OrbCounter = 0;
 	_Player_Level = 1;
 	_Player_Experience = 0;
 	pause = false;
-	areyouSure = 100;
+	areyouSure = true;
+	bossCoolDownCheck = false;
+	bossCooldownMin = 4;
+	bossCooldownSec = 0.f;
+	RegenerationTimer = 15.0f;
+	AUGMENT_4_FIRE_INTERVAL = 4.0f;
+	currencyCount = 0;
+
+
 	
 	free(sGameObjList);
 	sGameObjList = nullptr;
 	free(sGameObjInstList);
 	sGameObjInstList = nullptr;
-
-
-
-
-
-
-
-	//Clean up AEModule resources
-	AEAudioExit();
-
 }

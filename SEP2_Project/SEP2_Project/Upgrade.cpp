@@ -1,13 +1,9 @@
 #include "Upgrade.h"
 #include "Main.h"
 
-std::ifstream ifs{ "Assets\\SaveFiles\\Tester.txt" };
-std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
 
 //bool LevelToggle;
 //f32 Timer;
-float Timer = 0.0f;
 
 
 //Pointer to Mesh
@@ -37,9 +33,16 @@ f32 UpgradescaleY_settings;
 float Upgrade_textWidth{}, Upgrade_textHeight{};
 
 char Upgrade1_buffer[1024]{};
-
+bool CheckIfBoughtModel2 = false;
+bool CheckIfBoughtModel3 = false;
+bool CheckIfBoughtModel4 = false;
 void Upgrade_Load(void) 
 {
+	std::ifstream ifs{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ifstream ifs1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+	std::ifstream ifs2{ "Assets\\SaveFiles\\PlayerStats.txt" };
+	std::ifstream ifs3{ "Assets\\SaveFiles\\BoughtModels.txt" };
+
 	AEGfxSetBackgroundColor(0.f, 0.f, 255.f);
 
 	AEGfxMeshStart();
@@ -140,11 +143,6 @@ void Upgrade_Load(void)
 		ifs >> Currency;
 		ifs.close();
 	}
-	else if (ifs.fail())
-	{
-		std::cerr << "Error: \n";
-
-	}
 	//End of Open save file of money
 
 	//Open save file of ship
@@ -155,25 +153,21 @@ void Upgrade_Load(void)
 
 		ifs1.close();
 	}
-	else if (ifs1.fail())
-	{
-		std::cerr << "Error: \n";
 
-	}
 	//End of Open save file of ship
 
 	//Open save file of stats
 	if (ifs2.good())
 	{
 
-		ifs2 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Iframe_upgrade;
+		ifs2 >> MaximumPlayerHealth >> ProjectileSpeed_upgrade >> CD_upgrade >> Regen_upgrade;
 
 		ifs2.close();
 	}
-	else if (ifs2.fail())
-	{
-		std::cerr << "Error: \n";
 
+	if (ifs3.good()) {
+		ifs3 >> CheckIfBoughtModel2 >> CheckIfBoughtModel3 >> CheckIfBoughtModel4;
+		ifs3.close();
 	}
 	//End of Open save file of stats
 }
@@ -216,15 +210,16 @@ void Upgrade_Update(void)
 	}
 
 
-
-	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+	//Purchase ship model 1
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-
-		ShipModel = 0;
-		std::cout << "Thank you for purchase\n";
+		if (ShipModel != 0)
+		{
+			ShipModel = 0;		
+		}
 
 		outputStream << Currency;
 		outputStream.close();
@@ -232,76 +227,142 @@ void Upgrade_Update(void)
 		outputStream1.close();
 	}
 
-	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -93.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+	//Purchase ship model 2
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) -43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
-		std::ofstream outputStream{ "Assets\\SaveFiles\\Tester.txt" };
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
 		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
-		Timer += g_dt;
-		if (Currency >= 200)
+
+		
+		if (Currency >= 200 && ShipModel!=1 && CheckIfBoughtModel2 == false)
 		{
-			
-			if (Timer < 60) {
-				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxTextureSet(NULL, 0, 0);
-				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-				sprintf_s(Upgrade1_buffer, "Thank you for purchase");
-				AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-				AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
-			}
 			Currency = Currency - 200;
 			ShipModel = 1;
-			std::cout << "Thank you for purchase\n";
-
 			outputStream << Currency;
 			outputStream.close();
 			outputStream1 << ShipModel;
 			outputStream1.close();
+			CheckIfBoughtModel2 = true;
+		}
+		else if (CheckIfBoughtModel2 == true && ShipModel != 1) {
+			ShipModel = 1;
+			outputStream1 << ShipModel;
+			outputStream1.close();
+		}
 
-			
-		}
-		else
-		{
-			std::cout << "You don't have enough gold..\n";
-		}
 		outputStream.close();
 		outputStream1.close();
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxTextureSet(NULL, 0, 0);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(Upgrade1_buffer, "Thank you for purchase");
-		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 255.f, 255.f, 0.f);
 	}
 
-
-	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 223.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+	//Purchase ship model 3
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) +90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
 		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 
 		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
-		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+
+		if (Currency >= 1000 && ShipModel!=2 && CheckIfBoughtModel3 == false)
+		{
+			Currency = Currency - 1000;
+			ShipModel = 2;
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << ShipModel;
+			outputStream1.close();
+			CheckIfBoughtModel3 = true;
+
+		}
+		else if (CheckIfBoughtModel3 == true && ShipModel != 2) {
+			ShipModel = 2;
+			outputStream1 << ShipModel;
+			outputStream1.close();
+		}
+		outputStream.close();
+		outputStream1.close();
+	}
+
+	//Purchase ship model 4
+	if (IsAreaClicked((getWinHeight() / 2) + 274.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+		std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerShipModel.txt" };
+
+		if (Currency >= 3000 && ShipModel!=3 && CheckIfBoughtModel4 == false)
+		{
+			Currency = Currency - 3000;
+			ShipModel = 3;
+			outputStream << Currency;
+			outputStream.close();
+			outputStream1 << ShipModel;
+			outputStream1.close();
+			CheckIfBoughtModel4 = true;
+		}
+		else if (CheckIfBoughtModel4 == true && ShipModel != 3) {
+			ShipModel = 3;
+			outputStream1 << ShipModel;
+			outputStream1.close();
+		}
+		outputStream.close();
+		outputStream1.close();
+	}
+
+
+
+
+
+	//Purchase Max HP
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 173.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
 		
 		if (Currency >= 300)
 		{
 			Currency = Currency - 300;
-			MaximumPlayerHealth = MaximumPlayerHealth+1;
-			std::cout << "Thank you for purchase\n";
+			MaximumPlayerHealth++;
 
-			outputStream << Currency;
-			outputStream.close();
-			outputStream1 << MaximumPlayerHealth;
-			outputStream1.close();
 		}
-		else
-		{
-			std::cout << "You don't have enough gold..\n";
-		}
-		outputStream.close();
-		outputStream1.close();
 		
 	}
 
+
+	//Purchase Bullet speed
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) - 43.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		if (Currency >= 300 && ProjectileSpeed_upgrade != 10)
+		{
+			Currency = Currency - 300;
+			ProjectileSpeed_upgrade++;
+		}
+
+	}
+
+	//Purchase Cooldown reduction
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 90.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+		if (Currency >= 400 && CD_upgrade != 10)
+		{
+			Currency = Currency - 400;
+			CD_upgrade++;
+		}
+	}
 	
+
+	//Purchase HP regen
+	if (IsAreaClicked((getWinHeight() / 2) + 784.f, (getWinHeight() / 2) + 221.f, 107.f * UpgradescaleX_settings, 100.f * UpgradescaleY_settings, cursorX, cursorY)
+		&& AEInputCheckTriggered(AEVK_LBUTTON)) {
+
+
+
+		if (Currency >= 800 && Regen_upgrade != 10)
+		{
+			Currency = Currency - 800;
+			Regen_upgrade++;
+		}
+
+	}
 
 }
 void Upgrade_Draw(void) 
@@ -329,6 +390,20 @@ void Upgrade_Draw(void)
 	//Finish Background draw
 
 	AEGfxTextureUnload(BGtexture);
+
+
+	//Text display for current ship
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(Upgrade1_buffer, "Current ship model: %d", ShipModel+1);
+	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-4000.f * UpgradescaleX_settings)), (getWinHeight() / (-800.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+
+
+
+
 
 	//Coin Display
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
@@ -932,9 +1007,9 @@ void Upgrade_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
+	sprintf_s(Upgrade1_buffer, "SWAP");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (2300.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (2300.f * UpgradescaleY_settings)), 0.7f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 
 
@@ -943,7 +1018,7 @@ void Upgrade_Draw(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "Model: Default");
+	sprintf_s(Upgrade1_buffer, "Model: AA-Mark 1");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (2000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 	
@@ -960,20 +1035,30 @@ void Upgrade_Draw(void)
 
 
 	// "Buy" Text for Ship Model 2
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	if (CheckIfBoughtModel2 == false) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "SWAP");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (15000 * UpgradescaleY_settings)), 0.7f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 
 	//Start of description text for Ship Model 2//
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "Model: Small");
+	sprintf_s(Upgrade1_buffer, "Model: AT-Mark 2");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (7500.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
@@ -988,19 +1073,30 @@ void Upgrade_Draw(void)
 
 
 	// "Buy" Text for Ship Model 3
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	if (CheckIfBoughtModel3 == false) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "SWAP");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.7f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+
 
 	//Start of description text for Ship Model 3//
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "Model: Smaller");
+	sprintf_s(Upgrade1_buffer, "Model: ZP-Mark 3");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-3900.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
@@ -1015,19 +1111,29 @@ void Upgrade_Draw(void)
 
 
 	// "Buy" Text for Ship Model 4
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	if (CheckIfBoughtModel4 == false) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else{
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "SWAP");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-8900.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.7f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 
 	//Start of description text for Ship Model 4//
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxTextureSet(NULL, 0, 0);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "Model: Smallest");
+	sprintf_s(Upgrade1_buffer, "Model: XJ-Mark 4");
 	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
 	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-2050.f * UpgradescaleX_settings)), (getWinHeight() / (-1600.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
@@ -1150,30 +1256,57 @@ void Upgrade_Draw(void)
 
 
 	// "Buy" Text for Stat 2
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	if (ProjectileSpeed_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (15000.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 
 	// "Buy" Text for Stat 3
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
-
+	if (CD_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-3200.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 	// "Buy" Text for Stat 4
-	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxTextureSet(NULL, 0, 0);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	sprintf_s(Upgrade1_buffer, "BUY");
-	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
-	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
-
+	if (Regen_upgrade != 10) {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "BUY");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxTextureSet(NULL, 0, 0);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		sprintf_s(Upgrade1_buffer, "MAX");
+		AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+		AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (+2840.f * UpgradescaleX_settings)), (getWinHeight() / (-1450.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+	}
 	//Start of description text for Stat 2//
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -1256,6 +1389,27 @@ void Upgrade_Free(void)
 }
 void Upgrade_Unload(void) 
 {
+	std::ofstream outputStream2{ "Assets\\SaveFiles\\BoughtModels.txt" };
+	if (CheckIfBoughtModel2 == true)
+		outputStream2 << "1 " << std::endl;
+	else
+		outputStream2 << "0 " << std::endl;
+	if (CheckIfBoughtModel3 == true)
+		outputStream2 << "1 " << std::endl;
+	else
+		outputStream2 << "0 " << std::endl;
+	if (CheckIfBoughtModel4 == true)
+		outputStream2 << "1 " << std::endl;
+	else
+		outputStream2 << "0 " << std::endl;
+	std::ofstream outputStream{ "Assets\\SaveFiles\\Currency.txt" };
+	std::ofstream outputStream1{ "Assets\\SaveFiles\\PlayerStats.txt" };
+
+	outputStream << Currency;
+	outputStream.close();
+	outputStream1 <<MaximumPlayerHealth<<std::endl<< ProjectileSpeed_upgrade << std::endl << CD_upgrade << std::endl <<Regen_upgrade << std::endl;
+	outputStream1.close();
+	outputStream2.close();
 	AEGfxMeshFree(pMeshUpgrade);
 	AEGfxMeshFree(pMeshUpgrade1);
 	AEGfxMeshFree(CoinMesh);

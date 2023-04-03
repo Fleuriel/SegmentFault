@@ -51,6 +51,9 @@
     <ClInclude Include="SplashPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HowToPlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SplashPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HowToPlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

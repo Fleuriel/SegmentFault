@@ -1,6 +1,5 @@
 #pragma once
 
-
 void Settings_Load(void);
 void Settings_Init(void);
 void Settings_Update(void);
