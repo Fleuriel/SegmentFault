@@ -1,8 +1,6 @@
 #include "MainMenu.h"
 #include "Main.h"
-#include "SettingsMenu.h"
-
-
+// #include "SettingsMenu.h"
 
 
 // Pointer to Mesh
@@ -81,8 +79,8 @@ f32 buttonRotate_exitNo;
 bool mainMenu_areyouSure = true;
 
 //Audio declaration
- AEAudio MMBGM;
- AEAudioGroup MMBGM_layer;
+AEAudio MMBGM;
+AEAudioGroup MMBGM_layer;
 bool Audio_Playing = false;
 extern float volume;
 

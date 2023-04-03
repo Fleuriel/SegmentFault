@@ -1,6 +1,5 @@
 #include "SettingsMenu.h"
 #include "Main.h"
-#include "MainMenu.h"
 
 // Pointer to Mesh
 AEGfxVertexList* pMeshSettings = nullptr;

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
-#include "SettingsMenu.h"
 
 int reqExp = 15;
 int expPercent = 0;
