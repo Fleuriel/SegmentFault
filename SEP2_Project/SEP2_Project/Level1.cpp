@@ -23,20 +23,20 @@ Technology is prohibited.
 #include <cstdio>
 #include <cmath>
 
-int reqExp = 15;
-int expPercent = 0;
+int											reqExp = 15;
+int											expPercent = 0;
 // Pointer to Mesh
-AEGfxVertexList* ptrMesh = nullptr;
+AEGfxVertexList*							ptrMesh = nullptr;
 
 //AugmentOverlay definition
-AEGfxVertexList* augmentMesh = nullptr;
+AEGfxVertexList*							augmentMesh = nullptr;
 
 // Buttons in AugmentOverlay definition
-AEGfxVertexList* augmentButtonMesh = nullptr;
+AEGfxVertexList*							augmentButtonMesh = nullptr;
 
 //Background definition
-AEGfxVertexList* bMesh = nullptr;
-AEVec2 BG = { 0, 0 };
+AEGfxVertexList*							bMesh = nullptr;
+AEVec2										BG = { 0, 0 };
 
 // Pre-definiton for string buffers
 char gdt_buffer[1024]{};
