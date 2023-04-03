@@ -391,6 +391,20 @@ void Upgrade_Draw(void)
 
 	AEGfxTextureUnload(BGtexture);
 
+
+	//Text display for current ship
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxTextureSet(NULL, 0, 0);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	sprintf_s(Upgrade1_buffer, "Current ship model: %d", ShipModel+1);
+	AEGfxGetPrintSize(fontID, Upgrade1_buffer, 1.0f, Upgrade_textWidth, Upgrade_textHeight);
+	AEGfxPrint(fontID, Upgrade1_buffer, (getWinWidth() / (-4000.f * UpgradescaleX_settings)), (getWinHeight() / (-800.f * UpgradescaleY_settings)), 0.8f * UpgradescaleX_settings, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+
+
+
+
+
 	//Coin Display
 	AEGfxTexture* coinTex = AEGfxTextureLoad("Assets\\Assets\\Coin.png");
 	
