@@ -592,7 +592,7 @@ void Level_1_Update(void)
 	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckReleased(AEVK_P))
+	if (AEInputCheckReleased(AEVK_P) || AEInputCheckReleased(AEVK_ESCAPE))
 	{
 		pause = !pause;
 		if (pauseTransparency == 0) {
@@ -2475,7 +2475,7 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "> Press 'P' again to resume");
+		sprintf_s(augment1_buffer, "> Press 'P' or 'esc' again to resume");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
