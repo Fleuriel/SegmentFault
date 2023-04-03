@@ -1,6 +1,36 @@
+/******************************************************************************/
+/*!
+\file		Utilities.cpp
+\author		Liu Xujie, l.xujie, 2203183
+\par		l.xujie@digipen.edu
+\brief		Definition of function helpers
+
+Copyright (C) 2023 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+ */
+ /******************************************************************************/
+
 #include "Main.h"
 
-
+/*!*****************************************************************
+  \author
+   Liu Xujie
+  \brief
+   This function checks for the collision between two rectangular
+   object
+  \param[in] aabb1
+   struct of the min and max x y values for object 1
+  \param[in] vel1
+   velocity vector for object 1
+  \param[in] aabb2
+   struct of the min and max x y values for object 2
+  \param[in] aabb2
+   velocity vector for object 2
+  \return
+   true if colliding false if not colliding
+********************************************************************/
 bool CollisionIntersection_RectRect(const AABB& aabb1, const AEVec2& vel1,
     const AABB& aabb2, const AEVec2& vel2)
 {

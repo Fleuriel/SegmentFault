@@ -1177,7 +1177,7 @@ void Level_1_Update(void)
 								//Turns off the instance. (prevents damage)
 								qInst->showTexture = false;
 								AUGMENT_3_OFF_TIMER = 0;
-								AEAudioPlay(BlastSFX, SFX_layer, sfx/1.5, 1.f, 0);
+								AEAudioPlay(BlastSFX, SFX_layer, sfx/1.5f, 1.f, 0);
 							}
 						}
 					}
