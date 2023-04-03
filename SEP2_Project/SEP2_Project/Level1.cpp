@@ -1280,7 +1280,7 @@ void Level_1_Update(void)
 				{
 				case TYPE_BHELL1:
 					boss::DelayShoot = 0.25f;
-					boss::numBulletsBHell = 11;
+					boss::numBulletsBHell = 13;
 					angle = 225;
 					if (pInst->health <= (float)MaxBossHealth * (0.8f))
 					{
@@ -1297,21 +1297,29 @@ void Level_1_Update(void)
 					{
 						if (_delayTimeBullets >= boss::DelayShoot)
 						{
+							angle2 = 84;
 							for (int q = 0; q < boss::numBulletsBHell; q++)
 							{
-								angle2 = 0;
+								
 								angle -= 10;
 								if (angle < 134)
 								{
 									angle = 225;
 								}
-								angle2 -= 20;
-								if (angle2 < -60)
+
+								angle2 -= 12;
+								if (angle2 < -84)
 								{
-									angle2 = 60;
+									angle2 = 84;
 								}
+
+								std::cout << angle2 << '\n';
+
+
 								boss::velocity = { projectileSpeed * sin(AEDegToRad(angle)) , projectileSpeed * cos(AEDegToRad(angle)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity, angle);
+
+
 								boss::velocity2 = { projectileSpeed * sin(AEDegToRad(angle2)) , projectileSpeed * cos(AEDegToRad(angle2)) };
 								gameObjInstCreate(TYPE_BOSS_BULLETHELL_BULLET_1, 5, &pInst->position, &boss::velocity2, angle2);
 
