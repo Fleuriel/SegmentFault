@@ -622,7 +622,6 @@ void Level_1_Update(void)
 			if (IsAreaClicked(mainMenu_Button_midX, mainMenu_Button_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) 
 			{
-				printf("MainMenu\n");
 				areyouSure = false;
 				clicked_MainMenu = true;
 				pauseTransparency = 0.0f;
@@ -631,7 +630,6 @@ void Level_1_Update(void)
 			if (IsAreaClicked(quitButton_midX, quitButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) 
 			{
-				printf("Quit\n");
 				areyouSure = false;
 				clicked_MainMenu = false;
 				pauseTransparency = 0.0f;
@@ -646,19 +644,16 @@ void Level_1_Update(void)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
 				if (clicked_MainMenu) 
 				{
-					printf("Goto Main Menu\n");
 					gGameStateNext = MAINMENU;
 				}
 				else if (!clicked_MainMenu)
 				{
-					printf("Quit\n");
 					gGameStateNext = QUIT;
 				}
 			}
 
 			if (IsAreaClicked(noButton_midX, noButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
 				&& AEInputCheckReleased(AEVK_LBUTTON)) {
-				printf("Go Back to pause UI\n");
 				pauseTransparency = 0.5f;
 				areyouSure = true;
 			}
