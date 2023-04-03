@@ -1,7 +1,7 @@
 #pragma once
 /******************************************************************************/
 /*!
-\file       Level1.cpp
+\file       Level1.hpp
 \project    Among Them
 \authors	Angus Tan Yit Hoe, tan.a (100%)
 
