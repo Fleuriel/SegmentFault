@@ -68,6 +68,10 @@ float settings_textWidth{}, settings_textHeight{};
 // Pre-definition of Rotation
 f32 buttonRotate_settingsBack;
 
+// Volume and sfx initialization
+int volume = 100;
+int sfx = 100;
+
 void Settings_Load(void)
 {
     AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -187,60 +191,70 @@ void Settings_Update(void)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("0 Vol\n");
+        volume = 0;
     }
 
     else if (IsAreaClicked(vol2_midX, vol2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("25 Vol\n");
+        volume = 25;
     }
 
     else if (IsAreaClicked(vol3_midX, vol3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("50 Vol\n");
+        volume = 50;
     }
 
     else if (IsAreaClicked(vol4_midX, vol4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("75 Vol\n");
+        volume = 75;
     }
 
     else if (IsAreaClicked(vol5_midX, vol5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("100 Vol\n");
+        volume = 100;
     }
 
     else if (IsAreaClicked(sfx1_midX, sfx1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("0 Sfx\n");
+        sfx = 0;
     }
 
     else if (IsAreaClicked(sfx2_midX, sfx2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("25 Sfx\n");
+        sfx = 25;
     }
 
     else if (IsAreaClicked(sfx3_midX, sfx3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("50 Sfx\n");
+        sfx = 50;
     }
 
     else if (IsAreaClicked(sfx4_midX, sfx4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("75 Sfx\n");
+        sfx = 75;
     }
 
     else if (IsAreaClicked(sfx5_midX, sfx5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("100 Sfx\n");
+        sfx = 100;
     }
 
     if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
@@ -454,6 +468,19 @@ void Settings_Draw(void)
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(settingsText_buffer, "100");
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (3600.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settingsText_buffer, "Volume: %d", volume);
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-3000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settingsText_buffer, "Sfx: %d", sfx);
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
     //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     //AEGfxTextureSet(NULL, 0, 0);
     //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
