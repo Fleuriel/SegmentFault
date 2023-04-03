@@ -243,7 +243,7 @@ void HowToPlay_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "> Press 'P' to Pause");
+    sprintf_s(instructions3_buffer, "> Press 'P' or 'esc' to Pause");
     AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-25000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
