@@ -18,7 +18,6 @@ Technology is prohibited.
  */
  /******************************************************************************/
 
-#include "AEEngine.h"
 #include "Main.h"
 
 #include <fstream>
