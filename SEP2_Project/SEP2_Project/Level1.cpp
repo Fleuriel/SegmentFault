@@ -21,11 +21,7 @@ Technology is prohibited.
  */
  /******************************************************************************/
 
-#include "Main.h"
 #include "GameObjects.h"
-#include <iostream>
-#include <cstdio>
-#include <cmath>
 
 int											reqExp = 15;
 int											expPercent = 0;

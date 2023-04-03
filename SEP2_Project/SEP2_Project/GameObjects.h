@@ -22,7 +22,8 @@ Technology is prohibited.
 
 #include <fstream>
 #include <string>
-
+#include <cstdio>
+#include <cmath>
 
 
 #define MAX_ENEMIES				100
@@ -33,7 +34,6 @@ Technology is prohibited.
 
 //set flag for pause to false (game is running)
 bool pause = false;
-
 
 
 f32 const						PLAYER_SIZE = 60.0f;		//Definition of Player Size...
