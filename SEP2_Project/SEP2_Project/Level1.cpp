@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
-#include "SettingsMenu.h"
 
 int reqExp = 15;
 int expPercent = 0;
@@ -117,8 +116,8 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
-AEAudio BGM;
-AEAudioGroup BGM_layer;
+AEAudio BGM, BlastSFX;
+AEAudioGroup BGM_layer, SFX_layer;
 extern float volume;
 
 void Level_1_Load(void)
@@ -483,10 +482,9 @@ void Level_1_Load(void)
 
 	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
-
+	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
 	BGM_layer = AEAudioCreateGroup();
-
-
+	SFX_layer = AEAudioCreateGroup();
 	//Upgrades
 	for (int i = ProjectileSpeed_upgrade; i >= 0; i--) {
 		AUGMENT_1_BULLET_SPEED += 20;
@@ -592,7 +590,7 @@ void Level_1_Update(void)
 	AEAudioUpdate();
 	AEInputGetCursorPosition(&cursorX, &cursorY);
 
-	if (AEInputCheckReleased(AEVK_P) || AEInputCheckReleased(AEVK_ESCAPE))
+	if (AEInputCheckReleased(AEVK_ESCAPE))
 	{
 		pause = !pause;
 		if (pauseTransparency == 0) {
@@ -1126,7 +1124,7 @@ void Level_1_Update(void)
 
 							// Create a new bullet object and set its velocity to point towards the target
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
-
+							AEAudioPlay(BlastSFX, SFX_layer, volume, 1.f, 0);
 							if (bulletInst != nullptr)
 								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
@@ -2471,7 +2469,7 @@ void Level_1_Draw(void)
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		AEGfxTextureSet(NULL, 0, 0);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		sprintf_s(augment1_buffer, "> Press 'P' or 'esc' again to resume");
+		sprintf_s(augment1_buffer, "> Press 'esc' again to resume");
 		AEGfxPrint(fontID, augment1_buffer, (getWinWidth() / (-4000.f * scaleX)), (getWinHeight() / (-5500.f * scaleY)), 0.7f * scaleX, 0.0f / 255.f, 23.0f / 255.f, 54.0f / 255.f);
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
