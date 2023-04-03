@@ -196,28 +196,28 @@ void Settings_Update(void)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("25 Sfx\n");
-        sfx = 25;
+        sfx = 0.25;
     }
 
     else if (IsAreaClicked(sfx3_midX, sfx3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("50 Sfx\n");
-        sfx = 50;
+        sfx = 0.50;
     }
 
     else if (IsAreaClicked(sfx4_midX, sfx4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("75 Sfx\n");
-        sfx = 75;
+        sfx = 0.75;
     }
 
     else if (IsAreaClicked(sfx5_midX, sfx5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON))
     {
         printf("100 Sfx\n");
-        sfx = 100;
+        sfx = 1.00;
     }
 
     if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
@@ -430,7 +430,7 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "Sfx: %0.f", sfx);
+    sprintf_s(settingsText_buffer, "Sfx: %0.f", sfx*100);
     AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-1600.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 

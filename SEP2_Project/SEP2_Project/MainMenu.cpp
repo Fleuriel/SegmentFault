@@ -159,7 +159,7 @@ void Menu_Load(void)
     // audio group named bgm_layer with 
     // 100% volume, 100% pitch, looped infinitely.
     if (Audio_Playing == false) {
-        AEAudioPlay(MMBGM, MMBGM_layer, 0.5, 1.f, -1);
+        AEAudioPlay(MMBGM, MMBGM_layer, volume, 1.f, -1);
         Audio_Playing = true;
     }
 }
