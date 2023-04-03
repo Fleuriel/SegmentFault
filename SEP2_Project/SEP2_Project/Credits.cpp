@@ -239,6 +239,27 @@ void Credits_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "Special thanks to:");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-1650.f * scaleY)), 0.6f * scaleX, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "SOUNDLY");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-1200.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits1_buffer, "CRAFTON GAMING (DAFONT)");
+    AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
+    AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (-5000.f * scaleX)), (getWinHeight() / (-950.f * scaleY)), 0.6f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
     sprintf_s(credits1_buffer, "Executives:");
     AEGfxGetPrintSize(fontID, credits1_buffer, 1.0f, credits_textWidth, credits_textHeight);
     AEGfxPrint(fontID, credits1_buffer, (getWinWidth() / (3500.f * scaleX)), (getWinHeight() / (1200.f * scaleY)), 0.6f * scaleX, 255.0f / 255.f, 255.0f / 255.f, 255.0f / 255.f);
