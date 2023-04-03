@@ -90,7 +90,7 @@ INSTRUCTORS:														   |
 CHENG DING XIANG
 GERALD WONG HAN FENG
 ----------------------------------------------------------------------------------------------------------------------------
-ALL CONTENT ©2023 DIGIPEN INSTITUTE OF TECHNOLOGY SINGAPORE, ALL RIGHTS RESERVED.
+ALL CONTENT ©2023 DIGIPEN INSTITUTE OF TECHNOLOGY SINGAPORE, ALL RIGHTS RESERVED.					   |
 ----------------------------------------------------------------------------------------------------------------------------
 
 
