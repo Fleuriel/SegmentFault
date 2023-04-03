@@ -18,10 +18,11 @@ f32 backButton_midX;
 f32 backButton_midY;
 
 // Pre-defintion
-char howtoplay_buffer[1024]{};
-char instructions1_buffer[1024]{};
-char instructions2_buffer[1024]{};
-char instructions3_buffer[1024]{};
+//char howtoplay_buffer[1024]{};
+//char instructions1_buffer[1024]{};
+//char instructions2_buffer[1024]{};
+//char instructions3_buffer[1024]{};
+char settingsText_buffer[100]{};
 char settingsBackButton_buffer[1024]{};
 float settings_textWidth{}, settings_textHeight{};
 
@@ -147,32 +148,32 @@ void Settings_Draw(void)
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(howtoplay_buffer, "HOW TO PLAY:");
-    AEGfxPrint(fontID, howtoplay_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "HOW TO PLAY:");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions1_buffer, "Right mouse click for augments.");
-    AEGfxPrint(fontID, instructions1_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "Right mouse click for augments.");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions2_buffer, "WASD for movement.");
-    AEGfxPrint(fontID, instructions2_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "WASD for movement.");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "Bullets will follow cursor.");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "Bullets will follow cursor.");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(instructions3_buffer, "P to Pause");
-    AEGfxPrint(fontID, instructions3_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (14000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "P to Pause");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (14000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);

@@ -18,6 +18,7 @@
 #include "Upgrade.h"
 #include "MainMenu.h"
 #include "SettingsMenu.h"
+#include "HowToPlay.h"
 #include "Credits.h"
 #include "GameOverMenu.h"
 #include "SplashPage.h"

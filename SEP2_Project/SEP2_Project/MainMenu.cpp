@@ -17,6 +17,8 @@ f32 playButton_transX;
 f32 playButton_transY;
 f32 creditsButton_transX;
 f32 creditsButton_transY;
+f32 howToButton_transX;
+f32 howToButton_transY;
 f32 exitButton_transX;
 f32 exitButton_transY;
 f32 exitYesButton_transX;
@@ -39,6 +41,10 @@ f32 playButton_midY;
 // Credits button mid points
 f32 creditsButton_midX;
 f32 creditsButton_midY;
+
+// How to play button mid points
+f32 howToButton_midX;
+f32 howToButton_midY;
 
 // Exit button mid points
 f32 exitButton_midX;
@@ -64,6 +70,7 @@ f32 buttonRotate_play;
 f32 buttonRotate_settings;
 f32 buttonRotate_powerups;
 f32 buttonRotate_credits;
+f32 buttonRotate_howTo;
 f32 buttonRotate_exit;
 f32 buttonRotate_exitYes;
 f32 buttonRotate_exitNo;
@@ -135,6 +142,8 @@ void Menu_Init(void)
     playButton_transY = 0.0f * scaleY;
     creditsButton_transX = -585.0f * scaleX;
     creditsButton_transY = -355.0f * scaleY;
+    howToButton_transX = 640.0f * scaleX;
+    howToButton_transY = -355.0f * scaleY;
     exitButton_transX = 663.5f * scaleX;
     exitButton_transY = 355.0f * scaleY;
     BGtransX = 220.0f * scaleX;
@@ -226,6 +235,10 @@ void Menu_Update(void)
     // Exit button mid points
     exitButton_midX = static_cast<f32>((getWinWidth() / 2.04) + exitButton_transX);
     exitButton_midY = static_cast<f32>((getWinHeight() / 2) - exitButton_transY);
+
+    // How to play button mid points
+    howToButton_midX = static_cast<f32>((getWinWidth() / 2.09) + howToButton_transX);
+    howToButton_midY = static_cast<f32>((getWinHeight() / 2) - howToButton_transY);
     
     
     /********************************** Button Collision Logic Start ********************************************/
@@ -261,6 +274,12 @@ void Menu_Update(void)
         {
             gGameStateNext = CREDITS;
             printf("Goto Credits\n");
+        }
+
+        else if (IsAreaClicked(howToButton_midX, howToButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+            && AEInputCheckReleased(AEVK_LBUTTON))
+        {
+            gGameStateNext = HOWTOPLAY;
         }
     }
 
@@ -303,6 +322,11 @@ void Menu_Update(void)
         buttonRotate_credits = -0.10f;
     }
 
+    else if (IsAreaClicked(howToButton_midX, howToButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_howTo = -0.10f;
+    }
+
     if (!IsAreaClicked(powerUpButton_midX, powerUpButton_midY, 170.0f * scaleX, 100.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_powerups = 0.0f;
@@ -321,6 +345,11 @@ void Menu_Update(void)
     if (!IsAreaClicked(creditsButton_midX, creditsButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
     {
         buttonRotate_credits = 0.0f;
+    }
+
+    if (!IsAreaClicked(howToButton_midX, howToButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
+    {
+        buttonRotate_howTo = 0.0f;
     }
 
     if (!IsAreaClicked(exitButton_midX, exitButton_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY))
@@ -446,6 +475,21 @@ void Menu_Draw(void)
     AEGfxSetTransform(transform4.m);
     AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
 
+    // Button 6, How to play button
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33 scale5 = { 0 };
+    AEMtx33Scale(&scale5, 80.f * scaleX, 50.f * scaleY);
+    AEMtx33 rotate5 = { 0 };
+    AEMtx33Rot(&rotate5, buttonRotate_howTo);
+    AEMtx33 translate5 = { 0 };
+    AEMtx33Trans(&translate5, howToButton_transX, howToButton_transY);
+    AEMtx33 transform5 = { 0 };
+    AEMtx33Concat(&transform5, &rotate5, &scale5);
+    AEMtx33Concat(&transform5, &translate5, &transform5);
+    AEGfxSetTransform(transform5.m);
+    AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
     // Rendering texts for the screen
 
     // Title start
@@ -490,6 +534,13 @@ void Menu_Draw(void)
     sprintf_s(credits_buffer, "credits");
     AEGfxGetPrintSize(fontID, credits_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
     AEGfxPrint(fontID, credits_buffer, (getWinWidth() / ( - 1393.f * scaleX)), (getWinHeight() / ( - 800.f * scaleY)), 0.7f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(credits_buffer, "how to play");
+    AEGfxGetPrintSize(fontID, credits_buffer, 1.0f, mainMenu_textWidth, mainMenu_textHeight);
+    AEGfxPrint(fontID, credits_buffer, (getWinWidth() / (1690.f * scaleX)), (getWinHeight() / (-800.f * scaleY)), 0.45f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
