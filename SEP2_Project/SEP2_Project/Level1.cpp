@@ -116,8 +116,8 @@ bool clicked_Quit = true;
 //number of gold coins
 int currencyCount = 0;
 
-AEAudio BGM;
-AEAudioGroup BGM_layer;
+AEAudio BGM, BlastSFX;
+AEAudioGroup BGM_layer, SFX_layer;
 extern float volume;
 
 void Level_1_Load(void)
@@ -482,10 +482,9 @@ void Level_1_Load(void)
 
 	//// Loads a music from given filepath and assign to ‘audio’
 	BGM = AEAudioLoadMusic("Assets\\Music\\Bossmusic.wav");
-
+	BlastSFX = AEAudioLoadSound("Assets\\Music\\Blast.wav");
 	BGM_layer = AEAudioCreateGroup();
-
-
+	SFX_layer = AEAudioCreateGroup();
 	//Upgrades
 	for (int i = ProjectileSpeed_upgrade; i >= 0; i--) {
 		AUGMENT_1_BULLET_SPEED += 20;
@@ -1129,7 +1128,7 @@ void Level_1_Update(void)
 
 							// Create a new bullet object and set its velocity to point towards the target
 							GameObjInstances* bulletInst = gameObjInstCreate(TYPE_BULLET, BULLET_SIZE, &qInst->position, &AUGMENT_1_DIRECTION, getCursorRad(_Player->position));
-
+							AEAudioPlay(BlastSFX, SFX_layer, volume, 1.f, 0);
 							if (bulletInst != nullptr)
 								AEVec2Scale(&bulletInst->velocity, &bulletInst->velocity, AUGMENT_1_BULLET_SPEED);
 
