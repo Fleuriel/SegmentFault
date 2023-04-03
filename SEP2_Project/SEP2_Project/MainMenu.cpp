@@ -85,6 +85,23 @@ void Menu_Load(void)
 
     AEGfxSetBackgroundColor(0.019f, 0.27f, 0.411f);  // conversion -> rgb value/255
 
+    //Background
+    AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+    //start Background
+    AEGfxMeshStart();
+
+    AEGfxTriAdd(
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
+    AEGfxTriAdd(
+        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
+        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
+
+    BGmesh = AEGfxMeshEnd();
+    //end Background
+    
     // Create buttons
     AEGfxMeshStart();
 
@@ -156,23 +173,6 @@ void Menu_Init(void)
     buttonRotate_exit = 0.f;
     buttonRotate_exitYes = 0.f;
     buttonRotate_exitNo = 0.f;
-
-    //Background
-    AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-    //start Background
-    AEGfxMeshStart();
-
-    AEGfxTriAdd(
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f);
-    AEGfxTriAdd(
-        -1.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f,
-        -1.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-        0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f);
-
-    BGmesh = AEGfxMeshEnd();
-    //end Background
 
     // Exit button confirmation translation
     exitYesButton_transX = -210.0f * scaleX;

@@ -12,10 +12,53 @@ f32 BGtransX_settings, BGtransY_settings;
 // Pre-definition for buttons
 f32 backButton_transX;
 f32 backButton_transY;
+f32 vol1_transX;
+f32 vol1_transY;
+f32 vol2_transX;
+f32 vol2_transY;
+f32 vol3_transX;
+f32 vol3_transY;
+f32 vol4_transX;
+f32 vol4_transY;
+f32 vol5_transX;
+f32 vol5_transY;
+f32 sfx1_transX;
+f32 sfx1_transY;
+f32 sfx2_transX;
+f32 sfx2_transY;
+f32 sfx3_transX;
+f32 sfx3_transY;
+f32 sfx4_transX;
+f32 sfx4_transY;
+f32 sfx5_transX;
+f32 sfx5_transY;
 
 // Quit button mid point
 f32 backButton_midX;
 f32 backButton_midY;
+
+// Vol/sfx button mid points
+f32 vol1_midX;
+f32 vol1_midY;
+f32 vol2_midX;
+f32 vol2_midY;
+f32 vol3_midX;
+f32 vol3_midY;
+f32 vol4_midX;
+f32 vol4_midY;
+f32 vol5_midX;
+f32 vol5_midY;
+
+f32 sfx1_midX;
+f32 sfx1_midY;
+f32 sfx2_midX;
+f32 sfx2_midY;
+f32 sfx3_midX;
+f32 sfx3_midY;
+f32 sfx4_midX;
+f32 sfx4_midY;
+f32 sfx5_midX;
+f32 sfx5_midY;
 
 // Pre-defintion
 char settingsText_buffer[100]{};
@@ -74,6 +117,29 @@ void Settings_Init(void)
     BGtransX_settings = 220.0f * scaleX;
     BGtransY_settings = -40 * scaleY;
 
+    // Vol button translation
+    vol1_transX = -50.0f;
+    vol1_transY = 100.0f;
+    vol2_transX = 50.0f;
+    vol2_transY = 100.0f;
+    vol3_transX = 150.0f;
+    vol3_transY = 100.0f;
+    vol4_transX = 250.0f;
+    vol4_transY = 100.0f;
+    vol5_transX = 350.0f;
+    vol5_transY = 100.0f;
+
+    // Sfx button translation
+    sfx1_transX = -50.0f;
+    sfx1_transY = 0.0f;
+    sfx2_transX = 50.0f;
+    sfx2_transY = 0.0f;
+    sfx3_transX = 150.0f;
+    sfx3_transY = 0.0f;
+    sfx4_transX = 250.0f;
+    sfx4_transY = 0.0f;
+    sfx5_transX = 350.0f;
+    sfx5_transY = 0.0f;
 
 }
 void Settings_Update(void)
@@ -87,10 +153,94 @@ void Settings_Update(void)
     backButton_midX = static_cast<f32>((getWinWidth() / 2.08) + backButton_transX);
     backButton_midY = static_cast<f32>((getWinHeight() / 2) - backButton_transY);
 
+    // Vol button mid points
+    vol1_midX = static_cast<f32>((getWinWidth() / 2.04) + vol1_transX);
+    vol1_midY = static_cast<f32>((getWinHeight() / 2) - vol1_transY);
+    vol2_midX = static_cast<f32>((getWinWidth() / 2.04) + vol2_transX);
+    vol2_midY = static_cast<f32>((getWinHeight() / 2) - vol2_transY);
+    vol3_midX = static_cast<f32>((getWinWidth() / 2.04) + vol3_transX);
+    vol3_midY = static_cast<f32>((getWinHeight() / 2) - vol3_transY);
+    vol4_midX = static_cast<f32>((getWinWidth() / 2.04) + vol4_transX);
+    vol4_midY = static_cast<f32>((getWinHeight() / 2) - vol4_transY);
+    vol5_midX = static_cast<f32>((getWinWidth() / 2.04) + vol5_transX);
+    vol5_midY = static_cast<f32>((getWinHeight() / 2) - vol5_transY);
+
+    // Sfx button mid points
+    sfx1_midX = static_cast<f32>((getWinWidth() / 2.04) + sfx1_transX);
+    sfx1_midY = static_cast<f32>((getWinHeight() / 2) - sfx1_transY);
+    sfx2_midX = static_cast<f32>((getWinWidth() / 2.04) + sfx2_transX);
+    sfx2_midY = static_cast<f32>((getWinHeight() / 2) - sfx2_transY);
+    sfx3_midX = static_cast<f32>((getWinWidth() / 2.04) + sfx3_transX);
+    sfx3_midY = static_cast<f32>((getWinHeight() / 2) - sfx3_transY);
+    sfx4_midX = static_cast<f32>((getWinWidth() / 2.04) + sfx4_transX);
+    sfx4_midY = static_cast<f32>((getWinHeight() / 2) - sfx4_transY);
+    sfx5_midX = static_cast<f32>((getWinWidth() / 2.04) + sfx5_transX);
+    sfx5_midY = static_cast<f32>((getWinHeight() / 2) - sfx5_transY);
+
     // if cursor within buttons, change game state
     if (IsAreaClicked(backButton_midX, backButton_midY, 150.0f * scaleX, 100.0f * scaleY, cursorX, cursorY)
         && AEInputCheckReleased(AEVK_LBUTTON)) {
         gGameStateNext = MAINMENU;
+    }
+
+    else if (IsAreaClicked(vol1_midX, vol1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("0 Vol\n");
+    }
+
+    else if (IsAreaClicked(vol2_midX, vol2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("25 Vol\n");
+    }
+
+    else if (IsAreaClicked(vol3_midX, vol3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("50 Vol\n");
+    }
+
+    else if (IsAreaClicked(vol4_midX, vol4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("75 Vol\n");
+    }
+
+    else if (IsAreaClicked(vol5_midX, vol5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("100 Vol\n");
+    }
+
+    else if (IsAreaClicked(sfx1_midX, sfx1_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("0 Sfx\n");
+    }
+
+    else if (IsAreaClicked(sfx2_midX, sfx2_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("25 Sfx\n");
+    }
+
+    else if (IsAreaClicked(sfx3_midX, sfx3_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("50 Sfx\n");
+    }
+
+    else if (IsAreaClicked(sfx4_midX, sfx4_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("75 Sfx\n");
+    }
+
+    else if (IsAreaClicked(sfx5_midX, sfx5_midY, 57.8f * scaleX, 50.0f * scaleY, cursorX, cursorY)
+        && AEInputCheckReleased(AEVK_LBUTTON))
+    {
+        printf("100 Sfx\n");
     }
 
     if (IsAreaClicked(backButton_midX, backButton_midY, 136.0f * scaleX, 50.0f * scaleY, cursorX, cursorY))
@@ -141,41 +291,174 @@ void Settings_Draw(void)
     AEGfxSetTransform(transform.m);
     AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
 
+    // Volume buttons start //
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
-    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "HOW TO PLAY:");
-    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, vol1_transX, vol1_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, vol2_transX, vol2_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, vol3_transX, vol3_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, vol4_transX, vol4_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, vol5_transX, vol5_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+    // Volume buttons end //
+
+    // Sfx buttons start //
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, sfx1_transX, sfx1_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, sfx2_transX, sfx2_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, sfx3_transX, sfx3_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, sfx4_transX, sfx4_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEMtx33Scale(&scale, 34.f * scaleX, 50.f * scaleY);
+    AEMtx33Rot(&rotate, 0);
+    AEMtx33Trans(&translate, sfx5_transX, sfx5_transY);
+    AEMtx33Concat(&transform, &rotate, &scale);
+    AEMtx33Concat(&transform, &translate, &transform);
+    AEGfxSetTransform(transform.m);
+    AEGfxMeshDraw(pMeshSettings, AE_GFX_MDM_TRIANGLES);
+    // SFX Buttons End //
+    
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(settingsText_buffer, "HOW TO PLAY:");
+    //AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(settingsText_buffer, "Right mouse click for augments.");
+    //AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "Right mouse click for augments.");
-    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (1350.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "Volume:");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "WASD for movement.");
-    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "SFX:");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (-25000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "Bullets will follow cursor.");
-    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (4000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "Back");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsText_buffer, "P to Pause");
-    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-6000.f * scaleX)), (getWinHeight() / (14000 * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "0");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-14300.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     AEGfxTextureSet(NULL, 0, 0);
     AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-    sprintf_s(settingsBackButton_buffer, "Back");
-    AEGfxPrint(fontID, settingsBackButton_buffer, (getWinWidth() / (1655.f * scaleX)), (getWinHeight() / (-798.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    sprintf_s(settingsText_buffer, "25");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (120000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settingsText_buffer, "50");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (10000.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settingsText_buffer, "75");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (5250.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+
+    AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    AEGfxTextureSet(NULL, 0, 0);
+    AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    sprintf_s(settingsText_buffer, "100");
+    AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (3600.f * scaleX)), (getWinHeight() / (2000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
+    //AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+    //AEGfxTextureSet(NULL, 0, 0);
+    //AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+    //sprintf_s(settingsText_buffer, "0%");
+    //AEGfxPrint(fontID, settingsText_buffer, (getWinWidth() / (-3500.f * scaleX)), (getWinHeight() / (3000.f * scaleY)), 0.8f * scaleX, 156.0f / 255.f, 205.0f / 255.f, 220.0f / 255.f);
 
 
    
