@@ -27,7 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Credits.cpp" />
-    <ClCompile Include="GameObjects.cpp" />
     <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="GameStateMgr.cpp" />
     <ClCompile Include="HowToPlay.cpp" />
